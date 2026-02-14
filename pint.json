@@ -1,0 +1,30 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "class_definition": {
+            "multi_line_extends_each_single_line": true,
+            "single_item_single_line": true,
+            "single_line": true,
+            "space_before_parenthesis": true,
+            "inline_constructor_arguments": false
+        },
+        "new_with_parentheses": {
+            "named_class": true,
+            "anonymous_class": false
+        },
+        "ordered_imports": {
+            "imports_order": [
+                "class",
+                "function",
+                "const"
+            ],
+            "sort_algorithm": "alpha"
+        },
+        "no_break_comment": true,
+        "ordered_class_elements": {
+            "order": ["use_trait"]
+        },
+        "single_trait_insert_per_statement": true,
+        "visibility_required": true
+    }
+}
