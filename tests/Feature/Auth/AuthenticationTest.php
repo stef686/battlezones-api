@@ -5,7 +5,7 @@ use App\Models\User;
 test('a user can request an api login token', function () {
     $user = User::factory()->create();
 
-    $this->postJson('/api/login/token', [
+    $this->postJson(route('login.token'), [
         'email' => $user->email,
         'password' => 'password',
         'device_name' => 'Test Device',
@@ -17,7 +17,7 @@ test('a user can request an api login token', function () {
 test('a user cannot request an api login token with incorrect data', function () {
     $user = User::factory()->create();
 
-    $this->postJson('/api/login/token', [
+    $this->postJson(route('login.token'), [
         'email' => $user->email,
         'password' => 'incorrect-password',
         'device_name' => 'Test Device',

@@ -1,0 +1,82 @@
+name: Authentication
+description: 'APIs for authentication'
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/login/token
+    metadata:
+      custom: []
+      groupName: Authentication
+      groupDescription: 'APIs for authentication'
+      subgroup: ''
+      subgroupDescription: ''
+      title: Login
+      description: 'Returns an authorization token for the user'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: gbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      device_name:
+        custom: []
+        name: device_name
+        description: 'The name of the device logging in.'
+        required: true
+        example: iPhone
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: gbailey@example.net
+      password: architecto
+      device_name: iPhone
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"token":"{AUTH_TOKEN}"}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"email":["The provided credentials are incorrect."]}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
