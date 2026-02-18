@@ -1,12 +1,10 @@
 <?php
 
-use App\Jobs\SendVerificationEmail;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 
 test('a new user can register for an account', function () {
-    Queue::fake([
-        SendVerificationEmail::class,
-    ]);
+    Event::fake();
 
     $this->postJson(route('register'), [
         'name' => 'John Doe',
@@ -17,7 +15,7 @@ test('a new user can register for an account', function () {
     ])
         ->assertSuccessful();
 
-    Queue::assertPushed(SendVerificationEmail::class);
+    Event::assertDispatched(Registered::class);
 
     $this->assertDatabaseHas('users', [
         'name' => 'John Doe',
