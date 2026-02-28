@@ -32,7 +32,56 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":4,"public_name":"Ms. Elisabeth Okuneva","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":5,"updated_at":"2026-02-28T16:32:36Z","public_name":"Ms. Elisabeth Okuneva","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/profile/{user_id}'
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'User Profile'
+      description: "Display the given user's profile data."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":6,"updated_at":"2026-02-28T16:32:36Z","public_name":"Jermaine Tillman","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []

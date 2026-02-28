@@ -14,3 +14,18 @@ test('current user can load profile data', function () {
             ],
         ]);
 });
+
+test('a user can load another user\'s profile data', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $profileUser = User::factory()->create();
+
+    $this->get(route('profile.show', $profileUser))
+        ->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'public_name' => $profileUser->name,
+            ],
+        ]);
+});

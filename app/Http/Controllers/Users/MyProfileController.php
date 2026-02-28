@@ -9,7 +9,7 @@ use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 
 #[Group('Users', 'APIs for Users')]
-class ProfileController extends Controller
+class MyProfileController extends Controller
 {
     #[Endpoint('Current User Profile', "Display the current user's profile data.")]
     #[ResponseFromApiResource(UserProfileResource::class)]
