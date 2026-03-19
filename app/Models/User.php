@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\Country;
 use App\Notifications\Auth\ResetPasswordNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -19,6 +21,9 @@ use Laravel\Sanctum\PersonalAccessToken;
 /**
  * @property int $id
  * @property string $name
+ * @property string|null $username
+ * @property Country|null $country
+ * @property bool $show_public_name
  * @property string $email
  * @property Carbon|null $email_verified_at
  * @property string $password
@@ -27,6 +32,8 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property Carbon|null $updated_at
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read PendingEmailChange|null $pendingEmailChange
+ * @property-read PendingPasswordChange|null $pendingPasswordChange
  * @property-read string $public_name
  * @property-read Collection<int, PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
@@ -35,6 +42,7 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCountry($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
@@ -42,7 +50,9 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereShowPublicName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
  *
  * @mixin \Eloquent
  */
@@ -62,6 +72,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'username',
+        'country',
+        'show_public_name',
         'email',
         'password',
     ];
@@ -86,15 +99,36 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'country' => Country::class,
+            'show_public_name' => 'boolean',
         ];
     }
 
     protected function publicName(): Attribute
     {
         return Attribute::get(function (): string {
-            // TODO: Public name functionality
+            if (! $this->show_public_name && $this->username) {
+                return $this->username;
+            }
+
             return $this->name;
         });
+    }
+
+    /**
+     * @return HasOne<PendingEmailChange, $this>
+     */
+    public function pendingEmailChange(): HasOne
+    {
+        return $this->hasOne(PendingEmailChange::class);
+    }
+
+    /**
+     * @return HasOne<PendingPasswordChange, $this>
+     */
+    public function pendingPasswordChange(): HasOne
+    {
+        return $this->hasOne(PendingPasswordChange::class);
     }
 
     public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void

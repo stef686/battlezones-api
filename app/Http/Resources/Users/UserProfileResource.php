@@ -16,6 +16,12 @@ class UserProfileResource extends JsonResource
             'id' => $this->id,
             'updated_at' => $this->updated_at->toIso8601ZuluString(),
             'public_name' => $this->public_name,
+            'username' => $this->username,
+            'country' => $this->country,
+            $this->mergeWhen($request->user()?->is($this->resource), [
+                'email' => $this->email,
+                'show_public_name' => $this->show_public_name,
+            ]),
             'game_systems' => [],
             'avatar' => '',
             'location' => '',
