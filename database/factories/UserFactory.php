@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Country;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,7 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'username' => fake()->unique()->userName(),
-            'country' => fake()->countryCode(),
+            'country' => fake()->randomElement(Country::cases()),
             'show_public_name' => true,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
