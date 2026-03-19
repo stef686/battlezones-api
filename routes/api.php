@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginTokenController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Users\ChangeEmailController;
 use App\Http\Controllers\Users\MyProfileController;
 use App\Http\Controllers\Users\UpdateProfileController;
 use App\Http\Controllers\Users\UserProfileController;
@@ -17,5 +18,6 @@ Route::post('auth/reset-password', ResetPasswordController::class)->name('passwo
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', MyProfileController::class)->name('profile');
     Route::patch('profile', UpdateProfileController::class)->name('profile.update');
+    Route::post('profile/email', ChangeEmailController::class)->name('profile.email');
     Route::get('profile/{user}', UserProfileController::class)->name('profile.show');
 });
