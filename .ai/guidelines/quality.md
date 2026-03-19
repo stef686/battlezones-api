@@ -8,4 +8,6 @@ You are not just writing code. You are shaping the future of this
 project. The patterns you establish will be copied. The corners
 you cut will be cut again.
 
+Be mindful of avoiding N+1 problems and other performance issues.
+
 Fight entropy. Leave the codebase better than you found it.
