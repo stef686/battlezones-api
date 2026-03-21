@@ -15,6 +15,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
+ * @property string|null $name
+ * @property int $is_group
  * @property int|null $event_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -27,16 +29,18 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Conversation archivedForUser(int $userId)
  * @method static Builder<static>|Conversation eventsForUser(int $userId)
  * @method static \Database\Factories\ConversationFactory factory($count = null, $state = [])
- * @method static Builder<static>|Conversation forTab(ConversationTab $tab, int $userId)
+ * @method static Builder<static>|Conversation forTab(\App\Enums\ConversationTab $tab, int $userId)
  * @method static Builder<static>|Conversation forUser(int $userId)
- * @method static Builder<static>|Conversation primaryForUser(int $userId)
  * @method static Builder<static>|Conversation newModelQuery()
  * @method static Builder<static>|Conversation newQuery()
+ * @method static Builder<static>|Conversation primaryForUser(int $userId)
  * @method static Builder<static>|Conversation query()
  * @method static Builder<static>|Conversation requestsForUser(int $userId)
  * @method static Builder<static>|Conversation whereCreatedAt($value)
  * @method static Builder<static>|Conversation whereEventId($value)
  * @method static Builder<static>|Conversation whereId($value)
+ * @method static Builder<static>|Conversation whereIsGroup($value)
+ * @method static Builder<static>|Conversation whereName($value)
  * @method static Builder<static>|Conversation whereUpdatedAt($value)
  *
  * @mixin \Eloquent

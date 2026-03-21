@@ -11,14 +11,15 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property int $conversation_id
- * @property int $user_id
+ * @property int|null $user_id
  * @property string|null $body
+ * @property string|null $type
  * @property Carbon|null $edited_at
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Conversation $conversation
- * @property-read User $user
+ * @property-read User|null $user
  *
  * @method static \Database\Factories\MessageFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message newModelQuery()
@@ -30,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereEditedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUserId($value)
  *
