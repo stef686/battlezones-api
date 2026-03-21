@@ -30,6 +30,8 @@ test('other user still sees the conversation', function () {
         ->deleteJson(route('conversations.destroy', $conversation))
         ->assertSuccessful();
 
+    $otherUser->following()->attach($user);
+
     $this->actingAs($otherUser)
         ->getJson(route('conversations.index'))
         ->assertSuccessful()
@@ -75,6 +77,9 @@ test('new message after delete resurfaces conversation', function () {
     // User's pivot deleted_at should now be null (resurfaced)
     $pivot = $conversation->users()->where('user_id', $user->id)->first()->pivot;
     expect($pivot->deleted_at)->toBeNull();
+
+    // User follows otherUser so conversation appears in primary tab
+    $user->following()->attach($otherUser);
 
     // User can now see the conversation again
     $this->actingAs($user)

@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers\Conversations;
 
+use App\Enums\ConversationTab;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Conversations\ListConversationsRequest;
 use App\Http\Resources\Conversations\ConversationResource;
 use App\Models\Conversation;
 use App\Models\Message;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ListConversationsController extends Controller
 {
-    public function __invoke(Request $request): AnonymousResourceCollection
+    public function __invoke(ListConversationsRequest $request): AnonymousResourceCollection
     {
         $userId = $request->user()->id;
-        $isArchived = $request->query('filter') === 'archived';
+        $tab = ConversationTab::tryFrom($request->validated('tab', '')) ?? ConversationTab::Primary;
 
         $conversations = Conversation::query()
-            ->when($isArchived, fn ($q) => $q->archivedForUser($userId), fn ($q) => $q->forUser($userId))
+            ->tap(fn ($q) => match ($tab) {
+                ConversationTab::Primary => $q->primaryForUser($userId),
+                ConversationTab::Events => $q->eventsForUser($userId),
+                ConversationTab::Requests => $q->requestsForUser($userId),
+                ConversationTab::Archived => $q->archivedForUser($userId),
+            })
             ->with(['users', 'latestMessage'])
             ->addSelect(['latest_message_at' => Message::query()
                 ->whereColumn('conversation_id', 'conversations.id')
