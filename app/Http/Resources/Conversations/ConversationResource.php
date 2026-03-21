@@ -18,12 +18,17 @@ class ConversationResource extends JsonResource
     public function toArray(Request $request): array
     {
         $authUser = $request->user();
-        $participant = $this->users->firstWhere('id', '!=', $authUser->id);
-
         $lastReadAt = DB::table('conversation_user')
             ->where('conversation_id', $this->id)
             ->where('user_id', $authUser->id)
             ->value('last_read_at');
+        $participant = $this->users->firstWhere('id', '!=', $authUser->id);
+
+        $unreadQuery = $this->messages()->where('user_id', '!=', $authUser->id);
+
+        if ($lastReadAt) {
+            $unreadQuery->where('created_at', '>', $lastReadAt);
+        }
 
         return [
             'id' => $this->id,
@@ -36,9 +41,7 @@ class ConversationResource extends JsonResource
                 ? MessageResource::make($this->latestMessage)
                 : null
             ),
-            'unread_count' => $lastReadAt
-                ? $this->messages()->where('created_at', '>', $lastReadAt)->where('user_id', '!=', $authUser->id)->count()
-                : $this->messages()->where('user_id', '!=', $authUser->id)->count(),
+            'unread_count' => $unreadQuery->count(),
             'created_at' => $this->created_at?->toIso8601ZuluString(),
             'updated_at' => $this->updated_at?->toIso8601ZuluString(),
         ];

@@ -23,7 +23,7 @@ class MessageResource extends JsonResource
             'body' => $this->isDeleted() ? null : $this->body,
             'is_deleted' => $this->isDeleted(),
             'is_edited' => $this->edited_at !== null,
-            'is_editable' => ! $this->isDeleted() && $this->isEditable(),
+            'is_editable' => $this->isEditable(),
             'edited_at' => $this->edited_at?->toIso8601ZuluString(),
             'created_at' => $this->created_at?->toIso8601ZuluString(),
         ];

@@ -7,7 +7,6 @@ use App\Http\Requests\Conversations\StoreMessageRequest;
 use App\Http\Resources\Conversations\MessageResource;
 use App\Models\Conversation;
 use App\Notifications\Conversations\NewMessageNotification;
-use Illuminate\Support\Facades\DB;
 
 class StoreMessageController extends Controller
 {
@@ -20,15 +19,11 @@ class StoreMessageController extends Controller
             'user_id' => $sender->id,
         ]);
 
-        $recipient = $conversation->users()->where('user_id', '!=', $sender->id)->first();
+        $recipient = $conversation->users()
+            ->wherePivot('user_id', '!=', $sender->id)
+            ->first();
 
-        // Resurface conversation for recipient if they deleted it
-        $recipientDeletedAt = DB::table('conversation_user')
-            ->where('conversation_id', $conversation->id)
-            ->where('user_id', $recipient->id)
-            ->value('deleted_at');
-
-        if ($recipientDeletedAt) {
+        if ($recipient->pivot->getAttribute('deleted_at')) {
             $conversation->users()->updateExistingPivot($recipient->id, ['deleted_at' => null]);
         }
 

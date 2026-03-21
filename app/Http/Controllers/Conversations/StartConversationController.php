@@ -14,18 +14,16 @@ class StartConversationController extends Controller
     public function __invoke(StartConversationRequest $request): ConversationResource
     {
         $sender = $request->user();
-        $recipientId = (int) $request->validated('recipient_id');
+        $recipient = User::findOrFail($request->validated('recipient_id'));
 
-        $conversation = Conversation::findBetween($sender->id, $recipientId);
+        $conversation = Conversation::findBetween($sender->id, $recipient->id);
 
         if ($conversation) {
-            // Resurface for sender if deleted
             $conversation->users()->updateExistingPivot($sender->id, ['deleted_at' => null]);
-            // Resurface for recipient if deleted
-            $conversation->users()->updateExistingPivot($recipientId, ['deleted_at' => null]);
+            $conversation->users()->updateExistingPivot($recipient->id, ['deleted_at' => null]);
         } else {
             $conversation = Conversation::create();
-            $conversation->users()->attach([$sender->id, $recipientId]);
+            $conversation->users()->attach([$sender->id, $recipient->id]);
         }
 
         $message = $conversation->messages()->create([
@@ -33,7 +31,6 @@ class StartConversationController extends Controller
             'user_id' => $sender->id,
         ]);
 
-        $recipient = User::find($recipientId);
         $recipient->notify(new NewMessageNotification($message, $sender));
 
         $conversation->load(['users', 'latestMessage']);

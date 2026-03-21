@@ -4,6 +4,7 @@ namespace App\Http\Requests\Conversations;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class StartConversationRequest extends FormRequest
 {
@@ -23,9 +24,9 @@ class StartConversationRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator): void
+    public function withValidator(Validator $validator): void
     {
-        $validator->after(function ($validator) {
+        $validator->after(function (Validator $validator): void {
             if ((int) $this->input('recipient_id') === $this->user()->id) {
                 $validator->errors()->add('recipient_id', 'You cannot message yourself.');
             }
