@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginTokenController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Conversations\ArchiveConversationController;
 use App\Http\Controllers\Conversations\DeleteConversationController;
 use App\Http\Controllers\Conversations\DeleteMessageController;
 use App\Http\Controllers\Conversations\ListConversationsController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Conversations\ReadConversationController;
 use App\Http\Controllers\Conversations\ShowConversationController;
 use App\Http\Controllers\Conversations\StartConversationController;
 use App\Http\Controllers\Conversations\StoreMessageController;
+use App\Http\Controllers\Conversations\UnarchiveConversationController;
 use App\Http\Controllers\Conversations\UpdateMessageController;
 use App\Http\Controllers\Gallery\DeletePhotoController;
 use App\Http\Controllers\Gallery\ListPhotosController;
@@ -58,6 +60,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('conversations', StartConversationController::class)->name('conversations.store')->middleware('throttle:30,1');
     Route::get('conversations/{conversation}', ShowConversationController::class)->name('conversations.show');
     Route::delete('conversations/{conversation}', DeleteConversationController::class)->name('conversations.destroy');
+    Route::post('conversations/{conversation}/archive', ArchiveConversationController::class)->name('conversations.archive');
+    Route::post('conversations/{conversation}/unarchive', UnarchiveConversationController::class)->name('conversations.unarchive');
     Route::post('conversations/{conversation}/read', ReadConversationController::class)->name('conversations.read');
 
     // Messages
