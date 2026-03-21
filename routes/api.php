@@ -6,7 +6,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Users\ChangeEmailController;
 use App\Http\Controllers\Users\ChangePasswordController;
+use App\Http\Controllers\Users\GetNotificationSettingsController;
 use App\Http\Controllers\Users\MyProfileController;
+use App\Http\Controllers\Users\UpdateNotificationSettingsController;
 use App\Http\Controllers\Users\UpdateProfileController;
 use App\Http\Controllers\Users\UserProfileController;
 
@@ -22,4 +24,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('profile/email', ChangeEmailController::class)->name('profile.email');
     Route::post('profile/password', ChangePasswordController::class)->name('profile.password');
     Route::get('profile/{user}', UserProfileController::class)->name('profile.show');
+    Route::get('notification-settings', GetNotificationSettingsController::class)->name('notification-settings');
+    Route::patch('notification-settings', UpdateNotificationSettingsController::class)->name('notification-settings.update');
 });
