@@ -13,8 +13,10 @@ class ListConversationsController extends Controller
 {
     public function __invoke(Request $request): AnonymousResourceCollection
     {
+        $scope = $request->query('filter') === 'archived' ? 'archivedForUser' : 'forUser';
+
         $conversations = Conversation::query()
-            ->forUser($request->user()->id)
+            ->$scope($request->user()->id)
             ->with(['users', 'latestMessage'])
             ->addSelect(['latest_message_at' => Message::query()
                 ->whereColumn('conversation_id', 'conversations.id')
