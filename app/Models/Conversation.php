@@ -23,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $users_count
  *
  * @method static \Database\Factories\ConversationFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Conversation archivedForUser(int $userId)
  * @method static Builder<static>|Conversation forUser(int $userId)
  * @method static Builder<static>|Conversation newModelQuery()
  * @method static Builder<static>|Conversation newQuery()
@@ -44,7 +45,7 @@ class Conversation extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
-            ->withPivot('last_read_at', 'deleted_at')
+            ->withPivot('last_read_at', 'deleted_at', 'archived_at')
             ->withTimestamps();
     }
 
@@ -72,7 +73,21 @@ class Conversation extends Model
     {
         return $query->whereHas('users', function (Builder $q) use ($userId) {
             $q->where('conversation_user.user_id', $userId)
-                ->whereNull('conversation_user.deleted_at');
+                ->whereNull('conversation_user.deleted_at')
+                ->whereNull('conversation_user.archived_at');
+        });
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeArchivedForUser(Builder $query, int $userId): Builder
+    {
+        return $query->whereHas('users', function (Builder $q) use ($userId) {
+            $q->where('conversation_user.user_id', $userId)
+                ->whereNull('conversation_user.deleted_at')
+                ->whereNotNull('conversation_user.archived_at');
         });
     }
 
