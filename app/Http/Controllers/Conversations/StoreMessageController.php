@@ -27,7 +27,9 @@ class StoreMessageController extends Controller
             $conversation->users()->updateExistingPivot($recipient->id, ['deleted_at' => null]);
         }
 
-        $recipient->notify(new NewMessageNotification($message, $sender));
+        if (! $recipient->pivot->getAttribute('archived_at')) {
+            $recipient->notify(new NewMessageNotification($message, $sender));
+        }
 
         return MessageResource::make($message);
     }
