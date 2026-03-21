@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Resources\Gallery;
+
+use App\Models\Photo;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+/**
+ * @mixin Photo
+ */
+class PhotoResource extends JsonResource
+{
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray($request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'url' => $this->url,
+            'thumbnail_url' => $this->thumbnail_url,
+            'reactions_count' => $this->whenCounted('reactions'),
+            'created_at' => $this->created_at?->toIso8601ZuluString(),
+            'updated_at' => $this->updated_at?->toIso8601ZuluString(),
+        ];
+    }
+}
