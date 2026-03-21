@@ -11,6 +11,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
@@ -37,6 +38,8 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property-read int|null $notifications_count
  * @property-read PendingEmailChange|null $pendingEmailChange
  * @property-read PendingPasswordChange|null $pendingPasswordChange
+ * @property-read Collection<int, Photo> $photos
+ * @property-read int|null $photos_count
  * @property-read string $public_name
  * @property-read Collection<int, PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
@@ -119,6 +122,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
             return $this->name;
         });
+    }
+
+    /**
+     * @return HasMany<Photo, $this>
+     */
+    public function photos(): HasMany
+    {
+        return $this->hasMany(Photo::class);
     }
 
     /**
