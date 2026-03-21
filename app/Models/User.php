@@ -37,6 +37,10 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property array<array-key, mixed>|null $notification_settings
  * @property-read Collection<int, Conversation> $conversations
  * @property-read int|null $conversations_count
+ * @property-read Collection<int, User> $followers
+ * @property-read int|null $followers_count
+ * @property-read Collection<int, User> $following
+ * @property-read int|null $following_count
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read PendingEmailChange|null $pendingEmailChange
@@ -135,6 +139,22 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Conversation::class)
             ->withPivot('last_read_at', 'deleted_at', 'archived_at')
             ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function following(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id');
+    }
+
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id');
     }
 
     /**
