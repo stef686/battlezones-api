@@ -107,6 +107,128 @@ test('it lists archived conversations with tab=archived', function () {
         ->assertJsonCount(1, 'data');
 });
 
+test('primary tab lists conversations user started', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'primary']))
+        ->assertSuccessful()
+        ->assertJsonCount(1, 'data');
+});
+
+test('primary tab lists conversations with followed users', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $user->following()->attach($otherUser);
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $otherUser->id]);
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'primary']))
+        ->assertSuccessful()
+        ->assertJsonCount(1, 'data');
+});
+
+test('primary tab excludes event conversations', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create(['event_id' => 1]);
+    Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'primary']))
+        ->assertSuccessful()
+        ->assertJsonCount(0, 'data');
+});
+
+test('events tab lists only event conversations', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $eventConversation = Conversation::factory()->withUsers($user, $otherUser)->create(['event_id' => 1]);
+    Message::factory()->create(['conversation_id' => $eventConversation->id, 'user_id' => $user->id]);
+
+    $normalConversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    Message::factory()->create(['conversation_id' => $normalConversation->id, 'user_id' => $user->id]);
+
+    $response = $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'events']))
+        ->assertSuccessful()
+        ->assertJsonCount(1, 'data');
+
+    expect($response->json('data.0.id'))->toBe($eventConversation->id);
+});
+
+test('requests tab lists conversations from unfollowed users who initiated', function () {
+    $user = User::factory()->create();
+    $stranger = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $stranger)->create();
+    Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $stranger->id]);
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'requests']))
+        ->assertSuccessful()
+        ->assertJsonCount(1, 'data');
+});
+
+test('requests tab excludes event conversations', function () {
+    $user = User::factory()->create();
+    $stranger = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $stranger)->create(['event_id' => 1]);
+    Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $stranger->id]);
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'requests']))
+        ->assertSuccessful()
+        ->assertJsonCount(0, 'data');
+});
+
+test('tab validation rejects invalid values', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'invalid']))
+        ->assertUnprocessable();
+});
+
+test('conversation moves from requests to primary when user follows participant', function () {
+    $user = User::factory()->create();
+    $stranger = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $stranger)->create();
+    Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $stranger->id]);
+
+    // Conversation starts in requests
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'requests']))
+        ->assertJsonCount(1, 'data');
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'primary']))
+        ->assertJsonCount(0, 'data');
+
+    // User follows the stranger
+    $user->following()->attach($stranger);
+
+    // Now it appears in primary, not requests
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'primary']))
+        ->assertJsonCount(1, 'data');
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['tab' => 'requests']))
+        ->assertJsonCount(0, 'data');
+});
+
 test('it paginates results', function () {
     $user = User::factory()->create();
 
