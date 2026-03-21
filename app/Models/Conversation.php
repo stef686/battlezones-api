@@ -22,8 +22,8 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
- * @method static \Database\Factories\ConversationFactory factory($count = null, $state = [])
  * @method static Builder<static>|Conversation archivedForUser(int $userId)
+ * @method static \Database\Factories\ConversationFactory factory($count = null, $state = [])
  * @method static Builder<static>|Conversation forUser(int $userId)
  * @method static Builder<static>|Conversation newModelQuery()
  * @method static Builder<static>|Conversation newQuery()
