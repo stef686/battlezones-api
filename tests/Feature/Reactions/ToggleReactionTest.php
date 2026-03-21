@@ -10,7 +10,8 @@ test('it creates a reaction on first call', function () {
     $this->actingAs($user)
         ->postJson(route('gallery.react', $photo))
         ->assertSuccessful()
-        ->assertJsonPath('reactions_count', 1);
+        ->assertJsonPath('reactions_count', 1)
+        ->assertJsonPath('has_reacted', true);
 
     expect($photo->reactions()->where('user_id', $user->id)->exists())->toBeTrue();
 });
@@ -24,7 +25,8 @@ test('it removes the reaction on second call', function () {
     $this->actingAs($user)
         ->postJson(route('gallery.react', $photo))
         ->assertSuccessful()
-        ->assertJsonPath('reactions_count', 0);
+        ->assertJsonPath('reactions_count', 0)
+        ->assertJsonPath('has_reacted', false);
 
     expect($photo->reactions()->where('user_id', $user->id)->exists())->toBeFalse();
 });

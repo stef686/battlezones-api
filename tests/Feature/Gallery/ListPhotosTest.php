@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Photo;
+use App\Models\Reaction;
 use App\Models\User;
 
 test('it returns the authenticated user photos only', function () {
@@ -35,4 +36,23 @@ test('it paginates results', function () {
         ->getJson(route('gallery.index'))
         ->assertSuccessful()
         ->assertJsonStructure(['data', 'links', 'meta']);
+});
+
+test('it includes has_reacted for the authenticated user', function () {
+    $user = User::factory()->create();
+    $reactedPhoto = Photo::factory()->for($user)->create();
+    $unreactedPhoto = Photo::factory()->for($user)->create();
+
+    Reaction::factory()->for($reactedPhoto, 'reactable')->create(['user_id' => $user->id]);
+
+    $response = $this->actingAs($user)
+        ->getJson(route('gallery.index'))
+        ->assertSuccessful();
+
+    $data = collect($response->json('data'));
+    $reacted = $data->firstWhere('id', $reactedPhoto->id);
+    $unreacted = $data->firstWhere('id', $unreactedPhoto->id);
+
+    expect($reacted['has_reacted'])->toBeTrue()
+        ->and($unreacted['has_reacted'])->toBeFalse();
 });

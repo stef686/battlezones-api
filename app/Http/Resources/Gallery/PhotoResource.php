@@ -23,6 +23,7 @@ class PhotoResource extends JsonResource
             'url' => $this->url,
             'thumbnail_url' => $this->thumbnail_url,
             'reactions_count' => $this->whenCounted('reactions'),
+            'has_reacted' => $this->when(isset($this->resource->has_reacted), (bool) $this->resource->has_reacted),
             'created_at' => $this->created_at?->toIso8601ZuluString(),
             'updated_at' => $this->updated_at?->toIso8601ZuluString(),
         ];

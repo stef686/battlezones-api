@@ -25,6 +25,7 @@ class ToggleReactionController extends Controller
 
         return response()->json([
             'reactions_count' => $photo->reactions()->count(),
+            'has_reacted' => ! $deleted,
         ]);
     }
 }

@@ -16,6 +16,7 @@ class ListPhotosController extends Controller
         $photos = $request->user()
             ->photos()
             ->withCount('reactions')
+            ->withExists(['reactions as has_reacted' => fn ($query) => $query->where('user_id', $request->user()->id)])
             ->latest()
             ->paginate();
 
