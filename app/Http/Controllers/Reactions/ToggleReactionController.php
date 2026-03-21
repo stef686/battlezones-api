@@ -15,13 +15,11 @@ class ToggleReactionController extends Controller
     {
         $user = $request->user();
 
-        $existing = $photo->reactions()
+        $deleted = $photo->reactions()
             ->where('user_id', $user->id)
-            ->first();
+            ->delete();
 
-        if ($existing) {
-            $existing->delete();
-        } else {
+        if (! $deleted) {
             $photo->reactions()->create(['user_id' => $user->id]);
         }
 

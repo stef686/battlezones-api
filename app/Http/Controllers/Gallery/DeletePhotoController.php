@@ -16,7 +16,7 @@ class DeletePhotoController extends Controller
     {
         Gate::authorize('delete', $photo);
 
-        Storage::disk('public')->delete([$photo->path, $photo->thumbnail_path]);
+        Storage::disk('public')->delete(array_filter([$photo->path, $photo->thumbnail_path]));
         $photo->delete();
 
         return response()->noContent();

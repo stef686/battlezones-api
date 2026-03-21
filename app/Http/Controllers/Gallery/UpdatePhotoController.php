@@ -19,7 +19,7 @@ class UpdatePhotoController extends Controller
         $data = $request->safe()->except('photo');
 
         if ($request->hasFile('photo')) {
-            Storage::disk('public')->delete([$photo->path, $photo->thumbnail_path]);
+            Storage::disk('public')->delete(array_filter([$photo->path, $photo->thumbnail_path]));
 
             $user = $request->user();
             $file = $request->file('photo');
