@@ -4,6 +4,13 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginTokenController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Gallery\DeletePhotoController;
+use App\Http\Controllers\Gallery\ListPhotosController;
+use App\Http\Controllers\Gallery\ShowPhotoController;
+use App\Http\Controllers\Gallery\StorePhotoController;
+use App\Http\Controllers\Gallery\UpdatePhotoController;
+use App\Http\Controllers\Gallery\UserGalleryController;
+use App\Http\Controllers\Reactions\ToggleReactionController;
 use App\Http\Controllers\Users\ChangeEmailController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\GetNotificationSettingsController;
@@ -26,4 +33,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile/{user}', UserProfileController::class)->name('profile.show');
     Route::get('notification-settings', GetNotificationSettingsController::class)->name('notification-settings');
     Route::patch('notification-settings', UpdateNotificationSettingsController::class)->name('notification-settings.update');
+
+    // Gallery
+    Route::get('gallery', ListPhotosController::class)->name('gallery.index');
+    Route::post('gallery', StorePhotoController::class)->name('gallery.store');
+    Route::get('gallery/{photo}', ShowPhotoController::class)->name('gallery.show');
+    Route::patch('gallery/{photo}', UpdatePhotoController::class)->name('gallery.update');
+    Route::delete('gallery/{photo}', DeletePhotoController::class)->name('gallery.destroy');
+    Route::post('gallery/{photo}/react', ToggleReactionController::class)->name('gallery.react');
+
+    // Public galleries
+    Route::get('users/{user}/gallery', UserGalleryController::class)->name('users.gallery');
 });
