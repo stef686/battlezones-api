@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\Country;
+use App\Enums\NotificationChannel;
+use App\Enums\NotificationType;
 use App\Notifications\Auth\ResetPasswordNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -30,7 +32,7 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string|null $notification_settings
+ * @property array<string, list<string>>|null $notification_settings
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read PendingEmailChange|null $pendingEmailChange
@@ -79,6 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'show_public_name',
         'email',
         'password',
+        'notification_settings',
     ];
 
     /**
@@ -103,6 +106,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'country' => Country::class,
             'show_public_name' => 'boolean',
+            'notification_settings' => 'array',
         ];
     }
 
@@ -131,6 +135,23 @@ class User extends Authenticatable implements MustVerifyEmail
     public function pendingPasswordChange(): HasOne
     {
         return $this->hasOne(PendingPasswordChange::class);
+    }
+
+    /**
+     * @return list<NotificationChannel>
+     */
+    public function getNotificationChannels(NotificationType $type): array
+    {
+        $channels = $this->notification_settings[$type->value] ?? null;
+
+        if ($channels === null) {
+            return [NotificationChannel::Email];
+        }
+
+        return array_map(
+            fn (string $channel): NotificationChannel => NotificationChannel::from($channel),
+            $channels,
+        );
     }
 
     public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
