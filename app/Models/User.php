@@ -133,7 +133,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function conversations(): BelongsToMany
     {
         return $this->belongsToMany(Conversation::class)
-            ->withPivot('last_read_at', 'deleted_at')
+            ->withPivot('last_read_at', 'deleted_at', 'archived_at')
             ->withTimestamps();
     }
 

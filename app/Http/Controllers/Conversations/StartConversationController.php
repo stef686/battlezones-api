@@ -31,9 +31,11 @@ class StartConversationController extends Controller
             'user_id' => $sender->id,
         ]);
 
-        $recipientPivot = $conversation->users()->wherePivot('user_id', $recipient->id)->first();
+        $recipientPivot = $conversation->users()
+            ->wherePivot('user_id', $recipient->id)
+            ->first();
 
-        if (! $recipientPivot->pivot->getAttribute('archived_at')) {
+        if (! $recipientPivot?->pivot->getAttribute('archived_at')) {
             $recipient->notify(new NewMessageNotification($message, $sender));
         }
 

@@ -22,9 +22,9 @@ class ConversationResource extends JsonResource
             ->where('conversation_id', $this->id)
             ->where('user_id', $authUser->id)
             ->first(['last_read_at', 'archived_at']);
-        $lastReadAt = $pivot?->last_read_at;
         $participant = $this->users->firstWhere('id', '!=', $authUser->id);
 
+        $lastReadAt = $pivot?->last_read_at;
         $unreadQuery = $this->messages()->where('user_id', '!=', $authUser->id);
 
         if ($lastReadAt) {
