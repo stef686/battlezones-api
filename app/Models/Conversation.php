@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
+ * @property int|null $event_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Message|null $latestMessage
@@ -29,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Conversation newQuery()
  * @method static Builder<static>|Conversation query()
  * @method static Builder<static>|Conversation whereCreatedAt($value)
+ * @method static Builder<static>|Conversation whereEventId($value)
  * @method static Builder<static>|Conversation whereId($value)
  * @method static Builder<static>|Conversation whereUpdatedAt($value)
  *
