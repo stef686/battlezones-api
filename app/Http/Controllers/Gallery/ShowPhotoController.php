@@ -13,8 +13,7 @@ class ShowPhotoController extends Controller
 {
     public function __invoke(Request $request, Photo $photo): PhotoResource
     {
-        $photo->loadCount('reactions')
-            ->loadExists(['reactions as has_reacted' => fn ($query) => $query->where('user_id', $request->user()->id)]);
+        $photo->loadReactionData($request->user()->id);
 
         return PhotoResource::make($photo);
     }

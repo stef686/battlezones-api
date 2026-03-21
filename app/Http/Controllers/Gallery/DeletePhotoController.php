@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Gallery;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Gallery\DeletePhotoRequest;
 use App\Models\Photo;
+use App\Services\PhotoStorageService;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Knuckles\Scribe\Attributes\Group;
 
 #[Group('Gallery')]
 class DeletePhotoController extends Controller
 {
-    public function __invoke(Photo $photo): Response
+    public function __invoke(DeletePhotoRequest $request, Photo $photo, PhotoStorageService $storage): Response
     {
-        Gate::authorize('delete', $photo);
-
-        Storage::disk('public')->delete(array_filter([$photo->path, $photo->thumbnail_path]));
+        $storage->delete($photo);
         $photo->delete();
 
         return response()->noContent();
