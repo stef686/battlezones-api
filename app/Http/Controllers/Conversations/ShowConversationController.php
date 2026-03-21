@@ -7,6 +7,7 @@ use App\Http\Resources\Conversations\MessageResource;
 use App\Models\Conversation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class ShowConversationController extends Controller
@@ -16,7 +17,10 @@ class ShowConversationController extends Controller
         Gate::authorize('view', $conversation);
 
         $userId = $request->user()->id;
-        $deletedAt = $conversation->users()->wherePivot('user_id', $userId)->first()?->pivot?->getAttribute('deleted_at');
+        $deletedAt = DB::table('conversation_user')
+            ->where('conversation_id', $conversation->id)
+            ->where('user_id', $userId)
+            ->value('deleted_at');
 
         $messages = $conversation->messages()
             ->when($deletedAt, fn ($q, $deletedAt) => $q->where('created_at', '>', $deletedAt))
