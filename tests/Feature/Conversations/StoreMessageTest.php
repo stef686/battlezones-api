@@ -66,6 +66,41 @@ test('it validates body', function () {
         ->assertJsonValidationErrors('body');
 });
 
+test('archived conversation stays archived when new message arrives', function () {
+    Notification::fake();
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    $conversation->users()->updateExistingPivot($otherUser->id, ['archived_at' => now()]);
+
+    $this->actingAs($user)
+        ->postJson(route('conversations.messages.store', $conversation), [
+            'body' => 'Still archived?',
+        ])
+        ->assertSuccessful();
+
+    $pivot = $conversation->users()->where('user_id', $otherUser->id)->first()->pivot;
+    expect($pivot->archived_at)->not->toBeNull();
+});
+
+test('it does not notify an archived recipient', function () {
+    Notification::fake();
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    $conversation->users()->updateExistingPivot($otherUser->id, ['archived_at' => now()]);
+
+    $this->actingAs($user)
+        ->postJson(route('conversations.messages.store', $conversation), [
+            'body' => 'No notification',
+        ])
+        ->assertSuccessful();
+
+    Notification::assertNotSentTo($otherUser, NewMessageNotification::class);
+});
+
 test('it notifies the recipient', function () {
     Notification::fake();
     $user = User::factory()->create();

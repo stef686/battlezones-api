@@ -54,6 +54,20 @@ test('it paginates messages', function () {
         ->assertJsonStructure(['data', 'links', 'meta']);
 });
 
+test('archived conversation is still viewable', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $otherUser->id]);
+    $conversation->users()->updateExistingPivot($user->id, ['archived_at' => now()]);
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.show', $conversation))
+        ->assertSuccessful()
+        ->assertJsonCount(1, 'data');
+});
+
 test('it updates last_read_at when viewing', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();

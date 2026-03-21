@@ -79,6 +79,34 @@ test('it includes participant and latest message', function () {
         ->and($data['latest_message']['body'])->toBe('Hi');
 });
 
+test('it excludes archived conversations from default list', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $otherUser->id]);
+    $conversation->users()->updateExistingPivot($user->id, ['archived_at' => now()]);
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index'))
+        ->assertSuccessful()
+        ->assertJsonCount(0, 'data');
+});
+
+test('it lists archived conversations with filter=archived', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $otherUser->id]);
+    $conversation->users()->updateExistingPivot($user->id, ['archived_at' => now()]);
+
+    $this->actingAs($user)
+        ->getJson(route('conversations.index', ['filter' => 'archived']))
+        ->assertSuccessful()
+        ->assertJsonCount(1, 'data');
+});
+
 test('it paginates results', function () {
     $user = User::factory()->create();
 
