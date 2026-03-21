@@ -24,11 +24,14 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $users_count
  *
  * @method static Builder<static>|Conversation archivedForUser(int $userId)
+ * @method static Builder<static>|Conversation eventsForUser(int $userId)
  * @method static \Database\Factories\ConversationFactory factory($count = null, $state = [])
  * @method static Builder<static>|Conversation forUser(int $userId)
+ * @method static Builder<static>|Conversation primaryForUser(int $userId)
  * @method static Builder<static>|Conversation newModelQuery()
  * @method static Builder<static>|Conversation newQuery()
  * @method static Builder<static>|Conversation query()
+ * @method static Builder<static>|Conversation requestsForUser(int $userId)
  * @method static Builder<static>|Conversation whereCreatedAt($value)
  * @method static Builder<static>|Conversation whereEventId($value)
  * @method static Builder<static>|Conversation whereId($value)
@@ -78,6 +81,57 @@ class Conversation extends Model
                 ->whereNull('conversation_user.deleted_at')
                 ->whereNull('conversation_user.archived_at');
         });
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopePrimaryForUser(Builder $query, int $userId): Builder
+    {
+        return $query->forUser($userId)
+            ->whereNull('event_id')
+            ->where(function (Builder $q) use ($userId) {
+                $q->whereRaw(
+                    '(select user_id from messages where messages.conversation_id = conversations.id order by created_at asc limit 1) = ?',
+                    [$userId],
+                )->orWhereHas('users', function (Builder $u) use ($userId) {
+                    $u->where('conversation_user.user_id', '!=', $userId)
+                        ->whereIn('conversation_user.user_id', function ($sub) use ($userId) {
+                            $sub->select('following_id')
+                                ->from('follows')
+                                ->where('follower_id', $userId);
+                        });
+                });
+            });
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeEventsForUser(Builder $query, int $userId): Builder
+    {
+        return $query->forUser($userId)->whereNotNull('event_id');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeRequestsForUser(Builder $query, int $userId): Builder
+    {
+        return $query->forUser($userId)
+            ->whereNull('event_id')
+            ->whereRaw('(select user_id from messages where messages.conversation_id = conversations.id order by created_at asc limit 1) != ?', [$userId])
+            ->whereDoesntHave('users', function (Builder $u) use ($userId) {
+                $u->where('conversation_user.user_id', '!=', $userId)
+                    ->whereIn('conversation_user.user_id', function ($sub) use ($userId) {
+                        $sub->select('following_id')
+                            ->from('follows')
+                            ->where('follower_id', $userId);
+                    });
+            });
     }
 
     /**
