@@ -19,4 +19,18 @@ class ConversationPolicy
     {
         return $this->view($user, $conversation);
     }
+
+    public function archive(User $user, Conversation $conversation): bool
+    {
+        return $this->view($user, $conversation);
+    }
+
+    public function unarchive(User $user, Conversation $conversation): bool
+    {
+        return $conversation->users()
+            ->wherePivot('user_id', $user->id)
+            ->wherePivotNull('deleted_at')
+            ->wherePivotNotNull('archived_at')
+            ->exists();
+    }
 }
