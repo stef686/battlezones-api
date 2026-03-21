@@ -9,6 +9,6 @@ class GetNotificationSettingsController extends Controller
 {
     public function __invoke(): NotificationSettingsResource
     {
-        return NotificationSettingsResource::make(request()->user());
+        return NotificationSettingsResource::make(auth()->user());
     }
 }
