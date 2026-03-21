@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ConversationTab;
 use Database\Factories\ConversationFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -26,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Conversation archivedForUser(int $userId)
  * @method static Builder<static>|Conversation eventsForUser(int $userId)
  * @method static \Database\Factories\ConversationFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Conversation forTab(ConversationTab $tab, int $userId)
  * @method static Builder<static>|Conversation forUser(int $userId)
  * @method static Builder<static>|Conversation primaryForUser(int $userId)
  * @method static Builder<static>|Conversation newModelQuery()
@@ -74,6 +76,20 @@ class Conversation extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeForTab(Builder $query, ConversationTab $tab, int $userId): Builder
+    {
+        return match ($tab) {
+            ConversationTab::Primary => $query->primaryForUser($userId),
+            ConversationTab::Events => $query->eventsForUser($userId),
+            ConversationTab::Requests => $query->requestsForUser($userId),
+            ConversationTab::Archived => $query->archivedForUser($userId),
+        };
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeForUser(Builder $query, int $userId): Builder
     {
         return $query->whereHas('users', function (Builder $q) use ($userId) {
@@ -92,17 +108,8 @@ class Conversation extends Model
         return $query->forUser($userId)
             ->whereNull('event_id')
             ->where(function (Builder $q) use ($userId) {
-                $q->whereRaw(
-                    '(select user_id from messages where messages.conversation_id = conversations.id order by created_at asc limit 1) = ?',
-                    [$userId],
-                )->orWhereHas('users', function (Builder $u) use ($userId) {
-                    $u->where('conversation_user.user_id', '!=', $userId)
-                        ->whereIn('conversation_user.user_id', function ($sub) use ($userId) {
-                            $sub->select('following_id')
-                                ->from('follows')
-                                ->where('follower_id', $userId);
-                        });
-                });
+                $q->whereRaw(self::firstMessageSenderSql('='), [$userId])
+                    ->orWhereHas('users', self::otherUserFollowedBy($userId));
             });
     }
 
@@ -123,15 +130,8 @@ class Conversation extends Model
     {
         return $query->forUser($userId)
             ->whereNull('event_id')
-            ->whereRaw('(select user_id from messages where messages.conversation_id = conversations.id order by created_at asc limit 1) != ?', [$userId])
-            ->whereDoesntHave('users', function (Builder $u) use ($userId) {
-                $u->where('conversation_user.user_id', '!=', $userId)
-                    ->whereIn('conversation_user.user_id', function ($sub) use ($userId) {
-                        $sub->select('following_id')
-                            ->from('follows')
-                            ->where('follower_id', $userId);
-                    });
-            });
+            ->whereRaw(self::firstMessageSenderSql('!='), [$userId])
+            ->whereDoesntHave('users', self::otherUserFollowedBy($userId));
     }
 
     /**
@@ -145,6 +145,26 @@ class Conversation extends Model
                 ->whereNull('conversation_user.deleted_at')
                 ->whereNotNull('conversation_user.archived_at');
         });
+    }
+
+    /**
+     * @return \Closure(Builder): void
+     */
+    private static function otherUserFollowedBy(int $userId): \Closure
+    {
+        return function (Builder $q) use ($userId) {
+            $q->where('conversation_user.user_id', '!=', $userId)
+                ->whereIn('conversation_user.user_id', function ($sub) use ($userId) {
+                    $sub->select('following_id')
+                        ->from('follows')
+                        ->where('follower_id', $userId);
+                });
+        };
+    }
+
+    private static function firstMessageSenderSql(string $operator): string
+    {
+        return "(select user_id from messages where messages.conversation_id = conversations.id order by created_at asc limit 1) {$operator} ?";
     }
 
     public static function findBetween(int $userA, int $userB): ?self

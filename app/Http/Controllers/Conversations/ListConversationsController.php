@@ -18,12 +18,7 @@ class ListConversationsController extends Controller
         $tab = ConversationTab::tryFrom($request->validated('tab', '')) ?? ConversationTab::Primary;
 
         $conversations = Conversation::query()
-            ->tap(fn ($q) => match ($tab) {
-                ConversationTab::Primary => $q->primaryForUser($userId),
-                ConversationTab::Events => $q->eventsForUser($userId),
-                ConversationTab::Requests => $q->requestsForUser($userId),
-                ConversationTab::Archived => $q->archivedForUser($userId),
-            })
+            ->forTab($tab, $userId)
             ->with(['users', 'latestMessage'])
             ->addSelect(['latest_message_at' => Message::query()
                 ->whereColumn('conversation_id', 'conversations.id')
