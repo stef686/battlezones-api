@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\MessageType;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
@@ -34,6 +35,15 @@ class MessageFactory extends Factory
         return $this->state([
             'body' => null,
             'deleted_at' => now(),
+        ]);
+    }
+
+    public function system(string $body = 'System message'): static
+    {
+        return $this->state([
+            'type' => MessageType::System,
+            'user_id' => null,
+            'body' => $body,
         ]);
     }
 }

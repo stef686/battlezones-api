@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property string|null $name
- * @property int $is_group
+ * @property bool $is_group
  * @property int|null $event_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -51,12 +51,36 @@ class Conversation extends Model
     use HasFactory;
 
     /**
+     * @var list<string>
+     */
+    protected $fillable = [
+        'name',
+        'is_group',
+        'event_id',
+    ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_group' => 'boolean',
+        ];
+    }
+
+    public function isGroup(): bool
+    {
+        return $this->is_group;
+    }
+
+    /**
      * @return BelongsToMany<User, $this>
      */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
-            ->withPivot('last_read_at', 'deleted_at', 'archived_at')
+            ->withPivot('last_read_at', 'visible_from', 'deleted_at', 'archived_at')
             ->withTimestamps();
     }
 
@@ -112,7 +136,8 @@ class Conversation extends Model
         return $query->forUser($userId)
             ->whereNull('event_id')
             ->where(function (Builder $q) use ($userId) {
-                $q->whereRaw(self::firstMessageSenderSql('='), [$userId])
+                $q->where('is_group', true)
+                    ->orWhereRaw(self::firstMessageSenderSql('='), [$userId])
                     ->orWhereHas('users', self::otherUserFollowedBy($userId));
             });
     }
@@ -134,6 +159,7 @@ class Conversation extends Model
     {
         return $query->forUser($userId)
             ->whereNull('event_id')
+            ->where('is_group', false)
             ->whereRaw(self::firstMessageSenderSql('!='), [$userId])
             ->whereDoesntHave('users', self::otherUserFollowedBy($userId));
     }
@@ -174,6 +200,7 @@ class Conversation extends Model
     public static function findBetween(int $userA, int $userB): ?self
     {
         return self::query()
+            ->where('is_group', false)
             ->whereHas('users', fn (Builder $q) => $q->where('conversation_user.user_id', $userA))
             ->whereHas('users', fn (Builder $q) => $q->where('conversation_user.user_id', $userB))
             ->first();

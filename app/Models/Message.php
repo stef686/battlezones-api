@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MessageType;
 use Database\Factories\MessageFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Support\Carbon;
  * @property int $conversation_id
  * @property int|null $user_id
  * @property string|null $body
- * @property string|null $type
+ * @property MessageType|null $type
  * @property Carbon|null $edited_at
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
@@ -47,6 +48,7 @@ class Message extends Model
      */
     protected $fillable = [
         'body',
+        'type',
         'user_id',
         'conversation_id',
         'edited_at',
@@ -59,6 +61,7 @@ class Message extends Model
     protected function casts(): array
     {
         return [
+            'type' => MessageType::class,
             'edited_at' => 'datetime',
             'deleted_at' => 'datetime',
         ];
@@ -88,5 +91,10 @@ class Message extends Model
     public function isDeleted(): bool
     {
         return $this->deleted_at !== null;
+    }
+
+    public function isSystem(): bool
+    {
+        return $this->type === MessageType::System;
     }
 }

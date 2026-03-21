@@ -19,6 +19,14 @@ class ConversationFactory extends Factory
         return [];
     }
 
+    public function group(string $name = 'Test Group'): static
+    {
+        return $this->state([
+            'is_group' => true,
+            'name' => $name,
+        ]);
+    }
+
     public function withUsers(User $userA, User $userB): static
     {
         return $this->afterCreating(function (Conversation $conversation) use ($userA, $userB) {
