@@ -19,7 +19,7 @@ class StartConversationController extends Controller
         $conversation = Conversation::findBetween($sender->id, $recipient->id);
 
         if ($conversation) {
-            $conversation->users()->updateExistingPivot($sender->id, ['deleted_at' => null]);
+            $conversation->users()->updateExistingPivot($sender->id, ['deleted_at' => null, 'archived_at' => null]);
             $conversation->users()->updateExistingPivot($recipient->id, ['deleted_at' => null]);
         } else {
             $conversation = Conversation::create();
@@ -31,7 +31,11 @@ class StartConversationController extends Controller
             'user_id' => $sender->id,
         ]);
 
-        $recipient->notify(new NewMessageNotification($message, $sender));
+        $recipientPivot = $conversation->users()->wherePivot('user_id', $recipient->id)->first();
+
+        if (! $recipientPivot->pivot->getAttribute('archived_at')) {
+            $recipient->notify(new NewMessageNotification($message, $sender));
+        }
 
         $conversation->load(['users', 'latestMessage']);
 
