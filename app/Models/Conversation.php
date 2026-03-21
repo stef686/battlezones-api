@@ -4,12 +4,35 @@ namespace App\Models;
 
 use Database\Factories\ConversationFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Message|null $latestMessage
+ * @property-read Collection<int, Message> $messages
+ * @property-read int|null $messages_count
+ * @property-read Collection<int, User> $users
+ * @property-read int|null $users_count
+ *
+ * @method static \Database\Factories\ConversationFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Conversation forUser(int $userId)
+ * @method static Builder<static>|Conversation newModelQuery()
+ * @method static Builder<static>|Conversation newQuery()
+ * @method static Builder<static>|Conversation query()
+ * @method static Builder<static>|Conversation whereCreatedAt($value)
+ * @method static Builder<static>|Conversation whereId($value)
+ * @method static Builder<static>|Conversation whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 class Conversation extends Model
 {
     /** @use HasFactory<ConversationFactory> */

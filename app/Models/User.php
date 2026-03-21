@@ -35,6 +35,8 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property array<array-key, mixed>|null $notification_settings
+ * @property-read Collection<int, Conversation> $conversations
+ * @property-read int|null $conversations_count
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read PendingEmailChange|null $pendingEmailChange

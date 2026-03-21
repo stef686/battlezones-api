@@ -20,6 +20,19 @@ use Illuminate\Support\Carbon;
  * @property-read Conversation $conversation
  * @property-read User $user
  *
+ * @method static \Database\Factories\MessageFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereConversationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereEditedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Message extends Model
