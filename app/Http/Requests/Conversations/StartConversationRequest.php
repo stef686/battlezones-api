@@ -37,7 +37,19 @@ class StartConversationRequest extends FormRequest
 
             $recipient = User::find($this->input('recipient_id'));
 
-            if ($recipient && ! app(PrivacyService::class)->canMessage($this->user(), $recipient)) {
+            if (! $recipient) {
+                return;
+            }
+
+            $privacyService = app(PrivacyService::class);
+
+            if ($privacyService->isBlocked($this->user(), $recipient)) {
+                $validator->errors()->add('recipient_id', 'You cannot message this user.');
+
+                return;
+            }
+
+            if (! $privacyService->canMessage($this->user(), $recipient)) {
                 $validator->errors()->add('recipient_id', "This user's privacy settings prevent you from messaging them.");
             }
         });
