@@ -60,6 +60,22 @@ test('it returns 403 for non-owner', function () {
         ->assertForbidden();
 });
 
+test('it rejects empty body', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    $message = Message::factory()->create([
+        'conversation_id' => $conversation->id,
+        'user_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)
+        ->patchJson(route('conversations.messages.update', [$conversation, $message]), ['body' => ''])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('body');
+});
+
 test('it cannot edit a deleted message', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();

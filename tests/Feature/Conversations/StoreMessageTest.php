@@ -66,6 +66,18 @@ test('it validates body', function () {
         ->assertJsonValidationErrors('body');
 });
 
+test('it rejects empty body', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+
+    $this->actingAs($user)
+        ->postJson(route('conversations.messages.store', $conversation), ['body' => ''])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('body');
+});
+
 test('archived conversation stays archived when new message arrives', function () {
     Notification::fake();
     $user = User::factory()->create();
