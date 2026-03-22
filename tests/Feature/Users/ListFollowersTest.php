@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Resources\Users\UserCardResource;
 use App\Models\User;
+
+beforeEach(function () {
+    UserCardResource::resetAuthFollowing();
+});
 
 test('list followers returns paginated results with correct fields', function () {
     $user = User::factory()->create();

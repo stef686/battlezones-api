@@ -17,8 +17,6 @@ class ListFollowingController extends Controller
     #[ResponseFromApiResource(UserCardResource::class, paginate: 15)]
     public function __invoke(User $user): AnonymousResourceCollection
     {
-        UserCardResource::resetAuthFollowing();
-
         $following = $user->following()->paginate();
 
         return UserCardResource::collection($following);
