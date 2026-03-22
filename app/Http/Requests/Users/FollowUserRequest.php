@@ -2,14 +2,18 @@
 
 namespace App\Http\Requests\Users;
 
+use App\Services\PrivacyService;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FollowUserRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize(PrivacyService $privacyService): bool
     {
-        return $this->user()->isNot($this->route('user'));
+        $target = $this->route('user');
+
+        return $this->user()->isNot($target)
+            && ! $privacyService->isBlocked($this->user(), $target);
     }
 
     /**
