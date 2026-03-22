@@ -25,15 +25,18 @@ use App\Http\Controllers\Gallery\StorePhotoController;
 use App\Http\Controllers\Gallery\UpdatePhotoController;
 use App\Http\Controllers\Gallery\UserGalleryController;
 use App\Http\Controllers\Reactions\ToggleReactionController;
+use App\Http\Controllers\Users\BlockUserController;
 use App\Http\Controllers\Users\ChangeEmailController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\FollowUserController;
 use App\Http\Controllers\Users\GetNotificationSettingsController;
 use App\Http\Controllers\Users\GetPrivacySettingsController;
+use App\Http\Controllers\Users\ListBlockedUsersController;
 use App\Http\Controllers\Users\ListFollowersController;
 use App\Http\Controllers\Users\ListFollowingController;
 use App\Http\Controllers\Users\MyProfileController;
 use App\Http\Controllers\Users\SearchUsersController;
+use App\Http\Controllers\Users\UnblockUserController;
 use App\Http\Controllers\Users\UnfollowUserController;
 use App\Http\Controllers\Users\UpdateNotificationSettingsController;
 use App\Http\Controllers\Users\UpdatePrivacySettingsController;
@@ -76,6 +79,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('users/{user}/follow', UnfollowUserController::class)->name('users.unfollow');
     Route::get('users/{user}/followers', ListFollowersController::class)->name('users.followers');
     Route::get('users/{user}/following', ListFollowingController::class)->name('users.following');
+
+    // Block
+    Route::post('users/{user}/block', BlockUserController::class)->name('users.block');
+    Route::delete('users/{user}/block', UnblockUserController::class)->name('users.unblock');
+    Route::get('blocked-users', ListBlockedUsersController::class)->name('blocked-users.index');
 
     // Conversations
     Route::get('conversations', ListConversationsController::class)->name('conversations.index');
