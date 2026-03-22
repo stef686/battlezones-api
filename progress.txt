@@ -1,1 +1,2 @@
 Step 2: Created PrivacyOption enum (app/Enums/PrivacyOption.php) — string-backed with label() method, following NotificationType pattern. Cases: Anyone, FollowersOnly, FollowingOnly, MutualFollowers, FellowClubMembers.
+Step 1: Created migration add_privacy_settings_to_users_table — adds nullable JSON privacy_settings column to users table.
