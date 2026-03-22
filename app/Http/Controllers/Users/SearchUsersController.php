@@ -12,15 +12,11 @@ class SearchUsersController extends Controller
     public function __invoke(SearchUsersRequest $request): JsonResponse
     {
         $query = $request->validated('q');
-        $authId = $request->user()->id;
-
         $authUser = $request->user();
-        $blockedIds = $authUser->blockedUsers()->pluck('blocked_id')
-            ->merge($authUser->blockedBy()->pluck('blocker_id'));
 
         $users = User::query()
-            ->where('id', '!=', $authId)
-            ->whereNotIn('id', $blockedIds)
+            ->where('id', '!=', $authUser->id)
+            ->whereNotIn('id', $authUser->allBlockedIds())
             ->where(function ($q) use ($query) {
                 $q->where('username', 'like', "{$query}%")
                     ->orWhere('name', 'like', "{$query}%");

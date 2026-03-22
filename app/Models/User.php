@@ -193,6 +193,17 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get all user IDs blocked by or blocking this user (both directions).
+     *
+     * @return \Illuminate\Support\Collection<int, int>
+     */
+    public function allBlockedIds(): \Illuminate\Support\Collection
+    {
+        return $this->blockedUsers()->pluck('blocked_id')
+            ->merge($this->blockedBy()->pluck('blocker_id'));
+    }
+
+    /**
      * @return HasMany<Photo, $this>
      */
     public function photos(): HasMany
