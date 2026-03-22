@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Users\UserProfileResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
@@ -14,9 +15,9 @@ class UnfollowUserController extends Controller
 {
     #[Endpoint('Unfollow User', 'Unfollow the given user.')]
     #[ResponseFromApiResource(UserProfileResource::class)]
-    public function __invoke(User $user): UserProfileResource
+    public function __invoke(Request $request, User $user): UserProfileResource
     {
-        auth()->user()->following()->detach($user);
+        $request->user()->following()->detach($user);
 
         $user->loadCount(['followers', 'following']);
 

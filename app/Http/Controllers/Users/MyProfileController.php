@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Users\UserProfileResource;
+use Illuminate\Http\Request;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
@@ -13,9 +14,9 @@ class MyProfileController extends Controller
 {
     #[Endpoint('Current User Profile', "Display the current user's profile data.")]
     #[ResponseFromApiResource(UserProfileResource::class)]
-    public function __invoke(): UserProfileResource
+    public function __invoke(Request $request): UserProfileResource
     {
-        $user = auth()->user();
+        $user = $request->user();
         $user->loadCount(['followers', 'following']);
 
         return UserProfileResource::make($user);

@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Users;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -10,7 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class UserProfileResource extends JsonResource
 {
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
@@ -27,7 +28,7 @@ class UserProfileResource extends JsonResource
             'followers_count' => $this->followers_count ?? 0,
             'following_count' => $this->following_count ?? 0,
             $this->mergeWhen($request->user()?->isNot($this->resource), fn () => [
-                'is_following' => $request->user()?->following()->where('following_id', $this->id)->exists() ?? false,
+                'is_following' => (bool) $request->user()?->following()->where('following_id', $this->id)->exists(),
             ]),
         ];
     }
