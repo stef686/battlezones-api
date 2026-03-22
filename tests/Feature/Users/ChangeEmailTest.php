@@ -13,7 +13,7 @@ test('requesting email change sends verification to new email and notification t
     $user = User::factory()->create(['email' => 'old@example.com']);
 
     $this->actingAs($user)
-        ->postJson(route('profile.email'), ['email' => 'new@example.com'])
+        ->postJson(route('profile.email'), ['current_password' => 'password', 'email' => 'new@example.com'])
         ->assertSuccessful()
         ->assertJsonPath('message', 'A verification link has been sent to your new email address.');
 
@@ -29,16 +29,34 @@ test('requesting email change rejects duplicate email', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
-        ->postJson(route('profile.email'), ['email' => 'taken@example.com'])
+        ->postJson(route('profile.email'), ['current_password' => 'password', 'email' => 'taken@example.com'])
         ->assertUnprocessable()
         ->assertJsonValidationErrors('email');
+});
+
+test('requesting email change rejects wrong password', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->postJson(route('profile.email'), ['current_password' => 'wrong', 'email' => 'new@example.com'])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('current_password');
+});
+
+test('requesting email change rejects missing password', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->postJson(route('profile.email'), ['email' => 'new@example.com'])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('current_password');
 });
 
 test('requesting email change rejects invalid email', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
-        ->postJson(route('profile.email'), ['email' => 'not-an-email'])
+        ->postJson(route('profile.email'), ['current_password' => 'password', 'email' => 'not-an-email'])
         ->assertUnprocessable()
         ->assertJsonValidationErrors('email');
 });
@@ -95,7 +113,7 @@ test('old email stays until verification is completed', function () {
     $user = User::factory()->create(['email' => 'old@example.com']);
 
     $this->actingAs($user)
-        ->postJson(route('profile.email'), ['email' => 'new@example.com'])
+        ->postJson(route('profile.email'), ['current_password' => 'password', 'email' => 'new@example.com'])
         ->assertSuccessful();
 
     expect($user->fresh()->email)->toBe('old@example.com');
@@ -114,7 +132,7 @@ test('requesting a new email change replaces the previous pending change', funct
     ]);
 
     $this->actingAs($user)
-        ->postJson(route('profile.email'), ['email' => 'second@example.com'])
+        ->postJson(route('profile.email'), ['current_password' => 'password', 'email' => 'second@example.com'])
         ->assertSuccessful();
 
     expect(PendingEmailChange::query()->where('user_id', $user->id)->count())->toBe(1)
