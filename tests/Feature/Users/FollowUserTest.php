@@ -78,3 +78,16 @@ test('unfollowing someone not followed is idempotent', function () {
     $this->deleteJson(route('users.unfollow', $target))
         ->assertSuccessful();
 });
+
+test('deleting a user cascades to their follow records', function () {
+    $user = User::factory()->create();
+    $target = User::factory()->create();
+
+    $user->following()->attach($target);
+    $target->following()->attach($user);
+
+    $user->delete();
+
+    $this->assertDatabaseMissing('follows', ['follower_id' => $user->id]);
+    $this->assertDatabaseMissing('follows', ['following_id' => $user->id]);
+});

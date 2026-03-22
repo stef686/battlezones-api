@@ -37,12 +37,12 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property Carbon|null $updated_at
  * @property array<array-key, mixed>|null $notification_settings
  * @property array<array-key, mixed>|null $privacy_settings
- * @property-read Collection<int, Conversation> $conversations
- * @property-read int|null $conversations_count
  * @property-read Collection<int, User> $blockedBy
  * @property-read int|null $blocked_by_count
  * @property-read Collection<int, User> $blockedUsers
  * @property-read int|null $blocked_users_count
+ * @property-read Collection<int, Conversation> $conversations
+ * @property-read int|null $conversations_count
  * @property-read Collection<int, User> $followers
  * @property-read int|null $followers_count
  * @property-read Collection<int, User> $following
