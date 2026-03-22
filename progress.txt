@@ -1,0 +1,1 @@
+Step 2: Created PrivacyOption enum (app/Enums/PrivacyOption.php) — string-backed with label() method, following NotificationType pattern. Cases: Anyone, FollowersOnly, FollowingOnly, MutualFollowers, FellowClubMembers.
