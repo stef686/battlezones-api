@@ -27,10 +27,15 @@ class PrivacyService
             PrivacyOption::Anyone => true,
             PrivacyOption::FollowersOnly => $target->followers()->where('follower_id', $actor->id)->exists(),
             PrivacyOption::FollowingOnly => $target->following()->where('following_id', $actor->id)->exists(),
-            PrivacyOption::MutualFollowers => $target->followers()->where('follower_id', $actor->id)->exists()
-                && $target->following()->where('following_id', $actor->id)->exists(),
+            PrivacyOption::MutualFollowers => $this->areMutualFollowers($actor, $target),
             PrivacyOption::FellowClubMembers => $this->areClubMembers($actor, $target),
         };
+    }
+
+    private function areMutualFollowers(User $actor, User $target): bool
+    {
+        return $target->followers()->where('follower_id', $actor->id)->exists()
+            && $target->following()->where('following_id', $actor->id)->exists();
     }
 
     /**

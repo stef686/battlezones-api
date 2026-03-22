@@ -4,6 +4,7 @@ namespace App\Http\Resources\Users;
 
 use App\Enums\NotificationType;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class NotificationSettingsResource extends JsonResource
 {
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $settings = [];
 

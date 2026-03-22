@@ -4,6 +4,7 @@ namespace App\Http\Resources\Users;
 
 use App\Enums\PrivacyOption;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -11,21 +12,24 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class PrivacySettingsResource extends JsonResource
 {
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
+        $messaging = $this->getMessagingPrivacy();
+        $profile = $this->getProfilePrivacy();
+
         return [
             'messaging' => [
-                'value' => $this->getMessagingPrivacy()->value,
-                'label' => $this->getMessagingPrivacy()->label(),
+                'value' => $messaging->value,
+                'label' => $messaging->label(),
             ],
             'profile' => [
-                'value' => $this->getProfilePrivacy()->value,
-                'label' => $this->getProfilePrivacy()->label(),
+                'value' => $profile->value,
+                'label' => $profile->label(),
             ],
-            'options' => collect(PrivacyOption::cases())->map(fn (PrivacyOption $option) => [
+            'options' => array_map(fn (PrivacyOption $option) => [
                 'value' => $option->value,
                 'label' => $option->label(),
-            ])->all(),
+            ], PrivacyOption::cases()),
         ];
     }
 }

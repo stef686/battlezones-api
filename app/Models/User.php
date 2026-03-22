@@ -205,14 +205,17 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getMessagingPrivacy(): PrivacyOption
     {
-        $value = $this->privacy_settings['messaging'] ?? null;
-
-        return $value ? PrivacyOption::from($value) : PrivacyOption::Anyone;
+        return $this->getPrivacySetting('messaging');
     }
 
     public function getProfilePrivacy(): PrivacyOption
     {
-        $value = $this->privacy_settings['profile'] ?? null;
+        return $this->getPrivacySetting('profile');
+    }
+
+    private function getPrivacySetting(string $key): PrivacyOption
+    {
+        $value = $this->privacy_settings[$key] ?? null;
 
         return $value ? PrivacyOption::from($value) : PrivacyOption::Anyone;
     }
