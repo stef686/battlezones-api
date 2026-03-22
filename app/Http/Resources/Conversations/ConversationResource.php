@@ -31,13 +31,14 @@ class ConversationResource extends JsonResource
             $unreadQuery->where('created_at', '>', $lastReadAt);
         }
 
+        $otherUsers = $this->users->where('id', '!=', $authUser->id);
+
         return [
             'id' => $this->id,
-            'participant' => $participant ? [
-                'id' => $participant->id,
-                'public_name' => $participant->public_name,
-                'username' => $participant->username,
-            ] : null,
+            'is_group' => $this->is_group,
+            'name' => $this->name,
+            'participant' => ! $this->is_group ? $otherUsers->first()?->only('id', 'public_name', 'username') : null,
+            'participants' => $this->is_group ? $otherUsers->map->only('id', 'public_name', 'username')->values() : null,
             'latest_message' => $this->whenLoaded('latestMessage', fn () => $this->latestMessage
                 ? MessageResource::make($this->latestMessage)
                 : null
