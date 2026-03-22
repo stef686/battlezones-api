@@ -29,6 +29,7 @@ class UserProfileResource extends JsonResource
             'following_count' => $this->following_count ?? 0,
             $this->mergeWhen($request->user()?->isNot($this->resource), fn () => [
                 'is_following' => (bool) $request->user()?->following()->where('following_id', $this->id)->exists(),
+                'is_blocked_by_you' => (bool) $request->user()?->blockedUsers()->where('blocked_id', $this->id)->exists(),
             ]),
         ];
     }
