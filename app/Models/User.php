@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Country;
 use App\Enums\NotificationChannel;
 use App\Enums\NotificationType;
+use App\Enums\PrivacyOption;
 use App\Notifications\Auth\ResetPasswordNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -35,7 +36,7 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property array<array-key, mixed>|null $notification_settings
- * @property string|null $privacy_settings
+ * @property array<array-key, mixed>|null $privacy_settings
  * @property-read Collection<int, Conversation> $conversations
  * @property-read int|null $conversations_count
  * @property-read Collection<int, User> $followers
@@ -94,6 +95,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'notification_settings',
+        'privacy_settings',
     ];
 
     /**
@@ -119,6 +121,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'country' => Country::class,
             'show_public_name' => 'boolean',
             'notification_settings' => 'array',
+            'privacy_settings' => 'array',
         ];
     }
 
@@ -198,6 +201,20 @@ class User extends Authenticatable implements MustVerifyEmail
             fn (string $channel): NotificationChannel => NotificationChannel::from($channel),
             $channels,
         );
+    }
+
+    public function getMessagingPrivacy(): PrivacyOption
+    {
+        $value = $this->privacy_settings['messaging'] ?? null;
+
+        return $value ? PrivacyOption::from($value) : PrivacyOption::Anyone;
+    }
+
+    public function getProfilePrivacy(): PrivacyOption
+    {
+        $value = $this->privacy_settings['profile'] ?? null;
+
+        return $value ? PrivacyOption::from($value) : PrivacyOption::Anyone;
     }
 
     public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
