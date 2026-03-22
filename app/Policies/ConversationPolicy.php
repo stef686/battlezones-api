@@ -33,4 +33,19 @@ class ConversationPolicy
             ->wherePivotNotNull('archived_at')
             ->exists();
     }
+
+    public function addMembers(User $user, Conversation $conversation): bool
+    {
+        return $conversation->isGroup() && $this->view($user, $conversation);
+    }
+
+    public function leave(User $user, Conversation $conversation): bool
+    {
+        return $conversation->isGroup() && $this->view($user, $conversation);
+    }
+
+    public function updateName(User $user, Conversation $conversation): bool
+    {
+        return $conversation->isGroup() && $this->view($user, $conversation);
+    }
 }

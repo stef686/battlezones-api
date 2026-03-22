@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginTokenController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Conversations\AddGroupMembersController;
 use App\Http\Controllers\Conversations\ArchiveConversationController;
 use App\Http\Controllers\Conversations\DeleteConversationController;
 use App\Http\Controllers\Conversations\DeleteMessageController;
@@ -61,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('conversations', StartConversationController::class)->name('conversations.store')->middleware('throttle:30,1');
     Route::post('conversations/group', StartGroupConversationController::class)->name('conversations.group.store')->middleware('throttle:30,1');
     Route::get('conversations/{conversation}', ShowConversationController::class)->name('conversations.show');
+    Route::post('conversations/{conversation}/members', AddGroupMembersController::class)->name('conversations.members.store');
     Route::delete('conversations/{conversation}', DeleteConversationController::class)->name('conversations.destroy');
     Route::post('conversations/{conversation}/archive', ArchiveConversationController::class)->name('conversations.archive');
     Route::post('conversations/{conversation}/unarchive', UnarchiveConversationController::class)->name('conversations.unarchive');
