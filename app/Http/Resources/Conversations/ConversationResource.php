@@ -3,9 +3,9 @@
 namespace App\Http\Resources\Conversations;
 
 use App\Models\Conversation;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @mixin Conversation
@@ -18,20 +18,17 @@ class ConversationResource extends JsonResource
     public function toArray(Request $request): array
     {
         $authUser = $request->user();
-        $pivot = DB::table('conversation_user')
-            ->where('conversation_id', $this->id)
-            ->where('user_id', $authUser->id)
-            ->first(['last_read_at', 'archived_at']);
-        $participant = $this->users->firstWhere('id', '!=', $authUser->id);
+        $authUserModel = $this->users->firstWhere('id', $authUser->id);
+        /** @var Pivot|null $authPivot */
+        $authPivot = $authUserModel?->getRelation('pivot');
+        $otherUsers = $this->users->where('id', '!=', $authUser->id);
 
-        $lastReadAt = $pivot?->last_read_at;
+        $lastReadAt = $authPivot?->getAttribute('last_read_at');
         $unreadQuery = $this->messages()->where('user_id', '!=', $authUser->id);
 
         if ($lastReadAt) {
             $unreadQuery->where('created_at', '>', $lastReadAt);
         }
-
-        $otherUsers = $this->users->where('id', '!=', $authUser->id);
 
         return [
             'id' => $this->id,
@@ -43,7 +40,7 @@ class ConversationResource extends JsonResource
                 ? MessageResource::make($this->latestMessage)
                 : null
             ),
-            'is_archived' => $pivot?->archived_at !== null,
+            'is_archived' => $authPivot?->getAttribute('archived_at') !== null,
             'unread_count' => $unreadQuery->count(),
             'created_at' => $this->created_at?->toIso8601ZuluString(),
             'updated_at' => $this->updated_at?->toIso8601ZuluString(),

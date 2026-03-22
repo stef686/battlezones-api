@@ -30,6 +30,10 @@ class AddGroupMembersRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator): void {
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
+
             /** @var Conversation $conversation */
             $conversation = $this->route('conversation');
             $usernames = $this->input('usernames', []);

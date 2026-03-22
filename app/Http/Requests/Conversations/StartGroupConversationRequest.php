@@ -29,6 +29,10 @@ class StartGroupConversationRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator): void {
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
+
             $usernames = $this->input('usernames', []);
 
             if (in_array($this->user()->username, $usernames, true)) {

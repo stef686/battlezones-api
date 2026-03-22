@@ -19,9 +19,9 @@ class AddGroupMembersController extends Controller
 
         $pivotData = $includeHistory ? [] : ['visible_from' => now()];
 
-        foreach ($newMembers as $member) {
-            $conversation->users()->attach($member->id, $pivotData);
-        }
+        $conversation->users()->attach(
+            $newMembers->pluck('id')->mapWithKeys(fn ($id) => [$id => $pivotData])
+        );
 
         $names = $newMembers->pluck('public_name')->join(', ', ' and ');
 
