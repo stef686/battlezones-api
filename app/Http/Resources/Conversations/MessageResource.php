@@ -21,6 +21,8 @@ class MessageResource extends JsonResource
             'conversation_id' => $this->conversation_id,
             'user_id' => $this->user_id,
             'body' => $this->isDeleted() ? null : $this->body,
+            'type' => $this->type?->value,
+            'is_system' => $this->isSystem(),
             'is_deleted' => $this->isDeleted(),
             'is_edited' => $this->edited_at !== null,
             'is_editable' => $this->isEditable(),

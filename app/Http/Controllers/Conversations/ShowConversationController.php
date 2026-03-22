@@ -17,13 +17,14 @@ class ShowConversationController extends Controller
         Gate::authorize('view', $conversation);
 
         $userId = $request->user()->id;
-        $deletedAt = DB::table('conversation_user')
+        $pivot = DB::table('conversation_user')
             ->where('conversation_id', $conversation->id)
             ->where('user_id', $userId)
-            ->value('deleted_at');
+            ->first(['deleted_at', 'visible_from']);
 
         $messages = $conversation->messages()
-            ->when($deletedAt, fn ($q, $deletedAt) => $q->where('created_at', '>', $deletedAt))
+            ->when($pivot?->deleted_at, fn ($q, $deletedAt) => $q->where('created_at', '>', $deletedAt))
+            ->when($pivot?->visible_from, fn ($q, $visibleFrom) => $q->where('created_at', '>=', $visibleFrom))
             ->oldest('created_at')
             ->paginate();
 

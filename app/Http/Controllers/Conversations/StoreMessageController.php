@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Conversations\StoreMessageRequest;
 use App\Http\Resources\Conversations\MessageResource;
 use App\Models\Conversation;
+use App\Models\User;
 use App\Notifications\Conversations\NewMessageNotification;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class StoreMessageController extends Controller
 {
@@ -19,16 +21,19 @@ class StoreMessageController extends Controller
             'user_id' => $sender->id,
         ]);
 
-        $recipient = $conversation->users()
+        $otherMembers = $conversation->users()
             ->wherePivot('user_id', '!=', $sender->id)
-            ->first();
+            ->get();
 
-        if ($recipient->pivot->getAttribute('deleted_at')) {
-            $conversation->users()->updateExistingPivot($recipient->id, ['deleted_at' => null]);
-        }
+        /** @var User&object{pivot: Pivot} $member */
+        foreach ($otherMembers as $member) {
+            if ($member->pivot->getAttribute('deleted_at')) {
+                $conversation->users()->updateExistingPivot($member->id, ['deleted_at' => null]);
+            }
 
-        if (! $recipient->pivot->getAttribute('archived_at')) {
-            $recipient->notify(new NewMessageNotification($message, $sender));
+            if (! $member->pivot->getAttribute('archived_at')) {
+                $member->notify(new NewMessageNotification($message, $sender));
+            }
         }
 
         return MessageResource::make($message);
