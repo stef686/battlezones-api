@@ -29,6 +29,7 @@ use App\Http\Controllers\Users\ChangeEmailController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\GetNotificationSettingsController;
 use App\Http\Controllers\Users\MyProfileController;
+use App\Http\Controllers\Users\SearchUsersController;
 use App\Http\Controllers\Users\UpdateNotificationSettingsController;
 use App\Http\Controllers\Users\UpdateProfileController;
 use App\Http\Controllers\Users\UserProfileController;
@@ -58,6 +59,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Public galleries
     Route::get('users/{user}/gallery', UserGalleryController::class)->name('users.gallery');
+
+    // User search
+    Route::get('users/search', SearchUsersController::class)->name('users.search');
 
     // Conversations
     Route::get('conversations', ListConversationsController::class)->name('conversations.index');
