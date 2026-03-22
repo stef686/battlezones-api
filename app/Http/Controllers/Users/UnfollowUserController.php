@@ -10,12 +10,14 @@ use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 
 #[Group('Users', 'APIs for Users')]
-class UserProfileController extends Controller
+class UnfollowUserController extends Controller
 {
-    #[Endpoint('User Profile', "Display the given user's profile data.")]
+    #[Endpoint('Unfollow User', 'Unfollow the given user.')]
     #[ResponseFromApiResource(UserProfileResource::class)]
     public function __invoke(User $user): UserProfileResource
     {
+        auth()->user()->following()->detach($user);
+
         $user->loadCount(['followers', 'following']);
 
         return UserProfileResource::make($user);

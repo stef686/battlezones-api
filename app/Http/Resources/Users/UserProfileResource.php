@@ -24,8 +24,11 @@ class UserProfileResource extends JsonResource
             'avatar' => '',
             'location' => '',
             'events_count' => 0,
-            'followers_count' => 0,
-            'following_count' => 0,
+            'followers_count' => $this->followers_count ?? 0,
+            'following_count' => $this->following_count ?? 0,
+            $this->mergeWhen($request->user()?->isNot($this->resource), fn () => [
+                'is_following' => $request->user()?->following()->where('following_id', $this->id)->exists() ?? false,
+            ]),
         ];
     }
 }

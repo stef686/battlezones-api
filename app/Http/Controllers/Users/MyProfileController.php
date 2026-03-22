@@ -15,6 +15,9 @@ class MyProfileController extends Controller
     #[ResponseFromApiResource(UserProfileResource::class)]
     public function __invoke(): UserProfileResource
     {
-        return UserProfileResource::make(auth()->user());
+        $user = auth()->user();
+        $user->loadCount(['followers', 'following']);
+
+        return UserProfileResource::make($user);
     }
 }

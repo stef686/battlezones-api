@@ -27,9 +27,11 @@ use App\Http\Controllers\Gallery\UserGalleryController;
 use App\Http\Controllers\Reactions\ToggleReactionController;
 use App\Http\Controllers\Users\ChangeEmailController;
 use App\Http\Controllers\Users\ChangePasswordController;
+use App\Http\Controllers\Users\FollowUserController;
 use App\Http\Controllers\Users\GetNotificationSettingsController;
 use App\Http\Controllers\Users\MyProfileController;
 use App\Http\Controllers\Users\SearchUsersController;
+use App\Http\Controllers\Users\UnfollowUserController;
 use App\Http\Controllers\Users\UpdateNotificationSettingsController;
 use App\Http\Controllers\Users\UpdateProfileController;
 use App\Http\Controllers\Users\UserProfileController;
@@ -62,6 +64,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // User search
     Route::get('users/search', SearchUsersController::class)->name('users.search');
+
+    // Follow
+    Route::post('users/{user}/follow', FollowUserController::class)->name('users.follow');
+    Route::delete('users/{user}/follow', UnfollowUserController::class)->name('users.unfollow');
 
     // Conversations
     Route::get('conversations', ListConversationsController::class)->name('conversations.index');
