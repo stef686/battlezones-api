@@ -29,12 +29,14 @@ use App\Http\Controllers\Users\ChangeEmailController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\FollowUserController;
 use App\Http\Controllers\Users\GetNotificationSettingsController;
+use App\Http\Controllers\Users\GetPrivacySettingsController;
 use App\Http\Controllers\Users\ListFollowersController;
 use App\Http\Controllers\Users\ListFollowingController;
 use App\Http\Controllers\Users\MyProfileController;
 use App\Http\Controllers\Users\SearchUsersController;
 use App\Http\Controllers\Users\UnfollowUserController;
 use App\Http\Controllers\Users\UpdateNotificationSettingsController;
+use App\Http\Controllers\Users\UpdatePrivacySettingsController;
 use App\Http\Controllers\Users\UpdateProfileController;
 use App\Http\Controllers\Users\UserProfileController;
 
@@ -52,6 +54,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile/{user}', UserProfileController::class)->name('profile.show');
     Route::get('notification-settings', GetNotificationSettingsController::class)->name('notification-settings');
     Route::patch('notification-settings', UpdateNotificationSettingsController::class)->name('notification-settings.update');
+    Route::get('privacy-settings', GetPrivacySettingsController::class)->name('privacy-settings');
+    Route::patch('privacy-settings', UpdatePrivacySettingsController::class)->name('privacy-settings.update');
 
     // Gallery
     Route::get('gallery', ListPhotosController::class)->name('gallery.index');
