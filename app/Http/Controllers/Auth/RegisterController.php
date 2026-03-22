@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
@@ -23,14 +24,8 @@ class RegisterController extends Controller
     #[BodyParam('password_confirmation', 'string', 'Confirmation of the password field.', required: true, example: 'password')]
     #[BodyParam('device_name', 'string', 'The name of the device logging in.', required: true, example: 'iPhone')]
     #[Response(['token' => '{AUTH_TOKEN}'])]
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(RegisterRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed',
-            'device_name' => 'required',
-        ]);
 
         $user = User::create([
             'name' => $request->input('name'),
