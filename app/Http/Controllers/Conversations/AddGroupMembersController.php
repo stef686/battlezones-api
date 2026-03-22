@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Conversations;
 
-use App\Enums\MessageType;
+use App\Actions\Conversations\AddGroupMembers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Conversations\AddGroupMembersRequest;
 use App\Http\Resources\Conversations\ConversationResource;
@@ -11,24 +11,12 @@ use App\Models\User;
 
 class AddGroupMembersController extends Controller
 {
-    public function __invoke(AddGroupMembersRequest $request, Conversation $conversation): ConversationResource
+    public function __invoke(AddGroupMembersRequest $request, Conversation $conversation, AddGroupMembers $action): ConversationResource
     {
         $sender = $request->user();
-        $includeHistory = $request->boolean('include_history', true);
         $newMembers = User::query()->whereIn('username', $request->validated('usernames'))->get();
 
-        $pivotData = $includeHistory ? [] : ['visible_from' => now()];
-
-        $conversation->users()->attach(
-            $newMembers->pluck('id')->mapWithKeys(fn ($id) => [$id => $pivotData])
-        );
-
-        $names = $newMembers->pluck('public_name')->join(', ', ' and ');
-
-        $conversation->messages()->create([
-            'body' => "{$sender->public_name} added {$names}",
-            'type' => MessageType::System,
-        ]);
+        $action->execute($sender, $conversation, $newMembers, $request->boolean('include_history', true));
 
         $conversation->load(['users', 'latestMessage']);
 
