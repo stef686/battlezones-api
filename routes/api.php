@@ -29,6 +29,8 @@ use App\Http\Controllers\Users\ChangeEmailController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\FollowUserController;
 use App\Http\Controllers\Users\GetNotificationSettingsController;
+use App\Http\Controllers\Users\ListFollowersController;
+use App\Http\Controllers\Users\ListFollowingController;
 use App\Http\Controllers\Users\MyProfileController;
 use App\Http\Controllers\Users\SearchUsersController;
 use App\Http\Controllers\Users\UnfollowUserController;
@@ -68,6 +70,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Follow
     Route::post('users/{user}/follow', FollowUserController::class)->name('users.follow');
     Route::delete('users/{user}/follow', UnfollowUserController::class)->name('users.unfollow');
+    Route::get('users/{user}/followers', ListFollowersController::class)->name('users.followers');
+    Route::get('users/{user}/following', ListFollowingController::class)->name('users.following');
 
     // Conversations
     Route::get('conversations', ListConversationsController::class)->name('conversations.index');
