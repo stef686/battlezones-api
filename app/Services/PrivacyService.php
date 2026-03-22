@@ -9,7 +9,11 @@ class PrivacyService
 {
     public function isBlocked(User $a, User $b): bool
     {
-        return $a->hasBlocked($b) || $b->hasBlocked($a);
+        return $a->blockedUsers()->where('blocked_id', $b->id)
+            ->orWhere(function ($query) use ($a, $b) {
+                $query->where('blocker_id', $b->id)->where('blocked_id', $a->id);
+            })
+            ->exists();
     }
 
     public function canMessage(User $sender, User $recipient): bool
@@ -47,8 +51,13 @@ class PrivacyService
 
     private function areMutualFollowers(User $actor, User $target): bool
     {
-        return $target->followers()->where('follower_id', $actor->id)->exists()
-            && $target->following()->where('following_id', $actor->id)->exists();
+        return $target->followers()->where('follower_id', $actor->id)
+            ->whereExists(function ($query) use ($actor, $target) {
+                $query->from('follows')
+                    ->where('follower_id', $target->id)
+                    ->where('following_id', $actor->id);
+            })
+            ->exists();
     }
 
     /**
