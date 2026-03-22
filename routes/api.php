@@ -16,6 +16,7 @@ use App\Http\Controllers\Conversations\StartConversationController;
 use App\Http\Controllers\Conversations\StartGroupConversationController;
 use App\Http\Controllers\Conversations\StoreMessageController;
 use App\Http\Controllers\Conversations\UnarchiveConversationController;
+use App\Http\Controllers\Conversations\UpdateGroupNameController;
 use App\Http\Controllers\Conversations\UpdateMessageController;
 use App\Http\Controllers\Gallery\DeletePhotoController;
 use App\Http\Controllers\Gallery\ListPhotosController;
@@ -65,6 +66,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('conversations/{conversation}', ShowConversationController::class)->name('conversations.show');
     Route::post('conversations/{conversation}/members', AddGroupMembersController::class)->name('conversations.members.store');
     Route::post('conversations/{conversation}/leave', LeaveGroupConversationController::class)->name('conversations.leave');
+    Route::patch('conversations/{conversation}/name', UpdateGroupNameController::class)->name('conversations.name.update');
     Route::delete('conversations/{conversation}', DeleteConversationController::class)->name('conversations.destroy');
     Route::post('conversations/{conversation}/archive', ArchiveConversationController::class)->name('conversations.archive');
     Route::post('conversations/{conversation}/unarchive', UnarchiveConversationController::class)->name('conversations.unarchive');
