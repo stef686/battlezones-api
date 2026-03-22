@@ -54,7 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('profile', UpdateProfileController::class)->name('profile.update');
     Route::post('profile/email', ChangeEmailController::class)->name('profile.email');
     Route::post('profile/password', ChangePasswordController::class)->name('profile.password');
-    Route::get('profile/{user}', UserProfileController::class)->name('profile.show');
+    Route::get('profile/{user}', UserProfileController::class)->name('profile.show')->middleware('throttle:30,1');
     Route::get('notification-settings', GetNotificationSettingsController::class)->name('notification-settings');
     Route::patch('notification-settings', UpdateNotificationSettingsController::class)->name('notification-settings.update');
     Route::get('privacy-settings', GetPrivacySettingsController::class)->name('privacy-settings');
@@ -72,18 +72,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('users/{user}/gallery', UserGalleryController::class)->name('users.gallery');
 
     // User search
-    Route::get('users/search', SearchUsersController::class)->name('users.search');
+    Route::get('users/search', SearchUsersController::class)->name('users.search')->middleware('throttle:30,1');
 
     // Follow
     Route::post('users/{user}/follow', FollowUserController::class)->name('users.follow');
     Route::delete('users/{user}/follow', UnfollowUserController::class)->name('users.unfollow');
-    Route::get('users/{user}/followers', ListFollowersController::class)->name('users.followers');
-    Route::get('users/{user}/following', ListFollowingController::class)->name('users.following');
+    Route::get('users/{user}/followers', ListFollowersController::class)->name('users.followers')->middleware('throttle:30,1');
+    Route::get('users/{user}/following', ListFollowingController::class)->name('users.following')->middleware('throttle:30,1');
 
     // Block
     Route::post('users/{user}/block', BlockUserController::class)->name('users.block');
     Route::delete('users/{user}/block', UnblockUserController::class)->name('users.unblock');
-    Route::get('blocked-users', ListBlockedUsersController::class)->name('blocked-users.index');
+    Route::get('blocked-users', ListBlockedUsersController::class)->name('blocked-users.index')->middleware('throttle:30,1');
 
     // Conversations
     Route::get('conversations', ListConversationsController::class)->name('conversations.index');
