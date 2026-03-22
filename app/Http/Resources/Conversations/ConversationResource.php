@@ -23,13 +23,6 @@ class ConversationResource extends JsonResource
         $authPivot = $authUserModel?->getRelation('pivot');
         $otherUsers = $this->users->where('id', '!=', $authUser->id);
 
-        $lastReadAt = $authPivot?->getAttribute('last_read_at');
-        $unreadQuery = $this->messages()->where('user_id', '!=', $authUser->id);
-
-        if ($lastReadAt) {
-            $unreadQuery->where('created_at', '>', $lastReadAt);
-        }
-
         return [
             'id' => $this->id,
             'is_group' => $this->is_group,
@@ -41,7 +34,7 @@ class ConversationResource extends JsonResource
                 : null
             ),
             'is_archived' => $authPivot?->getAttribute('archived_at') !== null,
-            'unread_count' => $unreadQuery->count(),
+            'unread_count' => (int) $this->unread_count,
             'created_at' => $this->created_at?->toIso8601ZuluString(),
             'updated_at' => $this->updated_at?->toIso8601ZuluString(),
         ];

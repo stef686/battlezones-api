@@ -229,6 +229,69 @@ test('conversation moves from requests to primary when user follows participant'
         ->assertJsonCount(0, 'data');
 });
 
+test('it returns correct unread count', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+
+    // Auth user initiates (puts conversation in primary tab)
+    Message::factory()->create([
+        'conversation_id' => $conversation->id,
+        'user_id' => $user->id,
+        'created_at' => now()->subMinutes(10),
+    ]);
+
+    // 3 messages from the other user (all unread)
+    Message::factory()->count(3)->create([
+        'conversation_id' => $conversation->id,
+        'user_id' => $otherUser->id,
+    ]);
+
+    $response = $this->actingAs($user)
+        ->getJson(route('conversations.index'))
+        ->assertSuccessful();
+
+    expect($response->json('data.0.unread_count'))->toBe(3);
+});
+
+test('it returns correct unread count after reading', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+
+    // Auth user initiates
+    Message::factory()->create([
+        'conversation_id' => $conversation->id,
+        'user_id' => $user->id,
+        'created_at' => now()->subHours(3),
+    ]);
+
+    // Old message (before last_read_at)
+    Message::factory()->create([
+        'conversation_id' => $conversation->id,
+        'user_id' => $otherUser->id,
+        'created_at' => now()->subHours(2),
+    ]);
+
+    // Mark as read 1 hour ago
+    $conversation->users()->updateExistingPivot($user->id, ['last_read_at' => now()->subHour()]);
+
+    // New message (after last_read_at)
+    Message::factory()->create([
+        'conversation_id' => $conversation->id,
+        'user_id' => $otherUser->id,
+        'created_at' => now(),
+    ]);
+
+    $response = $this->actingAs($user)
+        ->getJson(route('conversations.index'))
+        ->assertSuccessful();
+
+    expect($response->json('data.0.unread_count'))->toBe(1);
+});
+
 test('it paginates results', function () {
     $user = User::factory()->create();
 
