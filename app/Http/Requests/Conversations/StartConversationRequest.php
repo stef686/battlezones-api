@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Conversations;
 
+use App\Models\User;
+use App\Services\PrivacyService;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
@@ -29,6 +31,14 @@ class StartConversationRequest extends FormRequest
         $validator->after(function (Validator $validator): void {
             if ((int) $this->input('recipient_id') === $this->user()->id) {
                 $validator->errors()->add('recipient_id', 'You cannot message yourself.');
+
+                return;
+            }
+
+            $recipient = User::find($this->input('recipient_id'));
+
+            if ($recipient && ! app(PrivacyService::class)->canMessage($this->user(), $recipient)) {
+                $validator->errors()->add('recipient_id', "This user's privacy settings prevent you from messaging them.");
             }
         });
     }
