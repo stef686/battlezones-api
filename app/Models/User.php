@@ -39,6 +39,10 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property array<array-key, mixed>|null $privacy_settings
  * @property-read Collection<int, Conversation> $conversations
  * @property-read int|null $conversations_count
+ * @property-read Collection<int, User> $blockedBy
+ * @property-read int|null $blocked_by_count
+ * @property-read Collection<int, User> $blockedUsers
+ * @property-read int|null $blocked_users_count
  * @property-read Collection<int, User> $followers
  * @property-read int|null $followers_count
  * @property-read Collection<int, User> $following
@@ -160,6 +164,32 @@ class User extends Authenticatable implements MustVerifyEmail
     public function followers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id');
+    }
+
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function blockedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'blocks', 'blocker_id', 'blocked_id');
+    }
+
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function blockedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'blocks', 'blocked_id', 'blocker_id');
+    }
+
+    public function hasBlocked(User $user): bool
+    {
+        return $this->blockedUsers()->where('blocked_id', $user->id)->exists();
+    }
+
+    public function isBlockedBy(User $user): bool
+    {
+        return $user->hasBlocked($this);
     }
 
     /**
