@@ -199,8 +199,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function allBlockedIds(): \Illuminate\Support\Collection
     {
-        return $this->blockedUsers()->pluck('blocked_id')
-            ->merge($this->blockedBy()->pluck('blocker_id'));
+        return $this->blockedUsers()->select('blocked_id as user_id')
+            ->union($this->blockedBy()->select('blocker_id as user_id')->getQuery())
+            ->pluck('user_id');
     }
 
     /**
