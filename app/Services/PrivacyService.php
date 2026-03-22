@@ -7,8 +7,17 @@ use App\Models\User;
 
 class PrivacyService
 {
+    public function isBlocked(User $a, User $b): bool
+    {
+        return $a->hasBlocked($b) || $b->hasBlocked($a);
+    }
+
     public function canMessage(User $sender, User $recipient): bool
     {
+        if ($this->isBlocked($sender, $recipient)) {
+            return false;
+        }
+
         return $this->satisfiesOption($sender, $recipient, $recipient->getMessagingPrivacy());
     }
 
@@ -16,6 +25,10 @@ class PrivacyService
     {
         if ($viewer->id === $target->id) {
             return true;
+        }
+
+        if ($viewer->isBlockedBy($target)) {
+            return false;
         }
 
         return $this->satisfiesOption($viewer, $target, $target->getProfilePrivacy());
