@@ -195,19 +195,19 @@ test('blocked users cannot message each other', function () {
 
     $this->actingAs($blocker)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $blocked->id,
+            'recipient_ids' => [$blocked->id],
             'body' => 'Hello!',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('recipient_id');
+        ->assertJsonValidationErrors('recipient_ids');
 
     $this->actingAs($blocked)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $blocker->id,
+            'recipient_ids' => [$blocker->id],
             'body' => 'Hello!',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('recipient_id');
+        ->assertJsonValidationErrors('recipient_ids');
 });
 
 test('blocking soft-deletes direct conversation between users', function () {

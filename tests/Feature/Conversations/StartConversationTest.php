@@ -12,7 +12,7 @@ test('it creates a conversation and returns resource', function () {
 
     $response = $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hello there!',
         ])
         ->assertSuccessful();
@@ -35,7 +35,7 @@ test('it reuses an existing conversation between the same users', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Another message',
         ])
         ->assertSuccessful();
@@ -55,7 +55,7 @@ test('it resurfaces a deleted conversation for both users', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'I am back',
         ])
         ->assertSuccessful();
@@ -77,7 +77,7 @@ test('it clears sender archived_at when starting conversation', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Unarchiving myself',
         ])
         ->assertSuccessful();
@@ -96,7 +96,7 @@ test('it keeps recipient archived_at when starting conversation', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Recipient stays archived',
         ])
         ->assertSuccessful();
@@ -115,7 +115,7 @@ test('it skips notification when recipient has archived', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'No notification',
         ])
         ->assertSuccessful();
@@ -128,11 +128,11 @@ test('it cannot message self', function () {
 
     $this->actingAs($user)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $user->id,
+            'recipient_ids' => [$user->id],
             'body' => 'Hello me',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('recipient_id');
+        ->assertJsonValidationErrors('recipient_ids');
 });
 
 test('it validates required fields', function () {
@@ -141,7 +141,7 @@ test('it validates required fields', function () {
     $this->actingAs($user)
         ->postJson(route('conversations.store'), [])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors(['recipient_id', 'body']);
+        ->assertJsonValidationErrors(['recipient_ids', 'body']);
 });
 
 test('it notifies the recipient', function () {
@@ -151,7 +151,7 @@ test('it notifies the recipient', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hey!',
         ])
         ->assertSuccessful();

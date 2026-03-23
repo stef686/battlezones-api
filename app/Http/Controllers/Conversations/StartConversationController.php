@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Conversations;
 
 use App\Actions\Conversations\StartConversation;
+use App\Actions\Conversations\StartGroupConversation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Conversations\StartConversationRequest;
 use App\Http\Resources\Conversations\ConversationResource;
@@ -10,12 +11,18 @@ use App\Models\User;
 
 class StartConversationController extends Controller
 {
-    public function __invoke(StartConversationRequest $request, StartConversation $action): ConversationResource
+    public function __invoke(StartConversationRequest $request, StartConversation $startConversation, StartGroupConversation $startGroupConversation): ConversationResource
     {
         $sender = $request->user();
-        $recipient = User::findOrFail($request->validated('recipient_id'));
+        $recipientIds = $request->validated('recipient_ids');
 
-        $conversation = $action->execute($sender, $recipient, $request->validated('body'));
+        if ($request->isGroupConversation()) {
+            $members = User::query()->whereIn('id', $recipientIds)->get();
+            $conversation = $startGroupConversation->execute($sender, $members, $request->validated('name'), $request->validated('body'));
+        } else {
+            $recipient = User::findOrFail($recipientIds[0]);
+            $conversation = $startConversation->execute($sender, $recipient, $request->validated('body'));
+        }
 
         return ConversationResource::make($conversation);
     }

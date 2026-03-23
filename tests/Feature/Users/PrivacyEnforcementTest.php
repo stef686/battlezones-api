@@ -15,7 +15,7 @@ test('messaging is allowed when privacy is set to anyone', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hello!',
         ])
         ->assertSuccessful();
@@ -29,11 +29,11 @@ test('messaging is blocked when set to followers_only and sender does not follow
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hello!',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('recipient_id');
+        ->assertJsonValidationErrors('recipient_ids');
 });
 
 test('messaging is allowed when set to followers_only and sender follows recipient', function () {
@@ -46,7 +46,7 @@ test('messaging is allowed when set to followers_only and sender follows recipie
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hello!',
         ])
         ->assertSuccessful();
@@ -60,11 +60,11 @@ test('messaging is blocked when set to following_only and recipient does not fol
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hello!',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('recipient_id');
+        ->assertJsonValidationErrors('recipient_ids');
 });
 
 test('messaging is allowed when set to following_only and recipient follows sender', function () {
@@ -77,7 +77,7 @@ test('messaging is allowed when set to following_only and recipient follows send
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hello!',
         ])
         ->assertSuccessful();
@@ -92,11 +92,11 @@ test('messaging is blocked when set to mutual_followers and only one direction e
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hello!',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('recipient_id');
+        ->assertJsonValidationErrors('recipient_ids');
 });
 
 test('messaging is allowed when set to mutual_followers and both directions exist', function () {
@@ -110,7 +110,7 @@ test('messaging is allowed when set to mutual_followers and both directions exis
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hello!',
         ])
         ->assertSuccessful();
@@ -124,11 +124,11 @@ test('messaging is blocked when set to fellow_club_members (stub)', function () 
 
     $this->actingAs($sender)
         ->postJson(route('conversations.store'), [
-            'recipient_id' => $recipient->id,
+            'recipient_ids' => [$recipient->id],
             'body' => 'Hello!',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('recipient_id');
+        ->assertJsonValidationErrors('recipient_ids');
 });
 
 // -- Profile privacy enforcement --

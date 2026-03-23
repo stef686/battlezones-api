@@ -11,9 +11,9 @@ test('it creates a group conversation and returns resource', function () {
     $members = User::factory()->count(2)->create();
 
     $response = $this->actingAs($sender)
-        ->postJson(route('conversations.group.store'), [
+        ->postJson(route('conversations.store'), [
             'name' => 'My Group',
-            'usernames' => $members->pluck('username')->all(),
+            'recipient_ids' => $members->pluck('id')->all(),
             'body' => 'Welcome everyone!',
         ])
         ->assertSuccessful();
@@ -34,9 +34,9 @@ test('it attaches all members plus the sender', function () {
     $members = User::factory()->count(3)->create();
 
     $this->actingAs($sender)
-        ->postJson(route('conversations.group.store'), [
+        ->postJson(route('conversations.store'), [
             'name' => 'Group',
-            'usernames' => $members->pluck('username')->all(),
+            'recipient_ids' => $members->pluck('id')->all(),
             'body' => 'Hey!',
         ])
         ->assertSuccessful();
@@ -50,9 +50,9 @@ test('it creates a system message', function () {
     $members = User::factory()->count(2)->create();
 
     $this->actingAs($sender)
-        ->postJson(route('conversations.group.store'), [
+        ->postJson(route('conversations.store'), [
             'name' => 'Group',
-            'usernames' => $members->pluck('username')->all(),
+            'recipient_ids' => $members->pluck('id')->all(),
             'body' => 'Hello!',
         ])
         ->assertSuccessful();
@@ -70,9 +70,9 @@ test('it notifies all other members', function () {
     $members = User::factory()->count(3)->create();
 
     $this->actingAs($sender)
-        ->postJson(route('conversations.group.store'), [
+        ->postJson(route('conversations.store'), [
             'name' => 'Group',
-            'usernames' => $members->pluck('username')->all(),
+            'recipient_ids' => $members->pluck('id')->all(),
             'body' => 'Hey!',
         ])
         ->assertSuccessful();
@@ -84,66 +84,81 @@ test('it notifies all other members', function () {
     Notification::assertNotSentTo($sender, NewMessageNotification::class);
 });
 
-test('it requires at least 2 usernames', function () {
+test('it creates a direct conversation when only one recipient id is given', function () {
+    Notification::fake();
     $sender = User::factory()->create();
     $member = User::factory()->create();
 
     $this->actingAs($sender)
-        ->postJson(route('conversations.group.store'), [
+        ->postJson(route('conversations.store'), [
             'name' => 'Group',
-            'usernames' => [$member->username],
+            'recipient_ids' => [$member->id],
             'body' => 'Hey!',
         ])
-        ->assertUnprocessable()
-        ->assertJsonValidationErrors('usernames');
+        ->assertSuccessful();
+
+    $this->assertDatabaseHas('conversations', ['is_group' => false]);
 });
 
-test('it allows at most 9 usernames', function () {
+test('it allows at most 9 recipient ids', function () {
     $sender = User::factory()->create();
     $members = User::factory()->count(10)->create();
 
     $this->actingAs($sender)
-        ->postJson(route('conversations.group.store'), [
+        ->postJson(route('conversations.store'), [
             'name' => 'Group',
-            'usernames' => $members->pluck('username')->all(),
+            'recipient_ids' => $members->pluck('id')->all(),
             'body' => 'Hey!',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('usernames');
+        ->assertJsonValidationErrors('recipient_ids');
 });
 
-test('it rejects invalid usernames', function () {
+test('it rejects invalid recipient ids', function () {
     $sender = User::factory()->create();
 
     $this->actingAs($sender)
-        ->postJson(route('conversations.group.store'), [
+        ->postJson(route('conversations.store'), [
             'name' => 'Group',
-            'usernames' => ['nonexistent1', 'nonexistent2'],
+            'recipient_ids' => [99998, 99999],
             'body' => 'Hey!',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('usernames.0');
+        ->assertJsonValidationErrors('recipient_ids.0');
 });
 
-test('it rejects self in usernames', function () {
+test('it rejects self in recipient ids', function () {
     $sender = User::factory()->create();
     $member = User::factory()->create();
 
     $this->actingAs($sender)
-        ->postJson(route('conversations.group.store'), [
+        ->postJson(route('conversations.store'), [
             'name' => 'Group',
-            'usernames' => [$sender->username, $member->username],
+            'recipient_ids' => [$sender->id, $member->id],
             'body' => 'Hey!',
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('usernames');
+        ->assertJsonValidationErrors('recipient_ids');
+});
+
+test('it requires name for group conversations', function () {
+    $sender = User::factory()->create();
+    $members = User::factory()->count(2)->create();
+
+    $this->actingAs($sender)
+        ->postJson(route('conversations.store'), [
+            'recipient_ids' => $members->pluck('id')->all(),
+            'body' => 'Hey!',
+        ])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('name');
 });
 
 test('it validates required fields', function () {
     $sender = User::factory()->create();
 
     $this->actingAs($sender)
-        ->postJson(route('conversations.group.store'), [])
+        ->postJson(route('conversations.store'), [])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors(['name', 'usernames', 'body']);
+        ->assertJsonValidationErrors(['recipient_ids', 'body']);
 });

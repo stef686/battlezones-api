@@ -9,7 +9,6 @@ use App\Http\Controllers\Conversations\ListConversationsController;
 use App\Http\Controllers\Conversations\ReadConversationController;
 use App\Http\Controllers\Conversations\ShowConversationController;
 use App\Http\Controllers\Conversations\StartConversationController;
-use App\Http\Controllers\Conversations\StartGroupConversationController;
 use App\Http\Controllers\Conversations\StoreMessageController;
 use App\Http\Controllers\Conversations\UnarchiveConversationController;
 use App\Http\Controllers\Conversations\UpdateGroupNameController;
@@ -18,7 +17,6 @@ use App\Http\Controllers\Conversations\UpdateMessageController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('conversations', ListConversationsController::class)->name('conversations.index');
     Route::post('conversations', StartConversationController::class)->name('conversations.store')->middleware('throttle:30,1');
-    Route::post('conversations/group', StartGroupConversationController::class)->name('conversations.group.store')->middleware('throttle:30,1');
     Route::get('conversations/{conversation}', ShowConversationController::class)->name('conversations.show');
     Route::post('conversations/{conversation}/members', AddGroupMembersController::class)->name('conversations.members.store');
     Route::post('conversations/{conversation}/leave', LeaveGroupConversationController::class)->name('conversations.leave');
