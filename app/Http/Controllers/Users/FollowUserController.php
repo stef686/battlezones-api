@@ -14,7 +14,7 @@ use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 class FollowUserController extends Controller
 {
     #[Endpoint('Follow User', 'Follow the given user.')]
-    #[ResponseFromApiResource(UserProfileResource::class)]
+    #[ResponseFromApiResource(UserProfileResource::class, model: User::class)]
     public function __invoke(FollowUserRequest $request, User $user): UserProfileResource
     {
         $request->user()->following()->syncWithoutDetaching($user);

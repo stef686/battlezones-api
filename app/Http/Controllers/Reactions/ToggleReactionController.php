@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Photo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 
-#[Group('Reactions')]
+#[Group('Reactions', 'APIs for Reactions')]
 class ToggleReactionController extends Controller
 {
+    #[Endpoint('Toggle Reaction', 'Toggle a reaction on a photo. Adds a reaction if none exists, removes it otherwise.')]
+    #[Response(['reactions_count' => 5, 'has_reacted' => true])]
     public function __invoke(Request $request, Photo $photo): JsonResponse
     {
         $user = $request->user();

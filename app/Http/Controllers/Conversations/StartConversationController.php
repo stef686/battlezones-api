@@ -7,10 +7,17 @@ use App\Actions\Conversations\StartGroupConversation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Conversations\StartConversationRequest;
 use App\Http\Resources\Conversations\ConversationResource;
+use App\Models\Conversation;
 use App\Models\User;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 
+#[Group('Conversations', 'APIs for Conversations')]
 class StartConversationController extends Controller
 {
+    #[Endpoint('Start Conversation', 'Start a new direct or group conversation.')]
+    #[ResponseFromApiResource(ConversationResource::class, model: Conversation::class)]
     public function __invoke(StartConversationRequest $request, StartConversation $startConversation, StartGroupConversation $startGroupConversation): ConversationResource
     {
         $sender = $request->user();

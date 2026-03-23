@@ -6,9 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\SearchUsersRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 
+#[Group('Users', 'APIs for Users')]
 class SearchUsersController extends Controller
 {
+    #[Endpoint('Search Users', 'Search for users by username or name.')]
+    #[Response(['data' => [['id' => 1, 'public_name' => 'John Doe', 'username' => 'johndoe']]])]
     public function __invoke(SearchUsersRequest $request): JsonResponse
     {
         $query = $request->validated('q');

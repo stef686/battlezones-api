@@ -10,9 +10,15 @@ use App\Notifications\Profile\VerifyNewEmailNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 
+#[Group('Users', 'APIs for Users')]
 class ChangeEmailController extends Controller
 {
+    #[Endpoint('Change Email', 'Initiate change email address for a user')]
+    #[Response(['message' => 'A verification link has been sent to your new email address.'])]
     public function __invoke(ChangeEmailRequest $request): JsonResponse
     {
         $user = $request->user();

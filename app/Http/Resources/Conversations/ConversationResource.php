@@ -18,10 +18,10 @@ class ConversationResource extends JsonResource
     public function toArray(Request $request): array
     {
         $authUser = $request->user();
-        $authUserModel = $this->users->firstWhere('id', $authUser->id);
+        $authUserModel = $authUser ? $this->users->firstWhere('id', $authUser->id) : null;
         /** @var Pivot|null $authPivot */
         $authPivot = $authUserModel?->getRelation('pivot');
-        $otherUsers = $this->users->where('id', '!=', $authUser->id);
+        $otherUsers = $authUser ? $this->users->where('id', '!=', $authUser->id) : $this->users;
 
         return [
             'id' => $this->id,

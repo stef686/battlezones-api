@@ -14,7 +14,7 @@ use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 class UnblockUserController extends Controller
 {
     #[Endpoint('Unblock User', 'Unblock the given user.')]
-    #[ResponseFromApiResource(UserProfileResource::class)]
+    #[ResponseFromApiResource(UserProfileResource::class, model: User::class)]
     public function __invoke(Request $request, User $user): UserProfileResource
     {
         $request->user()->blockedUsers()->detach($user);

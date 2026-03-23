@@ -32,7 +32,462 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":5,"updated_at":"2026-02-28T16:32:36Z","public_name":"Ms. Elisabeth Okuneva","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":118,"updated_at":"2026-03-23T22:27:11Z","public_name":"Ms. Elisabeth Okuneva","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: api/profile
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update Profile'
+      description: "Update the current user's profile."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      username:
+        custom: []
+        name: username
+        description: 'Must match the regex /^[a-zA-Z][a-zA-Z0-9_-]{2,29}$/.'
+        required: false
+        example: zm0y5pXxPAERES8A2
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      country:
+        custom: []
+        name: country
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues:
+          - AF
+          - AX
+          - AL
+          - DZ
+          - AS
+          - AD
+          - AO
+          - AI
+          - AQ
+          - AG
+          - AR
+          - AM
+          - AW
+          - AU
+          - AT
+          - AZ
+          - BS
+          - BH
+          - BD
+          - BB
+          - BY
+          - BE
+          - BZ
+          - BJ
+          - BM
+          - BT
+          - BO
+          - BA
+          - BW
+          - BV
+          - BR
+          - IO
+          - BN
+          - BG
+          - BF
+          - BI
+          - CV
+          - KH
+          - CM
+          - CA
+          - KY
+          - CF
+          - TD
+          - CL
+          - CN
+          - CX
+          - CC
+          - CO
+          - KM
+          - CG
+          - CD
+          - CK
+          - CR
+          - CI
+          - HR
+          - CU
+          - CW
+          - CY
+          - CZ
+          - DK
+          - DJ
+          - DM
+          - DO
+          - EC
+          - EG
+          - SV
+          - GQ
+          - ER
+          - EE
+          - SZ
+          - ET
+          - FK
+          - FO
+          - FJ
+          - FI
+          - FR
+          - GF
+          - PF
+          - TF
+          - GA
+          - GM
+          - GE
+          - DE
+          - GH
+          - GI
+          - GR
+          - GL
+          - GD
+          - GP
+          - GU
+          - GT
+          - GG
+          - GN
+          - GW
+          - GY
+          - HT
+          - HM
+          - VA
+          - HN
+          - HK
+          - HU
+          - IS
+          - IN
+          - ID
+          - IR
+          - IQ
+          - IE
+          - IM
+          - IL
+          - IT
+          - JM
+          - JP
+          - JE
+          - JO
+          - KZ
+          - KE
+          - KI
+          - KP
+          - KR
+          - KW
+          - KG
+          - LA
+          - LV
+          - LB
+          - LS
+          - LR
+          - LY
+          - LI
+          - LT
+          - LU
+          - MO
+          - MG
+          - MW
+          - MY
+          - MV
+          - ML
+          - MT
+          - MH
+          - MQ
+          - MR
+          - MU
+          - YT
+          - MX
+          - FM
+          - MD
+          - MC
+          - MN
+          - ME
+          - MS
+          - MA
+          - MZ
+          - MM
+          - NA
+          - NR
+          - NP
+          - NL
+          - NC
+          - NZ
+          - NI
+          - NE
+          - NG
+          - NU
+          - NF
+          - MK
+          - MP
+          - 'NO'
+          - OM
+          - PK
+          - PW
+          - PS
+          - PA
+          - PG
+          - PY
+          - PE
+          - PH
+          - PN
+          - PL
+          - PT
+          - PR
+          - QA
+          - RE
+          - RO
+          - RU
+          - RW
+          - BL
+          - SH
+          - KN
+          - LC
+          - MF
+          - PM
+          - VC
+          - WS
+          - SM
+          - ST
+          - SA
+          - SN
+          - RS
+          - SC
+          - SL
+          - SG
+          - SX
+          - SK
+          - SI
+          - SB
+          - SO
+          - ZA
+          - GS
+          - SS
+          - ES
+          - LK
+          - SD
+          - SR
+          - SJ
+          - SE
+          - CH
+          - SY
+          - TW
+          - TJ
+          - TZ
+          - TH
+          - TL
+          - TG
+          - TK
+          - TO
+          - TT
+          - TN
+          - TR
+          - TM
+          - TC
+          - TV
+          - UG
+          - UA
+          - AE
+          - GB
+          - US
+          - UM
+          - UY
+          - UZ
+          - VU
+          - VE
+          - VN
+          - VG
+          - VI
+          - WF
+          - EH
+          - YE
+          - ZM
+          - ZW
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      show_public_name:
+        custom: []
+        name: show_public_name
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+      username: zm0y5pXxPAERES8A2
+      country: architecto
+      show_public_name: false
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":119,"updated_at":"2026-03-23T22:27:11Z","public_name":"Ms. Elisabeth Okuneva","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/profile/email
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Change Email'
+      description: 'Initiate change email address for a user'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      current_password:
+        custom: []
+        name: current_password
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: zbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      current_password: architecto
+      email: zbailey@example.net
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"message":"A verification link has been sent to your new email address."}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/profile/password
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Change Password'
+      description: "Request a password change. A confirmation link will be sent to the user's email."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      current_password:
+        custom: []
+        name: current_password
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: 'Must be at least 8 characters.'
+        required: true
+        example: ']|{+-0pBNvYg'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      current_password: architecto
+      password: ']|{+-0pBNvYg'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"message":"A confirmation link has been sent to your email address."}'
         headers: []
         description: ''
     responseFields: []
@@ -81,7 +536,633 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":6,"updated_at":"2026-02-28T16:32:36Z","public_name":"Jermaine Tillman","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":120,"updated_at":"2026-03-23T22:27:11Z","public_name":"Mya DuBuque","country":"AQ","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/notification-settings
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get Notification Settings'
+      description: "Get the authenticated user's notification settings."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"primary_messages":{"label":"Primary Messages","channels":["email"]},"message_requests":{"label":"Message Requests","channels":["email"]},"event_messages":{"label":"Event Messages","channels":["email"]},"round_live":{"label":"Round Live","channels":["email"]}}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: api/notification-settings
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update Notification Settings'
+      description: "Update the authenticated user's notification settings."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      primary_messages:
+        custom: []
+        name: primary_messages
+        description: ''
+        required: false
+        example:
+          - email
+        type: 'string[]'
+        enumValues:
+          - email
+          - push
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      message_requests:
+        custom: []
+        name: message_requests
+        description: ''
+        required: false
+        example:
+          - push
+        type: 'string[]'
+        enumValues:
+          - email
+          - push
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event_messages:
+        custom: []
+        name: event_messages
+        description: ''
+        required: false
+        example:
+          - push
+        type: 'string[]'
+        enumValues:
+          - email
+          - push
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round_live:
+        custom: []
+        name: round_live
+        description: ''
+        required: false
+        example:
+          - push
+        type: 'string[]'
+        enumValues:
+          - email
+          - push
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      primary_messages:
+        - email
+      message_requests:
+        - push
+      event_messages:
+        - push
+      round_live:
+        - push
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"primary_messages":{"label":"Primary Messages","channels":["email"]},"message_requests":{"label":"Message Requests","channels":["email"]},"event_messages":{"label":"Event Messages","channels":["email"]},"round_live":{"label":"Round Live","channels":["email"]}}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/privacy-settings
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get Privacy Settings'
+      description: "Get the authenticated user's privacy settings."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"messaging":{"value":"anyone","label":"Anyone"},"profile":{"value":"anyone","label":"Anyone"},"options":[{"value":"anyone","label":"Anyone"},{"value":"followers_only","label":"Followers Only"},{"value":"following_only","label":"Following Only"},{"value":"mutual_followers","label":"Mutual Followers"},{"value":"fellow_club_members","label":"Fellow Club Members"}]}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: api/privacy-settings
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update Privacy Settings'
+      description: "Update the authenticated user's privacy settings."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      messaging:
+        custom: []
+        name: messaging
+        description: ''
+        required: false
+        example: followers_only
+        type: string
+        enumValues:
+          - anyone
+          - followers_only
+          - following_only
+          - mutual_followers
+          - fellow_club_members
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      profile:
+        custom: []
+        name: profile
+        description: ''
+        required: false
+        example: followers_only
+        type: string
+        enumValues:
+          - anyone
+          - followers_only
+          - following_only
+          - mutual_followers
+          - fellow_club_members
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      messaging: followers_only
+      profile: followers_only
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"messaging":{"value":"anyone","label":"Anyone"},"profile":{"value":"anyone","label":"Anyone"},"options":[{"value":"anyone","label":"Anyone"},{"value":"followers_only","label":"Followers Only"},{"value":"following_only","label":"Following Only"},{"value":"mutual_followers","label":"Mutual Followers"},{"value":"fellow_club_members","label":"Fellow Club Members"}]}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/users/search
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Search Users'
+      description: 'Search for users by username or name.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      q:
+        custom: []
+        name: q
+        description: 'Must be at least 1 character.'
+        required: true
+        example: bngzmiyvdljnikhw
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      q: bngzmiyvdljnikhw
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":1,"public_name":"John Doe","username":"johndoe"}]}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/users/{user_id}/follow'
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Follow User'
+      description: 'Follow the given user.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":125,"updated_at":"2026-03-23T22:27:11Z","public_name":"Mr. Adriel Romaguera","country":"PM","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/users/{user_id}/follow'
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Unfollow User'
+      description: 'Unfollow the given user.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":126,"updated_at":"2026-03-23T22:27:11Z","public_name":"Prof. Mina Bauch","country":"SD","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/users/{user_id}/followers'
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Followers'
+      description: "List the given user's followers."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":127,"public_name":"Buster Mills","avatar":"","is_following":false}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/users/{user_id}/following'
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Following'
+      description: 'List the users that the given user is following.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":128,"public_name":"Reid Champlin","avatar":"","is_following":false}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/users/{user_id}/block'
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Block User'
+      description: 'Block the given user.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":129,"updated_at":"2026-03-23T22:27:11Z","public_name":"Sabina Greenholt","country":"CW","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/users/{user_id}/block'
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Unblock User'
+      description: 'Unblock the given user.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":130,"updated_at":"2026-03-23T22:27:11Z","public_name":"Jakayla Mills","country":"HR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/blocked-users
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Blocked Users'
+      description: "List the authenticated user's blocked users."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":131,"public_name":"Mrs. Lizzie Lindgren","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []

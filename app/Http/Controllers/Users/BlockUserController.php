@@ -15,7 +15,7 @@ use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 class BlockUserController extends Controller
 {
     #[Endpoint('Block User', 'Block the given user.')]
-    #[ResponseFromApiResource(UserProfileResource::class)]
+    #[ResponseFromApiResource(UserProfileResource::class, model: User::class)]
     public function __invoke(BlockUserRequest $request, User $user, BlockUser $action): UserProfileResource
     {
         $action->execute($request->user(), $user);

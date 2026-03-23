@@ -7,11 +7,15 @@ use App\Http\Requests\Gallery\UpdatePhotoRequest;
 use App\Http\Resources\Gallery\PhotoResource;
 use App\Models\Photo;
 use App\Services\PhotoStorageService;
+use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 
-#[Group('Gallery')]
+#[Group('Gallery', 'APIs for Gallery')]
 class UpdatePhotoController extends Controller
 {
+    #[Endpoint('Update Photo', 'Update a photo\'s name, description, or image.')]
+    #[ResponseFromApiResource(PhotoResource::class, model: Photo::class)]
     public function __invoke(UpdatePhotoRequest $request, Photo $photo, PhotoStorageService $storage): PhotoResource
     {
         $data = $request->safe()->except('photo');

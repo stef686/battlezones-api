@@ -14,7 +14,7 @@ use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 class UserProfileController extends Controller
 {
     #[Endpoint('User Profile', "Display the given user's profile data.")]
-    #[ResponseFromApiResource(UserProfileResource::class)]
+    #[ResponseFromApiResource(UserProfileResource::class, model: User::class)]
     public function __invoke(User $user, PrivacyService $privacyService): UserProfileResource
     {
         abort_unless($privacyService->canViewProfile(auth()->user(), $user), 403);

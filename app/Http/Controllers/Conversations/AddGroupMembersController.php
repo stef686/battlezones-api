@@ -8,9 +8,15 @@ use App\Http\Requests\Conversations\AddGroupMembersRequest;
 use App\Http\Resources\Conversations\ConversationResource;
 use App\Models\Conversation;
 use App\Models\User;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 
+#[Group('Conversations', 'APIs for Conversations')]
 class AddGroupMembersController extends Controller
 {
+    #[Endpoint('Add Group Members', 'Add new members to a group conversation.')]
+    #[ResponseFromApiResource(ConversationResource::class, model: Conversation::class)]
     public function __invoke(AddGroupMembersRequest $request, Conversation $conversation, AddGroupMembers $action): ConversationResource
     {
         $sender = $request->user();

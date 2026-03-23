@@ -6,12 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Conversations\StoreMessageRequest;
 use App\Http\Resources\Conversations\MessageResource;
 use App\Models\Conversation;
+use App\Models\Message;
 use App\Models\User;
 use App\Notifications\Conversations\NewMessageNotification;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 
+#[Group('Conversations', 'APIs for Conversations')]
 class StoreMessageController extends Controller
 {
+    #[Endpoint('Send Message', 'Send a new message in a conversation.')]
+    #[ResponseFromApiResource(MessageResource::class, model: Message::class)]
     public function __invoke(StoreMessageRequest $request, Conversation $conversation): MessageResource
     {
         $sender = $request->user();

@@ -9,9 +9,15 @@ use App\Http\Resources\Conversations\ConversationResource;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 
+#[Group('Conversations', 'APIs for Conversations')]
 class ListConversationsController extends Controller
 {
+    #[Endpoint('List Conversations', 'List the authenticated user\'s conversations.')]
+    #[ResponseFromApiResource(ConversationResource::class, model: Conversation::class, paginate: 15)]
     public function __invoke(ListConversationsRequest $request): AnonymousResourceCollection
     {
         $userId = $request->user()->id;

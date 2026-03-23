@@ -15,7 +15,7 @@ use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 class ListFollowersController extends Controller
 {
     #[Endpoint('List Followers', "List the given user's followers.")]
-    #[ResponseFromApiResource(UserCardResource::class, paginate: 15)]
+    #[ResponseFromApiResource(UserCardResource::class, model: User::class, paginate: 15)]
     public function __invoke(User $user, PrivacyService $privacyService): AnonymousResourceCollection
     {
         abort_unless($privacyService->canViewProfile(auth()->user(), $user), 403);

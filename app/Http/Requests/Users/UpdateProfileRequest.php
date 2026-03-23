@@ -21,7 +21,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'string', 'max:255'],
-            'username' => ['sometimes', 'string', 'regex:/^[a-zA-Z][a-zA-Z0-9_-]{2,29}$/', Rule::unique('users')->ignore($this->user()->id)],
+            'username' => ['sometimes', 'string', 'regex:/^[a-zA-Z][a-zA-Z0-9_-]{2,29}$/', Rule::unique('users')->ignore($this->user()?->id)],
             'country' => ['sometimes', 'nullable', 'string', Rule::enum(Country::class)],
             'show_public_name' => ['sometimes', 'boolean'],
         ];

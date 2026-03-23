@@ -14,7 +14,7 @@ use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 class UnfollowUserController extends Controller
 {
     #[Endpoint('Unfollow User', 'Unfollow the given user.')]
-    #[ResponseFromApiResource(UserProfileResource::class)]
+    #[ResponseFromApiResource(UserProfileResource::class, model: User::class)]
     public function __invoke(Request $request, User $user): UserProfileResource
     {
         $request->user()->following()->detach($user);
