@@ -68,16 +68,16 @@ class RegisterController extends Controller
         return response()->json(['message' => 'Verification link resent!']);
     }
 
-    public function verifyEmail(User $user, string $hash): JsonResponse
+    public function verifyEmail(User $id, string $hash): JsonResponse
     {
         // Verify if the hash is correct
-        if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        if (! hash_equals((string) $hash, sha1($id->getEmailForVerification()))) {
             return response()->json(['message' => 'Invalid verification link.'], 403);
         }
 
         // Mark email as verified
-        if (! $user->hasVerifiedEmail()) {
-            $user->markEmailAsVerified();
+        if (! $id->hasVerifiedEmail()) {
+            $id->markEmailAsVerified();
         }
 
         return response()->json(['message' => 'Email verified successfully!']);

@@ -9,7 +9,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/email/verify/{user}/{hash}', [RegisterController::class, 'verifyEmail'])
+Route::get('/email/verify/{id}/{hash}', [RegisterController::class, 'verifyEmail'])
     ->middleware(['signed', 'throttle:6,1'])
     ->name('verification.verify');
 
