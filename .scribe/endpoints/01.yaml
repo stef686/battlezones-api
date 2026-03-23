@@ -30,7 +30,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":118,"updated_at":"2026-03-23T22:27:11Z","public_name":"Ms. Elisabeth Okuneva","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":140,"updated_at":"2026-03-23T22:38:46Z","public_name":"Ms. Elisabeth Okuneva","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -347,7 +347,7 @@ endpoints:
         name: show_public_name
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -357,13 +357,13 @@ endpoints:
       name: b
       username: zm0y5pXxPAERES8A2
       country: architecto
-      show_public_name: false
+      show_public_name: true
     fileParameters: []
     responses:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":119,"updated_at":"2026-03-23T22:27:11Z","public_name":"Ms. Elisabeth Okuneva","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":141,"updated_at":"2026-03-23T22:38:46Z","public_name":"Ms. Elisabeth Okuneva","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -534,7 +534,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":120,"updated_at":"2026-03-23T22:27:11Z","public_name":"Mya DuBuque","country":"AQ","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":142,"updated_at":"2026-03-23T22:38:46Z","public_name":"Mya DuBuque","country":"AQ","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -650,7 +650,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -666,7 +666,7 @@ endpoints:
       event_messages:
         - push
       round_live:
-        - push
+        - email
     fileParameters: []
     responses:
       -
@@ -745,7 +745,7 @@ endpoints:
         name: messaging
         description: ''
         required: false
-        example: followers_only
+        example: fellow_club_members
         type: string
         enumValues:
           - anyone
@@ -761,7 +761,7 @@ endpoints:
         name: profile
         description: ''
         required: false
-        example: followers_only
+        example: mutual_followers
         type: string
         enumValues:
           - anyone
@@ -773,8 +773,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      messaging: followers_only
-      profile: followers_only
+      messaging: fellow_club_members
+      profile: mutual_followers
     fileParameters: []
     responses:
       -
@@ -878,7 +878,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":125,"updated_at":"2026-03-23T22:27:11Z","public_name":"Mr. Adriel Romaguera","country":"PM","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":147,"updated_at":"2026-03-23T22:38:46Z","public_name":"Mr. Adriel Romaguera","country":"PM","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -927,7 +927,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":126,"updated_at":"2026-03-23T22:27:11Z","public_name":"Prof. Mina Bauch","country":"SD","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":148,"updated_at":"2026-03-23T22:38:46Z","public_name":"Prof. Mina Bauch","country":"SD","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -976,7 +976,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":127,"public_name":"Buster Mills","avatar":"","is_following":false}}'
+        content: '{"data":{"id":149,"public_name":"Juston Lind V","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1025,7 +1025,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":128,"public_name":"Reid Champlin","avatar":"","is_following":false}}'
+        content: '{"data":{"id":150,"public_name":"Prof. Gerald Schuster","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1074,7 +1074,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":129,"updated_at":"2026-03-23T22:27:11Z","public_name":"Sabina Greenholt","country":"CW","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":151,"updated_at":"2026-03-23T22:38:46Z","public_name":"Royce Ratke","country":"GP","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1123,7 +1123,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":130,"updated_at":"2026-03-23T22:27:11Z","public_name":"Jakayla Mills","country":"HR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":152,"updated_at":"2026-03-23T22:38:46Z","public_name":"Jamie Greenholt","country":"MS","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1160,7 +1160,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":131,"public_name":"Mrs. Lizzie Lindgren","avatar":"","is_following":false}}'
+        content: '{"data":{"id":153,"public_name":"Shaina Glover","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []

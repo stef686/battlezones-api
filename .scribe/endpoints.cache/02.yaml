@@ -32,7 +32,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":19,"name":"Saepe fugiat odit rem consequatur.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/004e0507-2c3e-3281-af04-5cb88f310e0d.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/afb1eea9-dd74-35de-a609-6f09b31292dc.jpg","created_at":"2026-03-23T22:27:12Z","updated_at":"2026-03-23T22:27:12Z"}}'
+        content: '{"data":{"id":25,"name":"In natus perferendis.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/ed7b741d-c366-32d2-827d-6666c851456c.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/609303d3-7451-3267-b3d4-462990137d0f.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -105,7 +105,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":20,"name":"Nihil accusantium harum.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/51c7cf5e-fac2-3ac6-8ef8-61e6050503af.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/d207102d-bce0-31f9-8c36-aa9cf4cfe75a.jpg","created_at":"2026-03-23T22:27:12Z","updated_at":"2026-03-23T22:27:12Z"}}'
+        content: '{"data":{"id":26,"name":"Nihil accusantium harum.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/51c7cf5e-fac2-3ac6-8ef8-61e6050503af.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/d207102d-bce0-31f9-8c36-aa9cf4cfe75a.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -154,7 +154,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":21,"name":"Et animi quos.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/d6fa562b-acd5-35ff-babb-d11194d3737b.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/5707ca55-f609-3528-be8b-1baeaee1567e.jpg","created_at":"2026-03-23T22:27:12Z","updated_at":"2026-03-23T22:27:12Z"}}'
+        content: '{"data":{"id":27,"name":"Et animi quos.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/d6fa562b-acd5-35ff-babb-d11194d3737b.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/5707ca55-f609-3528-be8b-1baeaee1567e.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -239,7 +239,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":22,"name":"Nihil accusantium harum.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/51c7cf5e-fac2-3ac6-8ef8-61e6050503af.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/d207102d-bce0-31f9-8c36-aa9cf4cfe75a.jpg","created_at":"2026-03-23T22:27:12Z","updated_at":"2026-03-23T22:27:12Z"}}'
+        content: '{"data":{"id":28,"name":"Nihil accusantium harum.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/51c7cf5e-fac2-3ac6-8ef8-61e6050503af.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/d207102d-bce0-31f9-8c36-aa9cf4cfe75a.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -287,8 +287,8 @@ endpoints:
     responses:
       -
         custom: []
-        status: 204
-        content: ''
+        status: 200
+        content: '{"message":"Photo successfully deleted."}'
         headers: []
         description: ''
     responseFields: []
@@ -337,7 +337,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":23,"name":"Et animi quos.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/d6fa562b-acd5-35ff-babb-d11194d3737b.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/5707ca55-f609-3528-be8b-1baeaee1567e.jpg","created_at":"2026-03-23T22:27:12Z","updated_at":"2026-03-23T22:27:12Z"}}'
+        content: '{"data":{"id":29,"name":"Et animi quos.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/d6fa562b-acd5-35ff-babb-d11194d3737b.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/5707ca55-f609-3528-be8b-1baeaee1567e.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
         headers: []
         description: ''
     responseFields: []

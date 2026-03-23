@@ -20,11 +20,20 @@ test('it deletes the photo model and files from disk', function () {
 
     $this->actingAs($user)
         ->deleteJson(route('gallery.destroy', $photo))
-        ->assertNoContent();
+        ->assertJson(['message' => 'Photo successfully deleted.']);
 
     expect(Photo::find($photo->id))->toBeNull();
     Storage::disk('public')->assertMissing($path);
     Storage::disk('public')->assertMissing($thumbPath);
+});
+
+test('it returns 404 json when photo does not exist', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->deleteJson(route('gallery.destroy', ['photo' => 999]))
+        ->assertNotFound()
+        ->assertJsonStructure(['message']);
 });
 
 test('it returns 403 for another user photo', function () {
