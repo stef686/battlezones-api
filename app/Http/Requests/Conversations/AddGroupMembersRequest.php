@@ -21,8 +21,8 @@ class AddGroupMembersRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'usernames' => ['required', 'array', 'min:1'],
-            'usernames.*' => ['required', 'string', 'exists:users,username'],
+            'recipient_ids' => ['required', 'array', 'min:1', 'max:9'],
+            'recipient_ids.*' => ['required', 'integer', 'exists:users,id'],
             'include_history' => ['boolean'],
         ];
     }
@@ -36,24 +36,24 @@ class AddGroupMembersRequest extends FormRequest
 
             /** @var Conversation $conversation */
             $conversation = $this->route('conversation');
-            $usernames = $this->input('usernames', []);
+            $recipientIds = $this->input('recipient_ids', []);
 
-            $existingUsernames = $conversation->users()
+            $existingIds = $conversation->users()
                 ->wherePivotNull('deleted_at')
-                ->pluck('username')
+                ->pluck('users.id')
                 ->all();
 
-            $alreadyPresent = array_intersect($usernames, $existingUsernames);
+            $alreadyPresent = array_intersect($recipientIds, $existingIds);
 
             if ($alreadyPresent) {
-                $validator->errors()->add('usernames', 'Some users are already members: '.implode(', ', $alreadyPresent));
+                $validator->errors()->add('recipient_ids', 'Some users are already members: '.implode(', ', $alreadyPresent));
             }
 
-            $currentCount = count($existingUsernames);
-            $newCount = count(array_diff($usernames, $existingUsernames));
+            $currentCount = count($existingIds);
+            $newCount = count(array_diff($recipientIds, $existingIds));
 
             if ($currentCount + $newCount > 10) {
-                $validator->errors()->add('usernames', 'A group cannot have more than 10 members.');
+                $validator->errors()->add('recipient_ids', 'A group cannot have more than 10 members.');
             }
         });
     }

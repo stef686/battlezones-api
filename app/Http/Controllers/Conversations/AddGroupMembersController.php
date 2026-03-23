@@ -20,7 +20,7 @@ class AddGroupMembersController extends Controller
     public function __invoke(AddGroupMembersRequest $request, Conversation $conversation, AddGroupMembers $action): ConversationResource
     {
         $sender = $request->user();
-        $newMembers = User::query()->whereIn('username', $request->validated('usernames'))->get();
+        $newMembers = User::query()->whereIn('id', $request->validated('recipient_ids'))->get();
 
         $action->execute($sender, $conversation, $newMembers, $request->boolean('include_history', true));
 

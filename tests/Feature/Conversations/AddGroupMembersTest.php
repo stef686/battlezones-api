@@ -14,7 +14,7 @@ test('it adds members to a group conversation', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.members.store', $conversation), [
-            'usernames' => [$newMember->username],
+            'recipient_ids' => [$newMember->id],
         ])
         ->assertSuccessful();
 
@@ -34,7 +34,7 @@ test('it creates a system message when adding members', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.members.store', $conversation), [
-            'usernames' => [$newMember->username],
+            'recipient_ids' => [$newMember->id],
         ])
         ->assertSuccessful();
 
@@ -56,7 +56,7 @@ test('it sets visible_from when include_history is false', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.members.store', $conversation), [
-            'usernames' => [$newMember->username],
+            'recipient_ids' => [$newMember->id],
             'include_history' => false,
         ])
         ->assertSuccessful();
@@ -75,7 +75,7 @@ test('it does not set visible_from when include_history is true', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.members.store', $conversation), [
-            'usernames' => [$newMember->username],
+            'recipient_ids' => [$newMember->id],
             'include_history' => true,
         ])
         ->assertSuccessful();
@@ -93,7 +93,7 @@ test('it rejects non-group conversations', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.members.store', $conversation), [
-            'usernames' => [$newMember->username],
+            'recipient_ids' => [$newMember->id],
         ])
         ->assertForbidden();
 });
@@ -108,7 +108,7 @@ test('it rejects non-member users', function () {
 
     $this->actingAs($outsider)
         ->postJson(route('conversations.members.store', $conversation), [
-            'usernames' => [$newMember->username],
+            'recipient_ids' => [$newMember->id],
         ])
         ->assertForbidden();
 });
@@ -122,10 +122,10 @@ test('it rejects already-present usernames', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.members.store', $conversation), [
-            'usernames' => [$existing->username],
+            'recipient_ids' => [$existing->id],
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('usernames');
+        ->assertJsonValidationErrors('recipient_ids');
 });
 
 test('it enforces 10-member cap', function () {
@@ -139,8 +139,8 @@ test('it enforces 10-member cap', function () {
 
     $this->actingAs($sender)
         ->postJson(route('conversations.members.store', $conversation), [
-            'usernames' => [$newMember->username],
+            'recipient_ids' => [$newMember->id],
         ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors('usernames');
+        ->assertJsonValidationErrors('recipient_ids');
 });
