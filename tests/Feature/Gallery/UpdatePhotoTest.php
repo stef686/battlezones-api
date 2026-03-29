@@ -38,9 +38,13 @@ test('it replaces file and thumbnail when new photo uploaded', function () {
         ->patchJson(route('gallery.update', $photo), [
             'photo' => UploadedFile::fake()->image('new.jpg', 800, 600),
         ])
-        ->assertSuccessful();
+        ->assertSuccessful()
+        ->assertJsonStructure(['data' => ['id', 'url', 'thumbnail_url']]);
 
     $photo->refresh();
+
+    expect($photo->path)->not->toBe($oldPath);
+    expect($photo->thumbnail_path)->not->toBe($oldThumbPath);
 
     Storage::disk('public')->assertMissing($oldPath);
     Storage::disk('public')->assertMissing($oldThumbPath);

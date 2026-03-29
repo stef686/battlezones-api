@@ -11,10 +11,14 @@ test('it archives a conversation for the requesting user', function () {
 
     $this->actingAs($user)
         ->postJson(route('conversations.archive', $conversation))
-        ->assertSuccessful();
+        ->assertSuccessful()
+        ->assertJson(['message' => 'Conversation archived.']);
 
     $pivot = $conversation->users()->where('user_id', $user->id)->first()->pivot;
     expect($pivot->archived_at)->not->toBeNull();
+
+    $otherPivot = $conversation->users()->where('user_id', $otherUser->id)->first()->pivot;
+    expect($otherPivot->archived_at)->toBeNull();
 });
 
 test('it returns 403 for non-participant', function () {
