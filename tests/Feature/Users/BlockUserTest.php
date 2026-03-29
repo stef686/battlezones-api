@@ -10,9 +10,9 @@ test('a user can block another user', function () {
 
     $this->postJson(route('users.block', $target))
         ->assertSuccessful()
-        ->assertJson([
-            'message' => 'User blocked',
-        ]);
+        ->assertJsonStructure(['data' => ['id', 'public_name', 'is_blocked_by_you']])
+        ->assertJsonPath('data.id', $target->id)
+        ->assertJsonPath('data.is_blocked_by_you', true);
 
     $this->assertDatabaseHas('blocks', [
         'blocker_id' => $user->id,

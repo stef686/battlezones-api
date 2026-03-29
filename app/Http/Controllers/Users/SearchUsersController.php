@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\SearchUsersRequest;
+use App\Http\Resources\Users\UserSearchResource;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
-use Knuckles\Scribe\Attributes\Response;
+use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 
 #[Group('Users', 'APIs for Users')]
 class SearchUsersController extends Controller
 {
     #[Endpoint('Search Users', 'Search for users by username or name.')]
-    #[Response(['data' => [['id' => 1, 'public_name' => 'John Doe', 'username' => 'johndoe']]])]
-    public function __invoke(SearchUsersRequest $request): JsonResponse
+    #[ResponseFromApiResource(UserSearchResource::class, model: User::class, collection: true)]
+    public function __invoke(SearchUsersRequest $request): AnonymousResourceCollection
     {
         $query = $request->validated('q');
         $authUser = $request->user();
@@ -28,14 +29,8 @@ class SearchUsersController extends Controller
                     ->orWhere('name', 'like', "{$query}%");
             })
             ->limit(config('battlezones.search_result_limit'))
-            ->get(['id', 'name', 'username', 'show_public_name']);
+            ->get();
 
-        return response()->json([
-            'data' => $users->map(fn (User $user) => [
-                'id' => $user->id,
-                'public_name' => $user->public_name,
-                'username' => $user->username,
-            ])->values(),
-        ]);
+        return UserSearchResource::collection($users);
     }
 }
