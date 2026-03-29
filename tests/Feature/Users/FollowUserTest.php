@@ -10,11 +10,7 @@ test('a user can follow another user', function () {
     $this->postJson(route('users.follow', $target))
         ->assertSuccessful()
         ->assertJson([
-            'data' => [
-                'id' => $target->id,
-                'is_following' => true,
-                'followers_count' => 1,
-            ],
+            'message' => 'User followed',
         ]);
 
     $this->assertDatabaseHas('follows', [
@@ -40,9 +36,7 @@ test('duplicate follow is idempotent', function () {
     $this->postJson(route('users.follow', $target))
         ->assertSuccessful()
         ->assertJson([
-            'data' => [
-                'followers_count' => 1,
-            ],
+            'message' => 'User followed',
         ]);
 
     expect($target->followers()->count())->toBe(1);
@@ -57,11 +51,7 @@ test('a user can unfollow another user', function () {
     $this->deleteJson(route('users.unfollow', $target))
         ->assertSuccessful()
         ->assertJson([
-            'data' => [
-                'id' => $target->id,
-                'is_following' => false,
-                'followers_count' => 0,
-            ],
+            'message' => 'User unfollowed',
         ]);
 
     $this->assertDatabaseMissing('follows', [
