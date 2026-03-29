@@ -11,28 +11,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class UserCardResource extends JsonResource
 {
-    /**
-     * @var list<int>|null
-     */
-    private static ?array $authFollowingIds = null;
-
     public function toArray(Request $request): array
     {
-        if (self::$authFollowingIds === null) {
-            self::$authFollowingIds = $request->user()
-                ?->following()->pluck('users.id')->all() ?? [];
-        }
+        $authFollowingIds = once(fn () => $request->user()
+            ?->following()->pluck('users.id')->all() ?? []);
 
         return [
             'id' => $this->id,
             'public_name' => $this->public_name,
             'avatar' => '',
-            'is_following' => in_array($this->id, self::$authFollowingIds),
+            'is_following' => in_array($this->id, $authFollowingIds),
         ];
-    }
-
-    public static function resetAuthFollowing(): void
-    {
-        self::$authFollowingIds = null;
     }
 }
