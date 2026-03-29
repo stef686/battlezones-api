@@ -7,6 +7,7 @@ use App\Http\Controllers\Conversations\DeleteMessageController;
 use App\Http\Controllers\Conversations\LeaveGroupConversationController;
 use App\Http\Controllers\Conversations\ListConversationsController;
 use App\Http\Controllers\Conversations\ReadConversationController;
+use App\Http\Controllers\Conversations\RemoveGroupMemberController;
 use App\Http\Controllers\Conversations\ShowConversationController;
 use App\Http\Controllers\Conversations\StartConversationController;
 use App\Http\Controllers\Conversations\StoreMessageController;
@@ -19,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('conversations', StartConversationController::class)->name('conversations.store')->middleware('throttle:30,1');
     Route::get('conversations/{conversation}', ShowConversationController::class)->name('conversations.show');
     Route::post('conversations/{conversation}/members', AddGroupMembersController::class)->name('conversations.members.store');
+    Route::delete('conversations/{conversation}/members/{user}', RemoveGroupMemberController::class)->name('conversations.members.destroy');
     Route::post('conversations/{conversation}/leave', LeaveGroupConversationController::class)->name('conversations.leave');
     Route::patch('conversations/{conversation}/name', UpdateGroupNameController::class)->name('conversations.name.update');
     Route::delete('conversations/{conversation}', DeleteConversationController::class)->name('conversations.destroy');

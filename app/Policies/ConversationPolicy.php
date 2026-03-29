@@ -48,4 +48,9 @@ class ConversationPolicy
     {
         return $conversation->isGroup() && $this->view($user, $conversation);
     }
+
+    public function removeMember(User $user, Conversation $conversation): bool
+    {
+        return $conversation->isGroup() && $this->view($user, $conversation);
+    }
 }
