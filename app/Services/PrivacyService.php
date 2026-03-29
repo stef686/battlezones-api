@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\PrivacyOption;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class PrivacyService
 {
@@ -65,6 +66,11 @@ class PrivacyService
      */
     public function areClubMembers(User $actor, User $target): bool
     {
+        Log::warning('PrivacyService::areClubMembers() is not implemented — denying access by default.', [
+            'actor_id' => $actor->id,
+            'target_id' => $target->id,
+        ]);
+
         return false;
     }
 
@@ -73,6 +79,11 @@ class PrivacyService
      */
     public function isEventOrganiserOf(User $organiser, User $participant): bool
     {
+        Log::warning('PrivacyService::isEventOrganiserOf() is not implemented — denying access by default.', [
+            'organiser_id' => $organiser->id,
+            'participant_id' => $participant->id,
+        ]);
+
         return false;
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Services\PrivacyService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 // -- Messaging enforcement --
@@ -116,7 +117,11 @@ test('messaging is allowed when set to mutual_followers and both directions exis
         ->assertSuccessful();
 });
 
-test('messaging is blocked when set to fellow_club_members (stub)', function () {
+test('messaging is blocked when set to fellow_club_members (stub) and logs warning', function () {
+    Log::shouldReceive('warning')
+        ->once()
+        ->withArgs(fn (string $message) => str_contains($message, 'areClubMembers'));
+
     $sender = User::factory()->create();
     $recipient = User::factory()->create([
         'privacy_settings' => ['messaging' => 'fellow_club_members'],
@@ -210,7 +215,11 @@ test('following list is blocked when profile privacy denies access', function ()
         ->assertForbidden();
 });
 
-test('event organiser stub returns false', function () {
+test('event organiser stub returns false and logs warning', function () {
+    Log::shouldReceive('warning')
+        ->once()
+        ->withArgs(fn (string $message) => str_contains($message, 'isEventOrganiserOf'));
+
     $organiser = User::factory()->create();
     $participant = User::factory()->create();
 
