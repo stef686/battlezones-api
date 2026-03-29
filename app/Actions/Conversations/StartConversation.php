@@ -5,11 +5,21 @@ namespace App\Actions\Conversations;
 use App\Models\Conversation;
 use App\Models\User;
 use App\Notifications\Conversations\NewMessageNotification;
+use App\Services\PrivacyService;
+use Illuminate\Validation\ValidationException;
 
 class StartConversation
 {
+    public function __construct(private PrivacyService $privacyService) {}
+
     public function execute(User $sender, User $recipient, string $body): Conversation
     {
+        if (! $this->privacyService->canMessage($sender, $recipient)) {
+            throw ValidationException::withMessages([
+                'recipient_ids' => ['You cannot message this user.'],
+            ]);
+        }
+
         $conversation = Conversation::findBetween($sender->id, $recipient->id);
 
         if ($conversation) {

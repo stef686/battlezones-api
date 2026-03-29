@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\Conversations;
 
-use App\Models\User;
-use App\Services\PrivacyService;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
@@ -48,31 +46,9 @@ class StartConversationRequest extends FormRequest
                 return;
             }
 
-            if (count($recipientIds) > 1) {
-                $this->validateGroupConversation($validator);
-            } else {
-                $this->validateDirectConversation($validator, (int) $recipientIds[0]);
+            if (count($recipientIds) > 1 && ! $this->filled('name')) {
+                $validator->errors()->add('name', 'A group name is required when starting a group conversation.');
             }
         });
-    }
-
-    private function validateDirectConversation(Validator $validator, int $recipientId): void
-    {
-        $recipient = User::find($recipientId);
-
-        if (! $recipient) {
-            return;
-        }
-
-        if (! app(PrivacyService::class)->canMessage($this->user(), $recipient)) {
-            $validator->errors()->add('recipient_ids', 'You cannot message this user.');
-        }
-    }
-
-    private function validateGroupConversation(Validator $validator): void
-    {
-        if (! $this->filled('name')) {
-            $validator->errors()->add('name', 'A group name is required when starting a group conversation.');
-        }
     }
 }
