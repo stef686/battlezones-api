@@ -27,7 +27,7 @@ class SearchUsersController extends Controller
                 $q->where('username', 'like', "{$query}%")
                     ->orWhere('name', 'like', "{$query}%");
             })
-            ->limit(10)
+            ->limit(config('battlezones.search_result_limit'))
             ->get(['id', 'name', 'username', 'show_public_name']);
 
         return response()->json([

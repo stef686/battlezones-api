@@ -21,7 +21,7 @@ class StartConversationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'recipient_ids' => ['required', 'array', 'min:1', 'max:9'],
+            'recipient_ids' => ['required', 'array', 'min:1', 'max:'.(config('battlezones.group_member_limit') - 1)],
             'recipient_ids.*' => ['required', 'integer', 'exists:users,id'],
             'name' => ['nullable', 'string', 'max:255'],
             'body' => ['required', 'string', 'max:1000'],

@@ -56,6 +56,6 @@ class PendingPasswordChange extends Model
 
     public function isExpired(): bool
     {
-        return $this->created_at->addDay()->isPast();
+        return $this->created_at->addHours(config('battlezones.password_change_token_expiry'))->isPast();
     }
 }

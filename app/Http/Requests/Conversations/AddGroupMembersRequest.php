@@ -21,7 +21,7 @@ class AddGroupMembersRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'recipient_ids' => ['required', 'array', 'min:1', 'max:9'],
+            'recipient_ids' => ['required', 'array', 'min:1', 'max:'.(config('battlezones.group_member_limit') - 1)],
             'recipient_ids.*' => ['required', 'integer', 'exists:users,id'],
             'include_history' => ['boolean'],
         ];
@@ -52,8 +52,10 @@ class AddGroupMembersRequest extends FormRequest
             $currentCount = count($existingIds);
             $newCount = count(array_diff($recipientIds, $existingIds));
 
-            if ($currentCount + $newCount > 10) {
-                $validator->errors()->add('recipient_ids', 'A group cannot have more than 10 members.');
+            $limit = config('battlezones.group_member_limit');
+
+            if ($currentCount + $newCount > $limit) {
+                $validator->errors()->add('recipient_ids', "A group cannot have more than {$limit} members.");
             }
         });
     }

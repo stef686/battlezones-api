@@ -85,7 +85,7 @@ class Message extends Model
 
     public function isEditable(): bool
     {
-        return ! $this->isDeleted() && $this->created_at->diffInMinutes(now()) < 15;
+        return ! $this->isDeleted() && $this->created_at->diffInMinutes(now()) < config('battlezones.message_edit_window');
     }
 
     public function isDeleted(): bool
