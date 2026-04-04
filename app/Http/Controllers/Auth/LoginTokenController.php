@@ -39,8 +39,12 @@ class LoginTokenController extends Controller
             return response()->json(['token' => null]);
         }
 
+        $newToken = $user->createToken($request->input('device_name'));
+
         return response()->json([
-            'token' => $user->createToken($request->input('device_name'))->plainTextToken,
+            'token' => $newToken->plainTextToken,
+            'expires_at' => $newToken->accessToken->created_at
+                ->addMinutes(config('sanctum.expiration')),
         ]);
     }
 }
