@@ -1,0 +1,1 @@
+PRD #1: Token expiration — Set Sanctum token expiration to 30 days (43200 min) in config/sanctum.php. Added daily scheduled pruning of expired tokens via sanctum:prune-expired. Added tests for expired/valid token behavior.
