@@ -35,6 +35,8 @@ use Illuminate\Support\Carbon;
  * @property-read Club|null $club
  * @property-read Collection<int, EventDocument> $documents
  * @property-read int|null $documents_count
+ * @property-read Collection<int, EventUpdate> $updates
+ * @property-read int|null $updates_count
  * @property-read GameSystem $gameSystem
  *
  * @method static \Database\Factories\EventFactory factory($count = null, $state = [])
@@ -139,5 +141,13 @@ class Event extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(EventDocument::class);
+    }
+
+    /**
+     * @return HasMany<EventUpdate, $this>
+     */
+    public function updates(): HasMany
+    {
+        return $this->hasMany(EventUpdate::class);
     }
 }
