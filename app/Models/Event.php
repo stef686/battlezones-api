@@ -150,4 +150,12 @@ class Event extends Model
     {
         return $this->hasMany(EventUpdate::class);
     }
+
+    /**
+     * @return HasMany<EventAttendee, $this>
+     */
+    public function attendees(): HasMany
+    {
+        return $this->hasMany(EventAttendee::class);
+    }
 }
