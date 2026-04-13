@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Database\Factories\EventAttendeeFactory;
+use App\Enums\CustomFieldType;
+use Database\Factories\EventCustomFieldFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,22 +14,20 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property int $event_id
- * @property int $user_id
- * @property int|null $faction_id
- * @property string|null $army_list
- * @property Carbon|null $checked_in_at
+ * @property string $name
+ * @property CustomFieldType $type
+ * @property array<int, string>|null $options
+ * @property int $display_order
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event $event
- * @property-read User $user
- * @property-read Faction|null $faction
- * @property-read Collection<int, EventCustomFieldResponse> $customFieldResponses
+ * @property-read Collection<int, EventCustomFieldResponse> $responses
  *
- * @method static EventAttendeeFactory factory($count = null, $state = [])
+ * @method static EventCustomFieldFactory factory($count = null, $state = [])
  */
-class EventAttendee extends Model
+class EventCustomField extends Model
 {
-    /** @use HasFactory<EventAttendeeFactory> */
+    /** @use HasFactory<EventCustomFieldFactory> */
     use HasFactory;
 
     /**
@@ -36,10 +35,10 @@ class EventAttendee extends Model
      */
     protected $fillable = [
         'event_id',
-        'user_id',
-        'faction_id',
-        'army_list',
-        'checked_in_at',
+        'name',
+        'type',
+        'options',
+        'display_order',
     ];
 
     /**
@@ -48,7 +47,8 @@ class EventAttendee extends Model
     protected function casts(): array
     {
         return [
-            'checked_in_at' => 'datetime',
+            'type' => CustomFieldType::class,
+            'options' => 'array',
         ];
     }
 
@@ -61,25 +61,9 @@ class EventAttendee extends Model
     }
 
     /**
-     * @return BelongsTo<User, $this>
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return BelongsTo<Faction, $this>
-     */
-    public function faction(): BelongsTo
-    {
-        return $this->belongsTo(Faction::class);
-    }
-
-    /**
      * @return HasMany<EventCustomFieldResponse, $this>
      */
-    public function customFieldResponses(): HasMany
+    public function responses(): HasMany
     {
         return $this->hasMany(EventCustomFieldResponse::class);
     }

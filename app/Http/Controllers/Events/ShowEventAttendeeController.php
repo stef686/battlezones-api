@@ -22,7 +22,7 @@ class ShowEventAttendeeController extends Controller
     {
         abort_unless($event->status->isPubliclyVisible(), 404);
 
-        $attendee->load(['user.clubs', 'faction']);
+        $attendee->load(['user.clubs', 'faction', 'customFieldResponses.field']);
 
         return EventAttendeeDetailResource::make($attendee);
     }

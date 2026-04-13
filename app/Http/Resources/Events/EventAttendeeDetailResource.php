@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources\Events;
 
+use App\Enums\CustomFieldType;
 use App\Models\EventAttendee;
+use App\Models\EventCustomFieldResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -32,7 +34,30 @@ class EventAttendeeDetailResource extends JsonResource
             ])->values(),
             'army_list' => $this->army_list,
             'checked_in_at' => $this->checked_in_at?->toIso8601ZuluString(),
+            'custom_field_responses' => $this->customFieldResponses
+                ->sortBy(fn (EventCustomFieldResponse $response): int => $response->field->display_order)
+                ->values()
+                ->map(fn (EventCustomFieldResponse $response): array => [
+                    'id' => $response->field->id,
+                    'name' => $response->field->name,
+                    'type' => $response->field->type->value,
+                    'value' => $this->interpretValue($response),
+                ])
+                ->all(),
             'games' => [],
         ];
+    }
+
+    private function interpretValue(EventCustomFieldResponse $response): string|int|bool|null
+    {
+        if ($response->value === null) {
+            return null;
+        }
+
+        return match ($response->field->type) {
+            CustomFieldType::Checkbox => filter_var($response->value, FILTER_VALIDATE_BOOLEAN),
+            CustomFieldType::Number => (int) $response->value,
+            default => $response->value,
+        };
     }
 }
