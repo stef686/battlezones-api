@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -23,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property-read User $user
  * @property-read Faction|null $faction
  * @property-read Collection<int, EventCustomFieldResponse> $customFieldResponses
+ * @property-read GameAttendeePivot|null $pivot
  *
  * @method static EventAttendeeFactory factory($count = null, $state = [])
  */
@@ -82,5 +84,16 @@ class EventAttendee extends Model
     public function customFieldResponses(): HasMany
     {
         return $this->hasMany(EventCustomFieldResponse::class);
+    }
+
+    /**
+     * @return BelongsToMany<Game, $this, GameAttendeePivot>
+     */
+    public function games(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, 'game_attendee')
+            ->using(GameAttendeePivot::class)
+            ->withPivot('score')
+            ->withTimestamps();
     }
 }

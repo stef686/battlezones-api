@@ -5,6 +5,7 @@ namespace App\Http\Resources\Events;
 use App\Enums\CustomFieldType;
 use App\Models\EventAttendee;
 use App\Models\EventCustomFieldResponse;
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -44,7 +45,23 @@ class EventAttendeeDetailResource extends JsonResource
                     'value' => $this->interpretValue($response),
                 ])
                 ->all(),
-            'games' => [],
+            'games' => $this->games
+                ->sortBy(fn (Game $game): int => $game->round->number)
+                ->values()
+                ->map(fn (Game $game): array => [
+                    'id' => $game->id,
+                    'round_number' => $game->round->number,
+                    'table_number' => $game->table_number,
+                    'is_bye' => $game->is_bye,
+                    'score' => $game->pivot?->score,
+                    'opponents' => $game->attendees
+                        ->reject(fn (EventAttendee $a): bool => $a->id === $this->id)
+                        ->values()
+                        ->map(fn (EventAttendee $a): array => [
+                            'id' => $a->id,
+                            'name' => $a->user->public_name,
+                        ])->all(),
+                ])->all(),
         ];
     }
 

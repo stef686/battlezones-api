@@ -7,6 +7,8 @@ use App\Models\EventAttendee;
 use App\Models\EventCustomField;
 use App\Models\EventCustomFieldResponse;
 use App\Models\Faction;
+use App\Models\Game;
+use App\Models\Round;
 use App\Models\User;
 
 test('it returns attendee detail with user, faction, clubs, army_list, checked_in_at and empty games', function () {
@@ -180,6 +182,31 @@ test('number custom field values are returned as integers', function () {
     $this->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
         ->assertSuccessful()
         ->assertJsonPath('data.custom_field_responses.0.value', 2000);
+});
+
+test('it returns games list with round number, opponent, scores and is_bye', function () {
+    $event = Event::factory()->active()->create();
+    $user1 = User::factory()->create(['name' => 'Alice']);
+    $user2 = User::factory()->create(['name' => 'Bob']);
+
+    $attendee1 = EventAttendee::factory()->for($event)->for($user1)->create();
+    $attendee2 = EventAttendee::factory()->for($event)->for($user2)->create();
+
+    $round = Round::factory()->for($event)->create(['number' => 1]);
+    $game = Game::factory()->for($round)->create(['table_number' => 3]);
+    $game->attendees()->attach($attendee1, ['score' => 85]);
+    $game->attendees()->attach($attendee2, ['score' => 70]);
+
+    $response = $this->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee1->id]))
+        ->assertSuccessful();
+
+    expect($response->json('data.games'))->toHaveCount(1)
+        ->and($response->json('data.games.0.round_number'))->toBe(1)
+        ->and($response->json('data.games.0.table_number'))->toBe(3)
+        ->and($response->json('data.games.0.is_bye'))->toBeFalse()
+        ->and($response->json('data.games.0.score'))->toBe(85)
+        ->and($response->json('data.games.0.opponents'))->toHaveCount(1)
+        ->and($response->json('data.games.0.opponents.0.name'))->toBe('Bob');
 });
 
 test('it does not leak custom field responses from other attendees', function () {

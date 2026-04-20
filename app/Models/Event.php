@@ -158,4 +158,12 @@ class Event extends Model
     {
         return $this->hasMany(EventAttendee::class);
     }
+
+    /**
+     * @return HasMany<Round, $this>
+     */
+    public function rounds(): HasMany
+    {
+        return $this->hasMany(Round::class);
+    }
 }

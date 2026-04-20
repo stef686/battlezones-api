@@ -1,0 +1,68 @@
+<?php
+
+use App\Models\Event;
+use App\Models\EventAttendee;
+use App\Models\Faction;
+use App\Models\Game;
+use App\Models\Round;
+use App\Models\User;
+
+test('it returns round detail with games ordered by table number', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->create(['number' => 1, 'name' => 'Round One']);
+
+    $faction = Faction::factory()->create(['name' => 'Space Marines']);
+    $user1 = User::factory()->create(['name' => 'Alice']);
+    $user2 = User::factory()->create(['name' => 'Bob']);
+
+    $attendee1 = EventAttendee::factory()->for($event)->for($user1)->for($faction)->create();
+    $attendee2 = EventAttendee::factory()->for($event)->for($user2)->create();
+
+    $game2 = Game::factory()->for($round)->create(['table_number' => 2]);
+    $game1 = Game::factory()->for($round)->create(['table_number' => 1]);
+
+    $game1->attendees()->attach($attendee1, ['score' => 85]);
+    $game1->attendees()->attach($attendee2, ['score' => 70]);
+    $game2->attendees()->attach($attendee1, ['score' => 90]);
+
+    $response = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertSuccessful();
+
+    expect($response->json('data.id'))->toBe($round->id)
+        ->and($response->json('data.number'))->toBe(1)
+        ->and($response->json('data.name'))->toBe('Round One')
+        ->and($response->json('data.games'))->toHaveCount(2);
+
+    $firstGame = $response->json('data.games.0');
+    expect($firstGame['table_number'])->toBe(1)
+        ->and($firstGame['is_bye'])->toBeFalse()
+        ->and($firstGame['attendees'])->toHaveCount(2)
+        ->and($firstGame['attendees'][0]['user']['name'])->toBe('Alice')
+        ->and($firstGame['attendees'][0]['faction']['name'])->toBe('Space Marines')
+        ->and($firstGame['attendees'][0]['score'])->toBe(85);
+});
+
+test('it returns 404 if round does not belong to event', function () {
+    $event = Event::factory()->active()->create();
+    $otherEvent = Event::factory()->active()->create();
+    $round = Round::factory()->for($otherEvent)->create();
+
+    $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertNotFound();
+});
+
+test('it returns 404 for non-publicly-visible events', function (string $state) {
+    $event = Event::factory()->{$state}()->create();
+    $round = Round::factory()->for($event)->create();
+
+    $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertNotFound();
+})->with(['draft', 'cancelled']);
+
+test('it returns 404 for published events (no rounds visible)', function () {
+    $event = Event::factory()->published()->create();
+    $round = Round::factory()->for($event)->create();
+
+    $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertNotFound();
+});
