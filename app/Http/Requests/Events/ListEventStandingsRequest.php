@@ -19,6 +19,7 @@ class ListEventStandingsRequest extends FormRequest
     {
         return [
             'search' => ['sometimes', 'string', 'max:255'],
+            'sort_by' => ['sometimes', 'string', 'max:255'],
         ];
     }
 }
