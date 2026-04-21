@@ -19,9 +19,10 @@ class ShowEventGameController extends Controller
     public function __invoke(Event $event, Game $game): GameDetailResource
     {
         abort_unless($event->status->isPubliclyVisible(), 404);
-        abort_unless($game->round->event_id === $event->id, 404);
 
         $game->load(['round', 'attendees.user', 'attendees.faction']);
+
+        abort_unless($game->round->event_id === $event->id, 404);
 
         return GameDetailResource::make($game);
     }
