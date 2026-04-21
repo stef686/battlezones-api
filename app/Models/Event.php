@@ -39,8 +39,14 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, EventDocument> $documents
  * @property-read int|null $documents_count
  * @property-read GameSystem $gameSystem
+ * @property-read Collection<int, Photo> $photos
+ * @property-read int|null $photos_count
  * @property-read Collection<int, Round> $rounds
  * @property-read int|null $rounds_count
+ * @property-read Collection<int, EventScoreType> $scoreTypes
+ * @property-read int|null $score_types_count
+ * @property-read Collection<int, EventStanding> $standings
+ * @property-read int|null $standings_count
  * @property-read Collection<int, EventUpdate> $updates
  * @property-read int|null $updates_count
  *
@@ -149,6 +155,14 @@ class Event extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(EventDocument::class);
+    }
+
+    /**
+     * @return HasMany<Photo, $this>
+     */
+    public function photos(): HasMany
+    {
+        return $this->hasMany(Photo::class);
     }
 
     /**

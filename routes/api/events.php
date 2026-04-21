@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Events\ListEventAttendeesController;
+use App\Http\Controllers\Events\ListEventGalleryController;
 use App\Http\Controllers\Events\ListEventRoundsController;
 use App\Http\Controllers\Events\ListEventsController;
 use App\Http\Controllers\Events\ListEventStandingsController;
@@ -21,3 +22,4 @@ Route::scopeBindings()->get('events/{event:slug}/rounds/{round}', ShowEventRound
     ->name('events.rounds.show');
 Route::get('events/{event:slug}/games/{game}', ShowEventGameController::class)->name('events.games.show');
 Route::get('events/{event:slug}/standings', ListEventStandingsController::class)->name('events.standings.index');
+Route::get('events/{event:slug}/gallery', ListEventGalleryController::class)->name('events.gallery.index');
