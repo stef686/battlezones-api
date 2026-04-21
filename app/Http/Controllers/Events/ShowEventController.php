@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[Group('Events', 'APIs for Events')]
 class ShowEventController extends Controller
@@ -18,9 +17,7 @@ class ShowEventController extends Controller
     #[ResponseFromApiResource(EventResource::class, model: Event::class)]
     public function __invoke(Request $request, Event $event): EventResource
     {
-        if (! $event->status->isPubliclyVisible()) {
-            throw new NotFoundHttpException();
-        }
+        abort_unless($event->status->isPubliclyVisible(), 404);
 
         $event->load(['gameSystem', 'documents']);
 

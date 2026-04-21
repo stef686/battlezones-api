@@ -11,7 +11,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[Group('Events', 'APIs for Events')]
 class ListEventUpdatesController extends Controller
@@ -20,9 +19,7 @@ class ListEventUpdatesController extends Controller
     #[ResponseFromApiResource(EventUpdateResource::class, model: EventUpdate::class, paginate: 15)]
     public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
-        if (! $event->status->isPubliclyVisible()) {
-            throw new NotFoundHttpException();
-        }
+        abort_unless($event->status->isPubliclyVisible(), 404);
 
         $updates = $event->updates()
             ->with(['author', 'attachments'])
