@@ -3,6 +3,7 @@
 use App\Http\Controllers\Events\ListEventAttendeesController;
 use App\Http\Controllers\Events\ListEventRoundsController;
 use App\Http\Controllers\Events\ListEventsController;
+use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
 use App\Http\Controllers\Events\ShowEventAttendeeController;
 use App\Http\Controllers\Events\ShowEventController;
@@ -19,3 +20,4 @@ Route::get('events/{event:slug}/rounds', ListEventRoundsController::class)->name
 Route::scopeBindings()->get('events/{event:slug}/rounds/{round}', ShowEventRoundController::class)
     ->name('events.rounds.show');
 Route::get('events/{event:slug}/games/{game}', ShowEventGameController::class)->name('events.games.show');
+Route::get('events/{event:slug}/standings', ListEventStandingsController::class)->name('events.standings.index');

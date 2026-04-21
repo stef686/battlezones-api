@@ -66,4 +66,9 @@ class EventFactory extends Factory
     {
         return $this->state(fn (): array => ['status' => EventStatus::Cancelled]);
     }
+
+    public function standingsVisible(): self
+    {
+        return $this->state(fn (): array => ['standings_visible' => true]);
+    }
 }

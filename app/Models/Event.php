@@ -30,14 +30,19 @@ use Illuminate\Support\Carbon;
  * @property string|null $venue_city
  * @property Country|null $venue_country
  * @property int|null $max_attendees
+ * @property bool $standings_visible
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<int, EventAttendee> $attendees
+ * @property-read int|null $attendees_count
  * @property-read Club|null $club
  * @property-read Collection<int, EventDocument> $documents
  * @property-read int|null $documents_count
+ * @property-read GameSystem $gameSystem
+ * @property-read Collection<int, Round> $rounds
+ * @property-read int|null $rounds_count
  * @property-read Collection<int, EventUpdate> $updates
  * @property-read int|null $updates_count
- * @property-read GameSystem $gameSystem
  *
  * @method static \Database\Factories\EventFactory factory($count = null, $state = [])
  * @method static Builder<static>|Event newModelQuery()
@@ -54,6 +59,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Event whereName($value)
  * @method static Builder<static>|Event wherePairingFormat($value)
  * @method static Builder<static>|Event whereSlug($value)
+ * @method static Builder<static>|Event whereStandingsVisible($value)
  * @method static Builder<static>|Event whereStartsAt($value)
  * @method static Builder<static>|Event whereStatus($value)
  * @method static Builder<static>|Event whereUpdatedAt($value)
@@ -87,6 +93,7 @@ class Event extends Model
         'venue_city',
         'venue_country',
         'max_attendees',
+        'standings_visible',
     ];
 
     /**
@@ -100,6 +107,7 @@ class Event extends Model
             'venue_country' => Country::class,
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
+            'standings_visible' => 'boolean',
         ];
     }
 
@@ -165,5 +173,21 @@ class Event extends Model
     public function rounds(): HasMany
     {
         return $this->hasMany(Round::class);
+    }
+
+    /**
+     * @return HasMany<EventScoreType, $this>
+     */
+    public function scoreTypes(): HasMany
+    {
+        return $this->hasMany(EventScoreType::class);
+    }
+
+    /**
+     * @return HasMany<EventStanding, $this>
+     */
+    public function standings(): HasMany
+    {
+        return $this->hasMany(EventStanding::class);
     }
 }
