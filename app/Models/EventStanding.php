@@ -17,11 +17,23 @@ use Illuminate\Support\Carbon;
  * @property int $position
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Event $event
  * @property-read EventAttendee $attendee
+ * @property-read Event $event
  * @property-read Collection<int, EventStandingScore> $scores
+ * @property-read int|null $scores_count
  *
- * @method static EventStandingFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\EventStandingFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStanding newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStanding newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStanding query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStanding whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStanding whereEventAttendeeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStanding whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStanding whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStanding wherePosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStanding whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class EventStanding extends Model
 {

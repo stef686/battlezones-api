@@ -45,6 +45,8 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property-read int|null $clubs_count
  * @property-read Collection<int, Conversation> $conversations
  * @property-read int|null $conversations_count
+ * @property-read Collection<int, EventAttendee> $eventAttendees
+ * @property-read int|null $event_attendees_count
  * @property-read Collection<int, User> $followers
  * @property-read int|null $followers_count
  * @property-read Collection<int, User> $following

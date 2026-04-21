@@ -22,6 +22,16 @@ use Illuminate\Support\Facades\Storage;
  * @property-read string $url
  *
  * @method static \Database\Factories\EventUpdateAttachmentFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment whereDisplayOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment whereEventUpdateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventUpdateAttachment whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

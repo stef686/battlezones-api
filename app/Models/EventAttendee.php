@@ -20,13 +20,29 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $checked_in_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Event $event
- * @property-read User $user
- * @property-read Faction|null $faction
  * @property-read Collection<int, EventCustomFieldResponse> $customFieldResponses
+ * @property-read int|null $custom_field_responses_count
+ * @property-read Event $event
+ * @property-read Faction|null $faction
  * @property-read GameAttendeePivot|null $pivot
+ * @property-read Collection<int, Game> $games
+ * @property-read int|null $games_count
+ * @property-read User $user
  *
- * @method static EventAttendeeFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\EventAttendeeFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereArmyList($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereCheckedInAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereFactionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereUserId($value)
+ *
+ * @mixin \Eloquent
  */
 class EventAttendee extends Model
 {

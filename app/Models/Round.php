@@ -19,8 +19,20 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Event $event
  * @property-read Collection<int, Game> $games
+ * @property-read int|null $games_count
  *
- * @method static RoundFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\RoundFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Round newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Round newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Round query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class Round extends Model
 {

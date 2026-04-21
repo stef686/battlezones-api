@@ -16,14 +16,28 @@ use Illuminate\Support\Carbon;
  * @property int $event_id
  * @property string $name
  * @property CustomFieldType $type
- * @property array<int, string>|null $options
+ * @property array<array-key, mixed>|null $options
  * @property int $display_order
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event $event
  * @property-read Collection<int, EventCustomFieldResponse> $responses
+ * @property-read int|null $responses_count
  *
- * @method static EventCustomFieldFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\EventCustomFieldFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField whereDisplayOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomField whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class EventCustomField extends Model
 {

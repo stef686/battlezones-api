@@ -18,7 +18,18 @@ use Illuminate\Support\Carbon;
  * @property-read EventAttendee $attendee
  * @property-read EventCustomField $field
  *
- * @method static EventCustomFieldResponseFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\EventCustomFieldResponseFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomFieldResponse newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomFieldResponse newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomFieldResponse query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomFieldResponse whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomFieldResponse whereEventAttendeeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomFieldResponse whereEventCustomFieldId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomFieldResponse whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomFieldResponse whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventCustomFieldResponse whereValue($value)
+ *
+ * @mixin \Eloquent
  */
 class EventCustomFieldResponse extends Model
 {

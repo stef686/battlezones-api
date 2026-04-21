@@ -12,13 +12,24 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $event_standing_id
  * @property int $event_score_type_id
- * @property string $value
+ * @property numeric $value
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read EventStanding $standing
  * @property-read EventScoreType $scoreType
+ * @property-read EventStanding $standing
  *
- * @method static EventStandingScoreFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\EventStandingScoreFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStandingScore newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStandingScore newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStandingScore query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStandingScore whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStandingScore whereEventScoreTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStandingScore whereEventStandingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStandingScore whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStandingScore whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventStandingScore whereValue($value)
+ *
+ * @mixin \Eloquent
  */
 class EventStandingScore extends Model
 {

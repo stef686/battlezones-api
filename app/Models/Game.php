@@ -17,11 +17,23 @@ use Illuminate\Support\Carbon;
  * @property bool $is_bye
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Round $round
- * @property-read Collection<int, EventAttendee> $attendees
  * @property-read GameAttendeePivot|null $pivot
+ * @property-read Collection<int, EventAttendee> $attendees
+ * @property-read int|null $attendees_count
+ * @property-read Round $round
  *
- * @method static GameFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\GameFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereIsBye($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereRoundId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereTableNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class Game extends Model
 {

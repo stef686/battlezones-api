@@ -20,7 +20,20 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Event $event
  *
- * @method static EventScoreTypeFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\EventScoreTypeFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereDisplayOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereSortDirection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class EventScoreType extends Model
 {
