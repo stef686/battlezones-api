@@ -109,7 +109,7 @@ class ConversationListQuery
             ->select('user_id')
             ->limit(1);
 
-        return DB::raw("({$subquery->toSql()})");
+        return DB::raw("({$subquery->toRawSql()})");
     }
 
     /**
