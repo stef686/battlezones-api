@@ -14,7 +14,7 @@ class ConversationListQuery
 {
     private const EPOCH = '1970-01-01 00:00:00';
 
-    private ?ConversationTab $tab = null;
+    private ConversationTab $tab;
 
     private function __construct(private int $userId) {}
 
@@ -70,7 +70,6 @@ class ConversationListQuery
             ConversationTab::Events => $this->applyEvents($query),
             ConversationTab::Requests => $this->applyRequests($query),
             ConversationTab::Archived => $this->applyArchived(),
-            default => $query,
         };
     }
 

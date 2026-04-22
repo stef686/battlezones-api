@@ -12,10 +12,10 @@ test('forUser returns conversations the user participates in', function () {
     $otherUser = User::factory()->create();
     $stranger = User::factory()->create();
 
-    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
-    Conversation::factory()->withUsers($otherUser, $stranger)->create();
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->group('Test')->create();
+    Conversation::factory()->withUsers($otherUser, $stranger)->group('Other')->create();
 
-    $result = ConversationListQuery::forUser($user->id)->toQuery()->get();
+    $result = ConversationListQuery::forUser($user->id)->tab(ConversationTab::Primary)->toQuery()->get();
 
     expect($result)->toHaveCount(1)
         ->and($result->first()->id)->toBe($conversation->id);
@@ -25,10 +25,10 @@ test('forUser excludes deleted conversations', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
 
-    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->group('Test')->create();
     $conversation->users()->updateExistingPivot($user->id, ['deleted_at' => now()]);
 
-    $result = ConversationListQuery::forUser($user->id)->toQuery()->get();
+    $result = ConversationListQuery::forUser($user->id)->tab(ConversationTab::Primary)->toQuery()->get();
 
     expect($result)->toHaveCount(0);
 });
@@ -37,10 +37,10 @@ test('forUser excludes archived conversations', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
 
-    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create();
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->group('Test')->create();
     $conversation->users()->updateExistingPivot($user->id, ['archived_at' => now()]);
 
-    $result = ConversationListQuery::forUser($user->id)->toQuery()->get();
+    $result = ConversationListQuery::forUser($user->id)->tab(ConversationTab::Primary)->toQuery()->get();
 
     expect($result)->toHaveCount(0);
 });
