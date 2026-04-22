@@ -6,11 +6,14 @@ use App\Enums\ConversationTab;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Contracts\Database\Query\Expression;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class ConversationListQuery
 {
+    private const EPOCH = '1970-01-01 00:00:00';
+
     private ?ConversationTab $tab = null;
 
     private function __construct(private int $userId) {}
@@ -31,6 +34,34 @@ class ConversationListQuery
      * @return Builder<Conversation>
      */
     public function toQuery(): Builder
+    {
+        $query = $this->applyTab();
+
+        return $query
+            ->with(['users', 'latestMessage'])
+            ->addSelect([
+                'latest_message_at' => Message::query()
+                    ->whereColumn('conversation_id', 'conversations.id')
+                    ->latest()
+                    ->select('created_at')
+                    ->limit(1),
+                'unread_count' => $this->unreadCountSubquery(),
+            ])
+            ->orderByDesc('latest_message_at');
+    }
+
+    /**
+     * @return LengthAwarePaginator<int, Conversation>
+     */
+    public function paginate(): LengthAwarePaginator
+    {
+        return $this->toQuery()->paginate();
+    }
+
+    /**
+     * @return Builder<Conversation>
+     */
+    private function applyTab(): Builder
     {
         $query = $this->baseQuery();
 
@@ -115,6 +146,27 @@ class ConversationListQuery
                     ->whereNull('conversation_user.deleted_at')
                     ->whereNotNull('conversation_user.archived_at');
             });
+    }
+
+    /**
+     * @return Builder<Message>
+     */
+    private function unreadCountSubquery(): Builder
+    {
+        $lastReadAt = DB::table('conversation_user')
+            ->whereColumn('conversation_user.conversation_id', 'conversations.id')
+            ->where('conversation_user.user_id', $this->userId)
+            ->select('last_read_at')
+            ->limit(1);
+
+        return Message::query()
+            ->selectRaw('count(*)')
+            ->whereColumn('messages.conversation_id', 'conversations.id')
+            ->where('messages.user_id', '!=', $this->userId)
+            ->where('messages.created_at', '>', DB::raw(
+                'coalesce(('.$lastReadAt->toSql().'), ?)'
+            ))
+            ->addBinding([...$lastReadAt->getBindings(), self::EPOCH]);
     }
 
     private function otherUserFollowedByAuthUser(): \Closure
