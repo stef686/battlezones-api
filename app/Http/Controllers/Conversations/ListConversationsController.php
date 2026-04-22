@@ -8,6 +8,7 @@ use App\Http\Requests\Conversations\ListConversationsRequest;
 use App\Http\Resources\Conversations\ConversationResource;
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Queries\ConversationListQuery;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Knuckles\Scribe\Attributes\Endpoint;
@@ -32,8 +33,9 @@ class ListConversationsController extends Controller
             ->select('last_read_at')
             ->limit(1);
 
-        $conversations = Conversation::query()
-            ->forTab($tab, $userId)
+        $conversations = ConversationListQuery::forUser($userId)
+            ->tab($tab)
+            ->toQuery()
             ->with(['users', 'latestMessage'])
             ->addSelect([
                 'latest_message_at' => Message::query()
