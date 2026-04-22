@@ -27,8 +27,7 @@ class ConversationResource extends JsonResource
             'id' => $this->id,
             'is_group' => $this->is_group,
             'name' => $this->name,
-            'participant' => ! $this->is_group ? $otherUsers->first()?->only('id', 'public_name', 'username') : null,
-            'participants' => $this->is_group ? $otherUsers->map->only('id', 'public_name', 'username')->values() : null,
+            'participants' => $otherUsers->map->only('id', 'public_name', 'username')->values()->all(),
             'latest_message' => $this->whenLoaded('latestMessage', fn () => $this->latestMessage
                 ? MessageResource::make($this->latestMessage)
                 : null

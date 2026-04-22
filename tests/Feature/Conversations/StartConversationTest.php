@@ -19,7 +19,7 @@ test('it creates a conversation and returns resource', function () {
 
     $data = $response->json('data');
 
-    expect($data['participant']['id'])->toBe($recipient->id)
+    expect($data['participants'][0]['id'])->toBe($recipient->id)
         ->and($data['latest_message']['body'])->toBe('Hello there!');
 
     $this->assertDatabaseCount('conversations', 1);

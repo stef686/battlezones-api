@@ -75,7 +75,7 @@ test('it includes participant and latest message', function () {
         ->assertSuccessful();
 
     $data = $response->json('data.0');
-    expect($data['participant']['id'])->toBe($otherUser->id)
+    expect($data['participants'][0]['id'])->toBe($otherUser->id)
         ->and($data['latest_message']['body'])->toBe('Hi');
 });
 
