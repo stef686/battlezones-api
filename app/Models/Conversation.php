@@ -20,10 +20,10 @@ use Illuminate\Support\Carbon;
  * @property int|null $event_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read int|null $unread_count
  * @property-read Message|null $latestMessage
  * @property-read Collection<int, Message> $messages
  * @property-read int|null $messages_count
- * @property-read int|null $unread_count
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *

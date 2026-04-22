@@ -41,8 +41,12 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property-read int|null $blocked_by_count
  * @property-read Collection<int, User> $blockedUsers
  * @property-read int|null $blocked_users_count
+ * @property-read Collection<int, Club> $clubs
+ * @property-read int|null $clubs_count
  * @property-read Collection<int, Conversation> $conversations
  * @property-read int|null $conversations_count
+ * @property-read Collection<int, EventAttendee> $eventAttendees
+ * @property-read int|null $event_attendees_count
  * @property-read Collection<int, User> $followers
  * @property-read int|null $followers_count
  * @property-read Collection<int, User> $following
@@ -211,6 +215,22 @@ class User extends Authenticatable implements MustVerifyEmail
     public function photos(): HasMany
     {
         return $this->hasMany(Photo::class);
+    }
+
+    /**
+     * @return BelongsToMany<Club, $this>
+     */
+    public function clubs(): BelongsToMany
+    {
+        return $this->belongsToMany(Club::class)->withTimestamps();
+    }
+
+    /**
+     * @return HasMany<EventAttendee, $this>
+     */
+    public function eventAttendees(): HasMany
+    {
+        return $this->hasMany(EventAttendee::class);
     }
 
     /**

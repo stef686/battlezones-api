@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     __DIR__.'/../routes/api/users.php',
                     __DIR__.'/../routes/api/gallery.php',
                     __DIR__.'/../routes/api/conversations.php',
+                    __DIR__.'/../routes/api/events.php',
                 ]);
         },
     )

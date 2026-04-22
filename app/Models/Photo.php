@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Storage;
  * @property string|null $thumbnail_path
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $event_id
+ * @property-read Event|null $event
  * @property-read Collection<int, Reaction> $reactions
  * @property-read int|null $reactions_count
  * @property-read string|null $thumbnail_url
@@ -33,6 +35,7 @@ use Illuminate\Support\Facades\Storage;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photo query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photo whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photo whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photo whereEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photo whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photo whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photo wherePath($value)
@@ -59,7 +62,16 @@ class Photo extends Model
         'path',
         'thumbnail_path',
         'user_id',
+        'event_id',
     ];
+
+    /**
+     * @return BelongsTo<Event, $this>
+     */
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class);
+    }
 
     /**
      * @return BelongsTo<User, $this>
