@@ -69,7 +69,7 @@ class ConversationListQuery
             ConversationTab::Primary => $this->applyPrimary($query),
             ConversationTab::Events => $this->applyEvents($query),
             ConversationTab::Requests => $this->applyRequests($query),
-            ConversationTab::Archived => $this->applyArchived(),
+            ConversationTab::Archived => $this->applyArchived($query),
         };
     }
 
@@ -135,9 +135,10 @@ class ConversationListQuery
     }
 
     /**
+     * @param  Builder<Conversation>  $query
      * @return Builder<Conversation>
      */
-    private function applyArchived(): Builder
+    private function applyArchived(Builder $query): Builder
     {
         return Conversation::query()
             ->whereHas('users', function (Builder $q) {
