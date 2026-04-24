@@ -29,9 +29,9 @@ endpoints:
       email:
         custom: []
         name: email
-        description: 'Must be a valid email address.'
+        description: "The user's email address. Must be a valid email address."
         required: true
-        example: gbailey@example.net
+        example: player@example.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -40,9 +40,9 @@ endpoints:
       password:
         custom: []
         name: password
-        description: ''
+        description: "The user's password."
         required: true
-        example: architecto
+        example: password
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -60,8 +60,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      email: gbailey@example.net
-      password: architecto
+      email: player@example.com
+      password: password
       device_name: iPhone
     fileParameters: []
     responses:
@@ -108,9 +108,9 @@ endpoints:
       name:
         custom: []
         name: name
-        description: ''
+        description: "The user's display name."
         required: true
-        example: architecto
+        example: 'John Doe'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -119,9 +119,9 @@ endpoints:
       email:
         custom: []
         name: email
-        description: 'Must be a valid email address.'
+        description: "The user's email address. Must be a valid email address."
         required: true
-        example: zbailey@example.net
+        example: player@example.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -161,8 +161,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      name: architecto
-      email: zbailey@example.net
+      name: 'John Doe'
+      email: player@example.com
       password: password
       device_name: iPhone
       password_confirmation: password
@@ -172,6 +172,49 @@ endpoints:
         custom: []
         status: 200
         content: '{"token":"{AUTH_TOKEN}"}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/auth/refresh
+    metadata:
+      custom: []
+      groupName: Authentication
+      groupDescription: 'APIs for authentication'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Refresh Token'
+      description: 'Exchange a current or recently-expired token for a new one'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"token":"{AUTH_TOKEN}","expires_at":"2026-05-04T00:00:00Z"}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers: []
         description: ''
     responseFields: []

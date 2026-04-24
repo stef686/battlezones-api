@@ -27,6 +27,23 @@ class AddGroupMembersRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array<string, array{description: string, example: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'recipient_ids' => [
+                'description' => 'An array of user IDs to add to the group.',
+                'example' => [3, 4],
+            ],
+            'include_history' => [
+                'description' => 'Whether new members should see existing message history.',
+                'example' => false,
+            ],
+        ];
+    }
+
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator): void {

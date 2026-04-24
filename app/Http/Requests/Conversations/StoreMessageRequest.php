@@ -21,4 +21,17 @@ class StoreMessageRequest extends FormRequest
             'body' => ['required', 'string', 'min:1', 'max:1000'],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'body' => [
+                'description' => 'The message content.',
+                'example' => 'Looking forward to the game!',
+            ],
+        ];
+    }
 }

@@ -7,11 +7,20 @@ use App\Http\Requests\Events\ListEventStandingsRequest;
 use App\Http\Resources\Events\EventStandingResource;
 use App\Models\Event;
 use App\Models\EventScoreType;
+use App\Models\EventStanding;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\ResponseFromApiResource;
+use Knuckles\Scribe\Attributes\UrlParam;
 
+#[Group('Events', 'APIs for Events')]
 class ListEventStandingsController extends Controller
 {
+    #[Endpoint('List Event Standings', 'Paginated standings for a publicly visible event with optional search and sorting.')]
+    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[ResponseFromApiResource(EventStandingResource::class, model: EventStanding::class, paginate: 15)]
     public function __invoke(ListEventStandingsRequest $request, Event $event): AnonymousResourceCollection
     {
         abort_unless($event->status->isPubliclyVisible(), 404);

@@ -22,4 +22,21 @@ class ListEventStandingsRequest extends FormRequest
             'sort_by' => ['sometimes', 'string', 'max:255'],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function queryParameters(): array
+    {
+        return [
+            'search' => [
+                'description' => 'Search standings by player name or username.',
+                'example' => 'john',
+            ],
+            'sort_by' => [
+                'description' => 'The field to sort standings by.',
+                'example' => 'points',
+            ],
+        ];
+    }
 }

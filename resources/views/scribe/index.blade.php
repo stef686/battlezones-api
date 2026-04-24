@@ -30,9 +30,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="{{ asset("/vendor/scribe/js/tryitout-5.8.0.js") }}"></script>
+    <script src="{{ asset("/vendor/scribe/js/tryitout-5.9.0.js") }}"></script>
 
-    <script src="{{ asset("/vendor/scribe/js/theme-default-5.8.0.js") }}"></script>
+    <script src="{{ asset("/vendor/scribe/js/theme-default-5.9.0.js") }}"></script>
 
 </head>
 
@@ -77,6 +77,9 @@
                                                                                 <li class="tocify-item level-2" data-unique="authentication-POSTapi-register">
                                 <a href="#authentication-POSTapi-register">Register</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="authentication-POSTapi-auth-refresh">
+                                <a href="#authentication-POSTapi-auth-refresh">Refresh Token</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="authentication-POSTapi-auth-resend-verification">
                                 <a href="#authentication-POSTapi-auth-resend-verification">Resend verification email</a>
                             </li>
@@ -105,6 +108,9 @@
                                                                                 <li class="tocify-item level-2" data-unique="conversations-POSTapi-conversations--conversation_id--members">
                                 <a href="#conversations-POSTapi-conversations--conversation_id--members">Add Group Members</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="conversations-DELETEapi-conversations--conversation_id--members--user_id-">
+                                <a href="#conversations-DELETEapi-conversations--conversation_id--members--user_id-">Remove Group Member</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="conversations-POSTapi-conversations--conversation_id--leave">
                                 <a href="#conversations-POSTapi-conversations--conversation_id--leave">Leave Group Conversation</a>
                             </li>
@@ -131,6 +137,43 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="conversations-DELETEapi-conversations--conversation_id--messages--id-">
                                 <a href="#conversations-DELETEapi-conversations--conversation_id--messages--id-">Delete Message</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
+                    <ul id="tocify-header-events" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="events">
+                    <a href="#events">Events</a>
+                </li>
+                                    <ul id="tocify-subheader-events" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="events-GETapi-events">
+                                <a href="#events-GETapi-events">List Events</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--slug-">
+                                <a href="#events-GETapi-events--slug-">Show Event</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--updates">
+                                <a href="#events-GETapi-events--event_slug--updates">List Event Updates</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--attendees">
+                                <a href="#events-GETapi-events--event_slug--attendees">List Event Attendees</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--attendees--id-">
+                                <a href="#events-GETapi-events--event_slug--attendees--id-">Show Event Attendee</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--rounds">
+                                <a href="#events-GETapi-events--event_slug--rounds">List Event Rounds</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--rounds--id-">
+                                <a href="#events-GETapi-events--event_slug--rounds--id-">Show Event Round</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--games--id-">
+                                <a href="#events-GETapi-events--event_slug--games--id-">Show Event Game</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--standings">
+                                <a href="#events-GETapi-events--event_slug--standings">List Event Standings</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--gallery">
+                                <a href="#events-GETapi-events--event_slug--gallery">List Event Gallery</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -236,7 +279,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: March 23, 2026</li>
+        <li>Last updated: April 24, 2026</li>
     </ul>
 </div>
 
@@ -281,8 +324,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'email' =&gt; 'gbailey@example.net',
-            'password' =&gt; 'architecto',
+            'email' =&gt; 'player@example.com',
+            'password' =&gt; 'password',
             'device_name' =&gt; 'iPhone',
         ],
     ]
@@ -302,8 +345,8 @@ const headers = {
 };
 
 let body = {
-    "email": "gbailey@example.net",
-    "password": "architecto",
+    "email": "player@example.com",
+    "password": "password",
     "device_name": "iPhone"
 };
 
@@ -416,10 +459,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-login-token"
-               value="gbailey@example.net"
+               value="player@example.com"
                data-component="body">
     <br>
-<p>Must be a valid email address. Example: <code>gbailey@example.net</code></p>
+<p>The user's email address. Must be a valid email address. Example: <code>player@example.com</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -428,10 +471,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="POSTapi-login-token"
-               value="architecto"
+               value="password"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>The user's password. Example: <code>password</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>device_name</code></b>&nbsp;&nbsp;
@@ -469,8 +512,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'name' =&gt; 'architecto',
-            'email' =&gt; 'zbailey@example.net',
+            'name' =&gt; 'John Doe',
+            'email' =&gt; 'player@example.com',
             'password' =&gt; 'password',
             'device_name' =&gt; 'iPhone',
             'password_confirmation' =&gt; 'password',
@@ -492,8 +535,8 @@ const headers = {
 };
 
 let body = {
-    "name": "architecto",
-    "email": "zbailey@example.net",
+    "name": "John Doe",
+    "email": "player@example.com",
     "password": "password",
     "device_name": "iPhone",
     "password_confirmation": "password"
@@ -597,10 +640,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="POSTapi-register"
-               value="architecto"
+               value="John Doe"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>The user's display name. Example: <code>John Doe</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
@@ -609,10 +652,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-register"
-               value="zbailey@example.net"
+               value="player@example.com"
                data-component="body">
     <br>
-<p>Must be a valid email address. Example: <code>zbailey@example.net</code></p>
+<p>The user's email address. Must be a valid email address. Example: <code>player@example.com</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -651,6 +694,145 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Confirmation of the password field. Example: <code>password</code></p>
         </div>
         </form>
+
+                    <h2 id="authentication-POSTapi-auth-refresh">Refresh Token</h2>
+
+<p>
+</p>
+
+<p>Exchange a current or recently-expired token for a new one</p>
+
+<span id="example-requests-POSTapi-auth-refresh">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/auth/refresh';
+$response = $client-&gt;post(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/auth/refresh"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-auth-refresh">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;token&quot;: &quot;{AUTH_TOKEN}&quot;,
+    &quot;expires_at&quot;: &quot;2026-05-04T00:00:00Z&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-auth-refresh" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-auth-refresh"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-auth-refresh"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-auth-refresh" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-auth-refresh">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-auth-refresh" data-method="POST"
+      data-path="api/auth/refresh"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-auth-refresh', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-auth-refresh"
+                    onclick="tryItOut('POSTapi-auth-refresh');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-auth-refresh"
+                    onclick="cancelTryOut('POSTapi-auth-refresh');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-auth-refresh"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/auth/refresh</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-auth-refresh"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-auth-refresh"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
 
                     <h2 id="authentication-POSTapi-auth-resend-verification">Resend verification email</h2>
 
@@ -1193,8 +1375,8 @@ $response = $client-&gt;get(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
-        'json' =&gt; [
-            'tab' =&gt; 'architecto',
+        'query' =&gt; [
+            'tab' =&gt; 'primary',
         ],
     ]
 );
@@ -1207,19 +1389,21 @@ print_r(json_decode((string) $body));</code></pre></div>
     "https://battlezones.test/api/conversations"
 );
 
+const params = {
+    "tab": "primary",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
 const headers = {
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
 
-let body = {
-    "tab": "architecto"
-};
 
 fetch(url, {
     method: "GET",
     headers,
-    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
@@ -1232,15 +1416,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 23,
+        &quot;id&quot;: 43,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
-        &quot;participant&quot;: null,
-        &quot;participants&quot;: null,
+        &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -1316,22 +1499,22 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>tab</code></b>&nbsp;&nbsp;
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>tab</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
                               name="tab"                data-endpoint="GETapi-conversations"
-               value="architecto"
-               data-component="body">
+               value="primary"
+               data-component="query">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>Filter by tab. One of: primary, events, requests, archived. Example: <code>primary</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>primary</code></li> <li><code>events</code></li> <li><code>requests</code></li> <li><code>archived</code></li></ul>
-        </div>
-        </form>
+            </div>
+                </form>
 
                     <h2 id="conversations-POSTapi-conversations">Start Conversation</h2>
 
@@ -1358,8 +1541,8 @@ $response = $client-&gt;post(
             'recipient_ids' =&gt; [
                 16,
             ],
-            'name' =&gt; 'n',
-            'body' =&gt; 'g',
+            'name' =&gt; 'Game Night Chat',
+            'body' =&gt; 'Hey, want to play this weekend?',
         ],
     ]
 );
@@ -1381,8 +1564,8 @@ let body = {
     "recipient_ids": [
         16
     ],
-    "name": "n",
-    "body": "g"
+    "name": "Game Night Chat",
+    "body": "Hey, want to play this weekend?"
 };
 
 fetch(url, {
@@ -1401,15 +1584,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 24,
+        &quot;id&quot;: 44,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
-        &quot;participant&quot;: null,
-        &quot;participants&quot;: null,
+        &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -1507,10 +1689,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="POSTapi-conversations"
-               value="n"
+               value="Game Night Chat"
                data-component="body">
     <br>
-<p>Must not be greater than 255 characters. Example: <code>n</code></p>
+<p>The group name (required when starting a group conversation with multiple recipients). Must not be greater than 255 characters. Example: <code>Game Night Chat</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>body</code></b>&nbsp;&nbsp;
@@ -1519,10 +1701,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="body"                data-endpoint="POSTapi-conversations"
-               value="g"
+               value="Hey, want to play this weekend?"
                data-component="body">
     <br>
-<p>Must not be greater than 1000 characters. Example: <code>g</code></p>
+<p>The initial message body. Must not be greater than 1000 characters. Example: <code>Hey, want to play this weekend?</code></p>
         </div>
         </form>
 
@@ -1539,7 +1721,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22';
+$url = 'https://battlezones.test/api/conversations/16';
 $response = $client-&gt;get(
     $url,
     [
@@ -1555,7 +1737,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22"
+    "https://battlezones.test/api/conversations/16"
 );
 
 const headers = {
@@ -1579,17 +1761,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 11,
-        &quot;conversation_id&quot;: 25,
-        &quot;user_id&quot;: 159,
-        &quot;body&quot;: &quot;Velit et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum. Commodi incidunt iure odit.&quot;,
+        &quot;id&quot;: 19,
+        &quot;conversation_id&quot;: 45,
+        &quot;user_id&quot;: 201,
+        &quot;body&quot;: &quot;Animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
         &quot;is_deleted&quot;: false,
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -1673,10 +1855,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="GETapi-conversations--id-"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -1693,7 +1875,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22/members';
+$url = 'https://battlezones.test/api/conversations/16/members';
 $response = $client-&gt;post(
     $url,
     [
@@ -1702,8 +1884,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'usernames' =&gt; [
-                'architecto',
+            'recipient_ids' =&gt; [
+                16,
             ],
             'include_history' =&gt; false,
         ],
@@ -1715,7 +1897,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22/members"
+    "https://battlezones.test/api/conversations/16/members"
 );
 
 const headers = {
@@ -1724,8 +1906,8 @@ const headers = {
 };
 
 let body = {
-    "usernames": [
-        "architecto"
+    "recipient_ids": [
+        16
     ],
     "include_history": false
 };
@@ -1746,15 +1928,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 26,
+        &quot;id&quot;: 46,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
-        &quot;participant&quot;: null,
-        &quot;participants&quot;: null,
+        &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -1838,25 +2019,25 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="conversation_id"                data-endpoint="POSTapi-conversations--conversation_id--members"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>usernames</code></b>&nbsp;&nbsp;
-<small>string[]</small>&nbsp;
+            <b style="line-height: 2;"><code>recipient_ids</code></b>&nbsp;&nbsp;
+<small>integer[]</small>&nbsp;
  &nbsp;
  &nbsp;
-                <input type="text" style="display: none"
-                              name="usernames[0]"                data-endpoint="POSTapi-conversations--conversation_id--members"
+                <input type="number" style="display: none"
+               step="any"               name="recipient_ids[0]"                data-endpoint="POSTapi-conversations--conversation_id--members"
                data-component="body">
-        <input type="text" style="display: none"
-               name="usernames[1]"                data-endpoint="POSTapi-conversations--conversation_id--members"
+        <input type="number" style="display: none"
+               name="recipient_ids[1]"                data-endpoint="POSTapi-conversations--conversation_id--members"
                data-component="body">
     <br>
-<p>The <code>username</code> of an existing record in the users table.</p>
+<p>The <code>id</code> of an existing record in the users table.</p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>include_history</code></b>&nbsp;&nbsp;
@@ -1878,9 +2059,160 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Whether new members should see existing message history. Example: <code>false</code></p>
         </div>
         </form>
+
+                    <h2 id="conversations-DELETEapi-conversations--conversation_id--members--user_id-">Remove Group Member</h2>
+
+<p>
+</p>
+
+<p>Remove a member from a group conversation.</p>
+
+<span id="example-requests-DELETEapi-conversations--conversation_id--members--user_id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/conversations/16/members/1';
+$response = $client-&gt;delete(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/conversations/16/members/1"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-conversations--conversation_id--members--user_id-">
+            <blockquote>
+            <p>Example response (204):</p>
+        </blockquote>
+                <pre>
+<code>Empty response</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEapi-conversations--conversation_id--members--user_id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-conversations--conversation_id--members--user_id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-conversations--conversation_id--members--user_id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-conversations--conversation_id--members--user_id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-conversations--conversation_id--members--user_id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-conversations--conversation_id--members--user_id-" data-method="DELETE"
+      data-path="api/conversations/{conversation_id}/members/{user_id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-conversations--conversation_id--members--user_id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-conversations--conversation_id--members--user_id-"
+                    onclick="tryItOut('DELETEapi-conversations--conversation_id--members--user_id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-conversations--conversation_id--members--user_id-"
+                    onclick="cancelTryOut('DELETEapi-conversations--conversation_id--members--user_id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-conversations--conversation_id--members--user_id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/conversations/{conversation_id}/members/{user_id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-conversations--conversation_id--members--user_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-conversations--conversation_id--members--user_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>conversation_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="conversation_id"                data-endpoint="DELETEapi-conversations--conversation_id--members--user_id-"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the conversation. Example: <code>16</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>user_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="user_id"                data-endpoint="DELETEapi-conversations--conversation_id--members--user_id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the user. Example: <code>1</code></p>
+            </div>
+                    </form>
 
                     <h2 id="conversations-POSTapi-conversations--conversation_id--leave">Leave Group Conversation</h2>
 
@@ -1895,7 +2227,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22/leave';
+$url = 'https://battlezones.test/api/conversations/16/leave';
 $response = $client-&gt;post(
     $url,
     [
@@ -1911,7 +2243,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22/leave"
+    "https://battlezones.test/api/conversations/16/leave"
 );
 
 const headers = {
@@ -2014,10 +2346,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="conversation_id"                data-endpoint="POSTapi-conversations--conversation_id--leave"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -2034,7 +2366,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22/name';
+$url = 'https://battlezones.test/api/conversations/16/name';
 $response = $client-&gt;patch(
     $url,
     [
@@ -2043,7 +2375,7 @@ $response = $client-&gt;patch(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'name' =&gt; 'b',
+            'name' =&gt; 'Weekend Warriors',
         ],
     ]
 );
@@ -2053,7 +2385,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22/name"
+    "https://battlezones.test/api/conversations/16/name"
 );
 
 const headers = {
@@ -2062,7 +2394,7 @@ const headers = {
 };
 
 let body = {
-    "name": "b"
+    "name": "Weekend Warriors"
 };
 
 fetch(url, {
@@ -2081,15 +2413,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 27,
+        &quot;id&quot;: 47,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
-        &quot;participant&quot;: null,
-        &quot;participants&quot;: null,
+        &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -2173,10 +2504,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="conversation_id"                data-endpoint="PATCHapi-conversations--conversation_id--name"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -2186,10 +2517,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="PATCHapi-conversations--conversation_id--name"
-               value="b"
+               value="Weekend Warriors"
                data-component="body">
     <br>
-<p>Must not be greater than 255 characters. Example: <code>b</code></p>
+<p>The new group conversation name. Must not be greater than 255 characters. Example: <code>Weekend Warriors</code></p>
         </div>
         </form>
 
@@ -2206,7 +2537,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22';
+$url = 'https://battlezones.test/api/conversations/16';
 $response = $client-&gt;delete(
     $url,
     [
@@ -2222,7 +2553,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22"
+    "https://battlezones.test/api/conversations/16"
 );
 
 const headers = {
@@ -2328,10 +2659,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-conversations--id-"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -2348,7 +2679,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22/archive';
+$url = 'https://battlezones.test/api/conversations/16/archive';
 $response = $client-&gt;post(
     $url,
     [
@@ -2364,7 +2695,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22/archive"
+    "https://battlezones.test/api/conversations/16/archive"
 );
 
 const headers = {
@@ -2470,10 +2801,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="conversation_id"                data-endpoint="POSTapi-conversations--conversation_id--archive"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -2490,7 +2821,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22/unarchive';
+$url = 'https://battlezones.test/api/conversations/16/unarchive';
 $response = $client-&gt;post(
     $url,
     [
@@ -2506,7 +2837,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22/unarchive"
+    "https://battlezones.test/api/conversations/16/unarchive"
 );
 
 const headers = {
@@ -2612,10 +2943,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="conversation_id"                data-endpoint="POSTapi-conversations--conversation_id--unarchive"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -2632,7 +2963,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22/read';
+$url = 'https://battlezones.test/api/conversations/16/read';
 $response = $client-&gt;post(
     $url,
     [
@@ -2648,7 +2979,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22/read"
+    "https://battlezones.test/api/conversations/16/read"
 );
 
 const headers = {
@@ -2754,10 +3085,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="conversation_id"                data-endpoint="POSTapi-conversations--conversation_id--read"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -2774,7 +3105,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22/messages';
+$url = 'https://battlezones.test/api/conversations/16/messages';
 $response = $client-&gt;post(
     $url,
     [
@@ -2783,7 +3114,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'body' =&gt; 'b',
+            'body' =&gt; 'Looking forward to the game!',
         ],
     ]
 );
@@ -2793,7 +3124,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22/messages"
+    "https://battlezones.test/api/conversations/16/messages"
 );
 
 const headers = {
@@ -2802,7 +3133,7 @@ const headers = {
 };
 
 let body = {
-    "body": "b"
+    "body": "Looking forward to the game!"
 };
 
 fetch(url, {
@@ -2821,17 +3152,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 12,
-        &quot;conversation_id&quot;: 28,
-        &quot;user_id&quot;: 160,
-        &quot;body&quot;: &quot;Animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
+        &quot;id&quot;: 20,
+        &quot;conversation_id&quot;: 48,
+        &quot;user_id&quot;: 202,
+        &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
         &quot;is_deleted&quot;: false,
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -2915,10 +3246,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="conversation_id"                data-endpoint="POSTapi-conversations--conversation_id--messages"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -2928,10 +3259,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="body"                data-endpoint="POSTapi-conversations--conversation_id--messages"
-               value="b"
+               value="Looking forward to the game!"
                data-component="body">
     <br>
-<p>Must be at least 1 character. Must not be greater than 1000 characters. Example: <code>b</code></p>
+<p>The message content. Must be at least 1 character. Must not be greater than 1000 characters. Example: <code>Looking forward to the game!</code></p>
         </div>
         </form>
 
@@ -2948,7 +3279,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22/messages/10';
+$url = 'https://battlezones.test/api/conversations/16/messages/16';
 $response = $client-&gt;patch(
     $url,
     [
@@ -2957,7 +3288,7 @@ $response = $client-&gt;patch(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'body' =&gt; 'b',
+            'body' =&gt; 'Updated: Looking forward to the game!',
         ],
     ]
 );
@@ -2967,7 +3298,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22/messages/10"
+    "https://battlezones.test/api/conversations/16/messages/16"
 );
 
 const headers = {
@@ -2976,7 +3307,7 @@ const headers = {
 };
 
 let body = {
-    "body": "b"
+    "body": "Updated: Looking forward to the game!"
 };
 
 fetch(url, {
@@ -2995,17 +3326,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 13,
-        &quot;conversation_id&quot;: 29,
-        &quot;user_id&quot;: 161,
-        &quot;body&quot;: &quot;Animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
+        &quot;id&quot;: 21,
+        &quot;conversation_id&quot;: 49,
+        &quot;user_id&quot;: 203,
+        &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
         &quot;is_deleted&quot;: false,
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -3089,10 +3420,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="conversation_id"                data-endpoint="PATCHapi-conversations--conversation_id--messages--id-"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
@@ -3101,10 +3432,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="PATCHapi-conversations--conversation_id--messages--id-"
-               value="10"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the message. Example: <code>10</code></p>
+<p>The ID of the message. Example: <code>16</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -3114,10 +3445,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="body"                data-endpoint="PATCHapi-conversations--conversation_id--messages--id-"
-               value="b"
+               value="Updated: Looking forward to the game!"
                data-component="body">
     <br>
-<p>Must be at least 1 character. Must not be greater than 1000 characters. Example: <code>b</code></p>
+<p>The updated message content. Must be at least 1 character. Must not be greater than 1000 characters. Example: <code>Updated: Looking forward to the game!</code></p>
         </div>
         </form>
 
@@ -3134,7 +3465,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/22/messages/10';
+$url = 'https://battlezones.test/api/conversations/16/messages/16';
 $response = $client-&gt;delete(
     $url,
     [
@@ -3150,7 +3481,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/22/messages/10"
+    "https://battlezones.test/api/conversations/16/messages/16"
 );
 
 const headers = {
@@ -3256,10 +3587,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="conversation_id"                data-endpoint="DELETEapi-conversations--conversation_id--messages--id-"
-               value="22"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the conversation. Example: <code>22</code></p>
+<p>The ID of the conversation. Example: <code>16</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
@@ -3268,10 +3599,1803 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-conversations--conversation_id--messages--id-"
-               value="10"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the message. Example: <code>10</code></p>
+<p>The ID of the message. Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                <h1 id="events">Events</h1>
+
+    <p>APIs for Events</p>
+
+                                <h2 id="events-GETapi-events">List Events</h2>
+
+<p>
+</p>
+
+<p>List publicly visible events with optional filters and search.</p>
+
+<span id="example-requests-GETapi-events">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'search' =&gt; 'Grand Tournament',
+            'status' =&gt; 'active',
+            'game_system' =&gt; 'warhammer-40k',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events"
+);
+
+const params = {
+    "search": "Grand Tournament",
+    "status": "active",
+    "game_system": "warhammer-40k",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 36,
+        &quot;name&quot;: &quot;Eius et animi&quot;,
+        &quot;slug&quot;: &quot;eius-et-animi-565&quot;,
+        &quot;description&quot;: &quot;Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
+        &quot;status&quot;: &quot;draft&quot;,
+        &quot;pairing_format&quot;: &quot;swiss&quot;,
+        &quot;starts_at&quot;: &quot;2026-08-21T10:03:46Z&quot;,
+        &quot;ends_at&quot;: &quot;2026-08-23T10:03:46Z&quot;,
+        &quot;max_attendees&quot;: 100,
+        &quot;venue&quot;: {
+            &quot;name&quot;: &quot;McLaughlin, Leuschke and Bauch Hall&quot;,
+            &quot;address&quot;: &quot;45058 Bailee Rue&quot;,
+            &quot;city&quot;: &quot;South Matildaburgh&quot;,
+            &quot;country&quot;: &quot;IE&quot;
+        },
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events" data-method="GET"
+      data-path="api/events"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events"
+                    onclick="tryItOut('GETapi-events');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events"
+                    onclick="cancelTryOut('GETapi-events');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="search"                data-endpoint="GETapi-events"
+               value="Grand Tournament"
+               data-component="query">
+    <br>
+<p>Search events by name. Must not be greater than 255 characters. Example: <code>Grand Tournament</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="status"                data-endpoint="GETapi-events"
+               value="active"
+               data-component="query">
+    <br>
+<p>Filter by event status. One of: published, active, completed. Example: <code>active</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>draft</code></li> <li><code>published</code></li> <li><code>active</code></li> <li><code>completed</code></li> <li><code>cancelled</code></li></ul>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>game_system</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="game_system"                data-endpoint="GETapi-events"
+               value="warhammer-40k"
+               data-component="query">
+    <br>
+<p>Filter by game system slug. The <code>slug</code> of an existing record in the game_systems table. Example: <code>warhammer-40k</code></p>
+            </div>
+                </form>
+
+                    <h2 id="events-GETapi-events--slug-">Show Event</h2>
+
+<p>
+</p>
+
+<p>Get a publicly visible event by slug.</p>
+
+<span id="example-requests-GETapi-events--slug-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/summer-showdown-2026';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/summer-showdown-2026"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--slug-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 37,
+        &quot;name&quot;: &quot;Fugit deleniti distinctio eum&quot;,
+        &quot;slug&quot;: &quot;fugit-deleniti-distinctio-eum-65128&quot;,
+        &quot;description&quot;: &quot;Aliquam veniam corporis dolorem mollitia deleniti nemo. Quia officia est dignissimos neque. Odio veritatis excepturi doloribus delectus fugit qui repudiandae. Est alias tenetur ratione.&quot;,
+        &quot;status&quot;: &quot;draft&quot;,
+        &quot;pairing_format&quot;: &quot;swiss&quot;,
+        &quot;starts_at&quot;: &quot;2026-08-10T16:56:01Z&quot;,
+        &quot;ends_at&quot;: &quot;2026-08-12T16:56:01Z&quot;,
+        &quot;max_attendees&quot;: 40,
+        &quot;venue&quot;: {
+            &quot;name&quot;: &quot;Casper-Smith Hall&quot;,
+            &quot;address&quot;: &quot;5481 Dibbert Stravenue Suite 237&quot;,
+            &quot;city&quot;: &quot;Ednaside&quot;,
+            &quot;country&quot;: &quot;AU&quot;
+        },
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--slug-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--slug-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--slug-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--slug-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--slug-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--slug-" data-method="GET"
+      data-path="api/events/{slug}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--slug-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--slug-"
+                    onclick="tryItOut('GETapi-events--slug-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--slug-"
+                    onclick="cancelTryOut('GETapi-events--slug-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--slug-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{slug}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--slug-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--slug-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="slug"                data-endpoint="GETapi-events--slug-"
+               value="summer-showdown-2026"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="events-GETapi-events--event_slug--updates">List Event Updates</h2>
+
+<p>
+</p>
+
+<p>List updates for a publicly visible event, pinned first then most recent.</p>
+
+<span id="example-requests-GETapi-events--event_slug--updates">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/summer-showdown-2026/updates';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/summer-showdown-2026/updates"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--updates">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 13,
+        &quot;title&quot;: &quot;Quia maiores assumenda&quot;,
+        &quot;body&quot;: &quot;Repellat officiis corporis nesciunt ut. Iure impedit molestiae ut rem est esse sint. Molestiae sunt suscipit doloribus fugiat ut aut. Et error neque recusandae et.\n\nEt ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut.&quot;,
+        &quot;pinned&quot;: false,
+        &quot;published_at&quot;: &quot;2026-03-27T19:57:13Z&quot;,
+        &quot;author&quot;: {
+            &quot;id&quot;: 204,
+            &quot;name&quot;: &quot;Christian Klocko PhD&quot;
+        },
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:54Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:54Z&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--updates" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--updates"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--updates"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--updates" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--updates">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--updates" data-method="GET"
+      data-path="api/events/{event_slug}/updates"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--updates', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--updates"
+                    onclick="tryItOut('GETapi-events--event_slug--updates');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--updates"
+                    onclick="cancelTryOut('GETapi-events--event_slug--updates');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--updates"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/updates</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--updates"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--updates"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--updates"
+               value="summer-showdown-2026"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="events-GETapi-events--event_slug--attendees">List Event Attendees</h2>
+
+<p>
+</p>
+
+<p>Paginated list of attendees for a publicly visible event.</p>
+
+<span id="example-requests-GETapi-events--event_slug--attendees">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'search' =&gt; 'john',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/summer-showdown-2026/attendees"
+);
+
+const params = {
+    "search": "john",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--attendees">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 41,
+        &quot;user&quot;: {
+            &quot;id&quot;: 205,
+            &quot;name&quot;: &quot;Rodrigo O&#039;Connell&quot;
+        },
+        &quot;faction&quot;: {
+            &quot;id&quot;: 23,
+            &quot;name&quot;: &quot;Tenetur Ratione&quot;
+        },
+        &quot;clubs&quot;: []
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--attendees" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--attendees"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--attendees"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--attendees" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--attendees">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--attendees" data-method="GET"
+      data-path="api/events/{event_slug}/attendees"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--attendees', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--attendees"
+                    onclick="tryItOut('GETapi-events--event_slug--attendees');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--attendees"
+                    onclick="cancelTryOut('GETapi-events--event_slug--attendees');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--attendees"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/attendees</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--attendees"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--attendees"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--attendees"
+               value="summer-showdown-2026"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event"                data-endpoint="GETapi-events--event_slug--attendees"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="search"                data-endpoint="GETapi-events--event_slug--attendees"
+               value="john"
+               data-component="query">
+    <br>
+<p>Search attendees by name or username. Must not be greater than 255 characters. Example: <code>john</code></p>
+            </div>
+                </form>
+
+                    <h2 id="events-GETapi-events--event_slug--attendees--id-">Show Event Attendee</h2>
+
+<p>
+</p>
+
+<p>Attendee detail for a publicly visible event.</p>
+
+<span id="example-requests-GETapi-events--event_slug--attendees--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees/1';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/summer-showdown-2026/attendees/1"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--attendees--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 42,
+        &quot;user&quot;: {
+            &quot;id&quot;: 206,
+            &quot;name&quot;: &quot;Cordia Cummings&quot;
+        },
+        &quot;faction&quot;: {
+            &quot;id&quot;: 24,
+            &quot;name&quot;: &quot;Accusantium Odit&quot;
+        },
+        &quot;clubs&quot;: [],
+        &quot;army_list&quot;: &quot;Modi rerum ex repellendus assumenda et tenetur. Reiciendis quia perspiciatis deserunt ducimus corrupti et. Quia maiores assumenda odit. Repellat officiis corporis nesciunt ut.&quot;,
+        &quot;checked_in_at&quot;: null,
+        &quot;custom_field_responses&quot;: [],
+        &quot;games&quot;: []
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--attendees--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--attendees--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--attendees--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--attendees--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--attendees--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--attendees--id-" data-method="GET"
+      data-path="api/events/{event_slug}/attendees/{id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--attendees--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--attendees--id-"
+                    onclick="tryItOut('GETapi-events--event_slug--attendees--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--attendees--id-"
+                    onclick="cancelTryOut('GETapi-events--event_slug--attendees--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--attendees--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/attendees/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--attendees--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--attendees--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--attendees--id-"
+               value="summer-showdown-2026"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-events--event_slug--attendees--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the attendee. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event"                data-endpoint="GETapi-events--event_slug--attendees--id-"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>attendee</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="attendee"                data-endpoint="GETapi-events--event_slug--attendees--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The id of the attendee. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="events-GETapi-events--event_slug--rounds">List Event Rounds</h2>
+
+<p>
+</p>
+
+<p>List rounds for an event. Only visible for Active/Completed events.</p>
+
+<span id="example-requests-GETapi-events--event_slug--rounds">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/summer-showdown-2026/rounds';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/summer-showdown-2026/rounds"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--rounds">
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--rounds" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--rounds"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--rounds"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--rounds" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--rounds">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--rounds" data-method="GET"
+      data-path="api/events/{event_slug}/rounds"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--rounds', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--rounds"
+                    onclick="tryItOut('GETapi-events--event_slug--rounds');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--rounds"
+                    onclick="cancelTryOut('GETapi-events--event_slug--rounds');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--rounds"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/rounds</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--rounds"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--rounds"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--rounds"
+               value="summer-showdown-2026"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event"                data-endpoint="GETapi-events--event_slug--rounds"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="events-GETapi-events--event_slug--rounds--id-">Show Event Round</h2>
+
+<p>
+</p>
+
+<p>Round detail with games for an event.</p>
+
+<span id="example-requests-GETapi-events--event_slug--rounds--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/summer-showdown-2026/rounds/1';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/summer-showdown-2026/rounds/1"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--rounds--id-">
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;No query results for model [App\\Models\\Round] 1&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--rounds--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--rounds--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--rounds--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--rounds--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--rounds--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--rounds--id-" data-method="GET"
+      data-path="api/events/{event_slug}/rounds/{id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--rounds--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--rounds--id-"
+                    onclick="tryItOut('GETapi-events--event_slug--rounds--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--rounds--id-"
+                    onclick="cancelTryOut('GETapi-events--event_slug--rounds--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--rounds--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/rounds/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--rounds--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--rounds--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--rounds--id-"
+               value="summer-showdown-2026"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-events--event_slug--rounds--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the round. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event"                data-endpoint="GETapi-events--event_slug--rounds--id-"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>round</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="round"                data-endpoint="GETapi-events--event_slug--rounds--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The id of the round. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="events-GETapi-events--event_slug--games--id-">Show Event Game</h2>
+
+<p>
+</p>
+
+<p>Game detail with full score breakdown and army lists.</p>
+
+<span id="example-requests-GETapi-events--event_slug--games--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/summer-showdown-2026/games/1';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/summer-showdown-2026/games/1"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--games--id-">
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--games--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--games--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--games--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--games--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--games--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--games--id-" data-method="GET"
+      data-path="api/events/{event_slug}/games/{id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--games--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--games--id-"
+                    onclick="tryItOut('GETapi-events--event_slug--games--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--games--id-"
+                    onclick="cancelTryOut('GETapi-events--event_slug--games--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--games--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/games/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--games--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--games--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--games--id-"
+               value="summer-showdown-2026"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-events--event_slug--games--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the game. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event"                data-endpoint="GETapi-events--event_slug--games--id-"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>game</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="game"                data-endpoint="GETapi-events--event_slug--games--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The id of the game. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="events-GETapi-events--event_slug--standings">List Event Standings</h2>
+
+<p>
+</p>
+
+<p>Paginated standings for a publicly visible event with optional search and sorting.</p>
+
+<span id="example-requests-GETapi-events--event_slug--standings">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/summer-showdown-2026/standings';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'search' =&gt; 'john',
+            'sort_by' =&gt; 'points',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/summer-showdown-2026/standings"
+);
+
+const params = {
+    "search": "john",
+    "sort_by": "points",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--standings">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 29,
+        &quot;position&quot;: 76,
+        &quot;attendee&quot;: {
+            &quot;id&quot;: 43,
+            &quot;name&quot;: &quot;Jovanny Cartwright&quot;,
+            &quot;faction&quot;: {
+                &quot;id&quot;: 25,
+                &quot;name&quot;: &quot;Sed Rem&quot;
+            },
+            &quot;clubs&quot;: []
+        },
+        &quot;scores&quot;: []
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--standings" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--standings"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--standings"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--standings" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--standings">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--standings" data-method="GET"
+      data-path="api/events/{event_slug}/standings"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--standings', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--standings"
+                    onclick="tryItOut('GETapi-events--event_slug--standings');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--standings"
+                    onclick="cancelTryOut('GETapi-events--event_slug--standings');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--standings"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/standings</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--standings"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--standings"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--standings"
+               value="summer-showdown-2026"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event"                data-endpoint="GETapi-events--event_slug--standings"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="search"                data-endpoint="GETapi-events--event_slug--standings"
+               value="john"
+               data-component="query">
+    <br>
+<p>Search standings by player name or username. Must not be greater than 255 characters. Example: <code>john</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>sort_by</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="sort_by"                data-endpoint="GETapi-events--event_slug--standings"
+               value="points"
+               data-component="query">
+    <br>
+<p>The field to sort standings by. Must not be greater than 255 characters. Example: <code>points</code></p>
+            </div>
+                </form>
+
+                    <h2 id="events-GETapi-events--event_slug--gallery">List Event Gallery</h2>
+
+<p>
+</p>
+
+<p>Paginated photos for a publicly visible event.</p>
+
+<span id="example-requests-GETapi-events--event_slug--gallery">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/summer-showdown-2026/gallery';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/summer-showdown-2026/gallery"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--gallery">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 45,
+        &quot;name&quot;: &quot;In quod id aspernatur.&quot;,
+        &quot;description&quot;: null,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/488b4973-cced-39cd-9019-4e5670dd35d4.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/338aa13c-ee9b-3c59-9dad-eeca56f85ba2.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:54Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:54Z&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--gallery" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--gallery"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--gallery"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--gallery" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--gallery">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--gallery" data-method="GET"
+      data-path="api/events/{event_slug}/gallery"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--gallery', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--gallery"
+                    onclick="tryItOut('GETapi-events--event_slug--gallery');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--gallery"
+                    onclick="cancelTryOut('GETapi-events--event_slug--gallery');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--gallery"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/gallery</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--gallery"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--gallery"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--gallery"
+               value="summer-showdown-2026"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event"                data-endpoint="GETapi-events--event_slug--gallery"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     </form>
 
@@ -3332,13 +5456,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 25,
-        &quot;name&quot;: &quot;In natus perferendis.&quot;,
+        &quot;id&quot;: 40,
+        &quot;name&quot;: &quot;Eum omnis autem et ut.&quot;,
         &quot;description&quot;: null,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/ed7b741d-c366-32d2-827d-6666c851456c.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/609303d3-7451-3267-b3d4-462990137d0f.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/756f42fe-19b4-314c-ab4b-e7d4d22d9ece.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/2470e22c-104d-39a9-be22-d184758f5176.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -3440,15 +5564,15 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'name',
-                'contents' =&gt; 'b'
+                'contents' =&gt; 'My painted army'
             ],
             [
                 'name' =&gt; 'description',
-                'contents' =&gt; 'Et animi quos velit et fugiat.'
+                'contents' =&gt; 'My fully painted Space Marines army.'
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpflcs3lm16etk8i1E3q4', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpk4vhkvtrdhgo9J21lN1', 'r')
             ],
         ],
     ]
@@ -3468,8 +5592,8 @@ const headers = {
 };
 
 const body = new FormData();
-body.append('name', 'b');
-body.append('description', 'Et animi quos velit et fugiat.');
+body.append('name', 'My painted army');
+body.append('description', 'My fully painted Space Marines army.');
 body.append('photo', document.querySelector('input[name="photo"]').files[0]);
 
 fetch(url, {
@@ -3488,13 +5612,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 26,
-        &quot;name&quot;: &quot;Nihil accusantium harum.&quot;,
-        &quot;description&quot;: null,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/51c7cf5e-fac2-3ac6-8ef8-61e6050503af.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/d207102d-bce0-31f9-8c36-aa9cf4cfe75a.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;id&quot;: 41,
+        &quot;name&quot;: &quot;Eius et animi.&quot;,
+        &quot;description&quot;: &quot;Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -3578,10 +5702,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="POSTapi-gallery"
-               value="b"
+               value="My painted army"
                data-component="body">
     <br>
-<p>Must not be greater than 255 characters. Example: <code>b</code></p>
+<p>The photo title. Must not be greater than 255 characters. Example: <code>My painted army</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>photo</code></b>&nbsp;&nbsp;
@@ -3593,7 +5717,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpflcs3lm16etk8i1E3q4</code></p>
+<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpk4vhkvtrdhgo9J21lN1</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -3602,10 +5726,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="description"                data-endpoint="POSTapi-gallery"
-               value="Et animi quos velit et fugiat."
+               value="My fully painted Space Marines army."
                data-component="body">
     <br>
-<p>Must not be greater than 1000 characters. Example: <code>Et animi quos velit et fugiat.</code></p>
+<p>An optional description of the photo. Must not be greater than 1000 characters. Example: <code>My fully painted Space Marines army.</code></p>
         </div>
         </form>
 
@@ -3622,7 +5746,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/gallery/16';
+$url = 'https://battlezones.test/api/gallery/1';
 $response = $client-&gt;get(
     $url,
     [
@@ -3638,7 +5762,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/gallery/16"
+    "https://battlezones.test/api/gallery/1"
 );
 
 const headers = {
@@ -3662,13 +5786,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 27,
-        &quot;name&quot;: &quot;Et animi quos.&quot;,
-        &quot;description&quot;: null,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d6fa562b-acd5-35ff-babb-d11194d3737b.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/5707ca55-f609-3528-be8b-1baeaee1567e.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;id&quot;: 42,
+        &quot;name&quot;: &quot;Eius et animi.&quot;,
+        &quot;description&quot;: &quot;Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -3752,10 +5876,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="photo_id"                data-endpoint="GETapi-gallery--photo_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the photo. Example: <code>16</code></p>
+<p>The ID of the photo. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -3772,7 +5896,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/gallery/16';
+$url = 'https://battlezones.test/api/gallery/1';
 $response = $client-&gt;patch(
     $url,
     [
@@ -3783,15 +5907,15 @@ $response = $client-&gt;patch(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'name',
-                'contents' =&gt; 'b'
+                'contents' =&gt; 'My painted army'
             ],
             [
                 'name' =&gt; 'description',
-                'contents' =&gt; 'Et animi quos velit et fugiat.'
+                'contents' =&gt; 'My fully painted Space Marines army.'
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phps9c7q2h5h9l33x3JKIV', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php04ivn7cl0gub6QnwjLP', 'r')
             ],
         ],
     ]
@@ -3802,7 +5926,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/gallery/16"
+    "https://battlezones.test/api/gallery/1"
 );
 
 const headers = {
@@ -3811,8 +5935,8 @@ const headers = {
 };
 
 const body = new FormData();
-body.append('name', 'b');
-body.append('description', 'Et animi quos velit et fugiat.');
+body.append('name', 'My painted army');
+body.append('description', 'My fully painted Space Marines army.');
 body.append('photo', document.querySelector('input[name="photo"]').files[0]);
 
 fetch(url, {
@@ -3831,13 +5955,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 28,
-        &quot;name&quot;: &quot;Nihil accusantium harum.&quot;,
-        &quot;description&quot;: null,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/51c7cf5e-fac2-3ac6-8ef8-61e6050503af.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/d207102d-bce0-31f9-8c36-aa9cf4cfe75a.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;id&quot;: 43,
+        &quot;name&quot;: &quot;Eius et animi.&quot;,
+        &quot;description&quot;: &quot;Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -3921,10 +6045,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="photo_id"                data-endpoint="PATCHapi-gallery--photo_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the photo. Example: <code>16</code></p>
+<p>The ID of the photo. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -3934,10 +6058,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="PATCHapi-gallery--photo_id-"
-               value="b"
+               value="My painted army"
                data-component="body">
     <br>
-<p>Must not be greater than 255 characters. Example: <code>b</code></p>
+<p>The photo title. Must not be greater than 255 characters. Example: <code>My painted army</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>photo</code></b>&nbsp;&nbsp;
@@ -3949,7 +6073,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phps9c7q2h5h9l33x3JKIV</code></p>
+<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php04ivn7cl0gub6QnwjLP</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -3958,10 +6082,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="description"                data-endpoint="PATCHapi-gallery--photo_id-"
-               value="Et animi quos velit et fugiat."
+               value="My fully painted Space Marines army."
                data-component="body">
     <br>
-<p>Must not be greater than 1000 characters. Example: <code>Et animi quos velit et fugiat.</code></p>
+<p>An updated description of the photo. Must not be greater than 1000 characters. Example: <code>My fully painted Space Marines army.</code></p>
         </div>
         </form>
 
@@ -3978,7 +6102,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/gallery/16';
+$url = 'https://battlezones.test/api/gallery/1';
 $response = $client-&gt;delete(
     $url,
     [
@@ -3994,7 +6118,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/gallery/16"
+    "https://battlezones.test/api/gallery/1"
 );
 
 const headers = {
@@ -4100,10 +6224,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="photo_id"                data-endpoint="DELETEapi-gallery--photo_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the photo. Example: <code>16</code></p>
+<p>The ID of the photo. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -4160,13 +6284,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 29,
-        &quot;name&quot;: &quot;Et animi quos.&quot;,
-        &quot;description&quot;: null,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d6fa562b-acd5-35ff-babb-d11194d3737b.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/5707ca55-f609-3528-be8b-1baeaee1567e.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;
+        &quot;id&quot;: 44,
+        &quot;name&quot;: &quot;Eum doloremque id aut.&quot;,
+        &quot;description&quot;: &quot;Corporis dolorem mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/dc407d02-9b9b-35e5-8d69-87904a6787e3.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/b3dfd3b4-abf6-34e6-9ab5-ef739060a5da.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;
     }
 }</code>
  </pre>
@@ -4274,7 +6398,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/gallery/16/react';
+$url = 'https://battlezones.test/api/gallery/1/react';
 $response = $client-&gt;post(
     $url,
     [
@@ -4290,7 +6414,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/gallery/16/react"
+    "https://battlezones.test/api/gallery/1/react"
 );
 
 const headers = {
@@ -4397,10 +6521,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="photo_id"                data-endpoint="POSTapi-gallery--photo_id--react"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the photo. Example: <code>16</code></p>
+<p>The ID of the photo. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -4461,8 +6585,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 140,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
+        &quot;id&quot;: 180,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
         &quot;country&quot;: &quot;NR&quot;,
         &quot;game_systems&quot;: [],
@@ -4570,9 +6694,9 @@ $response = $client-&gt;patch(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'name' =&gt; 'b',
-            'username' =&gt; 'zm0y5pXxPAERES8A2',
-            'country' =&gt; 'architecto',
+            'name' =&gt; 'John Doe',
+            'username' =&gt; 'johndoe',
+            'country' =&gt; 'US',
             'show_public_name' =&gt; true,
         ],
     ]
@@ -4592,9 +6716,9 @@ const headers = {
 };
 
 let body = {
-    "name": "b",
-    "username": "zm0y5pXxPAERES8A2",
-    "country": "architecto",
+    "name": "John Doe",
+    "username": "johndoe",
+    "country": "US",
     "show_public_name": true
 };
 
@@ -4614,9 +6738,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 141,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
+        &quot;id&quot;: 181,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;MX&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
@@ -4707,10 +6831,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="PATCHapi-profile"
-               value="b"
+               value="John Doe"
                data-component="body">
     <br>
-<p>Must not be greater than 255 characters. Example: <code>b</code></p>
+<p>The user's display name. Must not be greater than 255 characters. Example: <code>John Doe</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>username</code></b>&nbsp;&nbsp;
@@ -4719,10 +6843,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="username"                data-endpoint="PATCHapi-profile"
-               value="zm0y5pXxPAERES8A2"
+               value="johndoe"
                data-component="body">
     <br>
-<p>Must match the regex /^[a-zA-Z][a-zA-Z0-9_-]{2,29}$/. Example: <code>zm0y5pXxPAERES8A2</code></p>
+<p>A unique username (3-30 chars, starts with letter, allows letters/digits/underscores/hyphens). Must match the regex /^[a-zA-Z][a-zA-Z0-9_-]{2,29}$/. Example: <code>johndoe</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>country</code></b>&nbsp;&nbsp;
@@ -4731,10 +6855,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="country"                data-endpoint="PATCHapi-profile"
-               value="architecto"
+               value="US"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>An ISO 3166-1 alpha-2 country code. Example: <code>US</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>AF</code></li> <li><code>AX</code></li> <li><code>AL</code></li> <li><code>DZ</code></li> <li><code>AS</code></li> <li><code>AD</code></li> <li><code>AO</code></li> <li><code>AI</code></li> <li><code>AQ</code></li> <li><code>AG</code></li> <li><code>AR</code></li> <li><code>AM</code></li> <li><code>AW</code></li> <li><code>AU</code></li> <li><code>AT</code></li> <li><code>AZ</code></li> <li><code>BS</code></li> <li><code>BH</code></li> <li><code>BD</code></li> <li><code>BB</code></li> <li><code>BY</code></li> <li><code>BE</code></li> <li><code>BZ</code></li> <li><code>BJ</code></li> <li><code>BM</code></li> <li><code>BT</code></li> <li><code>BO</code></li> <li><code>BA</code></li> <li><code>BW</code></li> <li><code>BV</code></li> <li><code>BR</code></li> <li><code>IO</code></li> <li><code>BN</code></li> <li><code>BG</code></li> <li><code>BF</code></li> <li><code>BI</code></li> <li><code>CV</code></li> <li><code>KH</code></li> <li><code>CM</code></li> <li><code>CA</code></li> <li><code>KY</code></li> <li><code>CF</code></li> <li><code>TD</code></li> <li><code>CL</code></li> <li><code>CN</code></li> <li><code>CX</code></li> <li><code>CC</code></li> <li><code>CO</code></li> <li><code>KM</code></li> <li><code>CG</code></li> <li><code>CD</code></li> <li><code>CK</code></li> <li><code>CR</code></li> <li><code>CI</code></li> <li><code>HR</code></li> <li><code>CU</code></li> <li><code>CW</code></li> <li><code>CY</code></li> <li><code>CZ</code></li> <li><code>DK</code></li> <li><code>DJ</code></li> <li><code>DM</code></li> <li><code>DO</code></li> <li><code>EC</code></li> <li><code>EG</code></li> <li><code>SV</code></li> <li><code>GQ</code></li> <li><code>ER</code></li> <li><code>EE</code></li> <li><code>SZ</code></li> <li><code>ET</code></li> <li><code>FK</code></li> <li><code>FO</code></li> <li><code>FJ</code></li> <li><code>FI</code></li> <li><code>FR</code></li> <li><code>GF</code></li> <li><code>PF</code></li> <li><code>TF</code></li> <li><code>GA</code></li> <li><code>GM</code></li> <li><code>GE</code></li> <li><code>DE</code></li> <li><code>GH</code></li> <li><code>GI</code></li> <li><code>GR</code></li> <li><code>GL</code></li> <li><code>GD</code></li> <li><code>GP</code></li> <li><code>GU</code></li> <li><code>GT</code></li> <li><code>GG</code></li> <li><code>GN</code></li> <li><code>GW</code></li> <li><code>GY</code></li> <li><code>HT</code></li> <li><code>HM</code></li> <li><code>VA</code></li> <li><code>HN</code></li> <li><code>HK</code></li> <li><code>HU</code></li> <li><code>IS</code></li> <li><code>IN</code></li> <li><code>ID</code></li> <li><code>IR</code></li> <li><code>IQ</code></li> <li><code>IE</code></li> <li><code>IM</code></li> <li><code>IL</code></li> <li><code>IT</code></li> <li><code>JM</code></li> <li><code>JP</code></li> <li><code>JE</code></li> <li><code>JO</code></li> <li><code>KZ</code></li> <li><code>KE</code></li> <li><code>KI</code></li> <li><code>KP</code></li> <li><code>KR</code></li> <li><code>KW</code></li> <li><code>KG</code></li> <li><code>LA</code></li> <li><code>LV</code></li> <li><code>LB</code></li> <li><code>LS</code></li> <li><code>LR</code></li> <li><code>LY</code></li> <li><code>LI</code></li> <li><code>LT</code></li> <li><code>LU</code></li> <li><code>MO</code></li> <li><code>MG</code></li> <li><code>MW</code></li> <li><code>MY</code></li> <li><code>MV</code></li> <li><code>ML</code></li> <li><code>MT</code></li> <li><code>MH</code></li> <li><code>MQ</code></li> <li><code>MR</code></li> <li><code>MU</code></li> <li><code>YT</code></li> <li><code>MX</code></li> <li><code>FM</code></li> <li><code>MD</code></li> <li><code>MC</code></li> <li><code>MN</code></li> <li><code>ME</code></li> <li><code>MS</code></li> <li><code>MA</code></li> <li><code>MZ</code></li> <li><code>MM</code></li> <li><code>NA</code></li> <li><code>NR</code></li> <li><code>NP</code></li> <li><code>NL</code></li> <li><code>NC</code></li> <li><code>NZ</code></li> <li><code>NI</code></li> <li><code>NE</code></li> <li><code>NG</code></li> <li><code>NU</code></li> <li><code>NF</code></li> <li><code>MK</code></li> <li><code>MP</code></li> <li><code>NO</code></li> <li><code>OM</code></li> <li><code>PK</code></li> <li><code>PW</code></li> <li><code>PS</code></li> <li><code>PA</code></li> <li><code>PG</code></li> <li><code>PY</code></li> <li><code>PE</code></li> <li><code>PH</code></li> <li><code>PN</code></li> <li><code>PL</code></li> <li><code>PT</code></li> <li><code>PR</code></li> <li><code>QA</code></li> <li><code>RE</code></li> <li><code>RO</code></li> <li><code>RU</code></li> <li><code>RW</code></li> <li><code>BL</code></li> <li><code>SH</code></li> <li><code>KN</code></li> <li><code>LC</code></li> <li><code>MF</code></li> <li><code>PM</code></li> <li><code>VC</code></li> <li><code>WS</code></li> <li><code>SM</code></li> <li><code>ST</code></li> <li><code>SA</code></li> <li><code>SN</code></li> <li><code>RS</code></li> <li><code>SC</code></li> <li><code>SL</code></li> <li><code>SG</code></li> <li><code>SX</code></li> <li><code>SK</code></li> <li><code>SI</code></li> <li><code>SB</code></li> <li><code>SO</code></li> <li><code>ZA</code></li> <li><code>GS</code></li> <li><code>SS</code></li> <li><code>ES</code></li> <li><code>LK</code></li> <li><code>SD</code></li> <li><code>SR</code></li> <li><code>SJ</code></li> <li><code>SE</code></li> <li><code>CH</code></li> <li><code>SY</code></li> <li><code>TW</code></li> <li><code>TJ</code></li> <li><code>TZ</code></li> <li><code>TH</code></li> <li><code>TL</code></li> <li><code>TG</code></li> <li><code>TK</code></li> <li><code>TO</code></li> <li><code>TT</code></li> <li><code>TN</code></li> <li><code>TR</code></li> <li><code>TM</code></li> <li><code>TC</code></li> <li><code>TV</code></li> <li><code>UG</code></li> <li><code>UA</code></li> <li><code>AE</code></li> <li><code>GB</code></li> <li><code>US</code></li> <li><code>UM</code></li> <li><code>UY</code></li> <li><code>UZ</code></li> <li><code>VU</code></li> <li><code>VE</code></li> <li><code>VN</code></li> <li><code>VG</code></li> <li><code>VI</code></li> <li><code>WF</code></li> <li><code>EH</code></li> <li><code>YE</code></li> <li><code>ZM</code></li> <li><code>ZW</code></li></ul>
         </div>
@@ -4758,7 +6882,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Whether to display the user's real name publicly. Example: <code>true</code></p>
         </div>
         </form>
 
@@ -4784,8 +6908,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'current_password' =&gt; 'architecto',
-            'email' =&gt; 'zbailey@example.net',
+            'current_password' =&gt; 'password',
+            'email' =&gt; 'newemail@example.com',
         ],
     ]
 );
@@ -4804,8 +6928,8 @@ const headers = {
 };
 
 let body = {
-    "current_password": "architecto",
-    "email": "zbailey@example.net"
+    "current_password": "password",
+    "email": "newemail@example.com"
 };
 
 fetch(url, {
@@ -4906,10 +7030,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="current_password"                data-endpoint="POSTapi-profile-email"
-               value="architecto"
+               value="password"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>The user's current password for verification. Example: <code>password</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
@@ -4918,10 +7042,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-profile-email"
-               value="zbailey@example.net"
+               value="newemail@example.com"
                data-component="body">
     <br>
-<p>Must be a valid email address. Example: <code>zbailey@example.net</code></p>
+<p>The new email address. Must be a valid email address. Example: <code>newemail@example.com</code></p>
         </div>
         </form>
 
@@ -4947,8 +7071,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'current_password' =&gt; 'architecto',
-            'password' =&gt; ']|{+-0pBNvYg',
+            'current_password' =&gt; 'password',
+            'password' =&gt; 'newpassword',
         ],
     ]
 );
@@ -4967,8 +7091,8 @@ const headers = {
 };
 
 let body = {
-    "current_password": "architecto",
-    "password": "]|{+-0pBNvYg"
+    "current_password": "password",
+    "password": "newpassword"
 };
 
 fetch(url, {
@@ -5069,10 +7193,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="current_password"                data-endpoint="POSTapi-profile-password"
-               value="architecto"
+               value="password"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>The user's current password for verification. Example: <code>password</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -5081,10 +7205,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="POSTapi-profile-password"
-               value="]|{+-0pBNvYg"
+               value="newpassword"
                data-component="body">
     <br>
-<p>Must be at least 8 characters. Example: <code>]|{+-0pBNvYg</code></p>
+<p>The new password (min 8 characters). Must be at least 8 characters. Example: <code>newpassword</code></p>
         </div>
         </form>
 
@@ -5141,10 +7265,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 142,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;public_name&quot;: &quot;Mya DuBuque&quot;,
-        &quot;country&quot;: &quot;AQ&quot;,
+        &quot;id&quot;: 182,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
+        &quot;country&quot;: &quot;IL&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
         &quot;location&quot;: &quot;&quot;,
@@ -5418,7 +7542,7 @@ $response = $client-&gt;patch(
         ],
         'json' =&gt; [
             'primary_messages' =&gt; [
-                'email',
+                'push',
             ],
             'message_requests' =&gt; [
                 'push',
@@ -5448,7 +7572,7 @@ const headers = {
 
 let body = {
     "primary_messages": [
-        "email"
+        "push"
     ],
     "message_requests": [
         "push"
@@ -5825,8 +7949,8 @@ $response = $client-&gt;patch(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'messaging' =&gt; 'fellow_club_members',
-            'profile' =&gt; 'mutual_followers',
+            'messaging' =&gt; 'anyone',
+            'profile' =&gt; 'anyone',
         ],
     ]
 );
@@ -5845,8 +7969,8 @@ const headers = {
 };
 
 let body = {
-    "messaging": "fellow_club_members",
-    "profile": "mutual_followers"
+    "messaging": "anyone",
+    "profile": "anyone"
 };
 
 fetch(url, {
@@ -5978,10 +8102,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="messaging"                data-endpoint="PATCHapi-privacy-settings"
-               value="fellow_club_members"
+               value="anyone"
                data-component="body">
     <br>
-<p>Example: <code>fellow_club_members</code></p>
+<p>Who can send messages. One of: anyone, followers_only, following_only, mutual_followers, fellow_club_members. Example: <code>anyone</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>anyone</code></li> <li><code>followers_only</code></li> <li><code>following_only</code></li> <li><code>mutual_followers</code></li> <li><code>fellow_club_members</code></li></ul>
         </div>
@@ -5992,10 +8116,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="profile"                data-endpoint="PATCHapi-privacy-settings"
-               value="mutual_followers"
+               value="anyone"
                data-component="body">
     <br>
-<p>Example: <code>mutual_followers</code></p>
+<p>Who can view the profile. One of: anyone, followers_only, following_only, mutual_followers, fellow_club_members. Example: <code>anyone</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>anyone</code></li> <li><code>followers_only</code></li> <li><code>following_only</code></li> <li><code>mutual_followers</code></li> <li><code>fellow_club_members</code></li></ul>
         </div>
@@ -6022,8 +8146,8 @@ $response = $client-&gt;get(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
-        'json' =&gt; [
-            'q' =&gt; 'bngzmiyvdljnikhw',
+        'query' =&gt; [
+            'q' =&gt; 'john',
         ],
     ]
 );
@@ -6036,19 +8160,21 @@ print_r(json_decode((string) $body));</code></pre></div>
     "https://battlezones.test/api/users/search"
 );
 
+const params = {
+    "q": "john",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
 const headers = {
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
 
-let body = {
-    "q": "bngzmiyvdljnikhw"
-};
 
 fetch(url, {
     method: "GET",
     headers,
-    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
@@ -6062,9 +8188,14 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 1,
-            &quot;public_name&quot;: &quot;John Doe&quot;,
-            &quot;username&quot;: &quot;johndoe&quot;
+            &quot;id&quot;: 187,
+            &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
+            &quot;username&quot;: &quot;breitenberg.gilbert&quot;
+        },
+        {
+            &quot;id&quot;: 188,
+            &quot;public_name&quot;: &quot;Miss Jazlyn Keebler III&quot;,
+            &quot;username&quot;: &quot;bauch.marcelo&quot;
         }
     ]
 }</code>
@@ -6141,20 +8272,20 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>q</code></b>&nbsp;&nbsp;
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>q</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
                               name="q"                data-endpoint="GETapi-users-search"
-               value="bngzmiyvdljnikhw"
-               data-component="body">
+               value="john"
+               data-component="query">
     <br>
-<p>Must be at least 1 character. Example: <code>bngzmiyvdljnikhw</code></p>
-        </div>
-        </form>
+<p>The search query to find users by name or username. Must be at least 1 character. Example: <code>john</code></p>
+            </div>
+                </form>
 
                     <h2 id="users-POSTapi-users--user_id--follow">Follow User</h2>
 
@@ -6209,10 +8340,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 147,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;public_name&quot;: &quot;Mr. Adriel Romaguera&quot;,
-        &quot;country&quot;: &quot;PM&quot;,
+        &quot;id&quot;: 189,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;public_name&quot;: &quot;Mr. Mateo Huel&quot;,
+        &quot;country&quot;: &quot;MW&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
         &quot;location&quot;: &quot;&quot;,
@@ -6362,10 +8493,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 148,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;public_name&quot;: &quot;Prof. Mina Bauch&quot;,
-        &quot;country&quot;: &quot;SD&quot;,
+        &quot;id&quot;: 190,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;public_name&quot;: &quot;Elda Frami&quot;,
+        &quot;country&quot;: &quot;WF&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
         &quot;location&quot;: &quot;&quot;,
@@ -6515,8 +8646,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 149,
-        &quot;public_name&quot;: &quot;Juston Lind V&quot;,
+        &quot;id&quot;: 191,
+        &quot;public_name&quot;: &quot;Ms. Billie Beer&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
     }
@@ -6662,8 +8793,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 150,
-        &quot;public_name&quot;: &quot;Prof. Gerald Schuster&quot;,
+        &quot;id&quot;: 192,
+        &quot;public_name&quot;: &quot;Myrl Kshlerin&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
     }
@@ -6809,10 +8940,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 151,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;public_name&quot;: &quot;Royce Ratke&quot;,
-        &quot;country&quot;: &quot;GP&quot;,
+        &quot;id&quot;: 193,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;public_name&quot;: &quot;Prof. Elouise Schiller&quot;,
+        &quot;country&quot;: &quot;BY&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
         &quot;location&quot;: &quot;&quot;,
@@ -6962,10 +9093,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 152,
-        &quot;updated_at&quot;: &quot;2026-03-23T22:38:46Z&quot;,
-        &quot;public_name&quot;: &quot;Jamie Greenholt&quot;,
-        &quot;country&quot;: &quot;MS&quot;,
+        &quot;id&quot;: 194,
+        &quot;updated_at&quot;: &quot;2026-04-24T20:33:53Z&quot;,
+        &quot;public_name&quot;: &quot;Kendra Rice&quot;,
+        &quot;country&quot;: &quot;BW&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
         &quot;location&quot;: &quot;&quot;,
@@ -7115,8 +9246,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 153,
-        &quot;public_name&quot;: &quot;Shaina Glover&quot;,
+        &quot;id&quot;: 195,
+        &quot;public_name&quot;: &quot;Prof. Coralie Roob I&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
     }

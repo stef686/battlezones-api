@@ -1,0 +1,732 @@
+name: Events
+description: 'APIs for Events'
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/events
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Events'
+      description: 'List publicly visible events with optional filters and search.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      search:
+        custom: []
+        name: search
+        description: 'Search events by name. Must not be greater than 255 characters.'
+        required: false
+        example: 'Grand Tournament'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      status:
+        custom: []
+        name: status
+        description: 'Filter by event status. One of: published, active, completed.'
+        required: false
+        example: active
+        type: string
+        enumValues:
+          - draft
+          - published
+          - active
+          - completed
+          - cancelled
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game_system:
+        custom: []
+        name: game_system
+        description: 'Filter by game system slug. The <code>slug</code> of an existing record in the game_systems table.'
+        required: false
+        example: warhammer-40k
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      search: 'Grand Tournament'
+      status: active
+      game_system: warhammer-40k
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":36,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2026-08-21T10:03:46Z","ends_at":"2026-08-23T10:03:46Z","max_attendees":100,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{slug}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show Event'
+      description: 'Get a publicly visible event by slug.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      slug:
+        custom: []
+        name: slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      slug: summer-showdown-2026
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":37,"name":"Fugit deleniti distinctio eum","slug":"fugit-deleniti-distinctio-eum-65128","description":"Aliquam veniam corporis dolorem mollitia deleniti nemo. Quia officia est dignissimos neque. Odio veritatis excepturi doloribus delectus fugit qui repudiandae. Est alias tenetur ratione.","status":"draft","pairing_format":"swiss","starts_at":"2026-08-10T16:56:01Z","ends_at":"2026-08-12T16:56:01Z","max_attendees":40,"venue":{"name":"Casper-Smith Hall","address":"5481 Dibbert Stravenue Suite 237","city":"Ednaside","country":"AU"},"created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/updates'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Event Updates'
+      description: 'List updates for a publicly visible event, pinned first then most recent.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":13,"title":"Quia maiores assumenda","body":"Repellat officiis corporis nesciunt ut. Iure impedit molestiae ut rem est esse sint. Molestiae sunt suscipit doloribus fugiat ut aut. Et error neque recusandae et.\n\nEt ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut.","pinned":false,"published_at":"2026-03-27T19:57:13Z","author":{"id":204,"name":"Christian Klocko PhD"},"created_at":"2026-04-24T20:33:54Z","updated_at":"2026-04-24T20:33:54Z"}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/attendees'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Event Attendees'
+      description: 'Paginated list of attendees for a publicly visible event.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters:
+      search:
+        custom: []
+        name: search
+        description: 'Search attendees by name or username. Must not be greater than 255 characters.'
+        required: false
+        example: john
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      search: john
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":41,"user":{"id":205,"name":"Rodrigo O''Connell"},"faction":{"id":23,"name":"Tenetur Ratione"},"clubs":[]}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/attendees/{id}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show Event Attendee'
+      description: 'Attendee detail for a publicly visible event.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee:
+        custom: []
+        name: attendee
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      id: 1
+      event: london-grand-tournament
+      attendee: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":42,"user":{"id":206,"name":"Cordia Cummings"},"faction":{"id":24,"name":"Accusantium Odit"},"clubs":[],"army_list":"Modi rerum ex repellendus assumenda et tenetur. Reiciendis quia perspiciatis deserunt ducimus corrupti et. Quia maiores assumenda odit. Repellat officiis corporis nesciunt ut.","checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/rounds'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Event Rounds'
+      description: 'List rounds for an event. Only visible for Active/Completed events.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+              "message": ""
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/rounds/{id}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show Event Round'
+      description: 'Round detail with games for an event.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the round.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round:
+        custom: []
+        name: round
+        description: 'The id of the round.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      id: 1
+      event: london-grand-tournament
+      round: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+              "message": "No query results for model [App\\Models\\Round] 1"
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/games/{id}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show Event Game'
+      description: 'Game detail with full score breakdown and army lists.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game:
+        custom: []
+        name: game
+        description: 'The id of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      id: 1
+      event: london-grand-tournament
+      game: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+              "message": ""
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/standings'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Event Standings'
+      description: 'Paginated standings for a publicly visible event with optional search and sorting.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters:
+      search:
+        custom: []
+        name: search
+        description: 'Search standings by player name or username. Must not be greater than 255 characters.'
+        required: false
+        example: john
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      sort_by:
+        custom: []
+        name: sort_by
+        description: 'The field to sort standings by. Must not be greater than 255 characters.'
+        required: false
+        example: points
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      search: john
+      sort_by: points
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":29,"position":76,"attendee":{"id":43,"name":"Jovanny Cartwright","faction":{"id":25,"name":"Sed Rem"},"clubs":[]},"scores":[]}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/gallery'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Event Gallery'
+      description: 'Paginated photos for a publicly visible event.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":45,"name":"In quod id aspernatur.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/488b4973-cced-39cd-9019-4e5670dd35d4.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/338aa13c-ee9b-3c59-9dad-eeca56f85ba2.jpg","created_at":"2026-04-24T20:33:54Z","updated_at":"2026-04-24T20:33:54Z"}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

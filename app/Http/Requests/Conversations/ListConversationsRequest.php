@@ -23,4 +23,17 @@ class ListConversationsRequest extends FormRequest
             'tab' => ['sometimes', 'string', Rule::enum(ConversationTab::class)],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function queryParameters(): array
+    {
+        return [
+            'tab' => [
+                'description' => 'Filter by tab. One of: primary, events, requests, archived.',
+                'example' => 'primary',
+            ],
+        ];
+    }
 }

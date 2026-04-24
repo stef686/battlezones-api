@@ -6,9 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\PendingEmailChange;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
+use Knuckles\Scribe\Attributes\UrlParam;
 
+#[Group('Users', 'APIs for Users')]
 class ConfirmEmailChangeController extends Controller
 {
+    #[Endpoint('Confirm Email Change', 'Confirm a pending email change via the emailed verification link.')]
+    #[UrlParam('user', 'integer', 'The ID of the user.', example: 1)]
+    #[UrlParam('token', 'string', 'The verification token from the email.')]
+    #[Response(['message' => 'Your email address has been updated.'])]
     public function __invoke(User $user, string $token): JsonResponse
     {
         $pending = PendingEmailChange::query()

@@ -30,7 +30,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":25,"name":"In natus perferendis.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/ed7b741d-c366-32d2-827d-6666c851456c.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/609303d3-7451-3267-b3d4-462990137d0f.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
+        content: '{"data":{"id":40,"name":"Eum omnis autem et ut.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/756f42fe-19b4-314c-ab4b-e7d4d22d9ece.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/2470e22c-104d-39a9-be22-d184758f5176.jpg","created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -64,9 +64,9 @@ endpoints:
       name:
         custom: []
         name: name
-        description: 'Must not be greater than 255 characters.'
+        description: 'The photo title. Must not be greater than 255 characters.'
         required: true
-        example: b
+        example: 'My painted army'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -75,7 +75,7 @@ endpoints:
       photo:
         custom: []
         name: photo
-        description: 'Must be an image. Must not be greater than 10240 kilobytes.'
+        description: 'The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes.'
         required: true
         example: null
         type: file
@@ -86,24 +86,24 @@ endpoints:
       description:
         custom: []
         name: description
-        description: 'Must not be greater than 1000 characters.'
+        description: 'An optional description of the photo. Must not be greater than 1000 characters.'
         required: false
-        example: 'Et animi quos velit et fugiat.'
+        example: 'My fully painted Space Marines army.'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      name: b
-      description: 'Et animi quos velit et fugiat.'
+      name: 'My painted army'
+      description: 'My fully painted Space Marines army.'
     fileParameters:
       photo: null
     responses:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":26,"name":"Nihil accusantium harum.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/51c7cf5e-fac2-3ac6-8ef8-61e6050503af.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/d207102d-bce0-31f9-8c36-aa9cf4cfe75a.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
+        content: '{"data":{"id":41,"name":"Eius et animi.","description":"Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","url":"https:\/\/battlezones.test\/storage\/photos\/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg","created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -135,14 +135,14 @@ endpoints:
         name: photo_id
         description: 'The ID of the photo.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      photo_id: 16
+      photo_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -152,7 +152,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":27,"name":"Et animi quos.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/d6fa562b-acd5-35ff-babb-d11194d3737b.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/5707ca55-f609-3528-be8b-1baeaee1567e.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
+        content: '{"data":{"id":42,"name":"Eius et animi.","description":"Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","url":"https:\/\/battlezones.test\/storage\/photos\/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg","created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -184,23 +184,23 @@ endpoints:
         name: photo_id
         description: 'The ID of the photo.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      photo_id: 16
+      photo_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
       name:
         custom: []
         name: name
-        description: 'Must not be greater than 255 characters.'
+        description: 'The photo title. Must not be greater than 255 characters.'
         required: false
-        example: b
+        example: 'My painted army'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -209,7 +209,7 @@ endpoints:
       photo:
         custom: []
         name: photo
-        description: 'Must be an image. Must not be greater than 10240 kilobytes.'
+        description: 'A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes.'
         required: false
         example: null
         type: file
@@ -220,24 +220,24 @@ endpoints:
       description:
         custom: []
         name: description
-        description: 'Must not be greater than 1000 characters.'
+        description: 'An updated description of the photo. Must not be greater than 1000 characters.'
         required: false
-        example: 'Et animi quos velit et fugiat.'
+        example: 'My fully painted Space Marines army.'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      name: b
-      description: 'Et animi quos velit et fugiat.'
+      name: 'My painted army'
+      description: 'My fully painted Space Marines army.'
     fileParameters:
       photo: null
     responses:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":28,"name":"Nihil accusantium harum.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/51c7cf5e-fac2-3ac6-8ef8-61e6050503af.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/d207102d-bce0-31f9-8c36-aa9cf4cfe75a.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
+        content: '{"data":{"id":43,"name":"Eius et animi.","description":"Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","url":"https:\/\/battlezones.test\/storage\/photos\/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg","created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -269,14 +269,14 @@ endpoints:
         name: photo_id
         description: 'The ID of the photo.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      photo_id: 16
+      photo_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -335,7 +335,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":29,"name":"Et animi quos.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/d6fa562b-acd5-35ff-babb-d11194d3737b.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/5707ca55-f609-3528-be8b-1baeaee1567e.jpg","created_at":"2026-03-23T22:38:46Z","updated_at":"2026-03-23T22:38:46Z"}}'
+        content: '{"data":{"id":44,"name":"Eum doloremque id aut.","description":"Corporis dolorem mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio.","url":"https:\/\/battlezones.test\/storage\/photos\/dc407d02-9b9b-35e5-8d69-87904a6787e3.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/b3dfd3b4-abf6-34e6-9ab5-ef739060a5da.jpg","created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
         headers: []
         description: ''
     responseFields: []

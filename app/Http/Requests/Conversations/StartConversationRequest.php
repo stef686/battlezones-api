@@ -26,6 +26,27 @@ class StartConversationRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array<string, array{description: string, example: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'recipient_ids' => [
+                'description' => 'An array of user IDs to start the conversation with.',
+                'example' => [1, 2],
+            ],
+            'name' => [
+                'description' => 'The group name (required when starting a group conversation with multiple recipients).',
+                'example' => 'Game Night Chat',
+            ],
+            'body' => [
+                'description' => 'The initial message body.',
+                'example' => 'Hey, want to play this weekend?',
+            ],
+        ];
+    }
+
     public function isGroupConversation(): bool
     {
         return count($this->validated('recipient_ids')) > 1;

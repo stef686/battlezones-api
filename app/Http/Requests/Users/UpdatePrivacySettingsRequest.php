@@ -24,4 +24,21 @@ class UpdatePrivacySettingsRequest extends FormRequest
             'profile' => ['sometimes', Rule::enum(PrivacyOption::class)],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'messaging' => [
+                'description' => 'Who can send messages. One of: anyone, followers_only, following_only, mutual_followers, fellow_club_members.',
+                'example' => 'anyone',
+            ],
+            'profile' => [
+                'description' => 'Who can view the profile. One of: anyone, followers_only, following_only, mutual_followers, fellow_club_members.',
+                'example' => 'anyone',
+            ],
+        ];
+    }
 }

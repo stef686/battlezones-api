@@ -23,4 +23,25 @@ class UpdatePhotoRequest extends FormRequest
             'description' => ['sometimes', 'nullable', 'string', 'max:1000'],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'description' => 'The photo title.',
+                'example' => 'My painted army',
+            ],
+            'photo' => [
+                'description' => 'A replacement photo file (jpg, jpeg, png, or webp, max 10MB).',
+                'example' => 'photo.jpg',
+            ],
+            'description' => [
+                'description' => 'An updated description of the photo.',
+                'example' => 'My fully painted Space Marines army.',
+            ],
+        ];
+    }
 }

@@ -21,4 +21,17 @@ class ForgotPasswordRequest extends FormRequest
             'email' => ['required', 'email'],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'email' => [
+                'description' => 'The email address associated with the account.',
+                'example' => 'player@example.com',
+            ],
+        ];
+    }
 }

@@ -21,4 +21,17 @@ class SearchUsersRequest extends FormRequest
             'q' => ['required', 'string', 'min:1'],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function queryParameters(): array
+    {
+        return [
+            'q' => [
+                'description' => 'The search query to find users by name or username.',
+                'example' => 'john',
+            ],
+        ];
+    }
 }

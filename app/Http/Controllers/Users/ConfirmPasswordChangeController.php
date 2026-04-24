@@ -6,9 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\PendingPasswordChange;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
+use Knuckles\Scribe\Attributes\UrlParam;
 
+#[Group('Users', 'APIs for Users')]
 class ConfirmPasswordChangeController extends Controller
 {
+    #[Endpoint('Confirm Password Change', 'Confirm a pending password change via the emailed confirmation link.')]
+    #[UrlParam('user', 'integer', 'The ID of the user.', example: 1)]
+    #[UrlParam('token', 'string', 'The confirmation token from the email.')]
+    #[Response(['message' => 'Your password has been updated.'])]
     public function __invoke(User $user, string $token): JsonResponse
     {
         $pending = PendingPasswordChange::query()

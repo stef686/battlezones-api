@@ -23,4 +23,25 @@ class LoginTokenRequest extends FormRequest
             'device_name' => ['required'],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'email' => [
+                'description' => 'The user\'s email address.',
+                'example' => 'player@example.com',
+            ],
+            'password' => [
+                'description' => 'The user\'s password.',
+                'example' => 'password',
+            ],
+            'device_name' => [
+                'description' => 'A name identifying the device requesting the token.',
+                'example' => 'iPhone 15',
+            ],
+        ];
+    }
 }

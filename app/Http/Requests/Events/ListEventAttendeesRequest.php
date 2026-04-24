@@ -21,4 +21,17 @@ class ListEventAttendeesRequest extends FormRequest
             'search' => ['sometimes', 'string', 'max:255'],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function queryParameters(): array
+    {
+        return [
+            'search' => [
+                'description' => 'Search attendees by name or username.',
+                'example' => 'john',
+            ],
+        ];
+    }
 }

@@ -36,4 +36,25 @@ class ListEventsRequest extends FormRequest
             'game_system' => ['sometimes', 'string', Rule::exists('game_systems', 'slug')],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function queryParameters(): array
+    {
+        return [
+            'search' => [
+                'description' => 'Search events by name.',
+                'example' => 'Grand Tournament',
+            ],
+            'status' => [
+                'description' => 'Filter by event status. One of: published, active, completed.',
+                'example' => 'active',
+            ],
+            'game_system' => [
+                'description' => 'Filter by game system slug.',
+                'example' => 'warhammer-40k',
+            ],
+        ];
+    }
 }

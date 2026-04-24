@@ -23,6 +23,14 @@ class RemoveGroupMemberRequest extends FormRequest
         return [];
     }
 
+    /**
+     * @return array<string, array<string, string>>
+     */
+    public function bodyParameters(): array
+    {
+        return [];
+    }
+
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator): void {

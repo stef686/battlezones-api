@@ -29,4 +29,29 @@ class UpdateNotificationSettingsRequest extends FormRequest
 
         return $rules;
     }
+
+    /**
+     * @return array<string, array{description: string, example: array<int, string>}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'primary_messages' => [
+                'description' => 'Channels to receive primary message notifications on.',
+                'example' => ['email', 'push'],
+            ],
+            'message_requests' => [
+                'description' => 'Channels to receive message request notifications on.',
+                'example' => ['push'],
+            ],
+            'event_messages' => [
+                'description' => 'Channels to receive event message notifications on.',
+                'example' => ['email'],
+            ],
+            'round_live' => [
+                'description' => 'Channels to receive round-live notifications on.',
+                'example' => ['push'],
+            ],
+        ];
+    }
 }

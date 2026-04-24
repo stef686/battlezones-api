@@ -23,4 +23,12 @@ class FollowUserRequest extends FormRequest
     {
         return [];
     }
+
+    /**
+     * @return array<string, array<string, string>>
+     */
+    public function bodyParameters(): array
+    {
+        return [];
+    }
 }

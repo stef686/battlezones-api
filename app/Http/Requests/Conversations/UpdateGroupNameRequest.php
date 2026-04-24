@@ -22,4 +22,17 @@ class UpdateGroupNameRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'description' => 'The new group conversation name.',
+                'example' => 'Weekend Warriors',
+            ],
+        ];
+    }
 }

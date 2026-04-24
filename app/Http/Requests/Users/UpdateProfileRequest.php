@@ -26,4 +26,29 @@ class UpdateProfileRequest extends FormRequest
             'show_public_name' => ['sometimes', 'boolean'],
         ];
     }
+
+    /**
+     * @return array<string, array{description: string, example: string|bool}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'description' => 'The user\'s display name.',
+                'example' => 'John Doe',
+            ],
+            'username' => [
+                'description' => 'A unique username (3-30 chars, starts with letter, allows letters/digits/underscores/hyphens).',
+                'example' => 'johndoe',
+            ],
+            'country' => [
+                'description' => 'An ISO 3166-1 alpha-2 country code.',
+                'example' => 'US',
+            ],
+            'show_public_name' => [
+                'description' => 'Whether to display the user\'s real name publicly.',
+                'example' => true,
+            ],
+        ];
+    }
 }
