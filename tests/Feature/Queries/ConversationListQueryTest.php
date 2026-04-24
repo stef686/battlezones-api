@@ -2,6 +2,7 @@
 
 use App\Enums\ConversationTab;
 use App\Models\Conversation;
+use App\Models\Event;
 use App\Models\Message;
 use App\Models\User;
 use App\Queries\ConversationListQuery;
@@ -86,7 +87,7 @@ test('primary tab excludes event conversations', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
 
-    Conversation::factory()->withUsers($user, $otherUser)->create(['event_id' => 1]);
+    Conversation::factory()->withUsers($user, $otherUser)->create(['event_id' => Event::factory()->create()->id]);
 
     $result = ConversationListQuery::forUser($user->id)->tab(ConversationTab::Primary)->toQuery()->get();
 
@@ -109,7 +110,7 @@ test('events tab returns only event conversations', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
 
-    $eventConv = Conversation::factory()->withUsers($user, $otherUser)->create(['event_id' => 1]);
+    $eventConv = Conversation::factory()->withUsers($user, $otherUser)->create(['event_id' => Event::factory()->create()->id]);
     Conversation::factory()->withUsers($user, $otherUser)->create();
 
     $result = ConversationListQuery::forUser($user->id)->tab(ConversationTab::Events)->toQuery()->get();
@@ -149,7 +150,7 @@ test('requests tab excludes event conversations', function () {
     $user = User::factory()->create();
     $stranger = User::factory()->create();
 
-    $conversation = Conversation::factory()->withUsers($user, $stranger)->create(['event_id' => 1]);
+    $conversation = Conversation::factory()->withUsers($user, $stranger)->create(['event_id' => Event::factory()->create()->id]);
     Message::factory()->create(['conversation_id' => $conversation->id, 'user_id' => $stranger->id]);
 
     $result = ConversationListQuery::forUser($user->id)->tab(ConversationTab::Requests)->toQuery()->get();
@@ -204,7 +205,7 @@ test('deleted conversations excluded from events tab', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
 
-    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create(['event_id' => 1]);
+    $conversation = Conversation::factory()->withUsers($user, $otherUser)->create(['event_id' => Event::factory()->create()->id]);
     $conversation->users()->updateExistingPivot($user->id, ['deleted_at' => now()]);
 
     $result = ConversationListQuery::forUser($user->id)->tab(ConversationTab::Events)->toQuery()->get();
