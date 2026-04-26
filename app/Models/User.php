@@ -8,6 +8,8 @@ use App\Enums\NotificationType;
 use App\Enums\PrivacyOption;
 use App\Notifications\Auth\ResetPasswordNotification;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -37,6 +39,7 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property Carbon|null $updated_at
  * @property array<array-key, mixed>|null $notification_settings
  * @property array<array-key, mixed>|null $privacy_settings
+ * @property bool $is_admin
  * @property-read Collection<int, User> $blockedBy
  * @property-read int|null $blocked_by_count
  * @property-read Collection<int, User> $blockedUsers
@@ -70,6 +73,7 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereIsAdmin($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNotificationSettings($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
@@ -81,7 +85,7 @@ use Laravel\Sanctum\PersonalAccessToken;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     use HasApiTokens;
 
@@ -127,6 +131,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'country' => Country::class,
+            'is_admin' => 'boolean',
             'show_public_name' => 'boolean',
             'notification_settings' => 'array',
             'privacy_settings' => 'array',
@@ -281,6 +286,11 @@ class User extends Authenticatable implements MustVerifyEmail
         $value = $this->privacy_settings[$key] ?? null;
 
         return $value ? PrivacyOption::from($value) : PrivacyOption::Anyone;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->is_admin;
     }
 
     public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void

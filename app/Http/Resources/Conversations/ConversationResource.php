@@ -9,6 +9,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin Conversation
+ *
+ * @property int $unread_count
  */
 class ConversationResource extends JsonResource
 {

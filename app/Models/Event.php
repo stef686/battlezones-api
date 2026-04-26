@@ -150,6 +150,14 @@ class Event extends Model
     }
 
     /**
+     * @return HasMany<EventCustomField, $this>
+     */
+    public function customFields(): HasMany
+    {
+        return $this->hasMany(EventCustomField::class);
+    }
+
+    /**
      * @return HasMany<EventDocument, $this>
      */
     public function documents(): HasMany
