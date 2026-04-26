@@ -6,8 +6,12 @@ use App\Filament\Resources\Events\Pages\CreateEvent;
 use App\Filament\Resources\Events\Pages\EditEvent;
 use App\Filament\Resources\Events\Pages\ListEvents;
 use App\Filament\Resources\Events\RelationManagers\AttendeesRelationManager;
+use App\Filament\Resources\Events\RelationManagers\CustomFieldsRelationManager;
+use App\Filament\Resources\Events\RelationManagers\DocumentsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\RoundsRelationManager;
+use App\Filament\Resources\Events\RelationManagers\ScoreTypesRelationManager;
 use App\Filament\Resources\Events\RelationManagers\StandingsRelationManager;
+use App\Filament\Resources\Events\RelationManagers\UpdatesRelationManager;
 use App\Filament\Resources\Events\Schemas\EventForm;
 use App\Filament\Resources\Events\Tables\EventsTable;
 use App\Models\Event;
@@ -39,6 +43,10 @@ class EventResource extends Resource
             AttendeesRelationManager::class,
             RoundsRelationManager::class,
             StandingsRelationManager::class,
+            CustomFieldsRelationManager::class,
+            DocumentsRelationManager::class,
+            ScoreTypesRelationManager::class,
+            UpdatesRelationManager::class,
         ];
     }
 

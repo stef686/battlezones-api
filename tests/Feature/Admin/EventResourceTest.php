@@ -1,16 +1,26 @@
 <?php
 
+use App\Enums\CustomFieldType;
 use App\Enums\EventStatus;
+use App\Enums\SortDirection;
 use App\Filament\Resources\Events\Pages\CreateEvent;
 use App\Filament\Resources\Events\Pages\EditEvent;
 use App\Filament\Resources\Events\Pages\ListEvents;
 use App\Filament\Resources\Events\RelationManagers\AttendeesRelationManager;
+use App\Filament\Resources\Events\RelationManagers\CustomFieldsRelationManager;
+use App\Filament\Resources\Events\RelationManagers\DocumentsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\RoundsRelationManager;
+use App\Filament\Resources\Events\RelationManagers\ScoreTypesRelationManager;
 use App\Filament\Resources\Events\RelationManagers\StandingsRelationManager;
+use App\Filament\Resources\Events\RelationManagers\UpdatesRelationManager;
 use App\Models\Club;
 use App\Models\Event;
 use App\Models\EventAttendee;
+use App\Models\EventCustomField;
+use App\Models\EventDocument;
+use App\Models\EventScoreType;
 use App\Models\EventStanding;
+use App\Models\EventUpdate;
 use App\Models\Faction;
 use App\Models\GameSystem;
 use App\Models\Round;
@@ -303,4 +313,253 @@ test('standings relation manager renders on edit page', function () {
     ])
         ->assertOk()
         ->assertCanSeeTableRecords($standings);
+});
+
+test('custom fields relation manager renders on edit page', function () {
+    $event = Event::factory()
+        ->has(EventCustomField::factory()->count(3), 'customFields')
+        ->create();
+
+    Livewire::test(CustomFieldsRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->assertOk()
+        ->assertCanSeeTableRecords($event->customFields);
+});
+
+test('can create a custom field via relation manager', function () {
+    $event = Event::factory()->create();
+
+    Livewire::test(CustomFieldsRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(CreateAction::class)->table(), [
+            'name' => 'Favorite Color',
+            'type' => CustomFieldType::Text->value,
+            'display_order' => 1,
+        ])
+        ->assertNotified();
+
+    assertDatabaseHas(EventCustomField::class, [
+        'event_id' => $event->id,
+        'name' => 'Favorite Color',
+        'type' => CustomFieldType::Text->value,
+        'display_order' => 1,
+    ]);
+});
+
+test('can edit a custom field via relation manager', function () {
+    $event = Event::factory()->create();
+    $field = EventCustomField::factory()->for($event)->create();
+
+    Livewire::test(CustomFieldsRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(EditAction::class)->table($field), [
+            'name' => 'Updated Field',
+            'type' => CustomFieldType::Select->value,
+        ])
+        ->assertNotified();
+
+    assertDatabaseHas(EventCustomField::class, [
+        'id' => $field->id,
+        'name' => 'Updated Field',
+        'type' => CustomFieldType::Select->value,
+    ]);
+});
+
+test('can delete a custom field via relation manager', function () {
+    $event = Event::factory()->create();
+    $field = EventCustomField::factory()->for($event)->create();
+
+    Livewire::test(CustomFieldsRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(DeleteAction::class)->table($field))
+        ->assertNotified();
+
+    assertDatabaseMissing(EventCustomField::class, ['id' => $field->id]);
+});
+
+test('score types relation manager renders on edit page', function () {
+    $event = Event::factory()
+        ->has(EventScoreType::factory()->count(3), 'scoreTypes')
+        ->create();
+
+    Livewire::test(ScoreTypesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->assertOk()
+        ->assertCanSeeTableRecords($event->scoreTypes);
+});
+
+test('can create a score type via relation manager', function () {
+    $event = Event::factory()->create();
+
+    Livewire::test(ScoreTypesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(CreateAction::class)->table(), [
+            'name' => 'Battle Points',
+            'slug' => 'battle-points',
+            'sort_direction' => SortDirection::Desc->value,
+            'display_order' => 1,
+        ])
+        ->assertNotified();
+
+    assertDatabaseHas(EventScoreType::class, [
+        'event_id' => $event->id,
+        'name' => 'Battle Points',
+        'slug' => 'battle-points',
+        'sort_direction' => SortDirection::Desc->value,
+        'display_order' => 1,
+    ]);
+});
+
+test('can edit a score type via relation manager', function () {
+    $event = Event::factory()->create();
+    $scoreType = EventScoreType::factory()->for($event)->create();
+
+    Livewire::test(ScoreTypesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(EditAction::class)->table($scoreType), [
+            'name' => 'VP Difference',
+            'slug' => 'vp-difference',
+            'sort_direction' => SortDirection::Asc->value,
+        ])
+        ->assertNotified();
+
+    assertDatabaseHas(EventScoreType::class, [
+        'id' => $scoreType->id,
+        'name' => 'VP Difference',
+        'slug' => 'vp-difference',
+        'sort_direction' => SortDirection::Asc->value,
+    ]);
+});
+
+test('can delete a score type via relation manager', function () {
+    $event = Event::factory()->create();
+    $scoreType = EventScoreType::factory()->for($event)->create();
+
+    Livewire::test(ScoreTypesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(DeleteAction::class)->table($scoreType))
+        ->assertNotified();
+
+    assertDatabaseMissing(EventScoreType::class, ['id' => $scoreType->id]);
+});
+
+test('updates relation manager renders on edit page', function () {
+    $event = Event::factory()
+        ->has(EventUpdate::factory()->count(3), 'updates')
+        ->create();
+
+    Livewire::test(UpdatesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->assertOk()
+        ->assertCanSeeTableRecords($event->updates);
+});
+
+test('can create an update via relation manager', function () {
+    $event = Event::factory()->create();
+    $author = User::factory()->create();
+    $publishedAt = now()->startOfMinute();
+
+    Livewire::test(UpdatesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(CreateAction::class)->table(), [
+            'title' => 'Round 1 Results',
+            'body' => '<p>Results are in!</p>',
+            'user_id' => $author->id,
+            'published_at' => $publishedAt,
+            'pinned_at' => null,
+        ])
+        ->assertNotified();
+
+    assertDatabaseHas(EventUpdate::class, [
+        'event_id' => $event->id,
+        'title' => 'Round 1 Results',
+        'body' => '<p>Results are in!</p>',
+        'user_id' => $author->id,
+    ]);
+});
+
+test('can edit an update via relation manager', function () {
+    $event = Event::factory()->create();
+    $update = EventUpdate::factory()->for($event)->create([
+        'published_at' => now(),
+    ]);
+
+    Livewire::test(UpdatesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(EditAction::class)->table($update), [
+            'title' => 'Updated Title',
+            'body' => '<p>Updated body</p>',
+        ])
+        ->assertNotified();
+
+    assertDatabaseHas(EventUpdate::class, [
+        'id' => $update->id,
+        'title' => 'Updated Title',
+        'body' => '<p>Updated body</p>',
+    ]);
+});
+
+test('can delete an update via relation manager', function () {
+    $event = Event::factory()->create();
+    $update = EventUpdate::factory()->for($event)->create([
+        'published_at' => now(),
+    ]);
+
+    Livewire::test(UpdatesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(DeleteAction::class)->table($update))
+        ->assertNotified();
+
+    assertDatabaseMissing(EventUpdate::class, ['id' => $update->id]);
+});
+
+test('documents relation manager renders on edit page', function () {
+    $event = Event::factory()
+        ->has(EventDocument::factory()->count(3), 'documents')
+        ->create();
+
+    Livewire::test(DocumentsRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->assertOk()
+        ->assertCanSeeTableRecords($event->documents);
+});
+
+test('can delete a document via relation manager', function () {
+    $event = Event::factory()->create();
+    $document = EventDocument::factory()->for($event)->create();
+
+    Livewire::test(DocumentsRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(DeleteAction::class)->table($document))
+        ->assertNotified();
+
+    assertDatabaseMissing(EventDocument::class, ['id' => $document->id]);
 });
