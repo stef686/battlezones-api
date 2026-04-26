@@ -5,6 +5,9 @@ namespace App\Filament\Resources\Events;
 use App\Filament\Resources\Events\Pages\CreateEvent;
 use App\Filament\Resources\Events\Pages\EditEvent;
 use App\Filament\Resources\Events\Pages\ListEvents;
+use App\Filament\Resources\Events\RelationManagers\AttendeesRelationManager;
+use App\Filament\Resources\Events\RelationManagers\RoundsRelationManager;
+use App\Filament\Resources\Events\RelationManagers\StandingsRelationManager;
 use App\Filament\Resources\Events\Schemas\EventForm;
 use App\Filament\Resources\Events\Tables\EventsTable;
 use App\Models\Event;
@@ -33,7 +36,9 @@ class EventResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AttendeesRelationManager::class,
+            RoundsRelationManager::class,
+            StandingsRelationManager::class,
         ];
     }
 
