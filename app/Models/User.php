@@ -271,6 +271,25 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         );
     }
 
+    /**
+     * The notification drivers to deliver a given type on.
+     *
+     * Channels the application has no registered driver for are dropped, so a
+     * preference for a channel that is not built yet cannot break delivery on
+     * the channels that are.
+     *
+     * @return list<string>
+     */
+    public function getNotificationDrivers(NotificationType $type): array
+    {
+        $drivers = array_map(
+            fn (NotificationChannel $channel): ?string => $channel->driver(),
+            $this->getNotificationChannels($type),
+        );
+
+        return array_values(array_filter($drivers));
+    }
+
     public function getMessagingPrivacy(): PrivacyOption
     {
         return $this->getPrivacySetting('messaging');

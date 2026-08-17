@@ -22,10 +22,7 @@ class NewMessageNotification extends Notification implements ShouldQueue
     public function via(object $notifiable): array
     {
         /** @var User $notifiable */
-        return array_map(
-            fn ($channel) => $channel->value,
-            $notifiable->getNotificationChannels(NotificationType::PrimaryMessages),
-        );
+        return $notifiable->getNotificationDrivers(NotificationType::PrimaryMessages);
     }
 
     public function toMail(object $notifiable): MailMessage
