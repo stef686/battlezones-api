@@ -3,10 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Interfaces\ImageInterface;
-use Intervention\Image\Laravel\Facades\Image;
 
 class ThumbnailService
 {
@@ -18,11 +17,9 @@ class ThumbnailService
         $extension = $file->getClientOriginalExtension();
         $path = "photos/{$userId}/thumbs/".Str::uuid().".{$extension}";
 
-        /** @var ImageInterface $image */
-        $image = Image::read($file);
-        $image->scaleDown(width: 400);
+        $thumbnail = Image::fromUpload($file)->scale(width: 400);
 
-        Storage::disk('public')->put($path, $image->encodeByExtension($extension));
+        Storage::disk('public')->put($path, $thumbnail->toBytes());
 
         return $path;
     }
