@@ -3,12 +3,14 @@
         "claude_code",
         "gemini"
     ],
+    "cloud": false,
     "guidelines": true,
     "herd_mcp": true,
     "mcp": true,
     "nightwatch_mcp": false,
     "sail": false,
     "skills": [
+        "infer-conventions",
         "laravel-best-practices",
         "pest-testing",
         "tailwindcss-development"

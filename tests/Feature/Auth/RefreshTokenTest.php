@@ -82,7 +82,7 @@ test('the new token preserves the device name', function () {
 test('the refresh endpoint is rate limited', function () {
     $user = User::factory()->create();
 
-    for ($i = 0; $i < 5; $i++) {
+    for ($i = 0; $i < 60; $i++) {
         $token = $user->createToken('device');
 
         $this->postJson(route('auth.refresh'), [], [

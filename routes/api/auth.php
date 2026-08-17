@@ -9,8 +9,9 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 Route::middleware('throttle:auth')->group(function () {
     Route::post('login/token', LoginTokenController::class)->name('login.token');
     Route::post('register', RegisterController::class)->name('register');
-    Route::post('auth/refresh', RefreshTokenController::class)->name('auth.refresh');
 });
+
+Route::post('auth/refresh', RefreshTokenController::class)->name('auth.refresh')->middleware('throttle:60,1');
 
 Route::post('auth/resend-verification', [RegisterController::class, 'resendVerification']);
 Route::post('auth/forgot-password', ForgotPasswordController::class)->name('password.email');
