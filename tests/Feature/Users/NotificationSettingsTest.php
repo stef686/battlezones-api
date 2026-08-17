@@ -2,7 +2,10 @@
 
 use App\Enums\NotificationChannel;
 use App\Enums\NotificationType;
+use App\Models\Message;
 use App\Models\User;
+use App\Notifications\Conversations\NewMessageNotification;
+use Illuminate\Notifications\ChannelManager;
 
 test('it returns all notification types with defaults when none are saved', function () {
     $user = User::factory()->create();
@@ -160,4 +163,52 @@ test('getNotificationChannels returns empty array when set to none', function ()
     $channels = $user->getNotificationChannels(NotificationType::PrimaryMessages);
 
     expect($channels)->toBe([]);
+});
+
+test('every channel driver is resolvable by the notification manager', function () {
+    $manager = app(ChannelManager::class);
+
+    foreach (NotificationChannel::cases() as $channel) {
+        if ($channel->driver() === null) {
+            continue;
+        }
+
+        expect(fn () => $manager->driver($channel->driver()))->not->toThrow(InvalidArgumentException::class);
+    }
+});
+
+test('getNotificationDrivers maps email to the mail driver', function () {
+    $user = User::factory()->create();
+
+    expect($user->getNotificationDrivers(NotificationType::PrimaryMessages))->toBe(['mail']);
+});
+
+test('getNotificationDrivers drops channels with no registered driver', function () {
+    $user = User::factory()->create([
+        'notification_settings' => ['primary_messages' => ['email', 'push']],
+    ]);
+
+    expect($user->getNotificationDrivers(NotificationType::PrimaryMessages))->toBe(['mail']);
+});
+
+test('getNotificationDrivers returns an empty list when only undeliverable channels are chosen', function () {
+    $user = User::factory()->create([
+        'notification_settings' => ['primary_messages' => ['push']],
+    ]);
+
+    expect($user->getNotificationDrivers(NotificationType::PrimaryMessages))->toBe([]);
+});
+
+test('a new message notification resolves every driver it asks for', function () {
+    $user = User::factory()->create([
+        'notification_settings' => ['primary_messages' => ['email', 'push']],
+    ]);
+    $sender = User::factory()->create();
+    $message = Message::factory()->create();
+
+    $manager = app(ChannelManager::class);
+
+    foreach ((new NewMessageNotification($message, $sender))->via($user) as $driver) {
+        expect(fn () => $manager->driver($driver))->not->toThrow(InvalidArgumentException::class);
+    }
 });
