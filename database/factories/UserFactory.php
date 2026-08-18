@@ -33,6 +33,7 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'claimed_at' => now(),
             'is_admin' => false,
             'remember_token' => Str::random(10),
         ];
@@ -52,6 +53,18 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'is_admin' => true,
+        ]);
+    }
+
+    /**
+     * An account created by someone else's invitation, not yet claimed.
+     */
+    public function unclaimed(): static
+    {
+        return $this->state(fn (): array => [
+            'password' => null,
+            'claimed_at' => null,
+            'email_verified_at' => null,
         ]);
     }
 }

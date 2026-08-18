@@ -33,7 +33,8 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property bool $show_public_name
  * @property string $email
  * @property Carbon|null $email_verified_at
- * @property string $password
+ * @property string|null $password
+ * @property Carbon|null $claimed_at
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -106,6 +107,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'show_public_name',
         'email',
         'password',
+        'claimed_at',
         'notification_settings',
         'privacy_settings',
     ];
@@ -130,6 +132,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'claimed_at' => 'datetime',
             'country' => Country::class,
             'is_admin' => 'boolean',
             'show_public_name' => 'boolean',
@@ -257,6 +260,18 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     /**
      * @return list<NotificationChannel>
      */
+    /**
+     * Whether this Player has turned their invited account into a real one.
+     *
+     * An unclaimed account exists because someone else entered their email;
+     * until they set a password it is reachable only through an emailed
+     * credential, so it stays out of public surfaces and cannot authenticate.
+     */
+    public function isClaimed(): bool
+    {
+        return $this->claimed_at !== null;
+    }
+
     public function getNotificationChannels(NotificationType $type): array
     {
         $channels = $this->notification_settings[$type->value] ?? null;

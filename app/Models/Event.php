@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\EventSettings;
 use App\Enums\Country;
+use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
 use App\Enums\RegistrationMode;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -54,6 +56,8 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $score_types_count
  * @property-read Collection<int, EventStanding> $standings
  * @property-read int|null $standings_count
+ * @property-read Collection<int, User> $organisers
+ * @property-read int|null $organisers_count
  * @property-read Collection<int, EventUpdate> $updates
  * @property-read int|null $updates_count
  *
@@ -249,6 +253,31 @@ class Event extends Model
     public function updates(): HasMany
     {
         return $this->hasMany(EventUpdate::class);
+    }
+
+    /**
+     * The Players trusted to run this Event.
+     *
+     * @return BelongsToMany<User, $this>
+     */
+    public function organisers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'event_organisers')
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    public function isOrganisedBy(User $user): bool
+    {
+        return $this->organisers()->whereKey($user->getKey())->exists();
+    }
+
+    public function isLedBy(User $user): bool
+    {
+        return $this->organisers()
+            ->whereKey($user->getKey())
+            ->wherePivot('role', EventOrganiserRole::Lead->value)
+            ->exists();
     }
 
     /**
