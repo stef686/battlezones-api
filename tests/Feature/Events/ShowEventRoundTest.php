@@ -15,8 +15,8 @@ test('it returns round detail with games ordered by table number', function () {
     $user1 = User::factory()->create(['name' => 'Alice']);
     $user2 = User::factory()->create(['name' => 'Bob']);
 
-    $attendee1 = EventAttendee::factory()->for($event)->for($user1)->for($faction)->create();
-    $attendee2 = EventAttendee::factory()->for($event)->for($user2)->create();
+    $attendee1 = EventAttendee::factory()->for($event)->withMember($user1, ['faction_id' => $faction->id])->create();
+    $attendee2 = EventAttendee::factory()->for($event)->withMember($user2)->create();
 
     $game2 = Game::factory()->for($round)->create(['table_number' => 2]);
     $game1 = Game::factory()->for($round)->create(['table_number' => 1]);
@@ -37,8 +37,9 @@ test('it returns round detail with games ordered by table number', function () {
     expect($firstGame['table_number'])->toBe(1)
         ->and($firstGame['is_bye'])->toBeFalse()
         ->and($firstGame['attendees'])->toHaveCount(2)
-        ->and($firstGame['attendees'][0]['user']['name'])->toBe('Alice')
-        ->and($firstGame['attendees'][0]['faction']['name'])->toBe('Space Marines')
+        ->and($firstGame['attendees'][0]['name'])->toBe('Alice')
+        ->and($firstGame['attendees'][0]['members'][0]['name'])->toBe('Alice')
+        ->and($firstGame['attendees'][0]['members'][0]['faction']['name'])->toBe('Space Marines')
         ->and($firstGame['attendees'][0]['score'])->toBe(85);
 });
 

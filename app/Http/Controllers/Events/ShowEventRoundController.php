@@ -20,7 +20,7 @@ class ShowEventRoundController extends Controller
     {
         abort_unless($event->status->hasRoundsVisible(), 404);
 
-        $round->load(['games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.user', 'games.attendees.faction']);
+        $round->load(['games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction']);
 
         return RoundDetailResource::make($round);
     }

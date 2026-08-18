@@ -14,20 +14,17 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property int $event_id
- * @property int $user_id
- * @property int|null $faction_id
- * @property string|null $army_list
+ * @property string|null $name
  * @property Carbon|null $checked_in_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, EventCustomFieldResponse> $customFieldResponses
  * @property-read int|null $custom_field_responses_count
  * @property-read Event $event
- * @property-read Faction|null $faction
+ * @property-read Collection<int, User> $members
  * @property-read GameAttendeePivot|null $pivot
  * @property-read Collection<int, Game> $games
  * @property-read int|null $games_count
- * @property-read User $user
  *
  * @method static \Database\Factories\EventAttendeeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee newModelQuery()
@@ -54,9 +51,7 @@ class EventAttendee extends Model
      */
     protected $fillable = [
         'event_id',
-        'user_id',
-        'faction_id',
-        'army_list',
+        'name',
         'checked_in_at',
     ];
 
@@ -79,19 +74,35 @@ class EventAttendee extends Model
     }
 
     /**
-     * @return BelongsTo<User, $this>
+     * The Players competing as this Attendee: one for singles, two for doubles.
+     *
+     * @return BelongsToMany<User, $this, EventAttendeeMembership, 'membership'>
      */
-    public function user(): BelongsTo
+    public function members(): BelongsToMany
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'event_attendee_user')
+            ->using(EventAttendeeMembership::class)
+            ->as('membership')
+            ->withPivot(['id', 'event_id', 'faction_id', 'army_list'])
+            ->withTimestamps();
     }
 
     /**
-     * @return BelongsTo<Faction, $this>
+     * @return HasMany<EventAttendeeMembership, $this>
      */
-    public function faction(): BelongsTo
+    public function memberships(): HasMany
     {
-        return $this->belongsTo(Faction::class);
+        return $this->hasMany(EventAttendeeMembership::class);
+    }
+
+    /**
+     * The name this Attendee competes under.
+     *
+     * Parties name themselves; a lone Player falls back to their own name.
+     */
+    public function displayName(): string
+    {
+        return $this->name ?? $this->memberships->first()?->user->public_name ?? '';
     }
 
     /**

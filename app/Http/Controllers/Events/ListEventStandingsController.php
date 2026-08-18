@@ -27,16 +27,17 @@ class ListEventStandingsController extends Controller
         abort_unless($event->settings->standingsVisible, 404);
 
         $query = $event->standings()
-            ->with(['attendee.user.clubs', 'attendee.faction', 'scores.scoreType']);
+            ->with(['attendee.memberships.user.clubs', 'attendee.memberships.faction', 'scores.scoreType']);
 
         if ($request->filled('search')) {
             $term = '%'.$request->string('search').'%';
 
             $query->whereHas('attendee', function (Builder $q) use ($term): void {
                 $q->where(function (Builder $q) use ($term): void {
-                    $q->whereHas('user', fn (Builder $q) => $q->where('users.name', 'like', $term))
-                        ->orWhereHas('faction', fn (Builder $q) => $q->where('factions.name', 'like', $term))
-                        ->orWhereHas('user.clubs', fn (Builder $q) => $q->where('clubs.name', 'like', $term));
+                    $q->where('event_attendees.name', 'like', $term)
+                        ->orWhereHas('memberships.user', fn (Builder $q) => $q->where('users.name', 'like', $term))
+                        ->orWhereHas('memberships.faction', fn (Builder $q) => $q->where('factions.name', 'like', $term))
+                        ->orWhereHas('memberships.user.clubs', fn (Builder $q) => $q->where('clubs.name', 'like', $term));
                 });
             });
         }

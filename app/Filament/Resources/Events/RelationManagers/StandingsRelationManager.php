@@ -17,7 +17,7 @@ class StandingsRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('position')
                     ->sortable(),
-                TextColumn::make('attendee.user.name')
+                TextColumn::make('attendee.name')
                     ->label('Attendee')
                     ->sortable(),
             ]);

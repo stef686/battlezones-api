@@ -12,9 +12,9 @@ use App\Models\User;
 test('it returns standings ordered by position', function () {
     $event = Event::factory()->published()->standingsVisible()->create();
 
-    $attendee1 = EventAttendee::factory()->for($event)->for(User::factory()->create(['name' => 'First Place']))->create();
-    $attendee2 = EventAttendee::factory()->for($event)->for(User::factory()->create(['name' => 'Second Place']))->create();
-    $attendee3 = EventAttendee::factory()->for($event)->for(User::factory()->create(['name' => 'Third Place']))->create();
+    $attendee1 = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'First Place']))->create();
+    $attendee2 = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Second Place']))->create();
+    $attendee3 = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Third Place']))->create();
 
     EventStanding::factory()->for($event)->for($attendee3, 'attendee')->create(['position' => 3]);
     EventStanding::factory()->for($event)->for($attendee1, 'attendee')->create(['position' => 1]);
@@ -54,7 +54,7 @@ test('it includes attendee info and score values with type metadata', function (
     ]);
 
     $user = User::factory()->create(['name' => 'Alice']);
-    $attendee = EventAttendee::factory()->for($event)->for($user)->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember($user)->create();
     $standing = EventStanding::factory()->for($event)->for($attendee, 'attendee')->create(['position' => 1]);
     EventStandingScore::factory()->for($standing, 'standing')->for($scoreType, 'scoreType')->create(['value' => 75.50]);
 
@@ -80,8 +80,8 @@ test('it sorts by score type value descending when sort_direction is desc', func
     $lowUser = User::factory()->create(['name' => 'Low Scorer']);
     $highUser = User::factory()->create(['name' => 'High Scorer']);
 
-    $lowAttendee = EventAttendee::factory()->for($event)->for($lowUser)->create();
-    $highAttendee = EventAttendee::factory()->for($event)->for($highUser)->create();
+    $lowAttendee = EventAttendee::factory()->for($event)->withMember($lowUser)->create();
+    $highAttendee = EventAttendee::factory()->for($event)->withMember($highUser)->create();
 
     $lowStanding = EventStanding::factory()->for($event)->for($lowAttendee, 'attendee')->create(['position' => 1]);
     $highStanding = EventStanding::factory()->for($event)->for($highAttendee, 'attendee')->create(['position' => 2]);
@@ -107,8 +107,8 @@ test('it sorts by score type value ascending when sort_direction is asc', functi
     $lowUser = User::factory()->create(['name' => 'Few Penalties']);
     $highUser = User::factory()->create(['name' => 'Many Penalties']);
 
-    $lowAttendee = EventAttendee::factory()->for($event)->for($lowUser)->create();
-    $highAttendee = EventAttendee::factory()->for($event)->for($highUser)->create();
+    $lowAttendee = EventAttendee::factory()->for($event)->withMember($lowUser)->create();
+    $highAttendee = EventAttendee::factory()->for($event)->withMember($highUser)->create();
 
     $lowStanding = EventStanding::factory()->for($event)->for($lowAttendee, 'attendee')->create(['position' => 2]);
     $highStanding = EventStanding::factory()->for($event)->for($highAttendee, 'attendee')->create(['position' => 1]);
@@ -135,8 +135,8 @@ test('it returns 422 for invalid sort_by value', function () {
 test('it searches by attendee user name', function () {
     $event = Event::factory()->published()->standingsVisible()->create();
 
-    $match = EventAttendee::factory()->for($event)->for(User::factory()->create(['name' => 'Alice Anderson']))->create();
-    $miss = EventAttendee::factory()->for($event)->for(User::factory()->create(['name' => 'Bob Brown']))->create();
+    $match = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Alice Anderson']))->create();
+    $miss = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Bob Brown']))->create();
 
     EventStanding::factory()->for($event)->for($match, 'attendee')->create(['position' => 1]);
     EventStanding::factory()->for($event)->for($miss, 'attendee')->create(['position' => 2]);
@@ -153,8 +153,8 @@ test('it searches by faction name', function () {
     $matchFaction = Faction::factory()->create(['name' => 'Space Marines']);
     $missFaction = Faction::factory()->create(['name' => 'Tyranids']);
 
-    $match = EventAttendee::factory()->for($event)->for($matchFaction)->create();
-    $miss = EventAttendee::factory()->for($event)->for($missFaction)->create();
+    $match = EventAttendee::factory()->for($event)->withMember(null, ['faction_id' => $matchFaction->id])->create();
+    $miss = EventAttendee::factory()->for($event)->withMember(null, ['faction_id' => $missFaction->id])->create();
 
     EventStanding::factory()->for($event)->for($match, 'attendee')->create(['position' => 1]);
     EventStanding::factory()->for($event)->for($miss, 'attendee')->create(['position' => 2]);
@@ -171,8 +171,8 @@ test('it searches by club name', function () {
     $user = User::factory()->create();
     $user->clubs()->attach($club);
 
-    $match = EventAttendee::factory()->for($event)->for($user)->create();
-    $miss = EventAttendee::factory()->for($event)->create();
+    $match = EventAttendee::factory()->for($event)->withMember($user)->create();
+    $miss = EventAttendee::factory()->for($event)->withMember()->create();
 
     EventStanding::factory()->for($event)->for($match, 'attendee')->create(['position' => 1]);
     EventStanding::factory()->for($event)->for($miss, 'attendee')->create(['position' => 2]);

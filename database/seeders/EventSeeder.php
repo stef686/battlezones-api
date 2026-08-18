@@ -137,8 +137,7 @@ class EventSeeder extends Seeder
         $factions = $system->factions;
         $attendees = collect($users)->take(16)->map(fn (User $user) => EventAttendee::factory()
             ->for($event)
-            ->for($user)
-            ->for($factions->random())
+            ->withMember($user, ['faction_id' => $factions->random()->id])
             ->create(['checked_in_at' => now()->subDay()])
         );
 
@@ -175,8 +174,7 @@ class EventSeeder extends Seeder
         $factions = $system->factions;
         $attendees = collect($users)->take(12)->map(fn (User $user) => EventAttendee::factory()
             ->for($event)
-            ->for($user)
-            ->for($factions->random())
+            ->withMember($user, ['faction_id' => $factions->random()->id])
             ->create(['checked_in_at' => now()->subWeeks(2)])
         );
 

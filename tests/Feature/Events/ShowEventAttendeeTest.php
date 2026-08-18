@@ -11,7 +11,7 @@ use App\Models\Game;
 use App\Models\Round;
 use App\Models\User;
 
-test('it returns attendee detail with user, faction, clubs, army_list, checked_in_at and empty games', function () {
+test('it returns attendee detail with members, factions, clubs, army lists, checked_in_at and empty games', function () {
     $event = Event::factory()->published()->create();
     $faction = Faction::factory()->create(['name' => 'Space Marines']);
     $club = Club::factory()->create(['name' => 'London Warlords']);
@@ -21,22 +21,22 @@ test('it returns attendee detail with user, faction, clubs, army_list, checked_i
 
     $attendee = EventAttendee::factory()
         ->for($event)
-        ->for($user)
-        ->for($faction)
-        ->create([
+        ->withMember($user, [
+            'faction_id' => $faction->id,
             'army_list' => '1500pts Ultramarines list...',
-            'checked_in_at' => '2026-04-12 09:30:00',
-        ]);
+        ])
+        ->create(['checked_in_at' => '2026-04-12 09:30:00']);
 
     $this->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
         ->assertSuccessful()
         ->assertJsonPath('data.id', $attendee->id)
-        ->assertJsonPath('data.user.id', $user->id)
-        ->assertJsonPath('data.user.name', 'Alice Example')
-        ->assertJsonPath('data.faction.name', 'Space Marines')
-        ->assertJsonPath('data.clubs.0.id', $club->id)
-        ->assertJsonPath('data.clubs.0.name', 'London Warlords')
-        ->assertJsonPath('data.army_list', '1500pts Ultramarines list...')
+        ->assertJsonPath('data.name', 'Alice Example')
+        ->assertJsonPath('data.members.0.id', $user->id)
+        ->assertJsonPath('data.members.0.name', 'Alice Example')
+        ->assertJsonPath('data.members.0.faction.name', 'Space Marines')
+        ->assertJsonPath('data.members.0.clubs.0.id', $club->id)
+        ->assertJsonPath('data.members.0.clubs.0.name', 'London Warlords')
+        ->assertJsonPath('data.members.0.army_list', '1500pts Ultramarines list...')
         ->assertJsonPath('data.checked_in_at', '2026-04-12T09:30:00Z')
         ->assertJsonPath('data.games', []);
 });
@@ -189,8 +189,8 @@ test('it returns games list with round number, opponent, scores and is_bye', fun
     $user1 = User::factory()->create(['name' => 'Alice']);
     $user2 = User::factory()->create(['name' => 'Bob']);
 
-    $attendee1 = EventAttendee::factory()->for($event)->for($user1)->create();
-    $attendee2 = EventAttendee::factory()->for($event)->for($user2)->create();
+    $attendee1 = EventAttendee::factory()->for($event)->withMember($user1)->create();
+    $attendee2 = EventAttendee::factory()->for($event)->withMember($user2)->create();
 
     $round = Round::factory()->for($event)->create(['number' => 1]);
     $game = Game::factory()->for($round)->create(['table_number' => 3]);

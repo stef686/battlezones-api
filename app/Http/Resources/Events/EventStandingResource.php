@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Events;
 
+use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
 use App\Models\EventStanding;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -11,6 +12,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class EventStandingResource extends JsonResource
 {
+    use SerialisesAttendeeMembers;
+
     /**
      * @return array<string, mixed>
      */
@@ -21,15 +24,8 @@ class EventStandingResource extends JsonResource
             'position' => $this->position,
             'attendee' => [
                 'id' => $this->attendee->id,
-                'name' => $this->attendee->user->public_name,
-                'faction' => $this->attendee->faction ? [
-                    'id' => $this->attendee->faction->id,
-                    'name' => $this->attendee->faction->name,
-                ] : null,
-                'clubs' => $this->attendee->user->clubs->map(fn ($club) => [
-                    'id' => $club->id,
-                    'name' => $club->name,
-                ])->values(),
+                'name' => $this->attendee->displayName(),
+                'members' => $this->serialiseMembers($this->attendee, withClubs: true),
             ],
             'scores' => $this->scores->map(fn ($score) => [
                 'value' => $score->value,

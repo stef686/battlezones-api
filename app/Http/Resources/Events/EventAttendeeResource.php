@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Events;
 
+use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
 use App\Models\EventAttendee;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -11,6 +12,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class EventAttendeeResource extends JsonResource
 {
+    use SerialisesAttendeeMembers;
+
     /**
      * @return array<string, mixed>
      */
@@ -18,18 +21,8 @@ class EventAttendeeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => [
-                'id' => $this->user->id,
-                'name' => $this->user->public_name,
-            ],
-            'faction' => $this->faction ? [
-                'id' => $this->faction->id,
-                'name' => $this->faction->name,
-            ] : null,
-            'clubs' => $this->user->clubs->map(fn ($club) => [
-                'id' => $club->id,
-                'name' => $club->name,
-            ])->values(),
+            'name' => $this->displayName(),
+            'members' => $this->serialiseMembers($this->resource, withClubs: true),
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Events;
 
 use App\Enums\CustomFieldType;
+use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
 use App\Models\EventAttendee;
 use App\Models\EventCustomFieldResponse;
 use App\Models\Game;
@@ -14,6 +15,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class EventAttendeeDetailResource extends JsonResource
 {
+    use SerialisesAttendeeMembers;
+
     /**
      * @return array<string, mixed>
      */
@@ -21,19 +24,8 @@ class EventAttendeeDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => [
-                'id' => $this->user->id,
-                'name' => $this->user->public_name,
-            ],
-            'faction' => $this->faction ? [
-                'id' => $this->faction->id,
-                'name' => $this->faction->name,
-            ] : null,
-            'clubs' => $this->user->clubs->map(fn ($club) => [
-                'id' => $club->id,
-                'name' => $club->name,
-            ])->values(),
-            'army_list' => $this->army_list,
+            'name' => $this->displayName(),
+            'members' => $this->serialiseMembers($this->resource, withArmyList: true, withClubs: true),
             'checked_in_at' => $this->checked_in_at?->toIso8601ZuluString(),
             'custom_field_responses' => $this->customFieldResponses
                 ->sortBy(fn (EventCustomFieldResponse $response): int => $response->field->display_order)
@@ -59,7 +51,7 @@ class EventAttendeeDetailResource extends JsonResource
                         ->values()
                         ->map(fn (EventAttendee $a): array => [
                             'id' => $a->id,
-                            'name' => $a->user->public_name,
+                            'name' => $a->displayName(),
                         ])->all(),
                 ])->all(),
         ];

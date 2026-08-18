@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Events;
 
+use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
 use App\Models\EventAttendee;
 use App\Models\Game;
 use App\Models\Round;
@@ -13,6 +14,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class RoundDetailResource extends JsonResource
 {
+    use SerialisesAttendeeMembers;
+
     /**
      * @return array<string, mixed>
      */
@@ -28,14 +31,8 @@ class RoundDetailResource extends JsonResource
                 'is_bye' => $game->is_bye,
                 'attendees' => $game->attendees->map(fn (EventAttendee $attendee): array => [
                     'id' => $attendee->id,
-                    'user' => [
-                        'id' => $attendee->user->id,
-                        'name' => $attendee->user->public_name,
-                    ],
-                    'faction' => $attendee->faction ? [
-                        'id' => $attendee->faction->id,
-                        'name' => $attendee->faction->name,
-                    ] : null,
+                    'name' => $attendee->displayName(),
+                    'members' => $this->serialiseMembers($attendee),
                     'score' => $attendee->pivot?->score,
                 ])->all(),
             ])->all(),
