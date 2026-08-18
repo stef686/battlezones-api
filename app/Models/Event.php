@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Casts\EventSettings;
 use App\Enums\Country;
 use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
+use App\Enums\RegistrationMode;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,7 +33,11 @@ use Illuminate\Support\Carbon;
  * @property string|null $venue_city
  * @property Country|null $venue_country
  * @property int|null $max_attendees
- * @property bool $standings_visible
+ * @property int $attendee_size
+ * @property RegistrationMode $registration_mode
+ * @property Carbon|null $registration_closes_at
+ * @property string $timezone
+ * @property EventSettings $settings
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, EventAttendee> $attendees
@@ -65,7 +72,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Event whereName($value)
  * @method static Builder<static>|Event wherePairingFormat($value)
  * @method static Builder<static>|Event whereSlug($value)
- * @method static Builder<static>|Event whereStandingsVisible($value)
+ * @method static Builder<static>|Event whereSettings($value)
  * @method static Builder<static>|Event whereStartsAt($value)
  * @method static Builder<static>|Event whereStatus($value)
  * @method static Builder<static>|Event whereUpdatedAt($value)
@@ -99,7 +106,37 @@ class Event extends Model
         'venue_city',
         'venue_country',
         'max_attendees',
+        'attendee_size',
+        'registration_mode',
+        'registration_closes_at',
+        'timezone',
+        'settings',
         'standings_visible',
+    ];
+
+    /**
+     * Settings are internal configuration read through the typed DTO, so they
+     * are kept out of the model's array form; the toggle-able parts are
+     * appended individually instead.
+     *
+     * @var list<string>
+     */
+    protected $hidden = ['settings'];
+
+    /**
+     * @var list<string>
+     */
+    protected $appends = ['standings_visible'];
+
+    /**
+     * Defaults that apply in memory as well as on insert.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'attendee_size' => 1,
+        'registration_mode' => RegistrationMode::Open->value,
+        'timezone' => 'UTC',
     ];
 
     /**
@@ -113,8 +150,41 @@ class Event extends Model
             'venue_country' => Country::class,
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
-            'standings_visible' => 'boolean',
+            'registration_closes_at' => 'datetime',
+            'registration_mode' => RegistrationMode::class,
+            'attendee_size' => 'integer',
+            'settings' => EventSettings::class,
         ];
+    }
+
+    /**
+     * Whether Standings are visible to Players.
+     *
+     * Backed by settings rather than a column of its own, but exposed as an
+     * attribute so admin forms and seeders can read and write it by name.
+     *
+     * @return Attribute<bool, EventSettings>
+     */
+    protected function standingsVisible(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): bool => $this->settings->standingsVisible,
+            set: fn (bool $visible): array => [
+                'settings' => $this->settings->with(['standings_visible' => $visible]),
+            ],
+        );
+    }
+
+    /**
+     * Whether entry to this Event has closed.
+     *
+     * A null deadline means registration stays open until an Organiser closes
+     * it by hand, never that it is already closed.
+     */
+    public function registrationHasClosed(): bool
+    {
+        return $this->registration_closes_at !== null
+            && $this->registration_closes_at->isPast();
     }
 
     public function getRouteKeyName(): string

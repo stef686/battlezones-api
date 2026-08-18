@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Casts\EventSettings;
 use App\Enums\Country;
 use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
@@ -69,6 +70,16 @@ class EventFactory extends Factory
 
     public function standingsVisible(): self
     {
-        return $this->state(fn (): array => ['standings_visible' => true]);
+        return $this->settings(['standings_visible' => true]);
+    }
+
+    /**
+     * @param  array<string, mixed>  $settings
+     */
+    public function settings(array $settings): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'settings' => ($attributes['settings'] ?? new EventSettings())->with($settings),
+        ]);
     }
 }

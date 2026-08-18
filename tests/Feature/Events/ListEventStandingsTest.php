@@ -32,7 +32,7 @@ test('it returns standings ordered by position', function () {
 });
 
 test('it returns 404 when standings_visible is false', function () {
-    $event = Event::factory()->published()->create(['standings_visible' => false]);
+    $event = Event::factory()->published()->create();
 
     $this->getJson(route('events.standings.index', ['event' => $event->slug]))
         ->assertNotFound();

@@ -24,7 +24,7 @@ class ListEventStandingsController extends Controller
     public function __invoke(ListEventStandingsRequest $request, Event $event): AnonymousResourceCollection
     {
         abort_unless($event->status->isPubliclyVisible(), 404);
-        abort_unless($event->standings_visible, 404);
+        abort_unless($event->settings->standingsVisible, 404);
 
         $query = $event->standings()
             ->with(['attendee.user.clubs', 'attendee.faction', 'scores.scoreType']);
