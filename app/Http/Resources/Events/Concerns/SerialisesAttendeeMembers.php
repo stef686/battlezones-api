@@ -4,6 +4,7 @@ namespace App\Http\Resources\Events\Concerns;
 
 use App\Models\EventAttendee;
 use App\Models\EventAttendeeMembership;
+use Illuminate\Support\Facades\Gate;
 
 trait SerialisesAttendeeMembers
 {
@@ -14,6 +15,10 @@ trait SerialisesAttendeeMembers
      */
     protected function serialiseMembers(EventAttendee $attendee, bool $withArmyList = false, bool $withClubs = false): array
     {
+        // Entitlement is a property of the reader and the party, not of each
+        // Player, so it is settled once rather than per member.
+        $withArmyList = $withArmyList && Gate::allows('viewArmyLists', $attendee);
+
         return $attendee->memberships
             ->map(function (EventAttendeeMembership $membership) use ($withArmyList, $withClubs): array {
                 $member = [

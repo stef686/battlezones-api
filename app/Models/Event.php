@@ -274,6 +274,17 @@ class Event extends Model
             ->withTimestamps();
     }
 
+    /**
+     * Whether this Player is competing at the Event, in any party.
+     */
+    public function isAttendedBy(User $user): bool
+    {
+        return EventAttendeeMembership::query()
+            ->where('event_id', $this->getKey())
+            ->where('user_id', $user->getKey())
+            ->exists();
+    }
+
     public function isOrganisedBy(User $user): bool
     {
         return $this->organisers()->whereKey($user->getKey())->exists();

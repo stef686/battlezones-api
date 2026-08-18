@@ -27,7 +27,12 @@ test('it returns attendee detail with members, factions, clubs, army lists, chec
         ])
         ->create(['checked_in_at' => '2026-04-12 09:30:00']);
 
-    $this->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+    // Army lists are competitive information: they read only to someone
+    // authenticated and attending, and only once the whole party has submitted.
+    $attendee->memberships()->update(['army_list_submitted_at' => now()]);
+
+    $this->actingAs($user)
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
         ->assertSuccessful()
         ->assertJsonPath('data.id', $attendee->id)
         ->assertJsonPath('data.name', 'Alice Example')
@@ -39,6 +44,20 @@ test('it returns attendee detail with members, factions, clubs, army lists, chec
         ->assertJsonPath('data.members.0.army_list', '1500pts Ultramarines list...')
         ->assertJsonPath('data.checked_in_at', '2026-04-12T09:30:00Z')
         ->assertJsonPath('data.games', []);
+});
+
+test('army lists stay out of attendee detail for a passer-by', function () {
+    $event = Event::factory()->published()->create();
+    $user = User::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)
+        ->withMember($user, ['army_list' => '1500pts Ultramarines list...'])
+        ->create();
+    $attendee->memberships()->update(['army_list_submitted_at' => now()]);
+
+    $this->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+        ->assertSuccessful()
+        ->assertJsonPath('data.members.0.name', $user->public_name)
+        ->assertJsonMissingPath('data.members.0.army_list');
 });
 
 test('games is always an explicit empty array until games are implemented', function () {

@@ -26,7 +26,12 @@ test('it returns game detail with attendees, scores and army lists', function ()
     $game->attendees()->attach($attendee1, ['score' => 85]);
     $game->attendees()->attach($attendee2, ['score' => 70]);
 
-    $response = $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
+    // An opponent reading the table they are about to play on: authenticated,
+    // attending, and both parties have submitted.
+    $attendee1->memberships()->update(['army_list_submitted_at' => now()]);
+
+    $response = $this->actingAs($user2)
+        ->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
         ->assertSuccessful();
 
     expect($response->json('data.id'))->toBe($game->id)

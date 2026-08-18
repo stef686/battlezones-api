@@ -10,6 +10,7 @@ use App\Http\Controllers\Events\ListEventRoundsController;
 use App\Http\Controllers\Events\ListEventsController;
 use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
+use App\Http\Controllers\Events\RevealArmyListsController;
 use App\Http\Controllers\Events\ShowEventAttendeeController;
 use App\Http\Controllers\Events\ShowEventController;
 use App\Http\Controllers\Events\ShowEventGameController;
@@ -20,6 +21,8 @@ use App\Http\Controllers\Events\StoreEventAttendeeController;
 use App\Http\Controllers\Events\StoreEventInviteController;
 use App\Http\Controllers\Events\StoreEventOrganiserController;
 use App\Http\Controllers\Events\StoreInviteSessionController;
+use App\Http\Controllers\Events\UnlockArmyListController;
+use App\Http\Controllers\Events\UpdateArmyListController;
 use App\Http\Controllers\Events\UpdateEventAttendeeController;
 
 Route::get('events', ListEventsController::class)->name('events.index');
@@ -52,6 +55,14 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::post('events/{event:slug}/invites', StoreEventInviteController::class)
         ->name('events.invites.store');
+
+    Route::put('events/{event:slug}/army-list', UpdateArmyListController::class)
+        ->name('events.army-list.update');
+
+    Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/army-lists/reveal', RevealArmyListsController::class)
+        ->name('events.army-lists.reveal');
+    Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members/{member}/army-list/unlock', UnlockArmyListController::class)
+        ->name('events.army-list.unlock');
 
     Route::post('events/{event:slug}/attendees', StoreEventAttendeeController::class)
         ->name('events.attendees.store');

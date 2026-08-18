@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property int $event_id
  * @property string|null $name
  * @property Allegiance|null $allegiance
+ * @property Carbon|null $army_lists_revealed_at
  * @property Carbon|null $checked_in_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -37,6 +38,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereAllegiance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereArmyListsRevealedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereCheckedInAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereEventId($value)
@@ -58,6 +60,7 @@ class EventAttendee extends Model
         'event_id',
         'name',
         'allegiance',
+        'army_lists_revealed_at',
         'checked_in_at',
     ];
 
@@ -68,6 +71,7 @@ class EventAttendee extends Model
     {
         return [
             'allegiance' => Allegiance::class,
+            'army_lists_revealed_at' => 'datetime',
             'checked_in_at' => 'datetime',
         ];
     }
@@ -102,8 +106,35 @@ class EventAttendee extends Model
         return $this->hasMany(EventAttendeeMembership::class);
     }
 
+    /**
+     * Whether this party's army lists are open to the field.
+     *
+     * Every Player must have submitted, which is deliberate peer pressure. It
+     * can deadlock on a partner who never opens their invite, so an Organiser
+     * can reveal a team's lists regardless.
+     */
+    public function armyListsAreVisible(): bool
+    {
+        if ($this->army_lists_revealed_at !== null) {
+            return true;
+        }
+
+        $memberships = $this->relationLoaded('memberships')
+            ? $this->memberships
+            : $this->memberships()->get();
+
+        return $memberships->isNotEmpty()
+            && $memberships->every(fn (EventAttendeeMembership $membership): bool => $membership->isArmyListLocked());
+    }
+
     public function hasMember(User $user): bool
     {
+        if ($this->relationLoaded('memberships')) {
+            return $this->memberships->contains(
+                fn (EventAttendeeMembership $membership): bool => $membership->user_id === $user->getKey()
+            );
+        }
+
         return $this->members()->whereKey($user->getKey())->exists();
     }
 
