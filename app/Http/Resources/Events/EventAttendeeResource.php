@@ -22,6 +22,7 @@ class EventAttendeeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->displayName(),
+            'allegiance' => $this->allegiance?->value,
             'members' => $this->serialiseMembers($this->resource, withClubs: true),
         ];
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Events\ClaimInviteController;
+use App\Http\Controllers\Events\DeleteAttendeeMemberController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
 use App\Http\Controllers\Events\ListEventAttendeesController;
 use App\Http\Controllers\Events\ListEventGalleryController;
@@ -14,9 +15,12 @@ use App\Http\Controllers\Events\ShowEventController;
 use App\Http\Controllers\Events\ShowEventGameController;
 use App\Http\Controllers\Events\ShowEventRoundController;
 use App\Http\Controllers\Events\ShowInviteController;
+use App\Http\Controllers\Events\StoreAttendeeMemberController;
+use App\Http\Controllers\Events\StoreEventAttendeeController;
 use App\Http\Controllers\Events\StoreEventInviteController;
 use App\Http\Controllers\Events\StoreEventOrganiserController;
 use App\Http\Controllers\Events\StoreInviteSessionController;
+use App\Http\Controllers\Events\UpdateEventAttendeeController;
 
 Route::get('events', ListEventsController::class)->name('events.index');
 Route::get('events/{event:slug}', ShowEventController::class)->name('events.show');
@@ -48,4 +52,13 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::post('events/{event:slug}/invites', StoreEventInviteController::class)
         ->name('events.invites.store');
+
+    Route::post('events/{event:slug}/attendees', StoreEventAttendeeController::class)
+        ->name('events.attendees.store');
+    Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}', UpdateEventAttendeeController::class)
+        ->name('events.attendees.update');
+    Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members', StoreAttendeeMemberController::class)
+        ->name('events.attendees.members.store');
+    Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/members/{member}', DeleteAttendeeMemberController::class)
+        ->name('events.attendees.members.destroy');
 });

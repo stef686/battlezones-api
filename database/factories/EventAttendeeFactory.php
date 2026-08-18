@@ -21,6 +21,7 @@ class EventAttendeeFactory extends Factory
         return [
             'event_id' => Event::factory(),
             'name' => null,
+            'allegiance' => null,
             'checked_in_at' => null,
         ];
     }

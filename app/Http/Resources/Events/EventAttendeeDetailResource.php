@@ -25,6 +25,7 @@ class EventAttendeeDetailResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->displayName(),
+            'allegiance' => $this->allegiance?->value,
             'members' => $this->serialiseMembers($this->resource, withArmyList: true, withClubs: true),
             'checked_in_at' => $this->checked_in_at?->toIso8601ZuluString(),
             'custom_field_responses' => $this->customFieldResponses

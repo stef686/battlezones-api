@@ -39,15 +39,19 @@ use Illuminate\Support\Carbon;
  * @property RegistrationMode $registration_mode
  * @property Carbon|null $registration_closes_at
  * @property string $timezone
- * @property EventSettings $settings
+ * @property EventSettings|null $settings
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, EventAttendee> $attendees
  * @property-read int|null $attendees_count
  * @property-read Club|null $club
+ * @property-read Collection<int, EventCustomField> $customFields
+ * @property-read int|null $custom_fields_count
  * @property-read Collection<int, EventDocument> $documents
  * @property-read int|null $documents_count
  * @property-read GameSystem $gameSystem
+ * @property-read Collection<int, User> $organisers
+ * @property-read int|null $organisers_count
  * @property-read Collection<int, Photo> $photos
  * @property-read int|null $photos_count
  * @property-read Collection<int, Round> $rounds
@@ -56,8 +60,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $score_types_count
  * @property-read Collection<int, EventStanding> $standings
  * @property-read int|null $standings_count
- * @property-read Collection<int, User> $organisers
- * @property-read int|null $organisers_count
+ * @property bool $standings_visible
  * @property-read Collection<int, EventUpdate> $updates
  * @property-read int|null $updates_count
  *
@@ -66,6 +69,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Event newQuery()
  * @method static Builder<static>|Event publiclyVisible()
  * @method static Builder<static>|Event query()
+ * @method static Builder<static>|Event whereAttendeeSize($value)
  * @method static Builder<static>|Event whereClubId($value)
  * @method static Builder<static>|Event whereCreatedAt($value)
  * @method static Builder<static>|Event whereDescription($value)
@@ -75,10 +79,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Event whereMaxAttendees($value)
  * @method static Builder<static>|Event whereName($value)
  * @method static Builder<static>|Event wherePairingFormat($value)
- * @method static Builder<static>|Event whereSlug($value)
+ * @method static Builder<static>|Event whereRegistrationClosesAt($value)
+ * @method static Builder<static>|Event whereRegistrationMode($value)
  * @method static Builder<static>|Event whereSettings($value)
+ * @method static Builder<static>|Event whereSlug($value)
  * @method static Builder<static>|Event whereStartsAt($value)
  * @method static Builder<static>|Event whereStatus($value)
+ * @method static Builder<static>|Event whereTimezone($value)
  * @method static Builder<static>|Event whereUpdatedAt($value)
  * @method static Builder<static>|Event whereVenueAddress($value)
  * @method static Builder<static>|Event whereVenueCity($value)
@@ -286,6 +293,17 @@ class Event extends Model
     public function attendees(): HasMany
     {
         return $this->hasMany(EventAttendee::class);
+    }
+
+    /**
+     * Whether play has started as far as the Players are concerned.
+     *
+     * Anything a pairing depends on freezes here: changing it afterwards would
+     * retroactively invalidate Games that have already been published.
+     */
+    public function hasLiveRound(): bool
+    {
+        return $this->rounds()->live()->exists();
     }
 
     /**

@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Events\RelationManagers;
 
+use App\Enums\Allegiance;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
@@ -25,6 +27,9 @@ class AttendeesRelationManager extends RelationManager
                     ->label('Attendee')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('allegiance')
+                    ->badge()
+                    ->sortable(),
                 TextColumn::make('members.name')
                     ->label('Players')
                     ->badge(),
@@ -39,6 +44,8 @@ class AttendeesRelationManager extends RelationManager
                             ->label('Attendee name')
                             ->helperText('Leave blank for a single player, who competes under their own name.')
                             ->maxLength(255),
+                        Select::make('allegiance')
+                            ->options(Allegiance::class),
                     ]),
             ])
             ->recordActions([
@@ -47,6 +54,10 @@ class AttendeesRelationManager extends RelationManager
                         TextInput::make('name')
                             ->label('Attendee name')
                             ->maxLength(255),
+                        // The API freezes allegiance once a Round is Live,
+                        // organisers included; this is the repair path.
+                        Select::make('allegiance')
+                            ->options(Allegiance::class),
                     ]),
                 DeleteAction::make(),
             ])
