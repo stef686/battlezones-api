@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Users\ClaimAccount;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Knuckles\Scribe\Attributes\BodyParam;
@@ -23,12 +24,15 @@ class ResetPasswordController extends Controller
     #[BodyParam('password_confirmation', 'string', 'Confirmation of the new password.', required: true, example: 'new-password')]
     #[Response(['message' => 'Your password has been reset. You may now log in with your new password.'])]
     #[Response(content: ['message' => 'This password reset token is invalid or has expired.'], status: 422)]
-    public function __invoke(ResetPasswordRequest $request): JsonResponse
+    public function __invoke(ResetPasswordRequest $request, ClaimAccount $claimAccount): JsonResponse
     {
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill(['password' => Hash::make($password)])->save();
+            // Setting a password is what claiming means, whichever route it
+            // arrives by, so an invited account that resets one becomes real
+            // rather than lingering with a password it cannot be seen behind.
+            function (User $user, string $password) use ($claimAccount): void {
+                $claimAccount->handle($user, $password);
             }
         );
 

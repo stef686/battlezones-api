@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 test('an unclaimed account has no password and is not claimed', function () {
     $user = User::factory()->unclaimed()->create();
@@ -46,4 +47,17 @@ test('an unclaimed account is rejected before any hash comparison', function () 
         'password' => 'anything',
         'device_name' => 'iPhone',
     ])->assertUnprocessable();
+});
+
+test('resetting a password on an invited account claims it', function () {
+    $user = User::factory()->unclaimed()->create();
+
+    $this->postJson(route('password.update'), [
+        'token' => Password::createToken($user),
+        'email' => $user->email,
+        'password' => 'a-real-password',
+        'password_confirmation' => 'a-real-password',
+    ])->assertSuccessful();
+
+    expect($user->fresh()->isClaimed())->toBeTrue();
 });

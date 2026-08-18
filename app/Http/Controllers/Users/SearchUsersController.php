@@ -22,6 +22,7 @@ class SearchUsersController extends Controller
         $authUser = $request->user();
 
         $users = User::query()
+            ->claimed()
             ->where('id', '!=', $authUser->id)
             ->whereNotIn('id', $authUser->allBlockedIds())
             ->where(function ($q) use ($query) {

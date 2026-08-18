@@ -20,7 +20,7 @@ class ListFollowingController extends Controller
     {
         abort_unless($privacyService->canViewProfile(auth()->user(), $user), 403);
 
-        $following = $user->following()->whereNotIn('users.id', auth()->user()->allBlockedIds())->paginate();
+        $following = $user->following()->claimed()->whereNotIn('users.id', auth()->user()->allBlockedIds())->paginate();
 
         return UserCardResource::collection($following);
     }

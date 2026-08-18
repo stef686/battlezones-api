@@ -11,9 +11,11 @@ use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -33,8 +35,8 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property bool $show_public_name
  * @property string $email
  * @property Carbon|null $email_verified_at
- * @property string|null $password
  * @property Carbon|null $claimed_at
+ * @property string|null $password
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -65,24 +67,26 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property-read Collection<int, PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  *
+ * @method static Builder<static>|User claimed()
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCountry($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereIsAdmin($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNotificationSettings($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePrivacySettings($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereShowPublicName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
+ * @method static Builder<static>|User newModelQuery()
+ * @method static Builder<static>|User newQuery()
+ * @method static Builder<static>|User query()
+ * @method static Builder<static>|User whereClaimedAt($value)
+ * @method static Builder<static>|User whereCountry($value)
+ * @method static Builder<static>|User whereCreatedAt($value)
+ * @method static Builder<static>|User whereEmail($value)
+ * @method static Builder<static>|User whereEmailVerifiedAt($value)
+ * @method static Builder<static>|User whereId($value)
+ * @method static Builder<static>|User whereIsAdmin($value)
+ * @method static Builder<static>|User whereName($value)
+ * @method static Builder<static>|User whereNotificationSettings($value)
+ * @method static Builder<static>|User wherePassword($value)
+ * @method static Builder<static>|User wherePrivacySettings($value)
+ * @method static Builder<static>|User whereRememberToken($value)
+ * @method static Builder<static>|User whereShowPublicName($value)
+ * @method static Builder<static>|User whereUpdatedAt($value)
+ * @method static Builder<static>|User whereUsername($value)
  *
  * @mixin \Eloquent
  */
@@ -258,9 +262,6 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     }
 
     /**
-     * @return list<NotificationChannel>
-     */
-    /**
      * Whether this Player has turned their invited account into a real one.
      *
      * An unclaimed account exists because someone else entered their email;
@@ -272,6 +273,37 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return $this->claimed_at !== null;
     }
 
+    /**
+     * Accounts that exist by their owner's own doing.
+     *
+     * @param  Builder<self>  $query
+     */
+    public function scopeClaimed(Builder $query): void
+    {
+        $query->whereNotNull('users.claimed_at');
+    }
+
+    /**
+     * Unclaimed accounts are not addressable by route.
+     *
+     * Someone else's invitation created them, so until they are claimed they
+     * have no public presence to link to, follow, or read a profile from.
+     * Enforcing it at binding keeps every current and future /users route
+     * honest rather than relying on each one to remember.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     */
+    public function resolveRouteBinding($value, $field = null): ?Model
+    {
+        $user = parent::resolveRouteBinding($value, $field);
+
+        return $user instanceof self && $user->isClaimed() ? $user : null;
+    }
+
+    /**
+     * @return list<NotificationChannel>
+     */
     public function getNotificationChannels(NotificationType $type): array
     {
         $channels = $this->notification_settings[$type->value] ?? null;
