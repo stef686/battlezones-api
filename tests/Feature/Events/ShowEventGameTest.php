@@ -2,14 +2,19 @@
 
 use App\Models\Event;
 use App\Models\EventAttendee;
+use App\Models\EventScoreType;
 use App\Models\Faction;
 use App\Models\Game;
+use App\Models\GameScore;
 use App\Models\Round;
 use App\Models\User;
 
 test('it returns game detail with attendees, scores and army lists', function () {
     $event = Event::factory()->active()->create();
     $round = Round::factory()->for($event)->create(['number' => 1]);
+
+    $vp = EventScoreType::factory()->victoryPoints()->for($event)->create(['display_order' => 0]);
+    $mp = EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create(['display_order' => 1]);
 
     $faction = Faction::factory()->create(['name' => 'Necrons']);
     $user1 = User::factory()->create(['name' => 'Alice']);
@@ -23,11 +28,14 @@ test('it returns game detail with attendees, scores and army lists', function ()
         ->create();
 
     $game = Game::factory()->for($round)->create(['table_number' => 3]);
-    $game->attendees()->attach($attendee1, ['score' => 85]);
-    $game->attendees()->attach($attendee2, ['score' => 70]);
+    $game->attendees()->attach($attendee1);
+    $game->attendees()->attach($attendee2);
 
-    // An opponent reading the table they are about to play on: authenticated,
-    // attending, and both parties have submitted.
+    GameScore::factory()->create(['game_id' => $game->id, 'event_attendee_id' => $attendee1->id, 'event_score_type_id' => $vp->id, 'value' => 85]);
+    GameScore::factory()->create(['game_id' => $game->id, 'event_attendee_id' => $attendee2->id, 'event_score_type_id' => $vp->id, 'value' => 70]);
+    GameScore::factory()->create(['game_id' => $game->id, 'event_attendee_id' => $attendee1->id, 'event_score_type_id' => $mp->id, 'value' => 3]);
+    GameScore::factory()->create(['game_id' => $game->id, 'event_attendee_id' => $attendee2->id, 'event_score_type_id' => $mp->id, 'value' => 0]);
+
     $attendee1->memberships()->update(['army_list_submitted_at' => now()]);
 
     $response = $this->actingAs($user2)
@@ -42,7 +50,10 @@ test('it returns game detail with attendees, scores and army lists', function ()
         ->and($response->json('data.attendees.0.members.0.name'))->toBe('Alice')
         ->and($response->json('data.attendees.0.members.0.faction.name'))->toBe('Necrons')
         ->and($response->json('data.attendees.0.members.0.army_list'))->toBe('2000pts Necrons')
-        ->and($response->json('data.attendees.0.score'))->toBe(85);
+        ->and($response->json('data.attendees.0.scores.victory-points'))->toBe('85.00')
+        ->and($response->json('data.attendees.0.scores.match-points'))->toBe('3.00')
+        ->and($response->json('data.attendees.1.scores.victory-points'))->toBe('70.00')
+        ->and($response->json('data.attendees.1.scores.match-points'))->toBe('0.00');
 });
 
 test('it validates game belongs to event through round', function () {
@@ -70,7 +81,7 @@ test('bye game with single attendee', function () {
     $attendee = EventAttendee::factory()->for($event)->withMember()->create();
 
     $game = Game::factory()->for($round)->bye()->create(['table_number' => null]);
-    $game->attendees()->attach($attendee, ['score' => 20]);
+    $game->attendees()->attach($attendee);
 
     $response = $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
         ->assertSuccessful();
@@ -90,7 +101,7 @@ test('multiplayer game with more than two attendees', function () {
         $attendee = EventAttendee::factory()->for($event)
             ->withMember(User::factory()->create(['name' => $name]))
             ->create();
-        $game->attendees()->attach($attendee, ['score' => fake()->numberBetween(0, 100)]);
+        $game->attendees()->attach($attendee);
     }
 
     $response = $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))

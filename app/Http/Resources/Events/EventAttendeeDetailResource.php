@@ -7,6 +7,7 @@ use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
 use App\Models\EventAttendee;
 use App\Models\EventCustomFieldResponse;
 use App\Models\Game;
+use App\Models\GameScore;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -46,7 +47,10 @@ class EventAttendeeDetailResource extends JsonResource
                     'round_number' => $game->round->number,
                     'table_number' => $game->table_number,
                     'is_bye' => $game->is_bye,
-                    'score' => $game->pivot?->score,
+                    'scores' => $game->scores
+                        ->where('event_attendee_id', $this->id)
+                        ->mapWithKeys(fn (GameScore $score) => [$score->scoreType->slug => $score->value])
+                        ->toArray(),
                     'opponents' => $game->attendees
                         ->reject(fn (EventAttendee $a): bool => $a->id === $this->id)
                         ->values()

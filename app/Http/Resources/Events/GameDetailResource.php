@@ -5,6 +5,7 @@ namespace App\Http\Resources\Events;
 use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
 use App\Models\EventAttendee;
 use App\Models\Game;
+use App\Models\GameScore;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,6 +21,12 @@ class GameDetailResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $scoresByAttendee = $this->scores
+            ->groupBy('event_attendee_id')
+            ->map(fn ($scores) => $scores->mapWithKeys(
+                fn (GameScore $score) => [$score->scoreType->slug => $score->value]
+            ));
+
         return [
             'id' => $this->id,
             'table_number' => $this->table_number,
@@ -33,7 +40,7 @@ class GameDetailResource extends JsonResource
                 'id' => $attendee->id,
                 'name' => $attendee->displayName(),
                 'members' => $this->serialiseMembers($attendee, withArmyList: true),
-                'score' => $attendee->pivot?->score,
+                'scores' => $scoresByAttendee->get($attendee->id, collect())->toArray(),
             ])->all(),
         ];
     }

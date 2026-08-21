@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -68,13 +69,20 @@ class Game extends Model
     }
 
     /**
+     * @return HasMany<GameScore, $this>
+     */
+    public function scores(): HasMany
+    {
+        return $this->hasMany(GameScore::class);
+    }
+
+    /**
      * @return BelongsToMany<EventAttendee, $this, GameAttendeePivot>
      */
     public function attendees(): BelongsToMany
     {
         return $this->belongsToMany(EventAttendee::class, 'game_attendee')
             ->using(GameAttendeePivot::class)
-            ->withPivot('score')
             ->withTimestamps();
     }
 }

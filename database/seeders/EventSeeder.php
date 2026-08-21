@@ -315,7 +315,7 @@ class EventSeeder extends Seeder
 
             if ($players->count() === 1) {
                 $game = Game::factory()->bye()->for($round)->create(['table_number' => $tableNumber]);
-                $game->attendees()->attach($players[0]->id, ['score' => 20]);
+                $game->attendees()->attach($players[0]->id);
 
                 foreach ($scoreTypes as $scoreType) {
                     GameScore::factory()->create([
@@ -331,8 +331,8 @@ class EventSeeder extends Seeder
                 $score1 = fake()->numberBetween(0, 20);
                 $score2 = 20 - $score1;
 
-                $game->attendees()->attach($players[0]->id, ['score' => $score1]);
-                $game->attendees()->attach($players[1]->id, ['score' => $score2]);
+                $game->attendees()->attach($players[0]->id);
+                $game->attendees()->attach($players[1]->id);
 
                 foreach ([[$players[0], $score1], [$players[1], $score2]] as [$player, $score]) {
                     foreach ($scoreTypes as $index => $scoreType) {

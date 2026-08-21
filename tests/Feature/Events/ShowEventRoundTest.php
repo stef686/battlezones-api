@@ -2,14 +2,18 @@
 
 use App\Models\Event;
 use App\Models\EventAttendee;
+use App\Models\EventScoreType;
 use App\Models\Faction;
 use App\Models\Game;
+use App\Models\GameScore;
 use App\Models\Round;
 use App\Models\User;
 
 test('it returns round detail with games ordered by table number', function () {
     $event = Event::factory()->active()->create();
     $round = Round::factory()->for($event)->create(['number' => 1, 'name' => 'Round One']);
+
+    $vp = EventScoreType::factory()->victoryPoints()->for($event)->create();
 
     $faction = Faction::factory()->create(['name' => 'Space Marines']);
     $user1 = User::factory()->create(['name' => 'Alice']);
@@ -21,9 +25,12 @@ test('it returns round detail with games ordered by table number', function () {
     $game2 = Game::factory()->for($round)->create(['table_number' => 2]);
     $game1 = Game::factory()->for($round)->create(['table_number' => 1]);
 
-    $game1->attendees()->attach($attendee1, ['score' => 85]);
-    $game1->attendees()->attach($attendee2, ['score' => 70]);
-    $game2->attendees()->attach($attendee1, ['score' => 90]);
+    $game1->attendees()->attach($attendee1);
+    $game1->attendees()->attach($attendee2);
+    $game2->attendees()->attach($attendee1);
+
+    GameScore::factory()->create(['game_id' => $game1->id, 'event_attendee_id' => $attendee1->id, 'event_score_type_id' => $vp->id, 'value' => 85]);
+    GameScore::factory()->create(['game_id' => $game1->id, 'event_attendee_id' => $attendee2->id, 'event_score_type_id' => $vp->id, 'value' => 70]);
 
     $response = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
         ->assertSuccessful();
@@ -40,7 +47,7 @@ test('it returns round detail with games ordered by table number', function () {
         ->and($firstGame['attendees'][0]['name'])->toBe('Alice')
         ->and($firstGame['attendees'][0]['members'][0]['name'])->toBe('Alice')
         ->and($firstGame['attendees'][0]['members'][0]['faction']['name'])->toBe('Space Marines')
-        ->and($firstGame['attendees'][0]['score'])->toBe(85);
+        ->and($firstGame['attendees'][0]['scores'])->toBe(['victory-points' => '85.00']);
 });
 
 test('it returns 404 if round does not belong to event', function () {

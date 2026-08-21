@@ -163,7 +163,6 @@ class EventAttendee extends Model
     {
         return $this->belongsToMany(Game::class, 'game_attendee')
             ->using(GameAttendeePivot::class)
-            ->withPivot('score')
             ->withTimestamps();
     }
 }
