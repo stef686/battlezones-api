@@ -285,9 +285,13 @@ class Event extends Model
             ->exists();
     }
 
-    public function isOrganisedBy(User $user): bool
+    /**
+     * Guests are accepted so that public read endpoints, which have no
+     * authentication middleware to lean on, can ask this directly.
+     */
+    public function isOrganisedBy(?User $user): bool
     {
-        return $this->organisers()->whereKey($user->getKey())->exists();
+        return $user !== null && $this->organisers()->whereKey($user->getKey())->exists();
     }
 
     public function isLedBy(User $user): bool
@@ -315,6 +319,17 @@ class Event extends Model
     public function hasLiveRound(): bool
     {
         return $this->rounds()->live()->exists();
+    }
+
+    /**
+     * The Round the field is playing, derived rather than stored.
+     *
+     * Live is a latch, so the current Round is simply the highest-numbered one
+     * that has been published; a pointer on the Event could only disagree.
+     */
+    public function currentRound(): ?Round
+    {
+        return $this->rounds()->live()->orderByDesc('number')->first();
     }
 
     /**

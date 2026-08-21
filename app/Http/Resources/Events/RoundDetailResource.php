@@ -26,6 +26,7 @@ class RoundDetailResource extends JsonResource
             'id' => $this->id,
             'number' => $this->number,
             'name' => $this->name,
+            'status' => $this->status->value,
             'games' => $this->games->map(function (Game $game): array {
                 $scoresByAttendee = $game->scores
                     ->groupBy('event_attendee_id')

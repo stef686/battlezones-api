@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RoundStatus;
 use Database\Factories\RoundFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,7 +17,7 @@ use Illuminate\Support\Carbon;
  * @property int $event_id
  * @property int $number
  * @property string|null $name
- * @property Carbon|null $published_at
+ * @property RoundStatus $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event $event
@@ -33,7 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Round whereId($value)
  * @method static Builder<static>|Round whereName($value)
  * @method static Builder<static>|Round whereNumber($value)
- * @method static Builder<static>|Round wherePublishedAt($value)
+ * @method static Builder<static>|Round whereStatus($value)
  * @method static Builder<static>|Round whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -50,7 +51,7 @@ class Round extends Model
         'event_id',
         'number',
         'name',
-        'published_at',
+        'status',
     ];
 
     /**
@@ -59,7 +60,7 @@ class Round extends Model
     protected function casts(): array
     {
         return [
-            'published_at' => 'datetime',
+            'status' => RoundStatus::class,
         ];
     }
 
@@ -70,7 +71,25 @@ class Round extends Model
      */
     public function isLive(): bool
     {
-        return $this->published_at !== null && $this->published_at->isPast();
+        return $this->status === RoundStatus::Live;
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->status === RoundStatus::Draft;
+    }
+
+    /**
+     * Whether any result has been recorded against this Round's Games.
+     *
+     * Publishing can only be reversed while this is false: the alternative
+     * once results exist is silently hiding scores Players have already seen.
+     */
+    public function hasResults(): bool
+    {
+        return GameScore::query()
+            ->whereIn('game_id', $this->games()->select('id'))
+            ->exists();
     }
 
     /**
@@ -78,7 +97,7 @@ class Round extends Model
      */
     public function scopeLive(Builder $query): void
     {
-        $query->whereNotNull('published_at')->where('published_at', '<=', now());
+        $query->where('status', RoundStatus::Live);
     }
 
     /**

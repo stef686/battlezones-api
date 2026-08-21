@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventOrganiserRole;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScoreType;
@@ -11,7 +12,7 @@ use App\Models\User;
 
 test('it returns round detail with games ordered by table number', function () {
     $event = Event::factory()->active()->create();
-    $round = Round::factory()->for($event)->create(['number' => 1, 'name' => 'Round One']);
+    $round = Round::factory()->for($event)->live()->create(['number' => 1, 'name' => 'Round One']);
 
     $vp = EventScoreType::factory()->victoryPoints()->for($event)->create();
 
@@ -73,4 +74,24 @@ test('it returns 404 for published events (no rounds visible)', function () {
 
     $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
         ->assertNotFound();
+});
+
+test('it returns 404 for a draft round to players', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->create(['number' => 1]);
+
+    $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertNotFound();
+});
+
+test('it returns a draft round to organisers', function () {
+    $event = Event::factory()->active()->create();
+    $organiser = User::factory()->create();
+    $event->organisers()->attach($organiser, ['role' => EventOrganiserRole::Lead->value]);
+    $round = Round::factory()->for($event)->create(['number' => 1]);
+
+    $this->actingAs($organiser)
+        ->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertSuccessful()
+        ->assertJsonPath('data.status', 'draft');
 });

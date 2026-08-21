@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventOrganiserRole;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScoreType;
@@ -11,7 +12,7 @@ use App\Models\User;
 
 test('it returns game detail with attendees, scores and army lists', function () {
     $event = Event::factory()->active()->create();
-    $round = Round::factory()->for($event)->create(['number' => 1]);
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
 
     $vp = EventScoreType::factory()->victoryPoints()->for($event)->create(['display_order' => 0]);
     $mp = EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create(['display_order' => 1]);
@@ -77,7 +78,7 @@ test('it returns 404 for non-publicly-visible events', function (string $state) 
 
 test('bye game with single attendee', function () {
     $event = Event::factory()->active()->create();
-    $round = Round::factory()->for($event)->create();
+    $round = Round::factory()->for($event)->live()->create();
     $attendee = EventAttendee::factory()->for($event)->withMember()->create();
 
     $game = Game::factory()->for($round)->bye()->create(['table_number' => null]);
@@ -93,7 +94,7 @@ test('bye game with single attendee', function () {
 
 test('multiplayer game with more than two attendees', function () {
     $event = Event::factory()->active()->create();
-    $round = Round::factory()->for($event)->create();
+    $round = Round::factory()->for($event)->live()->create();
 
     $game = Game::factory()->for($round)->create(['table_number' => 5]);
 
@@ -112,9 +113,30 @@ test('multiplayer game with more than two attendees', function () {
 
 test('it is a public endpoint requiring no auth', function () {
     $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+    $game = Game::factory()->for($round)->create();
+
+    $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
+        ->assertSuccessful();
+});
+
+test('it returns 404 for a game in a draft round to players', function () {
+    $event = Event::factory()->active()->create();
     $round = Round::factory()->for($event)->create();
     $game = Game::factory()->for($round)->create();
 
     $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
+        ->assertNotFound();
+});
+
+test('it returns a game in a draft round to organisers', function () {
+    $event = Event::factory()->active()->create();
+    $organiser = User::factory()->create();
+    $event->organisers()->attach($organiser, ['role' => EventOrganiserRole::Lead->value]);
+    $round = Round::factory()->for($event)->create();
+    $game = Game::factory()->for($round)->create();
+
+    $this->actingAs($organiser)
+        ->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
         ->assertSuccessful();
 });

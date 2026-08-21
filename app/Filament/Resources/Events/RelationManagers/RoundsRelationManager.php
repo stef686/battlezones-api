@@ -25,6 +25,9 @@ class RoundsRelationManager extends RelationManager
                     ->sortable(),
                 TextColumn::make('name')
                     ->sortable(),
+                TextColumn::make('status')
+                    ->badge()
+                    ->sortable(),
                 TextColumn::make('games_count')
                     ->counts('games')
                     ->label('Games')

@@ -13,7 +13,7 @@ test('a captain changes their allegiance while every round is still draft', func
     $attendee = EventAttendee::factory()->for($event)->withMember($captain)
         ->create(['allegiance' => Allegiance::Loyalist]);
 
-    Round::factory()->for($event)->create(['number' => 1, 'published_at' => null]);
+    Round::factory()->for($event)->create(['number' => 1]);
 
     $this->actingAs($captain)
         ->patchJson(route('events.attendees.update', ['event' => $event->slug, 'attendee' => $attendee->id]), [
@@ -30,7 +30,7 @@ test('allegiance freezes once a round goes live', function () {
     $attendee = EventAttendee::factory()->for($event)->withMember($captain)
         ->create(['allegiance' => Allegiance::Loyalist]);
 
-    Round::factory()->for($event)->create(['number' => 1, 'published_at' => now()->subHour()]);
+    Round::factory()->for($event)->live()->create(['number' => 1]);
 
     $this->actingAs($captain)
         ->patchJson(route('events.attendees.update', ['event' => $event->slug, 'attendee' => $attendee->id]), [
@@ -49,7 +49,7 @@ test('an organiser cannot change allegiance once a round is live either', functi
     $attendee = EventAttendee::factory()->for($event)->withMember()
         ->create(['allegiance' => Allegiance::Loyalist]);
 
-    Round::factory()->for($event)->create(['number' => 1, 'published_at' => now()->subHour()]);
+    Round::factory()->for($event)->live()->create(['number' => 1]);
 
     $this->actingAs($organiser)
         ->patchJson(route('events.attendees.update', ['event' => $event->slug, 'attendee' => $attendee->id]), [
@@ -66,7 +66,7 @@ test('the team name still changes once a round is live', function () {
     $attendee = EventAttendee::factory()->for($event)->withMember($captain)
         ->create(['name' => 'Sons of Terra', 'allegiance' => Allegiance::Loyalist]);
 
-    Round::factory()->for($event)->create(['number' => 1, 'published_at' => now()->subHour()]);
+    Round::factory()->for($event)->live()->create(['number' => 1]);
 
     $this->actingAs($captain)
         ->patchJson(route('events.attendees.update', ['event' => $event->slug, 'attendee' => $attendee->id]), [
