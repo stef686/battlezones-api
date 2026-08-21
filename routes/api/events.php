@@ -3,6 +3,7 @@
 use App\Http\Controllers\Events\ClaimInviteController;
 use App\Http\Controllers\Events\DeleteAttendeeMemberController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
+use App\Http\Controllers\Events\GenerateRoundController;
 use App\Http\Controllers\Events\ListEventAttendeesController;
 use App\Http\Controllers\Events\ListEventGalleryController;
 use App\Http\Controllers\Events\ListEventOrganisersController;
@@ -62,6 +63,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('events/{event:slug}/my-game', ShowMyGameController::class)
         ->name('events.my-game.show');
 
+    Route::post('events/{event:slug}/rounds', GenerateRoundController::class)
+        ->name('events.rounds.generate');
     Route::scopeBindings()->post('events/{event:slug}/rounds/{round}/publish', PublishRoundController::class)
         ->name('events.rounds.publish');
     Route::scopeBindings()->delete('events/{event:slug}/rounds/{round}/publish', UnpublishRoundController::class)
