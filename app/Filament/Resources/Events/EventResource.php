@@ -10,7 +10,6 @@ use App\Filament\Resources\Events\RelationManagers\CustomFieldsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\DocumentsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\RoundsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\ScoreTypesRelationManager;
-use App\Filament\Resources\Events\RelationManagers\StandingsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\UpdatesRelationManager;
 use App\Filament\Resources\Events\Schemas\EventForm;
 use App\Filament\Resources\Events\Tables\EventsTable;
@@ -42,7 +41,6 @@ class EventResource extends Resource
         return [
             AttendeesRelationManager::class,
             RoundsRelationManager::class,
-            StandingsRelationManager::class,
             CustomFieldsRelationManager::class,
             DocumentsRelationManager::class,
             ScoreTypesRelationManager::class,

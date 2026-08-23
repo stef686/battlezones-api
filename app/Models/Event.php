@@ -58,8 +58,6 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $rounds_count
  * @property-read Collection<int, EventScoreType> $scoreTypes
  * @property-read int|null $score_types_count
- * @property-read Collection<int, EventStanding> $standings
- * @property-read int|null $standings_count
  * @property bool $standings_visible
  * @property-read Collection<int, EventUpdate> $updates
  * @property-read int|null $updates_count
@@ -346,13 +344,5 @@ class Event extends Model
     public function scoreTypes(): HasMany
     {
         return $this->hasMany(EventScoreType::class);
-    }
-
-    /**
-     * @return HasMany<EventStanding, $this>
-     */
-    public function standings(): HasMany
-    {
-        return $this->hasMany(EventStanding::class);
     }
 }

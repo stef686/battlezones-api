@@ -11,8 +11,6 @@ use App\Models\EventCustomField;
 use App\Models\EventCustomFieldResponse;
 use App\Models\EventDocument;
 use App\Models\EventScoreType;
-use App\Models\EventStanding;
-use App\Models\EventStandingScore;
 use App\Models\EventUpdate;
 use App\Models\EventUpdateAttachment;
 use App\Models\Faction;
@@ -156,7 +154,6 @@ class EventSeeder extends Seeder
 
         Round::factory()->for($event)->create(['number' => 3, 'name' => 'Round 3']);
 
-        $this->createPartialStandings($event, $attendees, $scoreTypes);
     }
 
     private function createCompletedEvent(GameSystem $system, Club $club, array $users): void
@@ -188,7 +185,6 @@ class EventSeeder extends Seeder
             $this->createGamesForRound($round, $attendees, $scoreTypes);
         }
 
-        $this->createFullStandings($event, $attendees, $scoreTypes);
     }
 
     private function createCancelledEvent(GameSystem $system, ?Club $club, array $users): void
@@ -349,40 +345,5 @@ class EventSeeder extends Seeder
 
             $tableNumber++;
         }
-    }
-
-    private function createPartialStandings(Event $event, $attendees, array $scoreTypes): void
-    {
-        $primaryScoreType = $scoreTypes[0];
-
-        $sorted = $attendees->sortByDesc(fn ($a) => GameScore::query()
-            ->where('event_attendee_id', $a->id)
-            ->where('event_score_type_id', $primaryScoreType->id)
-            ->sum('value')
-        )->values();
-
-        foreach ($sorted as $position => $attendee) {
-            $standing = EventStanding::factory()->for($event)->create([
-                'event_attendee_id' => $attendee->id,
-                'position' => $position + 1,
-            ]);
-
-            foreach ($scoreTypes as $scoreType) {
-                $total = GameScore::query()
-                    ->where('event_attendee_id', $attendee->id)
-                    ->where('event_score_type_id', $scoreType->id)
-                    ->sum('value');
-
-                EventStandingScore::factory()->for($standing, 'standing')->create([
-                    'event_score_type_id' => $scoreType->id,
-                    'value' => $total,
-                ]);
-            }
-        }
-    }
-
-    private function createFullStandings(Event $event, $attendees, array $scoreTypes): void
-    {
-        $this->createPartialStandings($event, $attendees, $scoreTypes);
     }
 }
