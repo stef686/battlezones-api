@@ -367,12 +367,16 @@ test('an invite session token never outlives the default token lifetime', functi
     Notification::fake();
 
     [$event] = eventWithLead();
+
+    // Push the Event far enough out that the Invite outlasts a normal session,
+    // rather than depending on the factory's random date landing beyond it.
+    $event->forceFill(['starts_at' => now()->addYear()])->save();
+
     $token = sendInviteAndCaptureToken($event);
     $invite = EventInvite::findByToken($token);
 
     $this->freezeTime();
 
-    // The Event is far enough out that the Invite outlasts a normal session.
     expect($invite->expires_at)->toBeGreaterThan(now()->addMinutes((int) config('sanctum.expiration')));
 
     $expiresAt = $this->postJson(route('invites.session', ['token' => $token]), ['device_name' => 'iPhone'])
@@ -380,4 +384,28 @@ test('an invite session token never outlives the default token lifetime', functi
         ->json('expires_at');
 
     expect($expiresAt)->toBe(now()->addMinutes((int) config('sanctum.expiration'))->toJson());
+});
+
+test('refreshing an invite session token does not extend it beyond the invitation', function () {
+    Notification::fake();
+
+    [$event] = eventWithLead();
+    $token = sendInviteAndCaptureToken($event);
+    $invite = EventInvite::findByToken($token);
+    $invite->forceFill(['expires_at' => now()->addDays(2)])->save();
+
+    $apiToken = $this->postJson(route('invites.session', ['token' => $token]), ['device_name' => 'iPhone'])
+        ->assertSuccessful()
+        ->json('token');
+
+    $refreshed = $this->postJson(route('auth.refresh'), [], ['Authorization' => 'Bearer '.$apiToken])
+        ->assertSuccessful();
+
+    expect($refreshed->json('expires_at'))->toBe($invite->expires_at->toJson());
+
+    $this->travelTo($invite->expires_at->copy()->addMinute());
+
+    $this->withToken($refreshed->json('token'))
+        ->getJson(route('profile'))
+        ->assertUnauthorized();
 });

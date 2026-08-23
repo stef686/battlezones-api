@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\CarbonInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Knuckles\Scribe\Attributes\Endpoint;
@@ -36,15 +37,16 @@ class RefreshTokenController extends Controller
         /** @var User $user */
         $user = $accessToken->tokenable;
         $deviceName = $accessToken->name;
+        $abilities = $accessToken->abilities ?? ['*'];
+        $expiresAt = $this->expiryFor($accessToken);
 
         $accessToken->delete();
 
-        $newToken = $user->createToken($deviceName);
+        $newToken = $user->createToken($deviceName, $abilities, $expiresAt);
 
         return response()->json([
             'token' => $newToken->plainTextToken,
-            'expires_at' => $newToken->accessToken->created_at
-                ->addMinutes(config('sanctum.expiration')),
+            'expires_at' => $expiresAt,
         ]);
     }
 
@@ -55,15 +57,51 @@ class RefreshTokenController extends Controller
      */
     private function isRefreshable(PersonalAccessToken $token): bool
     {
-        $expiration = config('sanctum.expiration');
+        $expiresAt = $this->currentExpiryOf($token);
 
-        if (! $expiration) {
+        if (! $expiresAt) {
             return true;
         }
 
-        $expiresAt = $token->created_at->addMinutes($expiration);
-        $graceDeadline = $expiresAt->copy()->addMinutes(self::GRACE_PERIOD_MINUTES);
+        return now()->lte($expiresAt->copy()->addMinutes(self::GRACE_PERIOD_MINUTES));
+    }
 
-        return now()->lte($graceDeadline);
+    /**
+     * Refreshing renews a session; it must never extend one.
+     *
+     * An invite session is deliberately capped to the life of the Invite it
+     * came from, so the replacement carries that ceiling forward rather than
+     * being minted afresh from the config default and outliving the Invite.
+     */
+    private function expiryFor(PersonalAccessToken $token): ?CarbonInterface
+    {
+        $expiration = config('sanctum.expiration');
+        $default = $expiration ? now()->addMinutes((int) $expiration) : null;
+        $ceiling = $token->expires_at;
+
+        if (! $ceiling) {
+            return $default;
+        }
+
+        if (! $default) {
+            return $ceiling;
+        }
+
+        return $ceiling->lessThan($default) ? $ceiling : $default;
+    }
+
+    /**
+     * The expiry the token is actually living under: its own where one was
+     * set explicitly, otherwise the config default measured from issue.
+     */
+    private function currentExpiryOf(PersonalAccessToken $token): ?CarbonInterface
+    {
+        if ($token->expires_at) {
+            return $token->expires_at;
+        }
+
+        $expiration = config('sanctum.expiration');
+
+        return $expiration ? $token->created_at->copy()->addMinutes((int) $expiration) : null;
     }
 }
