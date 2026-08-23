@@ -3,6 +3,7 @@
 namespace App\Actions\Events;
 
 use App\Enums\Allegiance;
+use App\Exceptions\EventIsFull;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\User;
@@ -32,6 +33,15 @@ class RegisterAttendee
         ?Allegiance $allegiance = null,
     ): EventAttendee {
         return DB::transaction(function () use ($event, $players, $registeredBy, $name, $allegiance): EventAttendee {
+            // Inside the transaction and counted fresh: the policy check that
+            // let this request through happened before the last place may have
+            // gone, and an over-full Event cannot be paired. Organisers are
+            // exempt here as they are in the policy — squeezing in a straggler
+            // on the day is part of running an event.
+            if (! $event->isOrganisedBy($registeredBy) && $event->fresh()?->isFull() === true) {
+                throw EventIsFull::for($event);
+            }
+
             $attendee = $event->attendees()->create([
                 'name' => $name,
                 'allegiance' => $allegiance,

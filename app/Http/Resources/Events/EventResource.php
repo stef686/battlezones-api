@@ -41,6 +41,15 @@ class EventResource extends JsonResource
             'starts_at' => $this->starts_at->toIso8601ZuluString(),
             'ends_at' => $this->ends_at->toIso8601ZuluString(),
             'max_attendees' => $this->max_attendees,
+            // How many Players make up one party, so a registration form knows
+            // how many people to ask for.
+            'attendee_size' => $this->attendee_size,
+            'requires_allegiance' => $this->settings->requiresOpposedAllegiance,
+            'registration_closes_at' => $this->registration_closes_at?->toIso8601ZuluString(),
+            // Present only where the caller counted, so the listing does not
+            // pay for a count nobody reads.
+            'attendees_count' => $this->whenCounted('attendees'),
+            'is_full' => $this->isFull(),
             'venue' => [
                 'name' => $this->venue_name,
                 'address' => $this->venue_address,

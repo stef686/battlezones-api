@@ -9,6 +9,7 @@ use App\Http\Controllers\Events\ExportEventFeedbackController;
 use App\Http\Controllers\Events\FlagGameResultController;
 use App\Http\Controllers\Events\GenerateRoundController;
 use App\Http\Controllers\Events\ListEventAttendeesController;
+use App\Http\Controllers\Events\ListEventFactionsController;
 use App\Http\Controllers\Events\ListEventFlaggedResultsController;
 use App\Http\Controllers\Events\ListEventGalleryController;
 use App\Http\Controllers\Events\ListEventOrganisersController;
@@ -52,12 +53,14 @@ use App\Http\Controllers\Events\UpdateArmyListController;
 use App\Http\Controllers\Events\UpdateEventAttendeeController;
 use App\Http\Controllers\Events\UpdateEventScheduleBlockController;
 use App\Http\Controllers\Events\UpdateGameResultController;
+use App\Http\Controllers\Events\UpdateMyFactionController;
 use App\Http\Controllers\Events\UpdatePaintingEntryController;
 
 Route::get('events', ListEventsController::class)->name('events.index');
 Route::get('events/{event:slug}', ShowEventController::class)->name('events.show');
 Route::get('events/{event:slug}/updates', ListEventUpdatesController::class)->name('events.updates.index');
 Route::get('events/{event:slug}/attendees', ListEventAttendeesController::class)->name('events.attendees.index');
+Route::get('events/{event:slug}/factions', ListEventFactionsController::class)->name('events.factions.index');
 Route::scopeBindings()->get('events/{event:slug}/attendees/{attendee}', ShowEventAttendeeController::class)
     ->name('events.attendees.show');
 Route::get('events/{event:slug}/rounds', ListEventRoundsController::class)->name('events.rounds.index');
@@ -133,6 +136,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::get('events/{event:slug}/my-game', ShowMyGameController::class)
         ->name('events.my-game.show');
+    Route::patch('events/{event:slug}/my-faction', UpdateMyFactionController::class)
+        ->name('events.my-faction.update');
 
     Route::post('events/{event:slug}/games/{game}/result', StoreGameResultController::class)
         ->name('events.games.result.store');

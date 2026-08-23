@@ -21,6 +21,9 @@ class ListEventsController extends Controller
         $events = Event::query()
             ->publiclyVisible()
             ->with('gameSystem')
+            // One subquery for the whole page: `is_full` on every row would
+            // otherwise be a count per Event.
+            ->withCount('attendees')
             ->when($request->filled('status'), fn ($query) => $query->where('status', $request->string('status')))
             ->when(
                 $request->filled('game_system'),

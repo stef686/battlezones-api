@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $army_list_submitted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read EventAttendee $attendee
  * @property-read Faction|null $faction
  * @property-read User $user
  *
@@ -76,6 +77,14 @@ class EventAttendeeMembership extends Pivot
     public function isArmyListLocked(): bool
     {
         return $this->army_list_submitted_at !== null;
+    }
+
+    /**
+     * @return BelongsTo<EventAttendee, $this>
+     */
+    public function attendee(): BelongsTo
+    {
+        return $this->belongsTo(EventAttendee::class, 'event_attendee_id');
     }
 
     /**

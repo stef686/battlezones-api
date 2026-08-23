@@ -73,7 +73,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":560,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T11:23:16Z","ends_at":"2027-02-14T11:23:16Z","max_attendees":100,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-23T21:53:22Z","updated_at":"2026-08-23T21:53:22Z"}}'
+        content: '{"data":{"id":586,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T12:09:12Z","ends_at":"2027-02-14T12:09:12Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-23T22:39:18Z","updated_at":"2026-08-23T22:39:18Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -122,10 +122,54 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"London Grand Tournament","slug":"london-grand-tournament","description":"A two-day Horus Heresy doubles event.","status":"published","pairing_format":"swiss","starts_at":"2026-09-12T09:00:00Z","ends_at":"2026-09-13T18:00:00Z","max_attendees":32,"venue":{"name":"The Hall","address":"1 Example Street","city":"London","country":"GB"},"game_system":{"id":1,"name":"Horus Heresy","slug":"horus-heresy"},"documents":[],"created_at":"2026-06-01T10:00:00Z","updated_at":"2026-06-01T10:00:00Z","viewer":{"is_organiser":true,"is_lead_organiser":false,"is_attendee":true,"attendee_id":9,"permissions":{"organise":true,"register":false,"manage_organisers":false}}}}'
+        content: '{"data":{"id":1,"name":"London Grand Tournament","slug":"london-grand-tournament","description":"A two-day Horus Heresy doubles event.","status":"published","pairing_format":"swiss","starts_at":"2026-09-12T09:00:00Z","ends_at":"2026-09-13T18:00:00Z","max_attendees":32,"attendee_size":2,"requires_allegiance":true,"registration_closes_at":"2026-09-05T23:59:00Z","attendees_count":18,"is_full":false,"venue":{"name":"The Hall","address":"1 Example Street","city":"London","country":"GB"},"game_system":{"id":1,"name":"Horus Heresy","slug":"horus-heresy"},"documents":[],"created_at":"2026-06-01T10:00:00Z","updated_at":"2026-06-01T10:00:00Z","viewer":{"is_organiser":true,"is_lead_organiser":false,"is_attendee":true,"attendee_id":9,"permissions":{"organise":true,"register":false,"manage_organisers":false}}}}'
         headers: []
         description: ''
     responseFields:
+      data.attendee_size:
+        custom: []
+        name: data.attendee_size
+        description: 'How many Players make up one party. Two for a doubles Event.'
+        required: true
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      data.requires_allegiance:
+        custom: []
+        name: data.requires_allegiance
+        description: 'Whether a party must declare a side, because this Event pairs across the divide.'
+        required: true
+        example: null
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      data.attendees_count:
+        custom: []
+        name: data.attendees_count
+        description: 'How many parties have entered. Present where the caller counted them.'
+        required: true
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      data.is_full:
+        custom: []
+        name: data.is_full
+        description: 'Whether every place has been taken. A null limit is no limit.'
+        required: true
+        example: null
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
       data.viewer:
         custom: []
         name: data.viewer
@@ -259,7 +303,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":52,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-05T19:24:36Z","author":{"id":1226,"name":"Cordia Cummings"},"created_at":"2026-08-23T21:53:22Z","updated_at":"2026-08-23T21:53:22Z"}}'
+        content: '{"data":{"id":54,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-05T20:10:32Z","author":{"id":1290,"name":"Cordia Cummings"},"created_at":"2026-08-23T22:39:18Z","updated_at":"2026-08-23T22:39:18Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -320,7 +364,56 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":123,"name":"","allegiance":null,"members":[]}}'
+        content: '{"data":{"id":139,"name":"","allegiance":null,"members":[]}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/factions'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List the Factions on offer'
+      description: "Every Faction in this Event's game system, for the picker a Player records theirs with."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":3,"name":"Sons of Horus","slug":"sons-of-horus"},{"id":4,"name":"Imperial Fists","slug":"imperial-fists"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -381,7 +474,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":124,"name":"","allegiance":null,"members":[],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":140,"name":"","allegiance":null,"members":[],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -430,7 +523,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":82,"number":1,"name":null,"status":"draft"},{"id":83,"number":3,"name":null,"status":"draft"}]}'
+        content: '{"data":[{"id":86,"number":1,"name":null,"status":"draft"},{"id":87,"number":3,"name":null,"status":"draft"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -767,7 +860,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":266,"name":"Culpa voluptatem vel.","description":"Amet sed occaecati ut esse et. Voluptatum minima sequi quo voluptas laboriosam quis delectus est. Ipsa alias vel velit est.","url":"https:\/\/battlezones.test\/storage\/photos\/01794813-a0b1-3d5d-890b-8d6f073cecc1.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/e9713237-e864-336d-9ae3-073c7f3ecd10.jpg","created_at":"2026-08-23T21:53:22Z","updated_at":"2026-08-23T21:53:22Z"}}'
+        content: '{"data":{"id":278,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-23T22:39:18Z","updated_at":"2026-08-23T22:39:18Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -1694,7 +1787,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":186,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null},{"id":187,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}]}'
+        content: '{"data":[{"id":196,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null},{"id":197,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}]}'
         headers: []
         description: ''
       -
@@ -1785,7 +1878,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":188,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":198,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
         headers: []
         description: ''
       -
@@ -1858,7 +1951,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":189,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":199,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
         headers: []
         description: ''
       -
@@ -2059,7 +2152,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":190,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":200,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
         headers: []
         description: ''
       -
@@ -2372,7 +2465,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":70,"label":"Awards","type":"info","starts_at":"2026-08-31T20:47:19+00:00","ends_at":"2026-08-31T21:47:19+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":74,"label":"Awards","type":"info","starts_at":"2026-08-31T21:33:15+00:00","ends_at":"2026-08-31T22:33:15+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -2596,7 +2689,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":71,"label":"Awards","type":"info","starts_at":"2026-08-31T20:47:19+00:00","ends_at":"2026-08-31T21:47:19+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":75,"label":"Awards","type":"info","starts_at":"2026-08-31T21:33:15+00:00","ends_at":"2026-08-31T22:33:15+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -2739,6 +2832,85 @@ endpoints:
         content: '{"message":"Unauthenticated."}'
         headers: []
         description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/events/{event_slug}/my-faction'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Record My Faction'
+      description: 'The Faction this Player is bringing. Personal to the Player, not the party: a doubles team fields two Factions under one Allegiance.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      faction_id:
+        custom: []
+        name: faction_id
+        description: 'The Faction this Player is bringing, or null to withdraw the choice.'
+        required: true
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      faction_id: 3
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models...","clubs":[{"id":2,"name":"The Ordo Ludi"}]}],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 404
+        content: '{"message":"Not Found."}'
+        headers: []
+        description: 'This Player has not entered this Event.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -3775,6 +3947,12 @@ endpoints:
         content: '{"message":"Unauthenticated."}'
         headers: []
         description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 409
+        content: '{"message":"London Grand Tournament is full. Ask an organiser whether there is a waiting list."}'
+        headers: []
+        description: 'The last place went while this registration was in flight.'
       -
         custom: []
         status: 422

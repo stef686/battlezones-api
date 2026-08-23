@@ -25,6 +25,11 @@ class ShowEventController extends Controller
         'starts_at' => '2026-09-12T09:00:00Z',
         'ends_at' => '2026-09-13T18:00:00Z',
         'max_attendees' => 32,
+        'attendee_size' => 2,
+        'requires_allegiance' => true,
+        'registration_closes_at' => '2026-09-05T23:59:00Z',
+        'attendees_count' => 18,
+        'is_full' => false,
         'venue' => [
             'name' => 'The Hall',
             'address' => '1 Example Street',
@@ -47,6 +52,10 @@ class ShowEventController extends Controller
             ],
         ],
     ]])]
+    #[ResponseField('data.attendee_size', 'integer', 'How many Players make up one party. Two for a doubles Event.')]
+    #[ResponseField('data.requires_allegiance', 'boolean', 'Whether a party must declare a side, because this Event pairs across the divide.')]
+    #[ResponseField('data.attendees_count', 'integer', 'How many parties have entered. Present where the caller counted them.')]
+    #[ResponseField('data.is_full', 'boolean', 'Whether every place has been taken. A null limit is no limit.')]
     #[ResponseField('data.viewer', 'object', 'What the reader may see and do at this Event. Null for an anonymous request.', nullable: true)]
     #[ResponseField('data.viewer.is_organiser', 'boolean', 'Whether the reader runs this Event.')]
     #[ResponseField('data.viewer.is_lead_organiser', 'boolean', 'Whether the reader leads it, and so may appoint Organisers.')]
@@ -60,6 +69,7 @@ class ShowEventController extends Controller
         abort_unless($event->status->isPubliclyVisible(), 404);
 
         $event->load(['gameSystem', 'documents']);
+        $event->loadCount('attendees');
 
         return EventResource::make($event)->withViewer();
     }

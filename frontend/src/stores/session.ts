@@ -7,6 +7,7 @@ import { BrowserInviteStorage, type RememberedInvite } from '@/api/invite-storag
 export interface Viewer {
     id: number;
     public_name: string;
+    email: string;
     is_claimed: boolean;
     email_verified: boolean;
     unread_notifications_count: number;

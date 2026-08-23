@@ -31,6 +31,7 @@ const INVITE = {
 const PROFILE = {
     id: 12,
     public_name: 'Ada Lovelace',
+    email: 'ada@example.com',
     is_claimed: false,
     email_verified: false,
     unread_notifications_count: 0,

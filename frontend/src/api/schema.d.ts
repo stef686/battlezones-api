@@ -483,6 +483,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/events/{event_slug}/factions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        /**
+         * List the Factions on offer
+         * @description Every Faction in this Event's game system, for the picker a Player records theirs with.
+         */
+        get: operations["listTheFactionsOnOffer"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events/{event_slug}/attendees/{id}": {
         parameters: {
             query?: never;
@@ -1175,6 +1198,29 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/events/{event_slug}/my-faction": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Record My Faction
+         * @description The Faction this Player is bringing. Personal to the Player, not the party: a doubles team fields two Factions under one Allegiance.
+         */
+        patch: operations["recordMyFaction"];
         trace?: never;
     };
     "/api/events/{event_slug}/games/{game_id}/result": {
@@ -2733,6 +2779,10 @@ export interface operations {
                             starts_at?: string;
                             ends_at?: string;
                             max_attendees?: number;
+                            attendee_size?: number;
+                            requires_allegiance?: boolean;
+                            registration_closes_at?: string | null;
+                            is_full?: boolean;
                             venue?: {
                                 name?: string;
                                 address?: string;
@@ -2775,6 +2825,15 @@ export interface operations {
                             starts_at?: string;
                             ends_at?: string;
                             max_attendees?: number;
+                            /** @description How many Players make up one party. Two for a doubles Event. */
+                            attendee_size: number;
+                            /** @description Whether a party must declare a side, because this Event pairs across the divide. */
+                            requires_allegiance: boolean;
+                            registration_closes_at?: string;
+                            /** @description How many parties have entered. Present where the caller counted them. */
+                            attendees_count: number;
+                            /** @description Whether every place has been taken. A null limit is no limit. */
+                            is_full: boolean;
                             venue?: {
                                 name?: string;
                                 address?: string;
@@ -2973,6 +3032,17 @@ export interface operations {
                     };
                 };
             };
+            /** @description The last place went while this registration was in flight. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
             /** @description The submitted data failed validation. */
             422: {
                 headers: {
@@ -2984,6 +3054,34 @@ export interface operations {
                         errors?: {
                             field_name?: string[];
                         };
+                    };
+                };
+            };
+        };
+    };
+    listTheFactionsOnOffer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            slug?: string;
+                        }[];
                     };
                 };
             };
@@ -4842,6 +4940,93 @@ export interface operations {
                 content: {
                     "application/json": {
                         message?: string;
+                    };
+                };
+            };
+        };
+    };
+    recordMyFaction: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description The Faction this Player is bringing, or null to withdraw the choice. */
+                    faction_id: number;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            allegiance?: string;
+                            members?: {
+                                id?: number;
+                                name?: string;
+                                faction?: {
+                                    id?: number;
+                                    name?: string;
+                                };
+                                army_list?: string;
+                                clubs?: {
+                                    id?: number;
+                                    name?: string;
+                                }[];
+                            }[];
+                            checked_in_at?: string | null;
+                            custom_field_responses?: unknown[];
+                            games?: unknown[];
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description This Player has not entered this Event. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The submitted data failed validation. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            field_name?: string[];
+                        };
                     };
                 };
             };

@@ -10,6 +10,7 @@ use App\Enums\PairingFormat;
 use App\Enums\RoundStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
+use App\Models\EventAttendeeMembership;
 use App\Models\EventInvite;
 use App\Models\EventScoreType;
 use App\Models\Faction;
@@ -42,6 +43,12 @@ class EndToEndSeeder extends Seeder
 
     public const INVITED_EMAIL = 'invited@battlezones.test';
 
+    /** A claimed account that has not entered, so it can register in the browser. */
+    public const CAPTAIN_EMAIL = 'captain@battlezones.test';
+
+    /** The partner that Captain names, who is invited rather than pre-created. */
+    public const PARTNER_EMAIL = 'partner@battlezones.test';
+
     /**
      * A fixed token so the browser test can follow the link an Organiser's
      * invitation email would carry. Only ever stored hashed, as in production.
@@ -60,6 +67,45 @@ class EndToEndSeeder extends Seeder
         $this->game($event, $mine, $theirs);
 
         $this->invite($event);
+
+        $this->unregisteredCaptain($event);
+    }
+
+    /**
+     * A Captain outside the Event, ready to enter it.
+     *
+     * Reset on every run: the browser test registers this Captain and invites
+     * a partner, and the next run needs both of them back outside.
+     */
+    private function unregisteredCaptain(Event $event): void
+    {
+        $captain = User::query()->updateOrCreate(
+            ['email' => self::CAPTAIN_EMAIL],
+            [
+                'name' => 'Malcador the Sigillite',
+                'password' => Hash::make(self::PASSWORD),
+                'email_verified_at' => now(),
+                'claimed_at' => now(),
+            ],
+        );
+
+        $partner = User::query()->where('email', self::PARTNER_EMAIL)->first();
+
+        $entered = EventAttendeeMembership::query()
+            ->where('event_id', $event->getKey())
+            ->whereIn('user_id', array_filter([$captain->getKey(), $partner?->getKey()]))
+            ->pluck('event_attendee_id')
+            ->unique();
+
+        if ($entered->isNotEmpty()) {
+            EventAttendeeMembership::query()->whereIn('event_attendee_id', $entered)->delete();
+            EventAttendee::query()->whereIn('id', $entered)->delete();
+        }
+
+        if ($partner instanceof User) {
+            EventInvite::query()->where('user_id', $partner->getKey())->delete();
+            $partner->delete();
+        }
     }
 
     /**
@@ -109,6 +155,8 @@ class EndToEndSeeder extends Seeder
                 'pairing_format' => PairingFormat::Swiss,
                 'starts_at' => now()->startOfDay(),
                 'ends_at' => now()->addDay()->endOfDay(),
+                // Doubles, so the registration form asks for a partner.
+                'attendee_size' => 2,
                 'venue_name' => 'The Test Hall',
                 'venue_city' => 'London',
                 'timezone' => 'Europe/London',

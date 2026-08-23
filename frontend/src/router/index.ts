@@ -57,6 +57,18 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true, unclaimed: true },
     },
     {
+        path: '/events/:eventSlug/register',
+        name: 'register',
+        component: () => import('@/views/RegisterView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/my-team',
+        name: 'my-team',
+        component: () => import('@/views/MyTeamView.vue'),
+        props: true,
+    },
+    {
         path: '/events/:eventSlug/my-game',
         name: 'my-game',
         component: () => import('@/views/MyGameView.vue'),

@@ -27,6 +27,7 @@ function signedInAs(isClaimed: boolean, invite: { token: string; eventSlug: stri
     session.viewer = {
         id: 12,
         public_name: 'Ada Lovelace',
+        email: 'ada@example.com',
         is_claimed: isClaimed,
         email_verified: true,
         unread_notifications_count: 0,

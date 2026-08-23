@@ -1057,6 +1057,15 @@ paths:
                         type: string
                       max_attendees:
                         type: integer
+                      attendee_size:
+                        type: integer
+                      requires_allegiance:
+                        type: boolean
+                      registration_closes_at:
+                        type: string
+                        nullable: true
+                      is_full:
+                        type: boolean
                       venue:
                         type: object
                         properties:
@@ -1110,6 +1119,20 @@ paths:
                         type: string
                       max_attendees:
                         type: integer
+                      attendee_size:
+                        type: integer
+                        description: 'How many Players make up one party. Two for a doubles Event.'
+                      requires_allegiance:
+                        type: boolean
+                        description: 'Whether a party must declare a side, because this Event pairs across the divide.'
+                      registration_closes_at:
+                        type: string
+                      attendees_count:
+                        type: integer
+                        description: 'How many parties have entered. Present where the caller counted them.'
+                      is_full:
+                        type: boolean
+                        description: 'Whether every place has been taken. A null limit is no limit.'
                       venue:
                         type: object
                         properties:
@@ -1176,6 +1199,10 @@ paths:
                         description: 'What the reader may see and do at this Event. Null for an anonymous request.'
                         nullable: true
                     required:
+                      - attendee_size
+                      - requires_allegiance
+                      - attendees_count
+                      - is_full
                       - viewer
       tags:
         - Events
@@ -1377,6 +1404,15 @@ paths:
                 properties:
                   message:
                     type: string
+        409:
+          description: 'The last place went while this registration was in flight.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         422:
           description: 'The submitted data failed validation.'
           content:
@@ -1430,6 +1466,42 @@ paths:
                       - email
               required:
                 - players
+    parameters:
+      -
+        in: path
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        schema:
+          type: string
+  '/api/events/{event_slug}/factions':
+    get:
+      summary: 'List the Factions on offer'
+      operationId: listTheFactionsOnOffer
+      description: "Every Faction in this Event's game system, for the picker a Player records theirs with."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        slug:
+                          type: string
+      tags:
+        - Events
+      security: []
     parameters:
       -
         in: path
@@ -3830,6 +3902,119 @@ paths:
                     type: string
       tags:
         - Events
+    parameters:
+      -
+        in: path
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        schema:
+          type: string
+  '/api/events/{event_slug}/my-faction':
+    patch:
+      summary: 'Record My Faction'
+      operationId: recordMyFaction
+      description: 'The Faction this Player is bringing. Personal to the Player, not the party: a doubles team fields two Factions under one Allegiance.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      allegiance:
+                        type: string
+                      members:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            faction:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                            army_list:
+                              type: string
+                            clubs:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  name:
+                                    type: string
+                      checked_in_at:
+                        type: string
+                        nullable: true
+                      custom_field_responses:
+                        type: array
+                      games:
+                        type: array
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        404:
+          description: 'This Player has not entered this Event.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        422:
+          description: 'The submitted data failed validation.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    properties:
+                      field_name:
+                        type: array
+                        items:
+                          type: string
+      tags:
+        - Events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                faction_id:
+                  type: integer
+                  description: 'The Faction this Player is bringing, or null to withdraw the choice.'
+              required:
+                - faction_id
     parameters:
       -
         in: path

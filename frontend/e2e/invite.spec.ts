@@ -1,6 +1,6 @@
-import { execSync } from 'node:child_process';
-
 import { expect, test } from '@playwright/test';
+
+import { resetWorld } from './reset';
 
 const EVENT_SLUG = 'end-to-end-open';
 const INVITE_TOKEN = 'end-to-end-invite-token';
@@ -12,7 +12,7 @@ const NEW_PASSWORD = 'a-password-of-their-own';
  * sets a password and revokes the Invite, and the link has to work again.
  */
 test.beforeEach(() => {
-    execSync('php artisan db:seed --class=EndToEndSeeder --no-interaction', { cwd: '..', stdio: 'pipe' });
+    resetWorld();
 });
 
 test('an invited Player enters without a password, is confined to their Event, then claims the account', async ({ page }) => {

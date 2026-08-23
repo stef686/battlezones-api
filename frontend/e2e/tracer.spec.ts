@@ -1,6 +1,6 @@
-import { execSync } from 'node:child_process';
-
 import { expect, test } from '@playwright/test';
+
+import { resetWorld } from './reset';
 
 const EVENT_SLUG = 'end-to-end-open';
 const PLAYER = { email: 'player@battlezones.test', password: 'end-to-end-password' };
@@ -11,7 +11,7 @@ const TABLE_NUMBER = '7';
  * is already scored answers the next run with a conflict.
  */
 test.beforeEach(() => {
-    execSync('php artisan db:seed --class=EndToEndSeeder --no-interaction', { cwd: '..', stdio: 'pipe' });
+    resetWorld();
 });
 
 test('a Player logs in, finds their table, submits a result, and sees the standings move', async ({ page }) => {

@@ -13,6 +13,7 @@ import ResetPasswordView from '@/views/ResetPasswordView.vue';
 const PROFILE = {
     id: 12,
     public_name: 'Ada Lovelace',
+    email: 'ada@example.com',
     is_claimed: true,
     email_verified: true,
     unread_notifications_count: 0,
