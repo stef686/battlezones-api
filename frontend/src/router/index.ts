@@ -18,7 +18,9 @@ declare module 'vue-router' {
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
-        redirect: { name: 'my-game', params: { eventSlug: 'end-to-end-open' } },
+        // Placeholder until there is a home screen: the Event page is the hub
+        // everything else hangs off, so it is the least wrong landing.
+        redirect: { name: 'event', params: { eventSlug: 'end-to-end-open' } },
     },
     {
         path: '/login',
@@ -55,6 +57,34 @@ const routes: RouteRecordRaw[] = [
         name: 'claim',
         component: () => import('@/views/ClaimView.vue'),
         meta: { public: true, unclaimed: true },
+    },
+    {
+        path: '/events/:eventSlug',
+        name: 'event',
+        component: () => import('@/views/EventView.vue'),
+        props: true,
+        meta: { public: true },
+    },
+    {
+        path: '/events/:eventSlug/schedule',
+        name: 'schedule',
+        component: () => import('@/views/ScheduleView.vue'),
+        props: true,
+        meta: { public: true },
+    },
+    {
+        path: '/events/:eventSlug/attendees',
+        name: 'attendees',
+        component: () => import('@/views/AttendeesView.vue'),
+        props: true,
+        meta: { public: true },
+    },
+    {
+        path: '/events/:eventSlug/attendees/:attendeeId',
+        name: 'attendee',
+        component: () => import('@/views/AttendeeView.vue'),
+        props: true,
+        meta: { public: true },
     },
     {
         path: '/events/:eventSlug/register',

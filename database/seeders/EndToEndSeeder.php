@@ -8,10 +8,12 @@ use App\Enums\EventInviteRole;
 use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
 use App\Enums\RoundStatus;
+use App\Enums\ScheduleBlockType;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventAttendeeMembership;
 use App\Models\EventInvite;
+use App\Models\EventScheduleBlock;
 use App\Models\EventScoreType;
 use App\Models\Faction;
 use App\Models\Game;
@@ -64,7 +66,9 @@ class EndToEndSeeder extends Seeder
         $mine = $this->attendee($event, self::PLAYER_EMAIL, 'Ada Lovelace', Allegiance::Loyalist);
         $theirs = $this->attendee($event, self::OPPONENT_EMAIL, 'Grace Hopper', Allegiance::Traitor);
 
-        $this->game($event, $mine, $theirs);
+        $round = $this->game($event, $mine, $theirs);
+
+        $this->schedule($event, $round);
 
         $this->invite($event);
 
@@ -233,7 +237,39 @@ class EndToEndSeeder extends Seeder
         return $attendee;
     }
 
-    private function game(Event $event, EventAttendee $mine, EventAttendee $theirs): void
+    /**
+     * Two blocks on the first day, out of order on purpose: the browser test
+     * asserts they are rendered by time rather than by the order they were
+     * written.
+     */
+    private function schedule(Event $event, Round $round): void
+    {
+        $day = $event->starts_at->copy()->startOfDay();
+
+        EventScheduleBlock::query()->updateOrCreate(
+            ['event_id' => $event->getKey(), 'label' => 'Round 1'],
+            [
+                'type' => ScheduleBlockType::Round,
+                'round_id' => $round->getKey(),
+                'starts_at' => $day->copy()->setTime(9, 30),
+                'ends_at' => $day->copy()->setTime(12, 0),
+                'display_order' => 1,
+            ],
+        );
+
+        EventScheduleBlock::query()->updateOrCreate(
+            ['event_id' => $event->getKey(), 'label' => 'Registration'],
+            [
+                'type' => ScheduleBlockType::Info,
+                'round_id' => null,
+                'starts_at' => $day->copy()->setTime(8, 30),
+                'ends_at' => $day->copy()->setTime(9, 15),
+                'display_order' => 0,
+            ],
+        );
+    }
+
+    private function game(Event $event, EventAttendee $mine, EventAttendee $theirs): Round
     {
         $round = Round::query()->updateOrCreate(
             ['event_id' => $event->getKey(), 'number' => 1],
@@ -255,5 +291,7 @@ class EndToEndSeeder extends Seeder
 
         $game->scores()->delete();
         $game->attendees()->sync([$mine->getKey(), $theirs->getKey()]);
+
+        return $round;
     }
 }

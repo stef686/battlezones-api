@@ -28,7 +28,51 @@ export interface EventSummary {
     attendees_count?: number;
     is_full: boolean;
     game_system: { id: number; name: string; slug: string } | null;
+    venue: {
+        name: string | null;
+        address: string | null;
+        city: string | null;
+        country: string | null;
+    };
+    documents: EventDocument[];
     viewer: EventViewer | null;
+}
+
+export interface EventDocument {
+    id: number;
+    name: string;
+    url: string;
+    created_at: string | null;
+}
+
+export interface ScheduleBlock {
+    id: number;
+    label: string;
+    type: string;
+    /** Carries the Event's own offset: read the wall clock, never convert it. */
+    starts_at: string;
+    ends_at: string;
+    display_order: number;
+    target_id: number | null;
+    is_target_live: boolean;
+    round: { id: number; number: number; name: string | null } | null;
+}
+
+export interface ScheduleDay {
+    date: string;
+    blocks: ScheduleBlock[];
+}
+
+export interface AttendeeSummary {
+    id: number;
+    name: string;
+    allegiance: string | null;
+    members: AttendeeMember[];
+}
+
+export interface Page<T> {
+    data: T[];
+    meta: { current_page: number; last_page: number; total: number };
 }
 
 export interface Faction {
@@ -67,6 +111,26 @@ export interface RegistrationDetails {
 
 export function fetchEvent(client: ApiClient, slug: string): Promise<EventSummary> {
     return client.get<{ data: EventSummary }>(eventPath(slug)).then((response) => response.data);
+}
+
+export function fetchSchedule(client: ApiClient, slug: string): Promise<ScheduleDay[]> {
+    return client.get<{ data: ScheduleDay[] }>(`${eventPath(slug)}/schedule`).then((response) => response.data);
+}
+
+export function fetchAttendees(client: ApiClient, slug: string, options: { search?: string; page?: number } = {}): Promise<Page<AttendeeSummary>> {
+    const query = new URLSearchParams();
+
+    if (options.search !== undefined && options.search !== '') {
+        query.set('search', options.search);
+    }
+
+    if (options.page !== undefined && options.page > 1) {
+        query.set('page', String(options.page));
+    }
+
+    const suffix = query.toString() === '' ? '' : `?${query.toString()}`;
+
+    return client.get<Page<AttendeeSummary>>(`${eventPath(slug)}/attendees${suffix}`);
 }
 
 export function fetchFactions(client: ApiClient, slug: string): Promise<Faction[]> {

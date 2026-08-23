@@ -12,3 +12,4 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Policies/** | .ai/rules/policies.md |
 | app/Queries/** | .ai/rules/queries.md |
 | frontend/src/router/** | .ai/rules/router.md |
+| frontend/src/views/** | .ai/rules/views.md |
