@@ -23,6 +23,8 @@ class EventScheduleBlockResource extends JsonResource
             'starts_at' => $this->starts_at->toIso8601String(),
             'ends_at' => $this->ends_at->toIso8601String(),
             'display_order' => $this->display_order,
+            'target_id' => $this->targetId(),
+            'is_target_live' => $this->isTargetLive(),
             'round' => $this->round === null ? null : [
                 'id' => $this->round->id,
                 'number' => $this->round->number,

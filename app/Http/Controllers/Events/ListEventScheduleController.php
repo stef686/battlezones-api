@@ -26,7 +26,8 @@ class ListEventScheduleController extends Controller
             ->orderBy('starts_at')
             ->orderBy('display_order')
             ->orderBy('id')
-            ->get();
+            ->get()
+            ->each(fn (EventScheduleBlock $block) => $block->setRelation('event', $event));
 
         $days = $blocks
             ->groupBy(fn (EventScheduleBlock $block): string => $block->day())

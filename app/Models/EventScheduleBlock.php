@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PollType;
 use App\Enums\ScheduleBlockType;
 use Database\Factories\EventScheduleBlockFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -83,6 +84,36 @@ class EventScheduleBlock extends Model
     public function day(): string
     {
         return $this->starts_at->copy()->setTimezone($this->event->timezone)->toDateString();
+    }
+
+    /**
+     * The row this block points at, if its type points at one.
+     *
+     * A round block carries its Round, a painting block the Poll whose window
+     * it describes, and an info block nothing at all.
+     */
+    public function targetId(): ?int
+    {
+        return match ($this->type) {
+            ScheduleBlockType::Info => null,
+            ScheduleBlockType::Round => $this->round_id,
+            ScheduleBlockType::PaintingVoting => $this->event->latestPoll(PollType::Painting)?->getKey(),
+        };
+    }
+
+    /**
+     * Whether the thing this block describes is happening now.
+     *
+     * The API says live or not and hands back an id; where that leads is the
+     * front end's routing decision, not something to hard-code into a payload.
+     */
+    public function isTargetLive(): bool
+    {
+        return match ($this->type) {
+            ScheduleBlockType::Info => false,
+            ScheduleBlockType::Round => $this->round?->isLive() ?? false,
+            ScheduleBlockType::PaintingVoting => $this->event->openPoll(PollType::Painting) !== null,
+        };
     }
 
     /**

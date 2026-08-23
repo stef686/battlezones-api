@@ -7,6 +7,7 @@ use App\Enums\Country;
 use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
+use App\Enums\PollType;
 use App\Enums\RegistrationMode;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -98,6 +99,16 @@ class Event extends Model
 {
     /** @use HasFactory<EventFactory> */
     use HasFactory;
+
+    /**
+     * @var array<string, EventPoll|null>
+     */
+    private array $openPolls = [];
+
+    /**
+     * @var array<string, EventPoll|null>
+     */
+    private array $latestPolls = [];
 
     /**
      * @var list<string>
@@ -338,6 +349,40 @@ class Event extends Model
     public function rounds(): HasMany
     {
         return $this->hasMany(Round::class);
+    }
+
+    /**
+     * The Poll of this type that is taking votes right now, if any.
+     *
+     * Memoised per instance: a schedule of twenty blocks would otherwise ask
+     * the same question of the same Event once per painting block on the page.
+     */
+    public function openPoll(PollType $type): ?EventPoll
+    {
+        if (! array_key_exists($type->value, $this->openPolls)) {
+            $this->openPolls[$type->value] = $this->polls()
+                ->open()
+                ->where('type', $type->value)
+                ->orderByDesc('id')
+                ->first();
+        }
+
+        return $this->openPolls[$type->value];
+    }
+
+    /**
+     * The most recent Poll of this type, open or not.
+     */
+    public function latestPoll(PollType $type): ?EventPoll
+    {
+        if (! array_key_exists($type->value, $this->latestPolls)) {
+            $this->latestPolls[$type->value] = $this->polls()
+                ->where('type', $type->value)
+                ->orderByDesc('id')
+                ->first();
+        }
+
+        return $this->latestPolls[$type->value];
     }
 
     /**
