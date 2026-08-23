@@ -21,7 +21,7 @@ class ShowEventGameController extends Controller
     {
         abort_unless($event->status->isPubliclyVisible(), 404);
 
-        $game->load(['round', 'attendees.memberships.user', 'attendees.memberships.faction', 'scores.scoreType']);
+        $game->load(['round', 'attendees.memberships.user', 'attendees.memberships.faction', 'scores.scoreType', 'submittedBy', 'editedBy', 'openResultFlag']);
 
         abort_unless($game->round->event_id === $event->id, 404);
         abort_if($game->round->isDraft() && ! $event->isOrganisedBy($request->user('sanctum')), 404);

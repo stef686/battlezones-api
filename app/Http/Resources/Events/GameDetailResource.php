@@ -36,6 +36,19 @@ class GameDetailResource extends JsonResource
                 'number' => $this->round->number,
                 'name' => $this->round->name,
             ],
+            'result' => [
+                'submitted_at' => $this->submitted_at?->toIso8601String(),
+                'submitted_by' => $this->whenLoaded('submittedBy', fn (): ?array => $this->submittedBy === null ? null : [
+                    'id' => $this->submittedBy->id,
+                    'name' => $this->submittedBy->name,
+                ]),
+                'edited_at' => $this->edited_at?->toIso8601String(),
+                'edited_by' => $this->whenLoaded('editedBy', fn (): ?array => $this->editedBy === null ? null : [
+                    'id' => $this->editedBy->id,
+                    'name' => $this->editedBy->name,
+                ]),
+                'is_flagged' => $this->openResultFlag !== null,
+            ],
             'attendees' => $this->attendees->map(fn (EventAttendee $attendee): array => [
                 'id' => $attendee->id,
                 'name' => $attendee->displayName(),

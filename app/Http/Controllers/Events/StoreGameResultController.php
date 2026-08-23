@@ -29,16 +29,7 @@ class StoreGameResultController extends Controller
     #[Response(['message' => 'A result has already been submitted for this game. Flag it if it needs correcting.'], 409, 'A result already exists.')]
     public function __invoke(SubmitGameResultRequest $request, Event $event, Game $game): GameDetailResource
     {
-        $scoreTypeIds = $request->scoreTypes()->map(fn ($scoreType): int => $scoreType->id);
-
-        /** @var array<int, array<int, numeric-string|int|float>> $scoresByAttendee */
-        $scoresByAttendee = collect($request->array('scores'))
-            ->mapWithKeys(fn (array $scores, int|string $attendeeId): array => [
-                (int) $attendeeId => collect($scores)
-                    ->mapWithKeys(fn (int|float|string $value, string $slug): array => [$scoreTypeIds->get($slug) => $value])
-                    ->all(),
-            ])
-            ->all();
+        $scoresByAttendee = $request->scoresByAttendeeId();
 
         /** @var User $submitter */
         $submitter = $request->user();
@@ -51,7 +42,7 @@ class StoreGameResultController extends Controller
 
         ResultSubmitted::dispatch($game->refresh(), $submitter);
 
-        $game->load(['round', 'attendees.memberships.user', 'attendees.memberships.faction', 'scores.scoreType']);
+        $game->load(['round', 'attendees.memberships.user', 'attendees.memberships.faction', 'scores.scoreType', 'submittedBy', 'editedBy', 'openResultFlag']);
 
         return GameDetailResource::make($game);
     }

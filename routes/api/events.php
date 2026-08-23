@@ -3,8 +3,10 @@
 use App\Http\Controllers\Events\ClaimInviteController;
 use App\Http\Controllers\Events\DeleteAttendeeMemberController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
+use App\Http\Controllers\Events\FlagGameResultController;
 use App\Http\Controllers\Events\GenerateRoundController;
 use App\Http\Controllers\Events\ListEventAttendeesController;
+use App\Http\Controllers\Events\ListEventFlaggedResultsController;
 use App\Http\Controllers\Events\ListEventGalleryController;
 use App\Http\Controllers\Events\ListEventOrganisersController;
 use App\Http\Controllers\Events\ListEventRoundsController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\Events\ListEventsController;
 use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
 use App\Http\Controllers\Events\PublishRoundController;
+use App\Http\Controllers\Events\ResolveGameResultFlagController;
 use App\Http\Controllers\Events\RevealArmyListsController;
 use App\Http\Controllers\Events\ShowEventAttendeeController;
 use App\Http\Controllers\Events\ShowEventController;
@@ -29,6 +32,7 @@ use App\Http\Controllers\Events\UnlockArmyListController;
 use App\Http\Controllers\Events\UnpublishRoundController;
 use App\Http\Controllers\Events\UpdateArmyListController;
 use App\Http\Controllers\Events\UpdateEventAttendeeController;
+use App\Http\Controllers\Events\UpdateGameResultController;
 
 Route::get('events', ListEventsController::class)->name('events.index');
 Route::get('events/{event:slug}', ShowEventController::class)->name('events.show');
@@ -66,6 +70,14 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::post('events/{event:slug}/games/{game}/result', StoreGameResultController::class)
         ->name('events.games.result.store');
+    Route::put('events/{event:slug}/games/{game}/result', UpdateGameResultController::class)
+        ->name('events.games.result.update');
+    Route::post('events/{event:slug}/games/{game}/flag', FlagGameResultController::class)
+        ->name('events.games.flag.store');
+    Route::post('events/{event:slug}/games/{game}/flag/resolve', ResolveGameResultFlagController::class)
+        ->name('events.games.flag.resolve');
+    Route::get('events/{event:slug}/flags', ListEventFlaggedResultsController::class)
+        ->name('events.flags.index');
 
     Route::post('events/{event:slug}/rounds', GenerateRoundController::class)
         ->name('events.rounds.generate');

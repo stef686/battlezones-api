@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
@@ -18,11 +19,17 @@ use Illuminate\Support\Carbon;
  * @property bool $is_bye
  * @property int|null $submitted_by_user_id
  * @property Carbon|null $submitted_at
+ * @property int|null $edited_by_user_id
+ * @property Carbon|null $edited_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read GameAttendeePivot|null $pivot
  * @property-read Collection<int, EventAttendee> $attendees
  * @property-read int|null $attendees_count
+ * @property-read User|null $editedBy
+ * @property-read GameResultFlag|null $openResultFlag
+ * @property-read Collection<int, GameResultFlag> $resultFlags
+ * @property-read int|null $result_flags_count
  * @property-read Round $round
  * @property-read Collection<int, GameScore> $scores
  * @property-read int|null $scores_count
@@ -33,6 +40,8 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereEditedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereEditedByUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereIsBye($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereRoundId($value)
@@ -57,6 +66,8 @@ class Game extends Model
         'is_bye',
         'submitted_by_user_id',
         'submitted_at',
+        'edited_by_user_id',
+        'edited_at',
     ];
 
     /**
@@ -67,6 +78,7 @@ class Game extends Model
         return [
             'is_bye' => 'boolean',
             'submitted_at' => 'datetime',
+            'edited_at' => 'datetime',
         ];
     }
 
@@ -87,11 +99,37 @@ class Game extends Model
     }
 
     /**
+     * @return BelongsTo<User, $this>
+     */
+    public function editedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'edited_by_user_id');
+    }
+
+    /**
      * @return BelongsTo<Round, $this>
      */
     public function round(): BelongsTo
     {
         return $this->belongsTo(Round::class);
+    }
+
+    /**
+     * @return HasMany<GameResultFlag, $this>
+     */
+    public function resultFlags(): HasMany
+    {
+        return $this->hasMany(GameResultFlag::class);
+    }
+
+    /**
+     * The open flag on this Game, if a Player or Organiser has raised one.
+     *
+     * @return HasOne<GameResultFlag, $this>
+     */
+    public function openResultFlag(): HasOne
+    {
+        return $this->hasOne(GameResultFlag::class)->unresolved();
     }
 
     /**

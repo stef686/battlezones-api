@@ -34,7 +34,7 @@ class ShowMyGameController extends Controller
             return response()->json(['data' => null]);
         }
 
-        $game->load(['round', 'attendees.memberships.user', 'attendees.memberships.faction', 'scores.scoreType']);
+        $game->load(['round', 'attendees.memberships.user', 'attendees.memberships.faction', 'scores.scoreType', 'submittedBy', 'editedBy', 'openResultFlag']);
 
         return GameDetailResource::make($game);
     }
