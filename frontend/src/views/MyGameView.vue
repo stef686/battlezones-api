@@ -5,7 +5,10 @@ import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
+import { fetchEvent } from '@/api/events';
+import { keys } from '@/api/keys';
 import { submitResult, type Game, type Scores } from '@/api/results';
+import { useEventPulse } from '@/composables/useEventPulse';
 import { useSessionStore } from '@/stores/session';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -14,8 +17,18 @@ const client = useApiClient();
 const session = useSessionStore();
 const queryClient = useQueryClient();
 
+const { data: event } = useQuery({
+  queryKey: computed(() => keys.event(props.eventSlug)),
+  queryFn: () => fetchEvent(client, props.eventSlug),
+  retry: false,
+});
+
+// This is the screen a Player leaves open on the table, so it is the one that
+// most has to notice the next Round being published without being asked.
+useEventPulse(() => props.eventSlug, computed(() => event.value?.status === 'active'));
+
 const { data, isPending, error } = useQuery({
-  queryKey: ['my-game', props.eventSlug],
+  queryKey: computed(() => keys.myGame(props.eventSlug)),
   queryFn: () => client.get<{ data: Game | null }>(`/api/events/${props.eventSlug}/my-game`),
 });
 
@@ -56,8 +69,8 @@ async function submit(): Promise<void> {
       notice.value = null;
     }
 
-    await queryClient.invalidateQueries({ queryKey: ['my-game', props.eventSlug] });
-    await queryClient.invalidateQueries({ queryKey: ['standings', props.eventSlug] });
+    await queryClient.invalidateQueries({ queryKey: keys.myGame(props.eventSlug) });
+    await queryClient.invalidateQueries({ queryKey: keys.standings(props.eventSlug) });
   } catch (caught) {
     problem.value = caught instanceof ApiError ? caught.message : 'That could not be sent.';
   } finally {

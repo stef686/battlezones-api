@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent, fetchFactions, registerAttendee, type Allegiance, type PlayerEntry } from '@/api/events';
+import { keys } from '@/api/keys';
 import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
 import { useSessionStore } from '@/stores/session';
@@ -18,13 +19,13 @@ const router = useRouter();
 const queryClient = useQueryClient();
 
 const { data: event, isPending, error } = useQuery({
-  queryKey: ['event', props.eventSlug],
+  queryKey: computed(() => keys.event(props.eventSlug)),
   queryFn: () => fetchEvent(client, props.eventSlug),
   retry: false,
 });
 
 const { data: factions } = useQuery({
-  queryKey: ['factions', props.eventSlug],
+  queryKey: computed(() => keys.factions(props.eventSlug)),
   queryFn: () => fetchFactions(client, props.eventSlug),
   retry: false,
 });
@@ -109,7 +110,7 @@ async function submit(): Promise<void> {
     // The Event carries the viewer's own state, and it now says something
     // different: without this the team screen reads a cached "not entered"
     // and sends the Captain straight back to this form.
-    await queryClient.invalidateQueries({ queryKey: ['event', props.eventSlug] });
+    await queryClient.invalidateQueries({ queryKey: keys.event(props.eventSlug) });
 
     await router.replace({ name: 'my-team', params: { eventSlug: props.eventSlug } });
   } catch (caught) {

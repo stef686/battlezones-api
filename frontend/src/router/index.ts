@@ -87,6 +87,20 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true },
     },
     {
+        path: '/events/:eventSlug/rounds',
+        name: 'rounds',
+        component: () => import('@/views/RoundsView.vue'),
+        props: true,
+        meta: { public: true },
+    },
+    {
+        path: '/events/:eventSlug/rounds/:roundId',
+        name: 'round',
+        component: () => import('@/views/RoundView.vue'),
+        props: true,
+        meta: { public: true },
+    },
+    {
         path: '/events/:eventSlug/register',
         name: 'register',
         component: () => import('@/views/RegisterView.vue'),

@@ -6,6 +6,7 @@ import { RouterLink, useRouter } from 'vue-router';
 import { useApiClient } from '@/api';
 import { amendAttendee, fetchAttendee, fetchEvent, fetchFactions, recordMyFaction, type Allegiance } from '@/api/events';
 import { ApiError } from '@/api/errors';
+import { keys } from '@/api/keys';
 import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
 import { useSessionStore } from '@/stores/session';
@@ -18,7 +19,7 @@ const router = useRouter();
 const queryClient = useQueryClient();
 
 const { data: event, isPending: eventPending } = useQuery({
-  queryKey: ['event', props.eventSlug],
+  queryKey: computed(() => keys.event(props.eventSlug)),
   queryFn: () => fetchEvent(client, props.eventSlug),
   retry: false,
 });
@@ -26,14 +27,14 @@ const { data: event, isPending: eventPending } = useQuery({
 const attendeeId = computed(() => event.value?.viewer?.attendee_id ?? null);
 
 const { data: attendee, isPending: attendeePending } = useQuery({
-  queryKey: computed(() => ['attendee', props.eventSlug, attendeeId.value]),
+  queryKey: computed(() => keys.attendee(props.eventSlug, attendeeId.value as number)),
   queryFn: () => fetchAttendee(client, props.eventSlug, attendeeId.value as number),
   enabled: computed(() => attendeeId.value !== null),
   retry: false,
 });
 
 const { data: factions } = useQuery({
-  queryKey: ['factions', props.eventSlug],
+  queryKey: computed(() => keys.factions(props.eventSlug)),
   queryFn: () => fetchFactions(client, props.eventSlug),
   retry: false,
 });
@@ -99,7 +100,7 @@ async function save(): Promise<void> {
 
     await recordMyFaction(client, props.eventSlug, myFactionId.value === '' ? null : Number(myFactionId.value));
 
-    await queryClient.invalidateQueries({ queryKey: ['attendee', props.eventSlug] });
+    await queryClient.invalidateQueries({ queryKey: ['events', props.eventSlug, 'attendees'] });
     saved.value = true;
   } catch (caught) {
     failure.value = caught instanceof ApiError ? caught : null;

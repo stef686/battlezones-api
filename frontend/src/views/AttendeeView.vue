@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router';
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchAttendee } from '@/api/events';
+import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 
@@ -14,7 +15,7 @@ const props = defineProps<{ eventSlug: string; attendeeId: string }>();
 const client = useApiClient();
 
 const { data: attendee, isPending, error } = useQuery({
-  queryKey: computed(() => ['attendee', props.eventSlug, Number(props.attendeeId)]),
+  queryKey: computed(() => keys.attendee(props.eventSlug, Number(props.attendeeId))),
   queryFn: () => fetchAttendee(client, props.eventSlug, Number(props.attendeeId)),
   retry: false,
 });

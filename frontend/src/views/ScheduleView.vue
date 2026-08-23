@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router';
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchSchedule } from '@/api/events';
+import { keys } from '@/api/keys';
 import MissingNotice from '@/components/MissingNotice.vue';
 import { formatDay, wallClockTime } from '@/lib/dates';
 
@@ -14,7 +15,7 @@ const props = defineProps<{ eventSlug: string }>();
 const client = useApiClient();
 
 const { data: days, isPending, error } = useQuery({
-  queryKey: ['schedule', props.eventSlug],
+  queryKey: computed(() => keys.schedule(props.eventSlug)),
   queryFn: () => fetchSchedule(client, props.eventSlug),
   retry: false,
 });

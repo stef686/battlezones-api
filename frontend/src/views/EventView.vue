@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router';
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
+import { keys } from '@/api/keys';
 import MissingNotice from '@/components/MissingNotice.vue';
 import { formatDateRange } from '@/lib/dates';
 
@@ -14,7 +15,7 @@ const props = defineProps<{ eventSlug: string }>();
 const client = useApiClient();
 
 const { data: event, isPending, error } = useQuery({
-  queryKey: ['event', props.eventSlug],
+  queryKey: computed(() => keys.event(props.eventSlug)),
   queryFn: () => fetchEvent(client, props.eventSlug),
   retry: false,
 });
@@ -117,6 +118,13 @@ const viewer = computed(() => event.value?.viewer ?? null);
           class="rounded-xl bg-surface-raised px-4 py-3 text-ink"
         >
           Schedule
+        </RouterLink>
+        <RouterLink
+          :to="{ name: 'rounds', params: { eventSlug: props.eventSlug } }"
+          data-testid="rounds-link"
+          class="rounded-xl bg-surface-raised px-4 py-3 text-ink"
+        >
+          Rounds and pairings
         </RouterLink>
         <RouterLink
           :to="{ name: 'attendees', params: { eventSlug: props.eventSlug } }"

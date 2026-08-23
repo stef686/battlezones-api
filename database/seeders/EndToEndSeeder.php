@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Casts\EventSettings;
 use App\Enums\Allegiance;
 use App\Enums\EventInviteRole;
+use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
 use App\Enums\RoundStatus;
@@ -51,6 +52,12 @@ class EndToEndSeeder extends Seeder
     /** The partner that Captain names, who is invited rather than pre-created. */
     public const PARTNER_EMAIL = 'partner@battlezones.test';
 
+    /** Runs the Event, so the browser test can publish a Round through the API. */
+    public const ORGANISER_EMAIL = 'organiser@battlezones.test';
+
+    /** The table the unpublished second Round puts the Player on. */
+    public const NEXT_TABLE_NUMBER = 12;
+
     /**
      * A fixed token so the browser test can follow the link an Organiser's
      * invitation email would carry. Only ever stored hashed, as in production.
@@ -69,6 +76,10 @@ class EndToEndSeeder extends Seeder
         $round = $this->game($event, $mine, $theirs);
 
         $this->schedule($event, $round);
+
+        $this->nextRound($event, $mine, $theirs);
+
+        $this->organiser($event);
 
         $this->invite($event);
 
@@ -235,6 +246,52 @@ class EndToEndSeeder extends Seeder
         }
 
         return $attendee;
+    }
+
+    /**
+     * A second Round, held back in Draft.
+     *
+     * The browser test publishes it through the API and watches a Player's
+     * screen follow, so it has to start every run unpublished and pointing at
+     * a different table from the first.
+     */
+    private function nextRound(Event $event, EventAttendee $mine, EventAttendee $theirs): void
+    {
+        $round = Round::query()->updateOrCreate(
+            ['event_id' => $event->getKey(), 'number' => 2],
+            ['name' => 'Round 2', 'status' => RoundStatus::Draft],
+        );
+
+        $game = Game::query()->updateOrCreate(
+            ['round_id' => $round->getKey(), 'table_number' => self::NEXT_TABLE_NUMBER],
+            [
+                'is_bye' => false,
+                'submitted_at' => null,
+                'submitted_by_user_id' => null,
+                'edited_at' => null,
+                'edited_by_user_id' => null,
+            ],
+        );
+
+        $game->scores()->delete();
+        $game->attendees()->sync([$mine->getKey(), $theirs->getKey()]);
+    }
+
+    private function organiser(Event $event): void
+    {
+        $organiser = User::query()->updateOrCreate(
+            ['email' => self::ORGANISER_EMAIL],
+            [
+                'name' => 'Rogal Dorn',
+                'password' => Hash::make(self::PASSWORD),
+                'email_verified_at' => now(),
+                'claimed_at' => now(),
+            ],
+        );
+
+        $event->organisers()->syncWithoutDetaching([
+            $organiser->getKey() => ['role' => EventOrganiserRole::Lead->value],
+        ]);
     }
 
     /**

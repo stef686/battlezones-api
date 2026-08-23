@@ -4,6 +4,9 @@ import { computed } from 'vue';
 
 import { useApiClient } from '@/api';
 import type { ApiError } from '@/api/errors';
+import { fetchEvent } from '@/api/events';
+import { keys } from '@/api/keys';
+import { useEventPulse } from '@/composables/useEventPulse';
 
 const props = defineProps<{ eventSlug: string }>();
 
@@ -16,8 +19,17 @@ interface Standing {
 
 const client = useApiClient();
 
+const { data: event } = useQuery({
+  queryKey: computed(() => keys.event(props.eventSlug)),
+  queryFn: () => fetchEvent(client, props.eventSlug),
+  retry: false,
+});
+
+// While the Event is being run, a result landing anywhere moves these.
+useEventPulse(() => props.eventSlug, computed(() => event.value?.status === 'active'));
+
 const { data, isPending, error } = useQuery({
-  queryKey: ['standings', props.eventSlug],
+  queryKey: computed(() => keys.standings(props.eventSlug)),
   queryFn: () => client.get<{ data: Standing[] }>(`/api/events/${props.eventSlug}/standings`),
 });
 

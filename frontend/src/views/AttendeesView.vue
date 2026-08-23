@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router';
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchAttendees } from '@/api/events';
+import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import TextField from '@/components/TextField.vue';
@@ -24,7 +25,7 @@ watch(search, () => {
 });
 
 const { data, isPending, error } = useQuery({
-  queryKey: computed(() => ['attendees', props.eventSlug, search.value, page.value]),
+  queryKey: computed(() => keys.attendees(props.eventSlug, search.value, page.value)),
   queryFn: () => fetchAttendees(client, props.eventSlug, { search: search.value, page: page.value }),
   // The list stays on screen while the next page loads, so the hall does not
   // flash empty between pages.
