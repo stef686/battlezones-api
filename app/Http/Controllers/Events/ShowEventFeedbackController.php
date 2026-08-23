@@ -22,7 +22,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ShowEventFeedbackController extends Controller
 {
     #[Endpoint('Read Feedback', 'Organisers only. Ratings summarised, free text listed, and nothing tying either to a Player — the responses carry no such link to begin with.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [
         'invitations' => ['sent' => 32, 'submitted' => 19],
         'questions' => [[

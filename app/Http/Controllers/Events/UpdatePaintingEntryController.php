@@ -18,8 +18,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class UpdatePaintingEntryController extends Controller
 {
     #[Endpoint('Mark a Painting Entry', 'Organisers only. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('attendee', 'integer', 'The id of the attendee.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
     #[Response(['data' => [
         'id' => 9,
         'name' => 'Ada and Grace',

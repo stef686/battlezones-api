@@ -20,8 +20,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ShowEventPollResultsController extends Controller
 {
     #[Endpoint('Read Poll Tallies', 'Organisers only, permanently — not live, not after close, not to Players. Winners are announced in the venue, and the announcement is an Event update. Ties come back unresolved: which of two equal armies wins is a judgement, not a rule to invent in code.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('poll', 'integer', 'The id of the poll.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('poll_id', 'integer', 'The id of the poll.', example: 1)]
     #[Response(['data' => [
         'poll' => ['id' => 1, 'name' => 'Best Painted Army', 'type' => 'best_painted', 'is_open' => false],
         'tallies' => [[

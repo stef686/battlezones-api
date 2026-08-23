@@ -18,7 +18,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListEventRoundsController extends Controller
 {
     #[Endpoint('List Event Rounds', 'List rounds for an event. Only visible for Active/Completed events. Draft rounds are shown to Organisers only.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[ResponseFromApiResource(RoundResource::class, model: Round::class, collection: true)]
     public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {

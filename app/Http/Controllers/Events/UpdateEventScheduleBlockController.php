@@ -18,8 +18,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class UpdateEventScheduleBlockController extends Controller
 {
     #[Endpoint('Edit a Schedule Block', 'Organisers only. Moving a block across midnight moves it to the other day, because the day is derived rather than stored.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('block', 'integer', 'The id of the schedule block.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('block_id', 'integer', 'The id of the schedule block.', example: 1)]
     #[ResponseFromApiResource(EventScheduleBlockResource::class, model: EventScheduleBlock::class)]
     public function __invoke(UpdateEventScheduleBlockRequest $request, Event $event, EventScheduleBlock $block): EventScheduleBlockResource
     {

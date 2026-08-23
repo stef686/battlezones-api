@@ -15,7 +15,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ConfirmEmailChangeController extends Controller
 {
     #[Endpoint('Confirm Email Change', 'Confirm a pending email change via the emailed verification link.')]
-    #[UrlParam('user', 'integer', 'The ID of the user.', example: 1)]
+    #[UrlParam('user_id', 'integer', 'The ID of the user.', example: 1)]
     #[UrlParam('token', 'string', 'The verification token from the email.')]
     #[Response(['message' => 'Your email address has been updated.'])]
     public function __invoke(User $user, string $token): JsonResponse

@@ -1593,14 +1593,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 113,
+        &quot;id&quot;: 134,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -1759,14 +1759,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 114,
+        &quot;id&quot;: 135,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -1950,17 +1950,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 49,
-        &quot;conversation_id&quot;: 115,
-        &quot;user_id&quot;: 455,
-        &quot;body&quot;: &quot;Harum nulla eos beatae consequatur molestiae qui. Unde dolorem non dolor corporis. Laborum dolor quos et maxime alias.&quot;,
+        &quot;id&quot;: 58,
+        &quot;conversation_id&quot;: 136,
+        &quot;user_id&quot;: 533,
+        &quot;body&quot;: &quot;Sit repellat eligendi fugiat eos. Aut libero voluptatibus voluptatum quos error nesciunt dolores ea. Ad quia iure maxime laboriosam dignissimos. Quas quaerat similique dolorem dolor necessitatibus tempore voluptas.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
         &quot;is_deleted&quot;: false,
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -2115,14 +2115,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 116,
+        &quot;id&quot;: 137,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -2614,14 +2614,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 117,
+        &quot;id&quot;: 138,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -3367,9 +3367,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 50,
-        &quot;conversation_id&quot;: 118,
-        &quot;user_id&quot;: 456,
+        &quot;id&quot;: 59,
+        &quot;conversation_id&quot;: 139,
+        &quot;user_id&quot;: 534,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3377,7 +3377,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -3555,9 +3555,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 51,
-        &quot;conversation_id&quot;: 119,
-        &quot;user_id&quot;: 457,
+        &quot;id&quot;: 60,
+        &quot;conversation_id&quot;: 140,
+        &quot;user_id&quot;: 535,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3565,7 +3565,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -3919,14 +3919,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 156,
+        &quot;id&quot;: 198,
         &quot;name&quot;: &quot;Eius et animi&quot;,
         &quot;slug&quot;: &quot;eius-et-animi-565&quot;,
         &quot;description&quot;: &quot;Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2027-02-12T06:38:58Z&quot;,
-        &quot;ends_at&quot;: &quot;2027-02-14T06:38:58Z&quot;,
+        &quot;starts_at&quot;: &quot;2027-02-12T06:47:02Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-02-14T06:47:02Z&quot;,
         &quot;max_attendees&quot;: 100,
         &quot;venue&quot;: {
             &quot;name&quot;: &quot;McLaughlin, Leuschke and Bauch Hall&quot;,
@@ -3934,8 +3934,8 @@ fetch(url, {
             &quot;city&quot;: &quot;South Matildaburgh&quot;,
             &quot;country&quot;: &quot;IE&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -4105,14 +4105,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 157,
+        &quot;id&quot;: 199,
         &quot;name&quot;: &quot;Fugit deleniti distinctio eum&quot;,
         &quot;slug&quot;: &quot;fugit-deleniti-distinctio-eum-65128&quot;,
         &quot;description&quot;: &quot;Aliquam veniam corporis dolorem mollitia deleniti nemo. Quia officia est dignissimos neque. Odio veritatis excepturi doloribus delectus fugit qui repudiandae. Est alias tenetur ratione.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2027-01-24T13:31:13Z&quot;,
-        &quot;ends_at&quot;: &quot;2027-01-26T13:31:13Z&quot;,
+        &quot;starts_at&quot;: &quot;2027-01-24T13:39:17Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-01-26T13:39:17Z&quot;,
         &quot;max_attendees&quot;: 40,
         &quot;venue&quot;: {
             &quot;name&quot;: &quot;Casper-Smith Hall&quot;,
@@ -4120,8 +4120,8 @@ fetch(url, {
             &quot;city&quot;: &quot;Ednaside&quot;,
             &quot;country&quot;: &quot;AU&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -4265,17 +4265,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 23,
+        &quot;id&quot;: 26,
         &quot;title&quot;: &quot;Quia maiores assumenda&quot;,
         &quot;body&quot;: &quot;Repellat officiis corporis nesciunt ut. Iure impedit molestiae ut rem est esse sint. Molestiae sunt suscipit doloribus fugiat ut aut. Et error neque recusandae et.\n\nEt ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut.&quot;,
         &quot;pinned&quot;: false,
-        &quot;published_at&quot;: &quot;2026-07-26T16:32:23Z&quot;,
+        &quot;published_at&quot;: &quot;2026-07-26T16:40:27Z&quot;,
         &quot;author&quot;: {
-            &quot;id&quot;: 458,
+            &quot;id&quot;: 536,
             &quot;name&quot;: &quot;Christian Klocko PhD&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -4379,7 +4379,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees';
 $response = $client-&gt;get(
     $url,
     [
@@ -4398,7 +4398,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/attendees"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees"
 );
 
 const params = {
@@ -4428,7 +4428,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 63,
+        &quot;id&quot;: 69,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
         &quot;members&quot;: []
@@ -4515,18 +4515,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--attendees"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--attendees"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -4560,7 +4548,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees/1';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1';
 $response = $client-&gt;get(
     $url,
     [
@@ -4576,7 +4564,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/attendees/1"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1"
 );
 
 const headers = {
@@ -4600,7 +4588,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 64,
+        &quot;id&quot;: 70,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
         &quot;members&quot;: [],
@@ -4690,10 +4678,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--attendees--id-"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
@@ -4702,30 +4690,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="GETapi-events--event_slug--attendees--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the attendee. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--attendees--id-"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>attendee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="attendee"                data-endpoint="GETapi-events--event_slug--attendees--id-"
                value="1"
                data-component="url">
     <br>
@@ -4746,7 +4710,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/rounds';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/rounds';
 $response = $client-&gt;get(
     $url,
     [
@@ -4762,7 +4726,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/rounds"
+    "https://battlezones.test/api/events/london-grand-tournament/rounds"
 );
 
 const headers = {
@@ -4787,13 +4751,13 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 23,
+            &quot;id&quot;: 29,
             &quot;number&quot;: 1,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
         },
         {
-            &quot;id&quot;: 24,
+            &quot;id&quot;: 30,
             &quot;number&quot;: 3,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
@@ -4881,18 +4845,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--rounds"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--rounds"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -4913,7 +4865,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/rounds/1';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/rounds/1';
 $response = $client-&gt;get(
     $url,
     [
@@ -4929,7 +4881,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/rounds/1"
+    "https://battlezones.test/api/events/london-grand-tournament/rounds/1"
 );
 
 const headers = {
@@ -5068,10 +5020,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--rounds--id-"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
@@ -5080,30 +5032,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="GETapi-events--event_slug--rounds--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the round. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--rounds--id-"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>round</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="round"                data-endpoint="GETapi-events--event_slug--rounds--id-"
                value="1"
                data-component="url">
     <br>
@@ -5124,7 +5052,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/games/1';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/games/1';
 $response = $client-&gt;get(
     $url,
     [
@@ -5140,7 +5068,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/games/1"
+    "https://battlezones.test/api/events/london-grand-tournament/games/1"
 );
 
 const headers = {
@@ -5286,10 +5214,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--games--id-"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
@@ -5298,30 +5226,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="GETapi-events--event_slug--games--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the game. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--games--id-"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>game</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="game"                data-endpoint="GETapi-events--event_slug--games--id-"
                value="1"
                data-component="url">
     <br>
@@ -5342,7 +5246,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/standings';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/standings';
 $response = $client-&gt;get(
     $url,
     [
@@ -5362,7 +5266,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/standings"
+    "https://battlezones.test/api/events/london-grand-tournament/standings"
 );
 
 const params = {
@@ -5511,18 +5415,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--standings"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--standings"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -5568,7 +5460,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/gallery';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/gallery';
 $response = $client-&gt;get(
     $url,
     [
@@ -5584,7 +5476,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/gallery"
+    "https://battlezones.test/api/events/london-grand-tournament/gallery"
 );
 
 const headers = {
@@ -5608,13 +5500,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 92,
-        &quot;name&quot;: &quot;Voluptas qui nulla.&quot;,
-        &quot;description&quot;: null,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/18d00301-fc96-3d24-969c-8fdaf4fe3b6b.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/2fb85718-aced-3bbf-ace8-16ea8d6bd73b.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;id&quot;: 110,
+        &quot;name&quot;: &quot;Reprehenderit voluptatem sit repellat.&quot;,
+        &quot;description&quot;: &quot;Harum repudiandae quasi error. Sunt sint perspiciatis ex provident saepe praesentium. Qui quia qui sunt asperiores non.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/11113d9d-3dfa-3442-a03d-b268f8f6a8e1.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/ccba112b-f4a8-3a42-b3d8-ad617a45e807.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -5698,18 +5590,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--gallery"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--gallery"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -5730,7 +5610,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/schedule';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/schedule';
 $response = $client-&gt;get(
     $url,
     [
@@ -5746,7 +5626,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/schedule"
+    "https://battlezones.test/api/events/london-grand-tournament/schedule"
 );
 
 const headers = {
@@ -5873,18 +5753,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--schedule"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--schedule"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -6853,7 +6721,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/organisers';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/organisers';
 $response = $client-&gt;get(
     $url,
     [
@@ -6869,7 +6737,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/organisers"
+    "https://battlezones.test/api/events/london-grand-tournament/organisers"
 );
 
 const headers = {
@@ -6990,18 +6858,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--organisers"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--organisers"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -7023,7 +6879,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/organisers';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/organisers';
 $response = $client-&gt;post(
     $url,
     [
@@ -7042,7 +6898,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/organisers"
+    "https://battlezones.test/api/events/london-grand-tournament/organisers"
 );
 
 const headers = {
@@ -7179,18 +7035,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--organisers"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--organisers"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -7225,7 +7069,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/organisers/1';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/organisers/1';
 $response = $client-&gt;delete(
     $url,
     [
@@ -7241,7 +7085,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/organisers/1"
+    "https://battlezones.test/api/events/london-grand-tournament/organisers/1"
 );
 
 const headers = {
@@ -7354,10 +7198,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="DELETEapi-events--event_slug--organisers--user_id-"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>user_id</code></b>&nbsp;&nbsp;
@@ -7366,30 +7210,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="DELETEapi-events--event_slug--organisers--user_id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the user. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="DELETEapi-events--event_slug--organisers--user_id-"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>user</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="user"                data-endpoint="DELETEapi-events--event_slug--organisers--user_id-"
                value="1"
                data-component="url">
     <br>
@@ -7411,7 +7231,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/invites';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/invites';
 $response = $client-&gt;post(
     $url,
     [
@@ -7431,7 +7251,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/invites"
+    "https://battlezones.test/api/events/london-grand-tournament/invites"
 );
 
 const headers = {
@@ -7580,18 +7400,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--invites"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--invites"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -7638,7 +7446,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/feedback/requests';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/feedback/requests';
 $response = $client-&gt;post(
     $url,
     [
@@ -7654,7 +7462,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/feedback/requests"
+    "https://battlezones.test/api/events/london-grand-tournament/feedback/requests"
 );
 
 const headers = {
@@ -7771,18 +7579,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--feedback-requests"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--feedback-requests"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -7804,7 +7600,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/feedback';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/feedback';
 $response = $client-&gt;get(
     $url,
     [
@@ -7820,7 +7616,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/feedback"
+    "https://battlezones.test/api/events/london-grand-tournament/feedback"
 );
 
 const headers = {
@@ -7956,18 +7752,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--feedback"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--feedback"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -7989,7 +7773,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/feedback/export';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/feedback/export';
 $response = $client-&gt;get(
     $url,
     [
@@ -8005,7 +7789,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/feedback/export"
+    "https://battlezones.test/api/events/london-grand-tournament/feedback/export"
 );
 
 const headers = {
@@ -8120,18 +7904,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--feedback-export"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--feedback-export"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -8153,7 +7925,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/polls';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/polls';
 $response = $client-&gt;get(
     $url,
     [
@@ -8169,7 +7941,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/polls"
+    "https://battlezones.test/api/events/london-grand-tournament/polls"
 );
 
 const headers = {
@@ -8194,7 +7966,7 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 41,
+            &quot;id&quot;: 56,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -8204,7 +7976,7 @@ fetch(url, {
             &quot;is_open_for_me&quot;: null
         },
         {
-            &quot;id&quot;: 42,
+            &quot;id&quot;: 57,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -8305,18 +8077,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--polls"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--polls"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -8338,7 +8098,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/polls';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/polls';
 $response = $client-&gt;post(
     $url,
     [
@@ -8359,7 +8119,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/polls"
+    "https://battlezones.test/api/events/london-grand-tournament/polls"
 );
 
 const headers = {
@@ -8389,7 +8149,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 43,
+        &quot;id&quot;: 58,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -8503,18 +8263,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--polls"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--polls"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -8573,7 +8321,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/polls/16/open';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/polls/1/open';
 $response = $client-&gt;post(
     $url,
     [
@@ -8589,7 +8337,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/polls/16/open"
+    "https://battlezones.test/api/events/london-grand-tournament/polls/1/open"
 );
 
 const headers = {
@@ -8613,7 +8361,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 44,
+        &quot;id&quot;: 59,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -8713,10 +8461,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--polls--poll_id--open"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>poll_id</code></b>&nbsp;&nbsp;
@@ -8725,30 +8473,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="poll_id"                data-endpoint="POSTapi-events--event_slug--polls--poll_id--open"
-               value="16"
-               data-component="url">
-    <br>
-<p>The ID of the poll. Example: <code>16</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--polls--poll_id--open"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>poll</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="poll"                data-endpoint="POSTapi-events--event_slug--polls--poll_id--open"
                value="1"
                data-component="url">
     <br>
@@ -8770,7 +8494,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/polls/16/candidates';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/polls/1/candidates';
 $response = $client-&gt;get(
     $url,
     [
@@ -8786,7 +8510,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/polls/16/candidates"
+    "https://battlezones.test/api/events/london-grand-tournament/polls/1/candidates"
 );
 
 const headers = {
@@ -8923,10 +8647,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--polls--poll_id--candidates"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>poll_id</code></b>&nbsp;&nbsp;
@@ -8935,30 +8659,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="poll_id"                data-endpoint="GETapi-events--event_slug--polls--poll_id--candidates"
-               value="16"
-               data-component="url">
-    <br>
-<p>The ID of the poll. Example: <code>16</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--polls--poll_id--candidates"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>poll</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="poll"                data-endpoint="GETapi-events--event_slug--polls--poll_id--candidates"
                value="1"
                data-component="url">
     <br>
@@ -8980,7 +8680,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/polls/16/results';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/polls/1/results';
 $response = $client-&gt;get(
     $url,
     [
@@ -8996,7 +8696,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/polls/16/results"
+    "https://battlezones.test/api/events/london-grand-tournament/polls/1/results"
 );
 
 const headers = {
@@ -9128,10 +8828,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--polls--poll_id--results"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>poll_id</code></b>&nbsp;&nbsp;
@@ -9140,30 +8840,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="poll_id"                data-endpoint="GETapi-events--event_slug--polls--poll_id--results"
-               value="16"
-               data-component="url">
-    <br>
-<p>The ID of the poll. Example: <code>16</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--polls--poll_id--results"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>poll</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="poll"                data-endpoint="GETapi-events--event_slug--polls--poll_id--results"
                value="1"
                data-component="url">
     <br>
@@ -9185,7 +8861,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/polls/16/close';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/polls/1/close';
 $response = $client-&gt;post(
     $url,
     [
@@ -9201,7 +8877,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/polls/16/close"
+    "https://battlezones.test/api/events/london-grand-tournament/polls/1/close"
 );
 
 const headers = {
@@ -9225,7 +8901,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 45,
+        &quot;id&quot;: 60,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -9325,10 +9001,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--polls--poll_id--close"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>poll_id</code></b>&nbsp;&nbsp;
@@ -9337,30 +9013,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="poll_id"                data-endpoint="POSTapi-events--event_slug--polls--poll_id--close"
-               value="16"
-               data-component="url">
-    <br>
-<p>The ID of the poll. Example: <code>16</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--polls--poll_id--close"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>poll</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="poll"                data-endpoint="POSTapi-events--event_slug--polls--poll_id--close"
                value="1"
                data-component="url">
     <br>
@@ -9382,7 +9034,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/polls/16/ballot';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/polls/1/ballot';
 $response = $client-&gt;put(
     $url,
     [
@@ -9401,7 +9053,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/polls/16/ballot"
+    "https://battlezones.test/api/events/london-grand-tournament/polls/1/ballot"
 );
 
 const headers = {
@@ -9538,10 +9190,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="PUTapi-events--event_slug--polls--poll_id--ballot"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>poll_id</code></b>&nbsp;&nbsp;
@@ -9550,30 +9202,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="poll_id"                data-endpoint="PUTapi-events--event_slug--polls--poll_id--ballot"
-               value="16"
-               data-component="url">
-    <br>
-<p>The ID of the poll. Example: <code>16</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="PUTapi-events--event_slug--polls--poll_id--ballot"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>poll</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="poll"                data-endpoint="PUTapi-events--event_slug--polls--poll_id--ballot"
                value="1"
                data-component="url">
     <br>
@@ -9610,7 +9238,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees/1/painting';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1/painting';
 $response = $client-&gt;patch(
     $url,
     [
@@ -9630,7 +9258,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/attendees/1/painting"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1/painting"
 );
 
 const headers = {
@@ -9784,10 +9412,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--painting"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
@@ -9796,30 +9424,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="attendee_id"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--painting"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the attendee. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--painting"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>attendee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="attendee"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--painting"
                value="1"
                data-component="url">
     <br>
@@ -9876,7 +9480,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/schedule';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/schedule';
 $response = $client-&gt;post(
     $url,
     [
@@ -9900,7 +9504,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/schedule"
+    "https://battlezones.test/api/events/london-grand-tournament/schedule"
 );
 
 const headers = {
@@ -9933,11 +9537,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 12,
+        &quot;id&quot;: 18,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-08-31T16:03:01+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-08-31T17:03:01+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-08-31T16:11:05+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-08-31T17:11:05+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
         &quot;is_target_live&quot;: false,
@@ -10048,18 +9652,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--schedule"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--schedule"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -10154,7 +9746,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/schedule/reorder';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/schedule/reorder';
 $response = $client-&gt;post(
     $url,
     [
@@ -10173,7 +9765,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/schedule/reorder"
+    "https://battlezones.test/api/events/london-grand-tournament/schedule/reorder"
 );
 
 const headers = {
@@ -10316,18 +9908,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--schedule-reorder"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--schedule-reorder"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -10364,7 +9944,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/schedule/16';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/schedule/1';
 $response = $client-&gt;patch(
     $url,
     [
@@ -10388,7 +9968,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/schedule/16"
+    "https://battlezones.test/api/events/london-grand-tournament/schedule/1"
 );
 
 const headers = {
@@ -10421,11 +10001,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 13,
+        &quot;id&quot;: 19,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-08-31T16:03:01+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-08-31T17:03:01+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-08-31T16:11:05+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-08-31T17:11:05+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
         &quot;is_target_live&quot;: false,
@@ -10536,10 +10116,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="PATCHapi-events--event_slug--schedule--block_id-"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>block_id</code></b>&nbsp;&nbsp;
@@ -10548,30 +10128,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="block_id"                data-endpoint="PATCHapi-events--event_slug--schedule--block_id-"
-               value="16"
-               data-component="url">
-    <br>
-<p>The ID of the block. Example: <code>16</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="PATCHapi-events--event_slug--schedule--block_id-"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>block</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="block"                data-endpoint="PATCHapi-events--event_slug--schedule--block_id-"
                value="1"
                data-component="url">
     <br>
@@ -10666,7 +10222,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/schedule/16';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/schedule/1';
 $response = $client-&gt;delete(
     $url,
     [
@@ -10682,7 +10238,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/schedule/16"
+    "https://battlezones.test/api/events/london-grand-tournament/schedule/1"
 );
 
 const headers = {
@@ -10794,10 +10350,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="DELETEapi-events--event_slug--schedule--block_id-"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>block_id</code></b>&nbsp;&nbsp;
@@ -10806,30 +10362,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="block_id"                data-endpoint="DELETEapi-events--event_slug--schedule--block_id-"
-               value="16"
-               data-component="url">
-    <br>
-<p>The ID of the block. Example: <code>16</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="DELETEapi-events--event_slug--schedule--block_id-"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>block</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="block"                data-endpoint="DELETEapi-events--event_slug--schedule--block_id-"
                value="1"
                data-component="url">
     <br>
@@ -10851,7 +10383,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/my-game';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/my-game';
 $response = $client-&gt;get(
     $url,
     [
@@ -10867,7 +10399,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/my-game"
+    "https://battlezones.test/api/events/london-grand-tournament/my-game"
 );
 
 const headers = {
@@ -11031,18 +10563,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--my-game"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--my-game"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -11064,7 +10584,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/games/1/result';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/games/1/result';
 $response = $client-&gt;post(
     $url,
     [
@@ -11086,7 +10606,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/games/1/result"
+    "https://battlezones.test/api/events/london-grand-tournament/games/1/result"
 );
 
 const headers = {
@@ -11275,10 +10795,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--games--game_id--result"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>game_id</code></b>&nbsp;&nbsp;
@@ -11287,30 +10807,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="game_id"                data-endpoint="POSTapi-events--event_slug--games--game_id--result"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the game. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--games--game_id--result"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>game</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="game"                data-endpoint="POSTapi-events--event_slug--games--game_id--result"
                value="1"
                data-component="url">
     <br>
@@ -11345,7 +10841,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/games/1/result';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/games/1/result';
 $response = $client-&gt;put(
     $url,
     [
@@ -11367,7 +10863,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/games/1/result"
+    "https://battlezones.test/api/events/london-grand-tournament/games/1/result"
 );
 
 const headers = {
@@ -11547,10 +11043,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="PUTapi-events--event_slug--games--game_id--result"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>game_id</code></b>&nbsp;&nbsp;
@@ -11559,30 +11055,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="game_id"                data-endpoint="PUTapi-events--event_slug--games--game_id--result"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the game. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="PUTapi-events--event_slug--games--game_id--result"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>game</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="game"                data-endpoint="PUTapi-events--event_slug--games--game_id--result"
                value="1"
                data-component="url">
     <br>
@@ -11617,7 +11089,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/games/1/flag';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/games/1/flag';
 $response = $client-&gt;post(
     $url,
     [
@@ -11636,7 +11108,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/games/1/flag"
+    "https://battlezones.test/api/events/london-grand-tournament/games/1/flag"
 );
 
 const headers = {
@@ -11780,10 +11252,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--games--game_id--flag"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>game_id</code></b>&nbsp;&nbsp;
@@ -11792,30 +11264,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="game_id"                data-endpoint="POSTapi-events--event_slug--games--game_id--flag"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the game. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--games--game_id--flag"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>game</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="game"                data-endpoint="POSTapi-events--event_slug--games--game_id--flag"
                value="1"
                data-component="url">
     <br>
@@ -11850,7 +11298,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/games/1/flag/resolve';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/games/1/flag/resolve';
 $response = $client-&gt;post(
     $url,
     [
@@ -11866,7 +11314,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/games/1/flag/resolve"
+    "https://battlezones.test/api/events/london-grand-tournament/games/1/flag/resolve"
 );
 
 const headers = {
@@ -11992,10 +11440,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--games--game_id--flag-resolve"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>game_id</code></b>&nbsp;&nbsp;
@@ -12004,30 +11452,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="game_id"                data-endpoint="POSTapi-events--event_slug--games--game_id--flag-resolve"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the game. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--games--game_id--flag-resolve"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>game</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="game"                data-endpoint="POSTapi-events--event_slug--games--game_id--flag-resolve"
                value="1"
                data-component="url">
     <br>
@@ -12049,7 +11473,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/flags';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/flags';
 $response = $client-&gt;get(
     $url,
     [
@@ -12065,7 +11489,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/flags"
+    "https://battlezones.test/api/events/london-grand-tournament/flags"
 );
 
 const headers = {
@@ -12213,18 +11637,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--flags"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="GETapi-events--event_slug--flags"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -12246,7 +11658,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/rounds';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/rounds';
 $response = $client-&gt;post(
     $url,
     [
@@ -12262,7 +11674,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/rounds"
+    "https://battlezones.test/api/events/london-grand-tournament/rounds"
 );
 
 const headers = {
@@ -12410,18 +11822,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--rounds"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--rounds"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -12443,7 +11843,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/rounds/1/publish';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/rounds/1/publish';
 $response = $client-&gt;post(
     $url,
     [
@@ -12459,7 +11859,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/rounds/1/publish"
+    "https://battlezones.test/api/events/london-grand-tournament/rounds/1/publish"
 );
 
 const headers = {
@@ -12607,10 +12007,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--rounds--round_id--publish"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>round_id</code></b>&nbsp;&nbsp;
@@ -12619,30 +12019,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="round_id"                data-endpoint="POSTapi-events--event_slug--rounds--round_id--publish"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the round. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--rounds--round_id--publish"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>round</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="round"                data-endpoint="POSTapi-events--event_slug--rounds--round_id--publish"
                value="1"
                data-component="url">
     <br>
@@ -12664,7 +12040,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/rounds/1/swap';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/rounds/1/swap';
 $response = $client-&gt;post(
     $url,
     [
@@ -12683,7 +12059,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/rounds/1/swap"
+    "https://battlezones.test/api/events/london-grand-tournament/rounds/1/swap"
 );
 
 const headers = {
@@ -12852,10 +12228,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--rounds--round_id--swap"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>round_id</code></b>&nbsp;&nbsp;
@@ -12864,30 +12240,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="round_id"                data-endpoint="POSTapi-events--event_slug--rounds--round_id--swap"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the round. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--rounds--round_id--swap"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>round</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="round"                data-endpoint="POSTapi-events--event_slug--rounds--round_id--swap"
                value="1"
                data-component="url">
     <br>
@@ -12924,7 +12276,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/rounds/1/publish';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/rounds/1/publish';
 $response = $client-&gt;delete(
     $url,
     [
@@ -12940,7 +12292,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/rounds/1/publish"
+    "https://battlezones.test/api/events/london-grand-tournament/rounds/1/publish"
 );
 
 const headers = {
@@ -13088,10 +12440,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="DELETEapi-events--event_slug--rounds--round_id--publish"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>round_id</code></b>&nbsp;&nbsp;
@@ -13100,30 +12452,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="round_id"                data-endpoint="DELETEapi-events--event_slug--rounds--round_id--publish"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the round. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="DELETEapi-events--event_slug--rounds--round_id--publish"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>round</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="round"                data-endpoint="DELETEapi-events--event_slug--rounds--round_id--publish"
                value="1"
                data-component="url">
     <br>
@@ -13145,7 +12473,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/army-list';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/army-list';
 $response = $client-&gt;put(
     $url,
     [
@@ -13164,7 +12492,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/army-list"
+    "https://battlezones.test/api/events/london-grand-tournament/army-list"
 );
 
 const headers = {
@@ -13301,18 +12629,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="PUTapi-events--event_slug--army-list"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="PUTapi-events--event_slug--army-list"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -13347,7 +12663,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees/1/army-lists/reveal';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1/army-lists/reveal';
 $response = $client-&gt;post(
     $url,
     [
@@ -13363,7 +12679,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/attendees/1/army-lists/reveal"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1/army-lists/reveal"
 );
 
 const headers = {
@@ -13526,10 +12842,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--army-lists-reveal"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
@@ -13538,30 +12854,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="attendee_id"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--army-lists-reveal"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the attendee. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--army-lists-reveal"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>attendee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="attendee"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--army-lists-reveal"
                value="1"
                data-component="url">
     <br>
@@ -13583,7 +12875,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees/1/members/1/army-list/unlock';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1/members/1/army-list/unlock';
 $response = $client-&gt;post(
     $url,
     [
@@ -13599,7 +12891,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/attendees/1/members/1/army-list/unlock"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1/members/1/army-list/unlock"
 );
 
 const headers = {
@@ -13718,10 +13010,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--member_id--army-list-unlock"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
@@ -13733,7 +13025,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="1"
                data-component="url">
     <br>
-<p>The ID of the attendee. Example: <code>1</code></p>
+<p>The id of the attendee. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>member_id</code></b>&nbsp;&nbsp;
@@ -13742,42 +13034,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="member_id"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--member_id--army-list-unlock"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the member. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--member_id--army-list-unlock"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>attendee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="attendee"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--member_id--army-list-unlock"
-               value="1"
-               data-component="url">
-    <br>
-<p>The id of the attendee. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>member</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="member"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--member_id--army-list-unlock"
                value="1"
                data-component="url">
     <br>
@@ -13799,7 +13055,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees';
 $response = $client-&gt;post(
     $url,
     [
@@ -13822,7 +13078,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/attendees"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees"
 );
 
 const headers = {
@@ -14012,18 +13268,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--attendees"
-               value="summer-showdown-2026"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--attendees"
                value="london-grand-tournament"
                data-component="url">
     <br>
@@ -14130,7 +13374,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees/1';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1';
 $response = $client-&gt;patch(
     $url,
     [
@@ -14150,7 +13394,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/attendees/1"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1"
 );
 
 const headers = {
@@ -14332,10 +13576,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="PATCHapi-events--event_slug--attendees--id-"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
@@ -14350,24 +13594,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>The ID of the attendee. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="PATCHapi-events--event_slug--attendees--id-"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>attendee</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="attendee"                data-endpoint="PATCHapi-events--event_slug--attendees--id-"
+               step="any"               name="attendee_id"                data-endpoint="PATCHapi-events--event_slug--attendees--id-"
                value="1"
                data-component="url">
     <br>
@@ -14414,7 +13646,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees/1/members';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1/members';
 $response = $client-&gt;post(
     $url,
     [
@@ -14436,7 +13668,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/attendees/1/members"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1/members"
 );
 
 const headers = {
@@ -14620,10 +13852,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
@@ -14632,30 +13864,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="attendee_id"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the attendee. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>attendee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="attendee"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members"
                value="1"
                data-component="url">
     <br>
@@ -14726,7 +13934,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/summer-showdown-2026/attendees/1/members/1';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1/members/1';
 $response = $client-&gt;delete(
     $url,
     [
@@ -14742,7 +13950,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/summer-showdown-2026/attendees/1/members/1"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1/members/1"
 );
 
 const headers = {
@@ -14855,10 +14063,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="DELETEapi-events--event_slug--attendees--attendee_id--members--id-"
-               value="summer-showdown-2026"
+               value="london-grand-tournament"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
@@ -14870,7 +14078,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="1"
                data-component="url">
     <br>
-<p>The ID of the attendee. Example: <code>1</code></p>
+<p>The id of the attendee. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
@@ -14879,42 +14087,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-events--event_slug--attendees--attendee_id--members--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the member. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="event"                data-endpoint="DELETEapi-events--event_slug--attendees--attendee_id--members--id-"
-               value="london-grand-tournament"
-               data-component="url">
-    <br>
-<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>attendee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="attendee"                data-endpoint="DELETEapi-events--event_slug--attendees--attendee_id--members--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The id of the attendee. Example: <code>1</code></p>
-            </div>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>member</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="member"                data-endpoint="DELETEapi-events--event_slug--attendees--attendee_id--members--id-"
                value="1"
                data-component="url">
     <br>
@@ -14979,13 +14151,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 87,
+        &quot;id&quot;: 105,
         &quot;name&quot;: &quot;Et error neque.&quot;,
         &quot;description&quot;: null,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/0946df97-37a5-38d3-ad41-d635320184d0.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/e01e6c64-459d-37af-9000-f6cce4a86480.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;
     }
 }</code>
  </pre>
@@ -15095,7 +14267,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpl5oebn5bfq3dc9GCeKH', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php963u84lmmlkkdmns131', 'r')
             ],
         ],
     ]
@@ -15135,13 +14307,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 88,
+        &quot;id&quot;: 106,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;
     }
 }</code>
  </pre>
@@ -15254,7 +14426,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpl5oebn5bfq3dc9GCeKH</code></p>
+<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php963u84lmmlkkdmns131</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -15323,13 +14495,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 89,
+        &quot;id&quot;: 107,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;
     }
 }</code>
  </pre>
@@ -15452,7 +14624,7 @@ $response = $client-&gt;patch(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpm1uuspuuj0gi7KXgyDd', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php94r2rl9gr0spaY5arQR', 'r')
             ],
         ],
     ]
@@ -15492,13 +14664,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 90,
+        &quot;id&quot;: 108,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -15624,7 +14796,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpm1uuspuuj0gi7KXgyDd</code></p>
+<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php94r2rl9gr0spaY5arQR</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -15835,13 +15007,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 91,
+        &quot;id&quot;: 109,
         &quot;name&quot;: &quot;Libero aliquam veniam corporis.&quot;,
         &quot;description&quot;: &quot;Nemo odit quia officia est dignissimos. Blanditiis odio veritatis excepturi doloribus delectus fugit. Repudiandae laboriosam est alias tenetur ratione.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/cc18252a-110c-3e9b-83cc-81f0ab1d55ab.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/a7f7c0d1-9882-3fbe-aef6-3354f397e54c.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:09:04Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:04Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:17:08Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:08Z&quot;
     }
 }</code>
  </pre>
@@ -16136,8 +15308,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 434,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
+        &quot;id&quot;: 512,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
         &quot;country&quot;: &quot;NR&quot;,
         &quot;game_systems&quot;: [],
@@ -16289,8 +15461,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 435,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
+        &quot;id&quot;: 513,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;MX&quot;,
         &quot;game_systems&quot;: [],
@@ -16858,8 +16030,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 436,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
+        &quot;id&quot;: 514,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;IL&quot;,
         &quot;game_systems&quot;: [],
@@ -17620,11 +16792,11 @@ $response = $client-&gt;patch(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'primary_messages' =&gt; ['push'],
-            'message_requests' =&gt; ['push'],
+            'primary_messages' =&gt; ['email'],
+            'message_requests' =&gt; ['email'],
             'event_messages' =&gt; ['push'],
             'round_live' =&gt; ['email'],
-            'result_activity' =&gt; ['push'],
+            'result_activity' =&gt; ['email'],
             'voting_open' =&gt; ['push'],
         ],
     ]
@@ -17645,10 +16817,10 @@ const headers = {
 
 let body = {
     "primary_messages": [
-        "push"
+        "email"
     ],
     "message_requests": [
-        "push"
+        "email"
     ],
     "event_messages": [
         "push"
@@ -17657,7 +16829,7 @@ let body = {
         "email"
     ],
     "result_activity": [
-        "push"
+        "email"
     ],
     "voting_open": [
         "push"
@@ -18345,12 +17517,12 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 441,
+            &quot;id&quot;: 519,
             &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
             &quot;username&quot;: &quot;marquardt.noah&quot;
         },
         {
-            &quot;id&quot;: 442,
+            &quot;id&quot;: 520,
             &quot;public_name&quot;: &quot;Mina Bauch&quot;,
             &quot;username&quot;: &quot;okeefe.isidro&quot;
         }
@@ -18497,8 +17669,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 443,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
+        &quot;id&quot;: 521,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
         &quot;public_name&quot;: &quot;Domingo Leuschke&quot;,
         &quot;country&quot;: &quot;MF&quot;,
         &quot;game_systems&quot;: [],
@@ -18650,8 +17822,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 444,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
+        &quot;id&quot;: 522,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
         &quot;public_name&quot;: &quot;Hank Batz&quot;,
         &quot;country&quot;: &quot;AW&quot;,
         &quot;game_systems&quot;: [],
@@ -18803,7 +17975,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 445,
+        &quot;id&quot;: 523,
         &quot;public_name&quot;: &quot;Rodrigo O&#039;Connell&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
@@ -18950,7 +18122,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 446,
+        &quot;id&quot;: 524,
         &quot;public_name&quot;: &quot;Brennon Anderson&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
@@ -19097,8 +18269,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 447,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
+        &quot;id&quot;: 525,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
         &quot;public_name&quot;: &quot;Michelle Cassin&quot;,
         &quot;country&quot;: &quot;TO&quot;,
         &quot;game_systems&quot;: [],
@@ -19250,8 +18422,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 448,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:09:03Z&quot;,
+        &quot;id&quot;: 526,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:17:07Z&quot;,
         &quot;public_name&quot;: &quot;Kayden Robel&quot;,
         &quot;country&quot;: &quot;PK&quot;,
         &quot;game_systems&quot;: [],
@@ -19403,7 +18575,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 449,
+        &quot;id&quot;: 527,
         &quot;public_name&quot;: &quot;Emilie Glover&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false

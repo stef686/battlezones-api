@@ -20,7 +20,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListEventFlaggedResultsController extends Controller
 {
     #[Endpoint('List Flagged Results', 'Organisers only. The open flags on this Event, oldest first, with the Game and its current scores.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [[
         'id' => 3,
         'game_id' => 18,

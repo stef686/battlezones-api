@@ -32,7 +32,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":434,"updated_at":"2026-08-23T17:09:03Z","public_name":"Ms. Elisabeth Okuneva","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":512,"updated_at":"2026-08-23T17:17:07Z","public_name":"Ms. Elisabeth Okuneva","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -365,7 +365,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":435,"updated_at":"2026-08-23T17:09:03Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":513,"updated_at":"2026-08-23T17:17:07Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
       -
@@ -554,7 +554,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":436,"updated_at":"2026-08-23T17:09:03Z","public_name":"Ms. Audra Crooks II","country":"IL","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":514,"updated_at":"2026-08-23T17:17:07Z","public_name":"Ms. Audra Crooks II","country":"IL","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -769,7 +769,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -783,7 +783,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -825,7 +825,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -849,15 +849,15 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       primary_messages:
-        - push
+        - email
       message_requests:
-        - push
+        - email
       event_messages:
         - push
       round_live:
         - email
       result_activity:
-        - push
+        - email
       voting_open:
         - push
     fileParameters: []
@@ -1034,7 +1034,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":441,"public_name":"Ms. Audra Crooks II","username":"marquardt.noah"},{"id":442,"public_name":"Mina Bauch","username":"okeefe.isidro"}]}'
+        content: '{"data":[{"id":519,"public_name":"Ms. Audra Crooks II","username":"marquardt.noah"},{"id":520,"public_name":"Mina Bauch","username":"okeefe.isidro"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -1083,7 +1083,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":443,"updated_at":"2026-08-23T17:09:03Z","public_name":"Domingo Leuschke","country":"MF","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":521,"updated_at":"2026-08-23T17:17:07Z","public_name":"Domingo Leuschke","country":"MF","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1132,7 +1132,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":444,"updated_at":"2026-08-23T17:09:03Z","public_name":"Hank Batz","country":"AW","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":522,"updated_at":"2026-08-23T17:17:07Z","public_name":"Hank Batz","country":"AW","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1181,7 +1181,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":445,"public_name":"Rodrigo O''Connell","avatar":"","is_following":false}}'
+        content: '{"data":{"id":523,"public_name":"Rodrigo O''Connell","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1230,7 +1230,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":446,"public_name":"Brennon Anderson","avatar":"","is_following":false}}'
+        content: '{"data":{"id":524,"public_name":"Brennon Anderson","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1279,7 +1279,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":447,"updated_at":"2026-08-23T17:09:03Z","public_name":"Michelle Cassin","country":"TO","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":525,"updated_at":"2026-08-23T17:17:07Z","public_name":"Michelle Cassin","country":"TO","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1328,7 +1328,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":448,"updated_at":"2026-08-23T17:09:03Z","public_name":"Kayden Robel","country":"PK","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":526,"updated_at":"2026-08-23T17:17:07Z","public_name":"Kayden Robel","country":"PK","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1365,7 +1365,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":449,"public_name":"Emilie Glover","avatar":"","is_following":false}}'
+        content: '{"data":{"id":527,"public_name":"Emilie Glover","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []

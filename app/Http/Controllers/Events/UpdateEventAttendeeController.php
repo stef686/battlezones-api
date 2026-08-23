@@ -19,8 +19,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class UpdateEventAttendeeController extends Controller
 {
     #[Endpoint('Amend a Team', 'Members and Organisers may change the party name; allegiance freezes once a Round is Live.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('attendee', 'integer', 'The id of the attendee.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
     #[Response(status: 200, content: ['data' => [
         'id' => 9,
         'name' => 'Ada and Grace',

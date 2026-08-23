@@ -18,7 +18,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class UpdateArmyListController extends Controller
 {
     #[Endpoint('Submit Your Army List', 'Submitting locks the list. Only an Organiser can reopen it.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [
         'army_list' => 'Legion Tactical Squad, 10 models...',
         'submitted_at' => '2026-09-10T18:30:00+00:00',

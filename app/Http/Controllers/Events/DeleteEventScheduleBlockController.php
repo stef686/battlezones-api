@@ -18,8 +18,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class DeleteEventScheduleBlockController extends Controller
 {
     #[Endpoint('Delete a Schedule Block', 'Organisers only.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('block', 'integer', 'The id of the schedule block.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('block_id', 'integer', 'The id of the schedule block.', example: 1)]
     #[ScribeResponse(content: '', status: 204)]
     public function __invoke(Event $event, EventScheduleBlock $block): Response
     {

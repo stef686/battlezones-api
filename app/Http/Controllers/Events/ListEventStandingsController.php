@@ -18,7 +18,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListEventStandingsController extends Controller
 {
     #[Endpoint('List Event Standings', 'Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [[
         'id' => 9,
         'position' => 1,

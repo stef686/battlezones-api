@@ -19,8 +19,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class DeleteEventOrganiserController extends Controller
 {
     #[Endpoint('Remove an Organiser', 'Lead organisers only.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('user', 'integer', 'The id of the organiser to remove.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('user_id', 'integer', 'The id of the organiser to remove.', example: 1)]
     #[Response(description: 'The Organiser was removed.')]
     public function __invoke(Request $request, Event $event, User $user): JsonResponse
     {

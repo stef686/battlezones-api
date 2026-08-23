@@ -18,7 +18,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class StoreEventScheduleBlockController extends Controller
 {
     #[Endpoint('Add a Schedule Block', 'Organisers only. The day the block appears under is derived from its start time in the Event timezone.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[ResponseFromApiResource(EventScheduleBlockResource::class, model: EventScheduleBlock::class)]
     public function __invoke(StoreEventScheduleBlockRequest $request, Event $event): EventScheduleBlockResource
     {

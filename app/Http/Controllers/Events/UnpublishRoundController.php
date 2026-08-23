@@ -20,8 +20,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class UnpublishRoundController extends Controller
 {
     #[Endpoint('Unpublish a Round', 'Organisers only. Returns a Round to Draft so a broken pairing can be fixed out of sight. Rejected once any result exists.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('round', 'integer', 'The id of the round.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('round_id', 'integer', 'The id of the round.', example: 1)]
     #[Response(['data' => [
         'id' => 4,
         'number' => 2,

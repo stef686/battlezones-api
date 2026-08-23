@@ -16,8 +16,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ShowEventGameController extends Controller
 {
     #[Endpoint('Show Event Game', 'Game detail with full score breakdown and army lists. Games in a Draft round are visible to Organisers only.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('game', 'integer', 'The id of the game.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('id', 'integer', 'The id of the game.', example: 1)]
     #[Response(['data' => [
         'id' => 18,
         'table_number' => 5,

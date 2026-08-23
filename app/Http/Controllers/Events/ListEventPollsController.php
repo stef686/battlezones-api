@@ -18,7 +18,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListEventPollsController extends Controller
 {
     #[Endpoint('List Polls', "The Event's Polls and whether each is open. Tallies are not here, and are never readable by Players.")]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[ResponseFromApiResource(EventPollResource::class, model: EventPoll::class, collection: true)]
     public function __invoke(Event $event): AnonymousResourceCollection
     {

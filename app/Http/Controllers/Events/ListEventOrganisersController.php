@@ -19,7 +19,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListEventOrganisersController extends Controller
 {
     #[Endpoint('List Event Organisers', 'The Players trusted to run this event. Organisers only.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [['id' => 12, 'name' => 'Ada Lovelace', 'role' => 'lead']]])]
     public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {

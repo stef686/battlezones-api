@@ -71,7 +71,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":156,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T06:38:58Z","ends_at":"2027-02-14T06:38:58Z","max_attendees":100,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
+        content: '{"data":{"id":198,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T06:47:02Z","ends_at":"2027-02-14T06:47:02Z","max_attendees":100,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-23T17:17:08Z","updated_at":"2026-08-23T17:17:08Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -120,7 +120,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":157,"name":"Fugit deleniti distinctio eum","slug":"fugit-deleniti-distinctio-eum-65128","description":"Aliquam veniam corporis dolorem mollitia deleniti nemo. Quia officia est dignissimos neque. Odio veritatis excepturi doloribus delectus fugit qui repudiandae. Est alias tenetur ratione.","status":"draft","pairing_format":"swiss","starts_at":"2027-01-24T13:31:13Z","ends_at":"2027-01-26T13:31:13Z","max_attendees":40,"venue":{"name":"Casper-Smith Hall","address":"5481 Dibbert Stravenue Suite 237","city":"Ednaside","country":"AU"},"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
+        content: '{"data":{"id":199,"name":"Fugit deleniti distinctio eum","slug":"fugit-deleniti-distinctio-eum-65128","description":"Aliquam veniam corporis dolorem mollitia deleniti nemo. Quia officia est dignissimos neque. Odio veritatis excepturi doloribus delectus fugit qui repudiandae. Est alias tenetur ratione.","status":"draft","pairing_format":"swiss","starts_at":"2027-01-24T13:39:17Z","ends_at":"2027-01-26T13:39:17Z","max_attendees":40,"venue":{"name":"Casper-Smith Hall","address":"5481 Dibbert Stravenue Suite 237","city":"Ednaside","country":"AU"},"created_at":"2026-08-23T17:17:08Z","updated_at":"2026-08-23T17:17:08Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -169,7 +169,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":23,"title":"Quia maiores assumenda","body":"Repellat officiis corporis nesciunt ut. Iure impedit molestiae ut rem est esse sint. Molestiae sunt suscipit doloribus fugiat ut aut. Et error neque recusandae et.\n\nEt ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut.","pinned":false,"published_at":"2026-07-26T16:32:23Z","author":{"id":458,"name":"Christian Klocko PhD"},"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
+        content: '{"data":{"id":26,"title":"Quia maiores assumenda","body":"Repellat officiis corporis nesciunt ut. Iure impedit molestiae ut rem est esse sint. Molestiae sunt suscipit doloribus fugiat ut aut. Et error neque recusandae et.\n\nEt ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut.","pinned":false,"published_at":"2026-07-26T16:40:27Z","author":{"id":536,"name":"Christian Klocko PhD"},"created_at":"2026-08-23T17:17:08Z","updated_at":"2026-08-23T17:17:08Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -201,17 +201,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -219,8 +208,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters:
       search:
         custom: []
@@ -242,7 +230,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":63,"name":"","allegiance":null,"members":[]}}'
+        content: '{"data":{"id":69,"name":"","allegiance":null,"members":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -274,7 +262,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -283,28 +271,6 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the attendee.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      attendee:
-        custom: []
-        name: attendee
         description: 'The id of the attendee.'
         required: true
         example: 1
@@ -314,10 +280,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       id: 1
-      event: london-grand-tournament
-      attendee: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -327,7 +291,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":64,"name":"","allegiance":null,"members":[],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":70,"name":"","allegiance":null,"members":[],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -359,17 +323,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -377,8 +330,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -388,7 +340,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":23,"number":1,"name":null,"status":"draft"},{"id":24,"number":3,"name":null,"status":"draft"}]}'
+        content: '{"data":[{"id":29,"number":1,"name":null,"status":"draft"},{"id":30,"number":3,"name":null,"status":"draft"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -420,7 +372,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -429,28 +381,6 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the round.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      round:
-        custom: []
-        name: round
         description: 'The id of the round.'
         required: true
         example: 1
@@ -460,10 +390,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       id: 1
-      event: london-grand-tournament
-      round: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -505,7 +433,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -514,28 +442,6 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the game.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      game:
-        custom: []
-        name: game
         description: 'The id of the game.'
         required: true
         example: 1
@@ -545,10 +451,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       id: 1
-      event: london-grand-tournament
-      game: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -590,17 +494,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -608,8 +501,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters:
       search:
         custom: []
@@ -675,17 +567,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -693,8 +574,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -704,7 +584,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":92,"name":"Voluptas qui nulla.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/18d00301-fc96-3d24-969c-8fdaf4fe3b6b.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/2fb85718-aced-3bbf-ace8-16ea8d6bd73b.jpg","created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
+        content: '{"data":{"id":110,"name":"Reprehenderit voluptatem sit repellat.","description":"Harum repudiandae quasi error. Sunt sint perspiciatis ex provident saepe praesentium. Qui quia qui sunt asperiores non.","url":"https:\/\/battlezones.test\/storage\/photos\/11113d9d-3dfa-3442-a03d-b268f8f6a8e1.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/ccba112b-f4a8-3a42-b3d8-ad617a45e807.jpg","created_at":"2026-08-23T17:17:08Z","updated_at":"2026-08-23T17:17:08Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -736,17 +616,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -754,8 +623,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1179,17 +1047,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -1197,8 +1054,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1246,17 +1102,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -1264,8 +1109,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1331,7 +1175,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1340,28 +1184,6 @@ endpoints:
       user_id:
         custom: []
         name: user_id
-        description: 'The ID of the user.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      user:
-        custom: []
-        name: user
         description: 'The id of the organiser to remove.'
         required: true
         example: 1
@@ -1371,10 +1193,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       user_id: 1
-      event: london-grand-tournament
-      user: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1422,17 +1242,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -1440,8 +1249,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1519,17 +1327,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -1537,8 +1334,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1586,17 +1382,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -1604,8 +1389,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1653,17 +1437,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -1671,8 +1444,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1722,17 +1494,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -1740,8 +1501,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1751,7 +1511,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":41,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null},{"id":42,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}]}'
+        content: '{"data":[{"id":56,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null},{"id":57,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}]}'
         headers: []
         description: ''
       -
@@ -1789,17 +1549,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -1807,8 +1556,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1854,7 +1602,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":43,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":58,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
         headers: []
         description: ''
       -
@@ -1898,7 +1646,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1907,28 +1655,6 @@ endpoints:
       poll_id:
         custom: []
         name: poll_id
-        description: 'The ID of the poll.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      poll:
-        custom: []
-        name: poll
         description: 'The id of the poll.'
         required: true
         example: 1
@@ -1938,10 +1664,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      poll_id: 16
-      event: london-grand-tournament
-      poll: 1
+      event_slug: london-grand-tournament
+      poll_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1951,7 +1675,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":44,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":59,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
         headers: []
         description: ''
       -
@@ -1989,7 +1713,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1998,28 +1722,6 @@ endpoints:
       poll_id:
         custom: []
         name: poll_id
-        description: 'The ID of the poll.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      poll:
-        custom: []
-        name: poll
         description: 'The id of the poll.'
         required: true
         example: 1
@@ -2029,10 +1731,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      poll_id: 16
-      event: london-grand-tournament
-      poll: 1
+      event_slug: london-grand-tournament
+      poll_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2080,7 +1780,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2089,28 +1789,6 @@ endpoints:
       poll_id:
         custom: []
         name: poll_id
-        description: 'The ID of the poll.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      poll:
-        custom: []
-        name: poll
         description: 'The id of the poll.'
         required: true
         example: 1
@@ -2120,10 +1798,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      poll_id: 16
-      event: london-grand-tournament
-      poll: 1
+      event_slug: london-grand-tournament
+      poll_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2171,7 +1847,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2180,28 +1856,6 @@ endpoints:
       poll_id:
         custom: []
         name: poll_id
-        description: 'The ID of the poll.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      poll:
-        custom: []
-        name: poll
         description: 'The id of the poll.'
         required: true
         example: 1
@@ -2211,10 +1865,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      poll_id: 16
-      event: london-grand-tournament
-      poll: 1
+      event_slug: london-grand-tournament
+      poll_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2224,7 +1876,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":45,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":60,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
         headers: []
         description: ''
       -
@@ -2262,7 +1914,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2271,28 +1923,6 @@ endpoints:
       poll_id:
         custom: []
         name: poll_id
-        description: 'The ID of the poll.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      poll:
-        custom: []
-        name: poll
         description: 'The id of the poll.'
         required: true
         example: 1
@@ -2302,10 +1932,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      poll_id: 16
-      event: london-grand-tournament
-      poll: 1
+      event_slug: london-grand-tournament
+      poll_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2375,7 +2003,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2384,28 +2012,6 @@ endpoints:
       attendee_id:
         custom: []
         name: attendee_id
-        description: 'The ID of the attendee.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      attendee:
-        custom: []
-        name: attendee
         description: 'The id of the attendee.'
         required: true
         example: 1
@@ -2415,10 +2021,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       attendee_id: 1
-      event: london-grand-tournament
-      attendee: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2496,17 +2100,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -2514,8 +2107,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2597,7 +2189,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":12,"label":"Awards","type":"info","starts_at":"2026-08-31T16:03:01+00:00","ends_at":"2026-08-31T17:03:01+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":18,"label":"Awards","type":"info","starts_at":"2026-08-31T16:11:05+00:00","ends_at":"2026-08-31T17:11:05+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -2641,17 +2233,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -2659,8 +2240,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2732,7 +2312,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2741,28 +2321,6 @@ endpoints:
       block_id:
         custom: []
         name: block_id
-        description: 'The ID of the block.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      block:
-        custom: []
-        name: block
         description: 'The id of the schedule block.'
         required: true
         example: 1
@@ -2772,10 +2330,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      block_id: 16
-      event: london-grand-tournament
-      block: 1
+      event_slug: london-grand-tournament
+      block_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2857,7 +2413,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":13,"label":"Awards","type":"info","starts_at":"2026-08-31T16:03:01+00:00","ends_at":"2026-08-31T17:03:01+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":19,"label":"Awards","type":"info","starts_at":"2026-08-31T16:11:05+00:00","ends_at":"2026-08-31T17:11:05+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -2901,7 +2457,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2910,28 +2466,6 @@ endpoints:
       block_id:
         custom: []
         name: block_id
-        description: 'The ID of the block.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      block:
-        custom: []
-        name: block
         description: 'The id of the schedule block.'
         required: true
         example: 1
@@ -2941,10 +2475,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      block_id: 16
-      event: london-grand-tournament
-      block: 1
+      event_slug: london-grand-tournament
+      block_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2992,17 +2524,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -3010,8 +2531,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3065,7 +2585,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -3074,28 +2594,6 @@ endpoints:
       game_id:
         custom: []
         name: game_id
-        description: 'The ID of the game.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      game:
-        custom: []
-        name: game
         description: 'The id of the game.'
         required: true
         example: 1
@@ -3105,10 +2603,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       game_id: 1
-      event: london-grand-tournament
-      game: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3188,7 +2684,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -3197,28 +2693,6 @@ endpoints:
       game_id:
         custom: []
         name: game_id
-        description: 'The ID of the game.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      game:
-        custom: []
-        name: game
         description: 'The id of the game.'
         required: true
         example: 1
@@ -3228,10 +2702,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       game_id: 1
-      event: london-grand-tournament
-      game: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3305,7 +2777,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -3314,28 +2786,6 @@ endpoints:
       game_id:
         custom: []
         name: game_id
-        description: 'The ID of the game.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      game:
-        custom: []
-        name: game
         description: 'The id of the game.'
         required: true
         example: 1
@@ -3345,10 +2795,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       game_id: 1
-      event: london-grand-tournament
-      game: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3414,7 +2862,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -3423,28 +2871,6 @@ endpoints:
       game_id:
         custom: []
         name: game_id
-        description: 'The ID of the game.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      game:
-        custom: []
-        name: game
         description: 'The id of the game.'
         required: true
         example: 1
@@ -3454,10 +2880,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       game_id: 1
-      event: london-grand-tournament
-      game: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3505,17 +2929,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -3523,8 +2936,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3572,17 +2984,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -3590,8 +2991,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3639,7 +3039,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -3648,28 +3048,6 @@ endpoints:
       round_id:
         custom: []
         name: round_id
-        description: 'The ID of the round.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      round:
-        custom: []
-        name: round
         description: 'The id of the round.'
         required: true
         example: 1
@@ -3679,10 +3057,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       round_id: 1
-      event: london-grand-tournament
-      round: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3730,7 +3106,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -3739,28 +3115,6 @@ endpoints:
       round_id:
         custom: []
         name: round_id
-        description: 'The ID of the round.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      round:
-        custom: []
-        name: round
         description: 'The id of the round.'
         required: true
         example: 1
@@ -3770,10 +3124,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       round_id: 1
-      event: london-grand-tournament
-      round: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3843,7 +3195,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -3852,28 +3204,6 @@ endpoints:
       round_id:
         custom: []
         name: round_id
-        description: 'The ID of the round.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      round:
-        custom: []
-        name: round
         description: 'The id of the round.'
         required: true
         example: 1
@@ -3883,10 +3213,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       round_id: 1
-      event: london-grand-tournament
-      round: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3934,17 +3262,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -3952,8 +3269,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -4019,7 +3335,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -4028,28 +3344,6 @@ endpoints:
       attendee_id:
         custom: []
         name: attendee_id
-        description: 'The ID of the attendee.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      attendee:
-        custom: []
-        name: attendee
         description: 'The id of the attendee.'
         required: true
         example: 1
@@ -4059,10 +3353,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       attendee_id: 1
-      event: london-grand-tournament
-      attendee: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4110,7 +3402,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -4119,7 +3411,7 @@ endpoints:
       attendee_id:
         custom: []
         name: attendee_id
-        description: 'The ID of the attendee.'
+        description: 'The id of the attendee.'
         required: true
         example: 1
         type: integer
@@ -4130,39 +3422,6 @@ endpoints:
       member_id:
         custom: []
         name: member_id
-        description: 'The ID of the member.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      attendee:
-        custom: []
-        name: attendee
-        description: 'The id of the attendee.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      member:
-        custom: []
-        name: member
         description: 'The id of the Player whose list to reopen.'
         required: true
         example: 1
@@ -4172,12 +3431,9 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       attendee_id: 1
       member_id: 1
-      event: london-grand-tournament
-      attendee: 1
-      member: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4225,17 +3481,6 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
         example: london-grand-tournament
         type: string
         enumValues: []
@@ -4243,8 +3488,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
-      event: london-grand-tournament
+      event_slug: london-grand-tournament
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -4383,7 +3627,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -4400,20 +3644,9 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      event:
+      attendee_id:
         custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      attendee:
-        custom: []
-        name: attendee
+        name: attendee_id
         description: 'The id of the attendee.'
         required: true
         example: 1
@@ -4423,10 +3656,9 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       id: 1
-      event: london-grand-tournament
-      attendee: 1
+      attendee_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -4504,7 +3736,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -4513,28 +3745,6 @@ endpoints:
       attendee_id:
         custom: []
         name: attendee_id
-        description: 'The ID of the attendee.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      attendee:
-        custom: []
-        name: attendee
         description: 'The id of the attendee.'
         required: true
         example: 1
@@ -4544,10 +3754,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       attendee_id: 1
-      event: london-grand-tournament
-      attendee: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -4649,7 +3857,7 @@ endpoints:
         name: event_slug
         description: 'The slug of the event.'
         required: true
-        example: summer-showdown-2026
+        example: london-grand-tournament
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -4658,7 +3866,7 @@ endpoints:
       attendee_id:
         custom: []
         name: attendee_id
-        description: 'The ID of the attendee.'
+        description: 'The id of the attendee.'
         required: true
         example: 1
         type: integer
@@ -4669,39 +3877,6 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the member.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event:
-        custom: []
-        name: event
-        description: 'The slug of the event.'
-        required: true
-        example: london-grand-tournament
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      attendee:
-        custom: []
-        name: attendee
-        description: 'The id of the attendee.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      member:
-        custom: []
-        name: member
         description: 'The id of the Player to remove.'
         required: true
         example: 1
@@ -4711,12 +3886,9 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      event_slug: summer-showdown-2026
+      event_slug: london-grand-tournament
       attendee_id: 1
       id: 1
-      event: london-grand-tournament
-      attendee: 1
-      member: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

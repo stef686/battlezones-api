@@ -18,7 +18,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class GenerateRoundController extends Controller
 {
     #[Endpoint('Generate the next Round', "Organisers only. Pairs the field into a new Draft Round. Rejected while the current Round is unpublished or has results outstanding, and once the Event's round count is reached.")]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [
         'id' => 4,
         'number' => 2,

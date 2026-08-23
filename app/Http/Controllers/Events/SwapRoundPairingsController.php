@@ -23,8 +23,8 @@ class SwapRoundPairingsController extends Controller
     public function __construct(private SwapRoundPairings $swapPairings) {}
 
     #[Endpoint('Swap two Pairings', 'Organisers only, on a Draft Round. Exchanges the same-allegiance side between two Games, or moves the Bye when one of them is a Bye. Table numbers stay with the Game, and rematch flags are recomputed.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('round', 'integer', 'The id of the round.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('round_id', 'integer', 'The id of the round.', example: 1)]
     #[Response(['data' => [
         'id' => 4,
         'number' => 2,

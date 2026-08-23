@@ -19,8 +19,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class RevealArmyListsController extends Controller
 {
     #[Endpoint('Reveal a Team\'s Army Lists', 'Organisers only. Frees a team held hostage by a Player who never submitted.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('attendee', 'integer', 'The id of the attendee.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
     #[Response(status: 200, content: ['data' => [
         'id' => 9,
         'name' => 'Ada and Grace',

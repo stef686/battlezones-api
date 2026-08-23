@@ -17,7 +17,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListEventScheduleController extends Controller
 {
     #[Endpoint('List the Event Schedule', "The Event's schedule grouped by day in the Event's own timezone, each day's blocks in time order.")]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [[
         'date' => '2026-09-12',
         'blocks' => [[

@@ -21,8 +21,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ResolveGameResultFlagController extends Controller
 {
     #[Endpoint('Resolve a Flagged Result', 'Organisers only. Closes the open flag on a Game. Resolving is deliberately separate from editing: an Organiser who checks a flag and finds the original result was right still needs a way to clear it.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('game', 'integer', 'The id of the game.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('game_id', 'integer', 'The id of the game.', example: 1)]
     #[Response(['data' => [
         'id' => 3,
         'game_id' => 18,

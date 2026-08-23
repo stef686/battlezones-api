@@ -20,8 +20,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class PublishRoundController extends Controller
 {
     #[Endpoint('Publish a Round', 'Organisers only. Makes the Round\'s pairings and table numbers visible to Players. Earlier Rounds stay Live.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('round', 'integer', 'The id of the round.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('round_id', 'integer', 'The id of the round.', example: 1)]
     #[Response(['data' => [
         'id' => 4,
         'number' => 2,

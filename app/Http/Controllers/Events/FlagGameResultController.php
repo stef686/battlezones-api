@@ -20,8 +20,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class FlagGameResultController extends Controller
 {
     #[Endpoint('Flag a Game Result', 'A Player in the Game, or an Organiser, claims the submitted result is wrong. Flagging again while a flag is open returns the open flag rather than raising a second one.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('game', 'integer', 'The id of the game.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('game_id', 'integer', 'The id of the game.', example: 1)]
     #[Response(['data' => [
         'id' => 3,
         'game_id' => 18,

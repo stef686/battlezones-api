@@ -16,8 +16,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ShowEventRoundController extends Controller
 {
     #[Endpoint('Show Event Round', 'Round detail with games for an event. Draft rounds are visible to Organisers only.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('round', 'integer', 'The id of the round.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('id', 'integer', 'The id of the round.', example: 1)]
     #[Response(['data' => [
         'id' => 4,
         'number' => 2,

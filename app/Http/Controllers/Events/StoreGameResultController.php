@@ -24,8 +24,8 @@ class StoreGameResultController extends Controller
     public function __construct(private StoreGameScores $storeGameScores) {}
 
     #[Endpoint('Submit a Game Result', 'Either Player in a Game submits scores for both Attendees. The first submission wins and locks the Game: a later one is rejected and the result has to be flagged for an Organiser instead. Derived Score Types such as Match Points are computed server-side.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('game', 'integer', 'The id of the game.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('game_id', 'integer', 'The id of the game.', example: 1)]
     #[Response(['data' => [
         'id' => 18,
         'table_number' => 5,

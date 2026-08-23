@@ -19,7 +19,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class StoreEventOrganiserController extends Controller
 {
     #[Endpoint('Appoint an Organiser', 'Lead organisers only. The account must already be claimed.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => ['id' => 12, 'name' => 'Ada Lovelace', 'role' => 'lead']])]
     public function __invoke(StoreEventOrganiserRequest $request, Event $event): EventOrganiserResource
     {

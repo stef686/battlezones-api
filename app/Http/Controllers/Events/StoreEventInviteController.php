@@ -21,7 +21,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class StoreEventInviteController extends Controller
 {
     #[Endpoint('Invite a Captain', 'Organisers only. Emails a time-limited credential for this Event.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(status: 201, content: ['data' => [
         'id' => 7,
         'role' => 'captain',

@@ -20,7 +20,7 @@ class SendEventFeedbackRequestsController extends Controller
     public function __construct(private SendFeedbackRequests $sendFeedbackRequests) {}
 
     #[Endpoint('Send Feedback Requests', 'Organisers only. Emails every Player their own one-time link, valid for 30 days. Players who have already answered are left alone.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => ['invited' => 24]])]
     public function __invoke(Event $event): JsonResponse
     {

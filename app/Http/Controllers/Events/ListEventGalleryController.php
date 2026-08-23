@@ -17,7 +17,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListEventGalleryController extends Controller
 {
     #[Endpoint('List Event Gallery', 'Paginated photos for a publicly visible event.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[ResponseFromApiResource(PhotoResource::class, model: Photo::class, paginate: 15)]
     public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {

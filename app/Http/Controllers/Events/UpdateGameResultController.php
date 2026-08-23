@@ -23,8 +23,8 @@ class UpdateGameResultController extends Controller
     public function __construct(private StoreGameScores $storeGameScores) {}
 
     #[Endpoint('Correct a Game Result', 'Organisers only, at any point and in any Round. Correcting is separate from resolving a flag: an Organiser who corrects a result still has to close the flag, and one who finds the result was right can close it without touching the scores.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('game', 'integer', 'The id of the game.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('game_id', 'integer', 'The id of the game.', example: 1)]
     #[Response(['data' => [
         'id' => 18,
         'table_number' => 5,

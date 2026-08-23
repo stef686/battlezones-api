@@ -368,9 +368,10 @@ test('an invite session token never outlives the default token lifetime', functi
 
     [$event] = eventWithLead();
 
-    // Push the Event far enough out that the Invite outlasts a normal session,
-    // rather than depending on the factory's random date landing beyond it.
-    $event->forceFill(['starts_at' => now()->addYear()])->save();
+    // The Invite expires a fixed span after the Event ends, so push the Event
+    // far enough out that it outlasts a normal session rather than depending on
+    // the factory's random date landing beyond one.
+    $event->forceFill(['starts_at' => now()->addYear(), 'ends_at' => now()->addYear()->addDay()])->save();
 
     $token = sendInviteAndCaptureToken($event);
     $invite = EventInvite::findByToken($token);

@@ -15,8 +15,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ShowEventAttendeeController extends Controller
 {
     #[Endpoint('Show Event Attendee', 'Attendee detail for a publicly visible event.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('attendee', 'integer', 'The id of the attendee.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('id', 'integer', 'The id of the attendee.', example: 1)]
     #[ResponseFromApiResource(EventAttendeeDetailResource::class, model: EventAttendee::class)]
     public function __invoke(Event $event, EventAttendee $attendee): EventAttendeeDetailResource
     {

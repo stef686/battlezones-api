@@ -19,7 +19,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ReorderEventScheduleController extends Controller
 {
     #[Endpoint('Reorder Schedule Blocks', 'Organisers only. Sets the order blocks appear in when they start at the same time — two things at ten o\'clock still need an order on the page.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[BodyParam('block_ids', 'integer[]', 'The block ids in the order they should appear.', required: true, example: [3, 1, 2])]
     #[Response(['data' => ['block_ids' => [3, 1, 2]]])]
     public function __invoke(Request $request, Event $event): JsonResponse

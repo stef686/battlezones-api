@@ -21,8 +21,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class StoreAttendeeMemberController extends Controller
 {
     #[Endpoint('Add a Player to a Team', 'Invites the Player if they have no account yet. Closed to members once registration closes; Organisers are never blocked.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('attendee', 'integer', 'The id of the attendee.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
     #[Response(status: 201, content: ['data' => [
         'id' => 9,
         'name' => 'Ada and Grace',

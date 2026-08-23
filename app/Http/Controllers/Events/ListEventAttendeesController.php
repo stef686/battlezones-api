@@ -18,7 +18,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListEventAttendeesController extends Controller
 {
     #[Endpoint('List Event Attendees', 'Paginated list of attendees for a publicly visible event.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[ResponseFromApiResource(EventAttendeeResource::class, model: EventAttendee::class, paginate: 15)]
     public function __invoke(ListEventAttendeesRequest $request, Event $event): AnonymousResourceCollection
     {

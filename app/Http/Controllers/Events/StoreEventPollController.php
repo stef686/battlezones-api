@@ -18,7 +18,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class StoreEventPollController extends Controller
 {
     #[Endpoint('Create a Poll', 'Organisers only. A Poll opens closed: the window is set by opening it, not by creating it.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[ResponseFromApiResource(EventPollResource::class, model: EventPoll::class)]
     public function __invoke(StoreEventPollRequest $request, Event $event): EventPollResource
     {

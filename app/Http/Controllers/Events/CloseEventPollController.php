@@ -18,8 +18,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class CloseEventPollController extends Controller
 {
     #[Endpoint('Close a Poll', "Organisers only. Closes this Poll's voting window. Results stay Organiser-only afterwards: winners are announced in the venue.")]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('poll', 'integer', 'The id of the poll.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('poll_id', 'integer', 'The id of the poll.', example: 1)]
     #[ResponseFromApiResource(EventPollResource::class, model: EventPoll::class)]
     public function __invoke(Event $event, EventPoll $poll): EventPollResource
     {

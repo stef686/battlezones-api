@@ -19,8 +19,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListPollCandidatesController extends Controller
 {
     #[Endpoint('List Poll Candidates', 'The Attendees this Player may pick in this Poll: armies on the display table for a painting Poll, and the teams this Player actually played for a favourite-opponent Poll. A Bye shortens the list rather than appearing in it.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('poll', 'integer', 'The id of the poll.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('poll_id', 'integer', 'The id of the poll.', example: 1)]
     #[Response(['data' => [[
         'id' => 9,
         'name' => 'Ada and Grace',
