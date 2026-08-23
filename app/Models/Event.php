@@ -56,6 +56,8 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $photos_count
  * @property-read Collection<int, Round> $rounds
  * @property-read int|null $rounds_count
+ * @property-read Collection<int, EventScheduleBlock> $scheduleBlocks
+ * @property-read int|null $schedule_blocks_count
  * @property-read Collection<int, EventScoreType> $scoreTypes
  * @property-read int|null $score_types_count
  * @property bool $standings_visible
@@ -336,6 +338,14 @@ class Event extends Model
     public function rounds(): HasMany
     {
         return $this->hasMany(Round::class);
+    }
+
+    /**
+     * @return HasMany<EventScheduleBlock, $this>
+     */
+    public function scheduleBlocks(): HasMany
+    {
+        return $this->hasMany(EventScheduleBlock::class);
     }
 
     /**

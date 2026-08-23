@@ -37,19 +37,19 @@ use Illuminate\Support\Carbon;
  * @property-read User|null $submittedBy
  *
  * @method static \Database\Factories\GameFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereEditedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereEditedByUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereIsBye($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereRoundId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereSubmittedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereSubmittedByUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereTableNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereUpdatedAt($value)
+ * @method static Builder<static>|Game newModelQuery()
+ * @method static Builder<static>|Game newQuery()
+ * @method static Builder<static>|Game query()
+ * @method static Builder<static>|Game whereCreatedAt($value)
+ * @method static Builder<static>|Game whereEditedAt($value)
+ * @method static Builder<static>|Game whereEditedByUserId($value)
+ * @method static Builder<static>|Game whereId($value)
+ * @method static Builder<static>|Game whereIsBye($value)
+ * @method static Builder<static>|Game whereRoundId($value)
+ * @method static Builder<static>|Game whereSubmittedAt($value)
+ * @method static Builder<static>|Game whereSubmittedByUserId($value)
+ * @method static Builder<static>|Game whereTableNumber($value)
+ * @method static Builder<static>|Game whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

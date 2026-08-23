@@ -35,17 +35,17 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $memberships_count
  *
  * @method static \Database\Factories\EventAttendeeFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereAllegiance($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereArmyListsRevealedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereCheckedInAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereEventId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EventAttendee whereUpdatedAt($value)
+ * @method static Builder<static>|EventAttendee newModelQuery()
+ * @method static Builder<static>|EventAttendee newQuery()
+ * @method static Builder<static>|EventAttendee query()
+ * @method static Builder<static>|EventAttendee whereAllegiance($value)
+ * @method static Builder<static>|EventAttendee whereArmyListsRevealedAt($value)
+ * @method static Builder<static>|EventAttendee whereCheckedInAt($value)
+ * @method static Builder<static>|EventAttendee whereCreatedAt($value)
+ * @method static Builder<static>|EventAttendee whereEventId($value)
+ * @method static Builder<static>|EventAttendee whereId($value)
+ * @method static Builder<static>|EventAttendee whereName($value)
+ * @method static Builder<static>|EventAttendee whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
