@@ -1,1 +1,39 @@
 @import 'tailwindcss';
+
+/*
+ * Provisional visual direction.
+ *
+ * The palette and type scale are settled in #99. Everything here is a token
+ * and nothing outside this file names a colour, so that work is a change to
+ * these values rather than a sweep through the components. Dark-only, which
+ * is the stated direction: there is no light theme to keep in step.
+ */
+@theme {
+    --color-surface: oklch(0.17 0.01 260);
+    --color-surface-raised: oklch(0.22 0.012 260);
+    --color-surface-sunken: oklch(0.13 0.01 260);
+    --color-border: oklch(0.32 0.014 260);
+    --color-ink: oklch(0.95 0.005 260);
+    --color-ink-muted: oklch(0.72 0.012 260);
+    --color-ink-faint: oklch(0.58 0.012 260);
+    --color-accent: oklch(0.72 0.15 55);
+    --color-accent-ink: oklch(0.17 0.01 260);
+    --color-danger: oklch(0.65 0.19 25);
+    --color-success: oklch(0.72 0.15 150);
+
+    /* The table number is read across a hall, so it gets its own step. */
+    --text-hall: 6rem;
+    --text-hall--line-height: 1;
+}
+
+html,
+body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    min-height: 100%;
+}
+
+body {
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
