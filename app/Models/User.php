@@ -323,7 +323,8 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
      *
      * Channels the application has no registered driver for are dropped, so a
      * preference for a channel that is not built yet cannot break delivery on
-     * the channels that are.
+     * the channels that are. Event notifications always keep the database
+     * driver on top of whatever the preference asks for.
      *
      * @return list<string>
      */
@@ -334,7 +335,11 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
             $this->getNotificationChannels($type),
         );
 
-        return array_values(array_filter($drivers));
+        $drivers = array_values(array_filter($drivers));
+
+        return $type->alwaysInApp()
+            ? ['database', ...$drivers]
+            : $drivers;
     }
 
     public function getMessagingPrivacy(): PrivacyOption

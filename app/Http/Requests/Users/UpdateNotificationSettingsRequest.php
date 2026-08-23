@@ -49,7 +49,15 @@ class UpdateNotificationSettingsRequest extends FormRequest
                 'example' => ['email'],
             ],
             'round_live' => [
-                'description' => 'Channels to receive round-live notifications on.',
+                'description' => 'Channels to receive round-live notifications on, in addition to the in-app notification.',
+                'example' => ['push'],
+            ],
+            'result_activity' => [
+                'description' => 'Channels to receive result activity notifications on, in addition to the in-app notification.',
+                'example' => ['email'],
+            ],
+            'voting_open' => [
+                'description' => 'Channels to receive voting notifications on, in addition to the in-app notification.',
                 'example' => ['push'],
             ],
         ];

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\GameFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -112,6 +113,21 @@ class Game extends Model
     public function round(): BelongsTo
     {
         return $this->belongsTo(Round::class);
+    }
+
+    /**
+     * The Players sitting at this Game — all four in doubles.
+     *
+     * @return Builder<User>
+     */
+    public function players(): Builder
+    {
+        return User::query()->whereIn(
+            'id',
+            EventAttendeeMembership::query()
+                ->whereIn('event_attendee_id', $this->attendees()->select('event_attendees.id'))
+                ->select('user_id'),
+        );
     }
 
     /**

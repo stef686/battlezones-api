@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Events;
 
+use App\Events\ResultFlagResolved;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Events\GameResultFlagResource;
 use App\Models\Event;
@@ -35,6 +36,8 @@ class ResolveGameResultFlagController extends Controller
             'resolved_at' => now(),
             'resolved_by_user_id' => $request->user()->getKey(),
         ])->save();
+
+        ResultFlagResolved::dispatch($flag, $request->user());
 
         return GameResultFlagResource::make($flag->load(['flaggedBy', 'resolvedBy']));
     }

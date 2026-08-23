@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Events;
 
+use App\Events\ResultFlagged;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Events\FlagGameResultRequest;
 use App\Http\Resources\Events\GameResultFlagResource;
@@ -32,6 +33,10 @@ class FlagGameResultController extends Controller
                 'reason' => $request->string('reason')->toString() ?: null,
             ],
         );
+
+        if ($flag->wasRecentlyCreated) {
+            ResultFlagged::dispatch($flag);
+        }
 
         return GameResultFlagResource::make($flag->load('flaggedBy'));
     }

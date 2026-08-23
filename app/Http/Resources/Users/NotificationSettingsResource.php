@@ -22,6 +22,7 @@ class NotificationSettingsResource extends JsonResource
             $settings[$type->value] = [
                 'label' => $type->label(),
                 'channels' => array_column($channels, 'value'),
+                'always_in_app' => $type->alwaysInApp(),
             ];
         }
 

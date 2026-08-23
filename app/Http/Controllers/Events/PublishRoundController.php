@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Events;
 use App\Enums\RoundStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Events\RoundDetailResource;
+use App\Jobs\NotifyRoundIsLive;
 use App\Models\Event;
 use App\Models\Round;
 use Illuminate\Support\Facades\Gate;
@@ -25,6 +26,8 @@ class PublishRoundController extends Controller
         Gate::authorize('organise', $event);
 
         $round->update(['status' => RoundStatus::Live]);
+
+        NotifyRoundIsLive::dispatch($round);
 
         $round->load(['games' => fn ($query) => $query->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType']);
 

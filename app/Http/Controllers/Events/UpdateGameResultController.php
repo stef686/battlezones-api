@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Events;
 
 use App\Actions\Events\StoreGameScores;
+use App\Events\ResultEdited;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Events\UpdateGameResultRequest;
 use App\Http\Resources\Events\GameDetailResource;
@@ -35,6 +36,8 @@ class UpdateGameResultController extends Controller
                 'edited_at' => now(),
             ])->save();
         });
+
+        ResultEdited::dispatch($game->refresh(), $request->user());
 
         $game->load(['round', 'attendees.memberships.user', 'attendees.memberships.faction', 'scores.scoreType', 'submittedBy', 'editedBy', 'openResultFlag']);
 
