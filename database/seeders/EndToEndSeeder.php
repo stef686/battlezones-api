@@ -178,7 +178,9 @@ class EndToEndSeeder extends Seeder
                 // The browser test reads the Standings, so they are public here.
                 'settings' => new EventSettings(
                     requiresOpposedAllegiance: true,
-                    roundCount: 1,
+                    // Three, so the Organiser loop has somewhere to go: pairing
+                    // is refused once the scheduled count is reached.
+                    roundCount: 3,
                     standingsVisible: true,
                 ),
             ],

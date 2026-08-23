@@ -168,9 +168,13 @@ const viewer = computed(() => event.value?.viewer ?? null);
         <h2 class="text-sm uppercase tracking-widest text-ink-faint">
           Organiser
         </h2>
-        <p class="text-sm text-ink-muted">
-          You run this event.
-        </p>
+        <RouterLink
+          :to="{ name: 'organise', params: { eventSlug: props.eventSlug } }"
+          data-testid="organise-link"
+          class="rounded-xl bg-accent px-4 py-3 text-center font-semibold text-accent-ink"
+        >
+          Run the event
+        </RouterLink>
       </section>
 
       <section

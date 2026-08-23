@@ -1763,6 +1763,14 @@ paths:
                               type: boolean
                             is_rematch:
                               type: boolean
+                            result:
+                              type: object
+                              properties:
+                                submitted_at:
+                                  type: string
+                                  nullable: true
+                                is_flagged:
+                                  type: boolean
                             attendees:
                               type: array
                               items:
@@ -1771,6 +1779,8 @@ paths:
                                   id:
                                     type: integer
                                   name:
+                                    type: string
+                                  allegiance:
                                     type: string
                                   members:
                                     type: array
@@ -1839,6 +1849,14 @@ paths:
                               type: boolean
                             is_rematch:
                               type: boolean
+                            result:
+                              type: object
+                              properties:
+                                submitted_at:
+                                  type: string
+                                  nullable: true
+                                is_flagged:
+                                  type: boolean
                             attendees:
                               type: array
                               items:
@@ -1847,6 +1865,8 @@ paths:
                                   id:
                                     type: integer
                                   name:
+                                    type: string
+                                  allegiance:
                                     type: string
                                   members:
                                     type: array
@@ -4647,6 +4667,14 @@ paths:
                               type: boolean
                             is_rematch:
                               type: boolean
+                            result:
+                              type: object
+                              properties:
+                                submitted_at:
+                                  type: string
+                                  nullable: true
+                                is_flagged:
+                                  type: boolean
                             attendees:
                               type: array
                               items:
@@ -4655,6 +4683,8 @@ paths:
                                   id:
                                     type: integer
                                   name:
+                                    type: string
+                                  allegiance:
                                     type: string
                                   members:
                                     type: array
@@ -4714,6 +4744,14 @@ paths:
                               type: boolean
                             is_rematch:
                               type: boolean
+                            result:
+                              type: object
+                              properties:
+                                submitted_at:
+                                  type: string
+                                  nullable: true
+                                is_flagged:
+                                  type: boolean
                             attendees:
                               type: array
                               items:
@@ -4722,6 +4760,8 @@ paths:
                                   id:
                                     type: integer
                                   name:
+                                    type: string
+                                  allegiance:
                                     type: string
                                   members:
                                     type: array
@@ -4797,6 +4837,14 @@ paths:
                               type: boolean
                             is_rematch:
                               type: boolean
+                            result:
+                              type: object
+                              properties:
+                                submitted_at:
+                                  type: string
+                                  nullable: true
+                                is_flagged:
+                                  type: boolean
                             attendees:
                               type: array
                               items:
@@ -4805,6 +4853,8 @@ paths:
                                   id:
                                     type: integer
                                   name:
+                                    type: string
+                                  allegiance:
                                     type: string
                                   members:
                                     type: array

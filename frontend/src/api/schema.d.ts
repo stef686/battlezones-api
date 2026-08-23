@@ -3276,9 +3276,14 @@ export interface operations {
                                 table_number?: number;
                                 is_bye?: boolean;
                                 is_rematch?: boolean;
+                                result?: {
+                                    submitted_at?: string | null;
+                                    is_flagged?: boolean;
+                                };
                                 attendees?: {
                                     id?: number;
                                     name?: string;
+                                    allegiance?: string;
                                     members?: {
                                         id?: number;
                                         name?: string;
@@ -3340,9 +3345,14 @@ export interface operations {
                                 table_number?: number;
                                 is_bye?: boolean;
                                 is_rematch?: boolean;
+                                result?: {
+                                    submitted_at?: string | null;
+                                    is_flagged?: boolean;
+                                };
                                 attendees?: {
                                     id?: number;
                                     name?: string;
+                                    allegiance?: string;
                                     members?: {
                                         id?: number;
                                         name?: string;
@@ -5479,9 +5489,14 @@ export interface operations {
                                 table_number?: number;
                                 is_bye?: boolean;
                                 is_rematch?: boolean;
+                                result?: {
+                                    submitted_at?: string | null;
+                                    is_flagged?: boolean;
+                                };
                                 attendees?: {
                                     id?: number;
                                     name?: string;
+                                    allegiance?: string;
                                     members?: {
                                         id?: number;
                                         name?: string;
@@ -5543,9 +5558,14 @@ export interface operations {
                                 table_number?: number;
                                 is_bye?: boolean;
                                 is_rematch?: boolean;
+                                result?: {
+                                    submitted_at?: string | null;
+                                    is_flagged?: boolean;
+                                };
                                 attendees?: {
                                     id?: number;
                                     name?: string;
+                                    allegiance?: string;
                                     members?: {
                                         id?: number;
                                         name?: string;
@@ -5614,9 +5634,14 @@ export interface operations {
                                 table_number?: number;
                                 is_bye?: boolean;
                                 is_rematch?: boolean;
+                                result?: {
+                                    submitted_at?: string | null;
+                                    is_flagged?: boolean;
+                                };
                                 attendees?: {
                                     id?: number;
                                     name?: string;
+                                    allegiance?: string;
                                     members?: {
                                         id?: number;
                                         name?: string;

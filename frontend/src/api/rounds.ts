@@ -10,6 +10,7 @@ export interface RoundSummary {
 export interface PairedAttendee {
     id: number;
     name: string;
+    allegiance: string | null;
     members: { id: number; name: string; faction: { id: number; name: string } | null }[];
     scores: Record<string, number | string>;
 }
@@ -19,6 +20,7 @@ export interface Pairing {
     table_number: number | null;
     is_bye: boolean;
     is_rematch: boolean;
+    result: { submitted_at: string | null; is_flagged: boolean };
     attendees: PairedAttendee[];
 }
 
@@ -39,6 +41,27 @@ export function fetchRounds(client: ApiClient, slug: string): Promise<RoundSumma
 
 export function fetchRound(client: ApiClient, slug: string, roundId: number): Promise<RoundDetail> {
     return client.get<{ data: RoundDetail }>(`${eventPath(slug)}/rounds/${roundId}`).then((response) => response.data);
+}
+
+/**
+ * Pair the field into a new Draft Round.
+ *
+ * Refused, with a message naming what to put right, while the current Round
+ * is unpublished or still has results outstanding.
+ */
+export function generateRound(client: ApiClient, slug: string): Promise<RoundDetail> {
+    return client.post<{ data: RoundDetail }>(`${eventPath(slug)}/rounds`).then((response) => response.data);
+}
+
+export function publishRound(client: ApiClient, slug: string, roundId: number): Promise<RoundDetail> {
+    return client.post<{ data: RoundDetail }>(`${eventPath(slug)}/rounds/${roundId}/publish`)
+        .then((response) => response.data);
+}
+
+/** Refused once any result is in: by then the Round has been played on. */
+export function unpublishRound(client: ApiClient, slug: string, roundId: number): Promise<RoundDetail> {
+    return client.delete<{ data: RoundDetail }>(`${eventPath(slug)}/rounds/${roundId}/publish`)
+        .then((response) => response.data);
 }
 
 function eventPath(slug: string): string {

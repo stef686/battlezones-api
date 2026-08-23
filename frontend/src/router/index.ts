@@ -101,6 +101,12 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true },
     },
     {
+        path: '/events/:eventSlug/organise',
+        name: 'organise',
+        component: () => import('@/views/OrganiseView.vue'),
+        props: true,
+    },
+    {
         path: '/events/:eventSlug/register',
         name: 'register',
         component: () => import('@/views/RegisterView.vue'),

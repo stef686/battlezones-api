@@ -28,9 +28,11 @@ class ShowEventRoundController extends Controller
             'table_number' => 5,
             'is_bye' => false,
             'is_rematch' => false,
+            'result' => ['submitted_at' => null, 'is_flagged' => false],
             'attendees' => [[
                 'id' => 9,
                 'name' => 'Ada and Grace',
+                'allegiance' => 'loyalist',
                 'members' => [['id' => 12, 'name' => 'Ada Lovelace', 'faction' => ['id' => 3, 'name' => 'Sons of Horus']]],
                 'scores' => ['match-points' => 3, 'victory-points' => 85],
             ]],
@@ -41,7 +43,7 @@ class ShowEventRoundController extends Controller
         abort_unless($event->status->hasRoundsVisible(), 404);
         abort_if($round->isDraft() && ! $event->isOrganisedBy($request->user('sanctum')), 404);
 
-        $round->load(['games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType']);
+        $round->load(['games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType', 'games.openResultFlag']);
 
         return RoundDetailResource::make($round);
     }

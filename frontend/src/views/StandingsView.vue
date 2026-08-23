@@ -6,16 +6,10 @@ import { useApiClient } from '@/api';
 import type { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
+import { fetchStandings, scoreOf, type Standing } from '@/api/standings';
 import { useEventPulse } from '@/composables/useEventPulse';
 
 const props = defineProps<{ eventSlug: string }>();
-
-interface Standing {
-  id: number;
-  position: number;
-  attendee: { id: number; name: string };
-  scores: { value: number | string; score_type: { slug: string; name: string } }[];
-}
 
 const client = useApiClient();
 
@@ -30,15 +24,13 @@ useEventPulse(() => props.eventSlug, computed(() => event.value?.status === 'act
 
 const { data, isPending, error } = useQuery({
   queryKey: computed(() => keys.standings(props.eventSlug)),
-  queryFn: () => client.get<{ data: Standing[] }>(`/api/events/${props.eventSlug}/standings`),
+  queryFn: () => fetchStandings(client, props.eventSlug),
 });
 
-const standings = computed(() => data.value?.data ?? []);
+const standings = computed(() => data.value ?? []);
 
 function score(standing: Standing, slug: string): string {
-  const found = standing.scores.find((entry) => entry.score_type.slug === slug);
-
-  return found === undefined ? '—' : String(Number(found.value));
+  return scoreOf(standing, slug);
 }
 </script>
 
