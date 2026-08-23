@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -90,6 +91,39 @@ class Round extends Model
         return GameScore::query()
             ->whereIn('game_id', $this->games()->select('id'))
             ->exists();
+    }
+
+    /**
+     * The Games in this Round between Attendees who have already met.
+     *
+     * A rematch is not blocked — an Organiser swapping pairings has reasons of
+     * their own — but the draft view has to say so, and stay truthful after
+     * every swap, which is why this is derived rather than stored.
+     *
+     * @return array<int, true>
+     */
+    public function rematchGameIds(): array
+    {
+        $rows = DB::table('game_attendee as side')
+            ->join('game_attendee as opponent', function ($join): void {
+                $join->on('side.game_id', '=', 'opponent.game_id')
+                    ->whereColumn('side.event_attendee_id', '<', 'opponent.event_attendee_id');
+            })
+            ->join('game_attendee as past_side', 'past_side.event_attendee_id', '=', 'side.event_attendee_id')
+            ->join('game_attendee as past_opponent', function ($join): void {
+                $join->on('past_opponent.game_id', '=', 'past_side.game_id')
+                    ->whereColumn('past_opponent.event_attendee_id', '=', 'opponent.event_attendee_id');
+            })
+            ->join('games', 'games.id', '=', 'side.game_id')
+            ->join('games as past_games', 'past_games.id', '=', 'past_side.game_id')
+            ->join('rounds as past_rounds', 'past_rounds.id', '=', 'past_games.round_id')
+            ->where('games.round_id', $this->getKey())
+            ->where('past_games.id', '!=', DB::raw('games.id'))
+            ->where('past_rounds.event_id', $this->event_id)
+            ->distinct()
+            ->pluck('side.game_id');
+
+        return array_fill_keys($rows->map(fn ($id): int => (int) $id)->all(), true);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Events\GenerateRoundPairings;
+use App\Enums\EventOrganiserRole;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScoreType;
@@ -99,4 +100,15 @@ function pairableEvent(array $settings = []): Event
     EventScoreType::factory()->victoryPoints()->rankedAt(2)->for($event)->create(['display_order' => 1]);
 
     return $event;
+}
+
+/**
+ * A Lead Organiser of this Event.
+ */
+function organiserOf(Event $event): User
+{
+    $organiser = User::factory()->create();
+    $event->organisers()->attach($organiser, ['role' => EventOrganiserRole::Lead->value]);
+
+    return $organiser;
 }

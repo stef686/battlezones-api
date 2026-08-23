@@ -28,6 +28,7 @@ use App\Http\Controllers\Events\StoreEventInviteController;
 use App\Http\Controllers\Events\StoreEventOrganiserController;
 use App\Http\Controllers\Events\StoreGameResultController;
 use App\Http\Controllers\Events\StoreInviteSessionController;
+use App\Http\Controllers\Events\SwapRoundPairingsController;
 use App\Http\Controllers\Events\UnlockArmyListController;
 use App\Http\Controllers\Events\UnpublishRoundController;
 use App\Http\Controllers\Events\UpdateArmyListController;
@@ -83,6 +84,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.rounds.generate');
     Route::scopeBindings()->post('events/{event:slug}/rounds/{round}/publish', PublishRoundController::class)
         ->name('events.rounds.publish');
+    Route::scopeBindings()->post('events/{event:slug}/rounds/{round}/swap', SwapRoundPairingsController::class)
+        ->name('events.rounds.swap');
     Route::scopeBindings()->delete('events/{event:slug}/rounds/{round}/publish', UnpublishRoundController::class)
         ->name('events.rounds.unpublish');
 

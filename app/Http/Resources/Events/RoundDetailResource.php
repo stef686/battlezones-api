@@ -22,12 +22,14 @@ class RoundDetailResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $rematches = $this->rematchGameIds();
+
         return [
             'id' => $this->id,
             'number' => $this->number,
             'name' => $this->name,
             'status' => $this->status->value,
-            'games' => $this->games->map(function (Game $game): array {
+            'games' => $this->games->map(function (Game $game) use ($rematches): array {
                 $scoresByAttendee = $game->scores
                     ->groupBy('event_attendee_id')
                     ->map(fn ($scores) => $scores->mapWithKeys(
@@ -38,6 +40,7 @@ class RoundDetailResource extends JsonResource
                     'id' => $game->id,
                     'table_number' => $game->table_number,
                     'is_bye' => $game->is_bye,
+                    'is_rematch' => isset($rematches[$game->id]),
                     'attendees' => $game->attendees->map(fn (EventAttendee $attendee): array => [
                         'id' => $attendee->id,
                         'name' => $attendee->displayName(),

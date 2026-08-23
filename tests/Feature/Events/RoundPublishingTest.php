@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\EventOrganiserRole;
 use App\Enums\RoundStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -9,14 +8,6 @@ use App\Models\Game;
 use App\Models\GameScore;
 use App\Models\Round;
 use App\Models\User;
-
-function organiserOf(Event $event): User
-{
-    $organiser = User::factory()->create();
-    $event->organisers()->attach($organiser, ['role' => EventOrganiserRole::Lead->value]);
-
-    return $organiser;
-}
 
 test('an organiser publishes a round and its pairings become visible', function () {
     $event = Event::factory()->active()->create();
