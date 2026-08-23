@@ -18,13 +18,19 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read EventPoll $poll
- * @property-read User $voter
  * @property-read EventAttendee $subject
+ * @property-read User $voter
  *
  * @method static \Database\Factories\EventVoteFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventVote newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventVote newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventVote query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventVote whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventVote whereEventPollId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventVote whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventVote whereSubjectEventAttendeeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventVote whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventVote whereVoterUserId($value)
  *
  * @mixin \Eloquent
  */

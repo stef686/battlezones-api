@@ -55,6 +55,8 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $organisers_count
  * @property-read Collection<int, Photo> $photos
  * @property-read int|null $photos_count
+ * @property-read Collection<int, EventPoll> $polls
+ * @property-read int|null $polls_count
  * @property-read Collection<int, Round> $rounds
  * @property-read int|null $rounds_count
  * @property-read Collection<int, EventScheduleBlock> $scheduleBlocks

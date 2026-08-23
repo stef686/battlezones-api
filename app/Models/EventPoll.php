@@ -33,6 +33,15 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|EventPoll newQuery()
  * @method static Builder<static>|EventPoll open()
  * @method static Builder<static>|EventPoll query()
+ * @method static Builder<static>|EventPoll whereClosesAt($value)
+ * @method static Builder<static>|EventPoll whereCreatedAt($value)
+ * @method static Builder<static>|EventPoll whereEventId($value)
+ * @method static Builder<static>|EventPoll whereId($value)
+ * @method static Builder<static>|EventPoll whereName($value)
+ * @method static Builder<static>|EventPoll whereOpensAt($value)
+ * @method static Builder<static>|EventPoll whereType($value)
+ * @method static Builder<static>|EventPoll whereUpdatedAt($value)
+ * @method static Builder<static>|EventPoll whereVotesPerPlayer($value)
  *
  * @mixin \Eloquent
  */

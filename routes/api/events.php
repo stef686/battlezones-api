@@ -5,6 +5,7 @@ use App\Http\Controllers\Events\CloseEventPollController;
 use App\Http\Controllers\Events\DeleteAttendeeMemberController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
 use App\Http\Controllers\Events\DeleteEventScheduleBlockController;
+use App\Http\Controllers\Events\ExportEventFeedbackController;
 use App\Http\Controllers\Events\FlagGameResultController;
 use App\Http\Controllers\Events\GenerateRoundController;
 use App\Http\Controllers\Events\ListEventAttendeesController;
@@ -24,11 +25,14 @@ use App\Http\Controllers\Events\ReorderEventScheduleController;
 use App\Http\Controllers\Events\ReplaceBallotController;
 use App\Http\Controllers\Events\ResolveGameResultFlagController;
 use App\Http\Controllers\Events\RevealArmyListsController;
+use App\Http\Controllers\Events\SendEventFeedbackRequestsController;
 use App\Http\Controllers\Events\ShowEventAttendeeController;
 use App\Http\Controllers\Events\ShowEventController;
+use App\Http\Controllers\Events\ShowEventFeedbackController;
 use App\Http\Controllers\Events\ShowEventGameController;
 use App\Http\Controllers\Events\ShowEventPollResultsController;
 use App\Http\Controllers\Events\ShowEventRoundController;
+use App\Http\Controllers\Events\ShowFeedbackFormController;
 use App\Http\Controllers\Events\ShowInviteController;
 use App\Http\Controllers\Events\ShowMyGameController;
 use App\Http\Controllers\Events\StoreAttendeeMemberController;
@@ -39,6 +43,7 @@ use App\Http\Controllers\Events\StoreEventPollController;
 use App\Http\Controllers\Events\StoreEventScheduleBlockController;
 use App\Http\Controllers\Events\StoreGameResultController;
 use App\Http\Controllers\Events\StoreInviteSessionController;
+use App\Http\Controllers\Events\SubmitFeedbackController;
 use App\Http\Controllers\Events\SwapRoundPairingsController;
 use App\Http\Controllers\Events\UnlockArmyListController;
 use App\Http\Controllers\Events\UnpublishRoundController;
@@ -62,6 +67,11 @@ Route::get('events/{event:slug}/standings', ListEventStandingsController::class)
 Route::get('events/{event:slug}/gallery', ListEventGalleryController::class)->name('events.gallery.index');
 Route::get('events/{event:slug}/schedule', ListEventScheduleController::class)->name('events.schedule.index');
 
+Route::get('feedback/{token}', ShowFeedbackFormController::class)->name('feedback.show')
+    ->middleware('throttle:30,1');
+Route::post('feedback/{token}', SubmitFeedbackController::class)->name('feedback.store')
+    ->middleware('throttle:10,1');
+
 Route::get('invites/{token}', ShowInviteController::class)->name('invites.show')
     ->middleware('throttle:30,1');
 Route::post('invites/{token}/session', StoreInviteSessionController::class)->name('invites.session')
@@ -79,6 +89,13 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::post('events/{event:slug}/invites', StoreEventInviteController::class)
         ->name('events.invites.store');
+
+    Route::post('events/{event:slug}/feedback/requests', SendEventFeedbackRequestsController::class)
+        ->name('events.feedback.invite');
+    Route::get('events/{event:slug}/feedback', ShowEventFeedbackController::class)
+        ->name('events.feedback.index');
+    Route::get('events/{event:slug}/feedback/export', ExportEventFeedbackController::class)
+        ->name('events.feedback.export');
 
     Route::get('events/{event:slug}/polls', ListEventPollsController::class)
         ->name('events.polls.index');
