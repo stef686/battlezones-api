@@ -12,9 +12,12 @@ stream_text='select(.type == "assistant").message.content[]? | select(.type == "
 # jq filter to extract final result
 final_result='select(.type == "result").result // empty'
 
+# One temp file for the whole run, cleaned up once however the script exits.
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+
 for ((i=1; i<=$1; i++)); do
-  tmpfile=$(mktemp)
-  trap "rm -f $tmpfile" EXIT
+  : > "$tmpfile"
 
   sbx run claude -- --model Opus --permission-mode acceptEdits --verbose \
     --output-format stream-json -p "@.ai/PROMPT.md" \

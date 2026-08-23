@@ -18,7 +18,7 @@ class ClaimInviteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'password' => ['required', 'confirmed'],
+            'password' => ['required', 'min:8', 'confirmed'],
             'device_name' => ['required', 'string', 'max:255'],
             'name' => ['nullable', 'string', 'max:255'],
         ];

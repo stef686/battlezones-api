@@ -28,11 +28,11 @@ class ClaimInviteController extends Controller
 
         $user = $invite->user;
 
-        if ($name = $request->string('name')->toString()) {
-            $user->forceFill(['name' => $name]);
-        }
-
-        $claimAccount->handle($user, $request->string('password')->toString());
+        $claimAccount->handle(
+            $user,
+            $request->string('password')->toString(),
+            $request->string('name')->toString(),
+        );
 
         $newToken = $user->createToken($request->string('device_name')->toString());
 

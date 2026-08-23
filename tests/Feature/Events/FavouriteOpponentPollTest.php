@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Events\OpenFavouriteOpponentVoting;
 use App\Actions\Events\StoreGameScores;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -9,6 +10,8 @@ use App\Models\Game;
 use App\Models\Round;
 use App\Models\User;
 use App\Notifications\Events\VotingOpenNotification;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 /**
@@ -194,4 +197,34 @@ test('a team is told once when its voting opens', function () {
 
     Notification::assertSentTo($player, VotingOpenNotification::class, fn (VotingOpenNotification $notification): bool => $notification->poll->is($poll));
     Notification::assertSentToTimes($player, VotingOpenNotification::class, 1);
+});
+
+test('the told-already check is one query for the whole team', function () {
+    Notification::fake();
+
+    $event = pairableEvent(['round_count' => 1]);
+    $poll = EventPoll::factory()->for($event)->favouriteOpponent()->create();
+
+    $own = EventAttendee::factory()->for($event)->withMember()->withMember()->withMember()->create();
+    $opponent = EventAttendee::factory()->for($event)->withMember()->create();
+
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+    $game = scoreGame($round, $own, $opponent);
+
+    $queries = 0;
+
+    DB::listen(function (QueryExecuted $query) use (&$queries): void {
+        if (str_contains($query->sql, 'notifications')) {
+            $queries++;
+        }
+    });
+
+    app(OpenFavouriteOpponentVoting::class)->forGame($game);
+
+    // One dedup query per Attendee in the Game, whatever the team size.
+    expect($queries)->toBe(2);
+
+    foreach ($own->members as $player) {
+        Notification::assertSentToTimes($player, VotingOpenNotification::class, 1);
+    }
 });

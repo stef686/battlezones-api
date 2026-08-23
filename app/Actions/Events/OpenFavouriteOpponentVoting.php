@@ -8,6 +8,7 @@ use App\Models\EventPoll;
 use App\Models\Game;
 use App\Models\User;
 use App\Notifications\Events\VotingOpenNotification;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Notification;
 
 /**
@@ -56,12 +57,35 @@ class OpenFavouriteOpponentVoting
     {
         $players = User::query()
             ->whereIn('id', $attendee->memberships()->select('user_id'))
-            ->get()
-            ->reject(fn (User $player): bool => $player->notifications()
-                ->where('type', VotingOpenNotification::class)
-                ->where('data->poll_id', $poll->getKey())
-                ->exists());
+            ->get();
+
+        $alreadyTold = $this->alreadyNotified($poll, $players->modelKeys());
+
+        $players = $players->reject(
+            fn (User $player): bool => in_array($player->getKey(), $alreadyTold, true)
+        );
 
         Notification::send($players, new VotingOpenNotification($poll));
+    }
+
+    /**
+     * The ids, of those given, already told about this poll.
+     *
+     * One query for the team rather than one per player: a full Event runs
+     * this for every Attendee as their last Game lands.
+     *
+     * @param  list<int>  $userIds
+     * @return list<int>
+     */
+    private function alreadyNotified(EventPoll $poll, array $userIds): array
+    {
+        return DatabaseNotification::query()
+            ->where('notifiable_type', (new User())->getMorphClass())
+            ->whereIn('notifiable_id', $userIds)
+            ->where('type', VotingOpenNotification::class)
+            ->where('data->poll_id', $poll->getKey())
+            ->pluck('notifiable_id')
+            ->map(fn (mixed $id): int => (int) $id)
+            ->all();
     }
 }

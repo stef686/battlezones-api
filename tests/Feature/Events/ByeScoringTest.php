@@ -113,3 +113,48 @@ test('a bye is not an opponent', function () {
     expect($attendee->opponents()->pluck('event_attendees.id')->all())->toEqual([$opponent->id])
         ->and($byeGameModel->is_bye)->toBeTrue();
 });
+
+test('a bye win is awarded once, and entering victory points does not rewrite it', function () {
+    [$event, $game, $attendee, $organiser, $matchPoints] = byeGame();
+
+    // An Organiser has already adjusted the Bye's Match Points by hand.
+    GameScore::query()->create([
+        'game_id' => $game->id,
+        'event_attendee_id' => $attendee->id,
+        'event_score_type_id' => $matchPoints->id,
+        'value' => 1,
+    ]);
+
+    $this->actingAs($organiser)
+        ->putJson(route('events.games.result.update', ['event' => $event->slug, 'game' => $game->id]), [
+            'scores' => [
+                $attendee->id => ['victory-points' => 60],
+            ],
+        ])
+        ->assertSuccessful();
+
+    $matchPointsValue = GameScore::query()
+        ->where('game_id', $game->id)
+        ->where('event_score_type_id', $matchPoints->id)
+        ->value('value');
+
+    expect($matchPointsValue)->toBe('1.00');
+});
+
+test('result attribution cannot be mass assigned onto a game', function () {
+    [, $game, , $organiser] = byeGame();
+
+    $game->fill([
+        'submitted_by_user_id' => $organiser->id,
+        'submitted_at' => now(),
+        'edited_by_user_id' => $organiser->id,
+        'edited_at' => now(),
+    ])->save();
+
+    $game->refresh();
+
+    expect($game->submitted_by_user_id)->toBeNull()
+        ->and($game->submitted_at)->toBeNull()
+        ->and($game->edited_by_user_id)->toBeNull()
+        ->and($game->edited_at)->toBeNull();
+});

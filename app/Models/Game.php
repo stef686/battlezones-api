@@ -59,16 +59,17 @@ class Game extends Model
     use HasFactory;
 
     /**
+     * Result attribution is deliberately absent: `submitted_by_user_id`,
+     * `submitted_at`, `edited_by_user_id` and `edited_at` say who claimed a
+     * result and when, so they are written by the controllers that establish
+     * that fact and never from a request payload.
+     *
      * @var list<string>
      */
     protected $fillable = [
         'round_id',
         'table_number',
         'is_bye',
-        'submitted_by_user_id',
-        'submitted_at',
-        'edited_by_user_id',
-        'edited_at',
     ];
 
     /**

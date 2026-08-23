@@ -307,3 +307,77 @@ test('re-inviting the same person retires the token already sent to them', funct
         ->assertNotFound()
         ->assertJsonPath('code', 'invite_not_found');
 });
+
+test('a claimed account keeps the name its owner gave, not the one the organiser typed', function () {
+    Notification::fake();
+
+    [$event] = eventWithLead();
+    $token = sendInviteAndCaptureToken($event);
+
+    $this->postJson(route('invites.claim', ['token' => $token]), [
+        'password' => 'a-real-password',
+        'password_confirmation' => 'a-real-password',
+        'device_name' => 'iPhone',
+        'name' => 'Horus Lupercal',
+    ])->assertSuccessful();
+
+    $invited = User::where('email', 'captain@example.com')->firstOrFail();
+
+    expect($invited->fresh()->name)->toBe('Horus Lupercal');
+});
+
+test('claiming will not set a password shorter than the platform minimum', function () {
+    Notification::fake();
+
+    [$event] = eventWithLead();
+    $token = sendInviteAndCaptureToken($event);
+
+    $this->postJson(route('invites.claim', ['token' => $token]), [
+        'password' => 'short',
+        'password_confirmation' => 'short',
+        'device_name' => 'iPhone',
+    ])->assertJsonValidationErrors('password');
+
+    expect(User::where('email', 'captain@example.com')->firstOrFail()->isClaimed())->toBeFalse();
+});
+
+test('an invite session token dies with the invitation that issued it', function () {
+    Notification::fake();
+
+    [$event] = eventWithLead();
+    $token = sendInviteAndCaptureToken($event);
+    $invite = EventInvite::findByToken($token);
+    $invite->forceFill(['expires_at' => now()->addDays(2)])->save();
+
+    $response = $this->postJson(route('invites.session', ['token' => $token]), ['device_name' => 'iPhone'])
+        ->assertSuccessful();
+
+    expect($response->json('expires_at'))->toBe($invite->expires_at->toJson());
+
+    $apiToken = $response->json('token');
+
+    $this->travelTo($invite->expires_at->copy()->addMinute());
+
+    $this->withToken($apiToken)
+        ->getJson(route('profile'))
+        ->assertUnauthorized();
+});
+
+test('an invite session token never outlives the default token lifetime', function () {
+    Notification::fake();
+
+    [$event] = eventWithLead();
+    $token = sendInviteAndCaptureToken($event);
+    $invite = EventInvite::findByToken($token);
+
+    $this->freezeTime();
+
+    // The Event is far enough out that the Invite outlasts a normal session.
+    expect($invite->expires_at)->toBeGreaterThan(now()->addMinutes((int) config('sanctum.expiration')));
+
+    $expiresAt = $this->postJson(route('invites.session', ['token' => $token]), ['device_name' => 'iPhone'])
+        ->assertSuccessful()
+        ->json('expires_at');
+
+    expect($expiresAt)->toBe(now()->addMinutes((int) config('sanctum.expiration'))->toJson());
+});

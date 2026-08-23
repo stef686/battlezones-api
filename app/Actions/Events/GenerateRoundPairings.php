@@ -31,7 +31,9 @@ class GenerateRoundPairings
 
     public function execute(Event $event): Round
     {
-        $this->guardRoundCount($event);
+        $roundNumber = $this->nextRoundNumber($event);
+
+        $this->guardRoundCount($event, $roundNumber);
         $this->guardTheRoundBefore($event);
 
         $rankingScoreTypes = $this->rankingScoreTypes($event);
@@ -56,18 +58,18 @@ class GenerateRoundPairings
             $pairs[] = [$attendee, $sideB[$assignment[$index]]];
         }
 
-        return $this->persist($event, $ranked, $pairs, $byes);
+        return $this->persist($event, $roundNumber, $ranked, $pairs, $byes);
     }
 
     /**
      * An Event that has not declared a round count is open-ended, so it is only
      * a ceiling when one is set.
      */
-    private function guardRoundCount(Event $event): void
+    private function guardRoundCount(Event $event, int $roundNumber): void
     {
         $roundCount = $event->settings->roundCount;
 
-        if ($roundCount !== null && $this->nextRoundNumber($event) > $roundCount) {
+        if ($roundCount !== null && $roundNumber > $roundCount) {
             throw CannotGeneratePairings::roundCountReached($roundCount);
         }
     }
@@ -426,7 +428,7 @@ class GenerateRoundPairings
      * @param  list<array{EventAttendee, EventAttendee}>  $pairs
      * @param  list<EventAttendee>  $byes
      */
-    private function persist(Event $event, Collection $ranked, array $pairs, array $byes): Round
+    private function persist(Event $event, int $roundNumber, Collection $ranked, array $pairs, array $byes): Round
     {
         $positionOf = [];
 
@@ -437,9 +439,9 @@ class GenerateRoundPairings
         usort($pairs, fn (array $a, array $b): int => min($positionOf[$a[0]->id], $positionOf[$a[1]->id])
             <=> min($positionOf[$b[0]->id], $positionOf[$b[1]->id]));
 
-        return DB::transaction(function () use ($event, $pairs, $byes): Round {
+        return DB::transaction(function () use ($event, $roundNumber, $pairs, $byes): Round {
             $round = $event->rounds()->create([
-                'number' => $this->nextRoundNumber($event),
+                'number' => $roundNumber,
                 'status' => RoundStatus::Draft,
             ]);
 

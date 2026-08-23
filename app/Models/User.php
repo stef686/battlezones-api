@@ -338,7 +338,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         $drivers = array_values(array_filter($drivers));
 
         return $type->alwaysInApp()
-            ? ['database', ...$drivers]
+            ? array_values(array_unique(['database', ...$drivers]))
             : $drivers;
     }
 

@@ -108,6 +108,10 @@ class StoreGameScores
      * rather than waiting on an Organiser: the win is a fact of the draw, and
      * an Attendee should not sit below their true position in the Standings
      * until someone remembers to type their Victory Points in.
+     *
+     * Awarded once and never rewritten: an Organiser entering a Bye's Victory
+     * Points comes back through `execute()`, and this must not undo whatever
+     * the derived rows already hold.
      */
     public function awardByeWin(Game $game): void
     {
@@ -118,7 +122,7 @@ class StoreGameScores
 
         foreach ($game->attendees()->pluck('event_attendees.id') as $attendeeId) {
             foreach ($derivedTypes as $derivedType) {
-                GameScore::updateOrCreate(
+                GameScore::firstOrCreate(
                     [
                         'game_id' => $game->id,
                         'event_attendee_id' => $attendeeId,
