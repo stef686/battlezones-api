@@ -23,6 +23,7 @@ use App\Http\Controllers\Events\StoreAttendeeMemberController;
 use App\Http\Controllers\Events\StoreEventAttendeeController;
 use App\Http\Controllers\Events\StoreEventInviteController;
 use App\Http\Controllers\Events\StoreEventOrganiserController;
+use App\Http\Controllers\Events\StoreGameResultController;
 use App\Http\Controllers\Events\StoreInviteSessionController;
 use App\Http\Controllers\Events\UnlockArmyListController;
 use App\Http\Controllers\Events\UnpublishRoundController;
@@ -62,6 +63,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::get('events/{event:slug}/my-game', ShowMyGameController::class)
         ->name('events.my-game.show');
+
+    Route::post('events/{event:slug}/games/{game}/result', StoreGameResultController::class)
+        ->name('events.games.result.store');
 
     Route::post('events/{event:slug}/rounds', GenerateRoundController::class)
         ->name('events.rounds.generate');

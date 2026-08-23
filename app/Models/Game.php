@@ -16,12 +16,17 @@ use Illuminate\Support\Carbon;
  * @property int $round_id
  * @property int|null $table_number
  * @property bool $is_bye
+ * @property int|null $submitted_by_user_id
+ * @property Carbon|null $submitted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read GameAttendeePivot|null $pivot
  * @property-read Collection<int, EventAttendee> $attendees
  * @property-read int|null $attendees_count
  * @property-read Round $round
+ * @property-read Collection<int, GameScore> $scores
+ * @property-read int|null $scores_count
+ * @property-read User|null $submittedBy
  *
  * @method static \Database\Factories\GameFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game newModelQuery()
@@ -31,6 +36,8 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereIsBye($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereRoundId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereSubmittedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereSubmittedByUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereTableNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Game whereUpdatedAt($value)
  *
@@ -48,6 +55,8 @@ class Game extends Model
         'round_id',
         'table_number',
         'is_bye',
+        'submitted_by_user_id',
+        'submitted_at',
     ];
 
     /**
@@ -57,7 +66,24 @@ class Game extends Model
     {
         return [
             'is_bye' => 'boolean',
+            'submitted_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Whether a result has been submitted, which locks the Game to Players.
+     */
+    public function hasResult(): bool
+    {
+        return $this->submitted_at !== null;
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function submittedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'submitted_by_user_id');
     }
 
     /**
