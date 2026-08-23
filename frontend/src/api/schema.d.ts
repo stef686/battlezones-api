@@ -4960,7 +4960,7 @@ export interface operations {
                     };
                 };
             };
-            /** @description A result already exists. */
+            /** @description A result already exists. The body carries the Game as it stands, so a client whose own submission lost its response can recognise it rather than reporting a dispute. */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -4968,6 +4968,43 @@ export interface operations {
                 content: {
                     "application/json": {
                         message?: string;
+                        data?: {
+                            id?: number;
+                            table_number?: number;
+                            is_bye?: boolean;
+                            round?: {
+                                id?: number;
+                                number?: number;
+                                name?: string;
+                            };
+                            result?: {
+                                submitted_at?: string;
+                                submitted_by?: {
+                                    id?: number;
+                                    name?: string;
+                                };
+                                edited_at?: string | null;
+                                edited_by?: string | null;
+                                is_flagged?: boolean;
+                            };
+                            attendees?: {
+                                id?: number;
+                                name?: string;
+                                members?: {
+                                    id?: number;
+                                    name?: string;
+                                    faction?: {
+                                        id?: number;
+                                        name?: string;
+                                    };
+                                    army_list?: string;
+                                }[];
+                                scores?: {
+                                    "match-points"?: number;
+                                    "victory-points"?: number;
+                                };
+                            }[];
+                        };
                     };
                 };
             };

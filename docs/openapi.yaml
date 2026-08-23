@@ -3878,7 +3878,7 @@ paths:
                   message:
                     type: string
         409:
-          description: 'A result already exists.'
+          description: 'A result already exists. The body carries the Game as it stands, so a client whose own submission lost its response can recognise it rather than reporting a dispute.'
           content:
             application/json:
               schema:
@@ -3886,6 +3886,76 @@ paths:
                 properties:
                   message:
                     type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      table_number:
+                        type: integer
+                      is_bye:
+                        type: boolean
+                      round:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          number:
+                            type: integer
+                          name:
+                            type: string
+                      result:
+                        type: object
+                        properties:
+                          submitted_at:
+                            type: string
+                          submitted_by:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                          edited_at:
+                            type: string
+                            nullable: true
+                          edited_by:
+                            type: string
+                            nullable: true
+                          is_flagged:
+                            type: boolean
+                      attendees:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            members:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  name:
+                                    type: string
+                                  faction:
+                                    type: object
+                                    properties:
+                                      id: { type: integer }
+                                      name: { type: string }
+                                  army_list:
+                                    type: string
+                            scores:
+                              type: object
+                              properties:
+                                match-points:
+                                  type: integer
+                                victory-points:
+                                  type: integer
         422:
           description: 'The submitted data failed validation.'
           content:

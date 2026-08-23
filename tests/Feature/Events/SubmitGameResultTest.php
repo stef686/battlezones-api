@@ -302,3 +302,75 @@ test('it rejects a submission that misses an attendee', function () {
         ])
         ->assertJsonValidationErrors('scores');
 });
+
+test('the conflict response carries the stored result, so a lost response is not mistaken for a dispute', function () {
+    [$event, $game, $mine, $theirs, $player] = submittedGame();
+
+    $url = route('events.games.result.store', ['event' => $event->slug, 'game' => $game->id]);
+
+    // The Player's first submission landed; only its response was lost, so the
+    // retry looks exactly like the request that succeeded.
+    $response = $this->actingAs($player)
+        ->postJson($url, [
+            'scores' => [
+                $mine->id => ['victory-points' => 85],
+                $theirs->id => ['victory-points' => 70],
+            ],
+        ])
+        ->assertStatus(409);
+
+    $response
+        ->assertJsonPath('message', 'A result has already been submitted for this game. Flag it if it needs correcting.')
+        ->assertJsonPath('data.id', $game->id)
+        ->assertJsonPath('data.result.submitted_by.id', $player->id)
+        ->assertJsonPath('data.result.submitted_at', $game->fresh()->submitted_at->toIso8601String());
+
+    $scores = collect($response->json('data.attendees'))->keyBy('id');
+
+    expect($scores[$mine->id]['scores']['victory-points'])->toEqual(85)
+        ->and($scores[$theirs->id]['scores']['victory-points'])->toEqual(70);
+});
+
+test('the conflict body is shaped like the successful submission, so one reader handles both', function () {
+    [$event, $game, $mine, $theirs] = submittedGame();
+
+    $opponent = $theirs->memberships()->firstOrFail()->user;
+
+    $conflict = $this->actingAs($opponent)
+        ->postJson(route('events.games.result.store', ['event' => $event->slug, 'game' => $game->id]), [
+            'scores' => [
+                $mine->id => ['victory-points' => 10],
+                $theirs->id => ['victory-points' => 99],
+            ],
+        ])
+        ->assertStatus(409)
+        ->json('data');
+
+    $success = $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
+        ->assertSuccessful()
+        ->json('data');
+
+    expect(array_keys($conflict))->toBe(array_keys($success))
+        ->and(array_keys($conflict['result']))->toBe(array_keys($success['result']));
+});
+
+test('a rejected submission still writes nothing', function () {
+    [$event, $game, $mine, $theirs, $player] = submittedGame();
+
+    $opponent = $theirs->memberships()->firstOrFail()->user;
+
+    $this->actingAs($opponent)
+        ->postJson(route('events.games.result.store', ['event' => $event->slug, 'game' => $game->id]), [
+            'scores' => [
+                $mine->id => ['victory-points' => 10],
+                $theirs->id => ['victory-points' => 99],
+            ],
+        ])
+        ->assertStatus(409);
+
+    $game->refresh();
+
+    expect($game->submitted_by_user_id)->toBe($player->id)
+        ->and(GameScore::query()->where('game_id', $game->id)->where('event_attendee_id', $mine->id)->value('value'))->toBe('85.00')
+        ->and(GameScore::query()->where('game_id', $game->id)->where('event_attendee_id', $theirs->id)->value('value'))->toBe('70.00');
+});
