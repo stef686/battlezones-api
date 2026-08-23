@@ -4,11 +4,13 @@ namespace Database\Seeders;
 
 use App\Casts\EventSettings;
 use App\Enums\Allegiance;
+use App\Enums\EventInviteRole;
 use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
 use App\Enums\RoundStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
+use App\Models\EventInvite;
 use App\Models\EventScoreType;
 use App\Models\Faction;
 use App\Models\Game;
@@ -38,6 +40,14 @@ class EndToEndSeeder extends Seeder
 
     public const TABLE_NUMBER = 7;
 
+    public const INVITED_EMAIL = 'invited@battlezones.test';
+
+    /**
+     * A fixed token so the browser test can follow the link an Organiser's
+     * invitation email would carry. Only ever stored hashed, as in production.
+     */
+    public const INVITE_TOKEN = 'end-to-end-invite-token';
+
     public function run(): void
     {
         $event = $this->event();
@@ -48,6 +58,38 @@ class EndToEndSeeder extends Seeder
         $theirs = $this->attendee($event, self::OPPONENT_EMAIL, 'Grace Hopper', Allegiance::Traitor);
 
         $this->game($event, $mine, $theirs);
+
+        $this->invite($event);
+    }
+
+    /**
+     * An outstanding Invite to an account nobody has claimed.
+     *
+     * Reset on every run: the browser test claims it, which sets a password
+     * and revokes the Invite, and the next run needs the link to work again.
+     */
+    private function invite(Event $event): void
+    {
+        $user = User::query()->updateOrCreate(
+            ['email' => self::INVITED_EMAIL],
+            [
+                'name' => 'Invited Captain',
+                'password' => Hash::make(self::PASSWORD),
+                'email_verified_at' => null,
+                'claimed_at' => null,
+            ],
+        );
+
+        EventInvite::query()->updateOrCreate(
+            ['token' => EventInvite::hashToken(self::INVITE_TOKEN)],
+            [
+                'event_id' => $event->getKey(),
+                'user_id' => $user->getKey(),
+                'role' => EventInviteRole::Captain,
+                'expires_at' => now()->addWeek(),
+                'revoked_at' => null,
+            ],
+        );
     }
 
     private function event(): Event

@@ -5,6 +5,13 @@ import { ApiClient, type ApiClientOptions } from './client';
 let client: ApiClient | null = null;
 
 /**
+ * What the API records this session against. One name for every screen that
+ * asks for a token, so a Player's device list reads as devices rather than as
+ * the screens they happened to sign in from.
+ */
+export const DEVICE_NAME = 'Battlezones Web';
+
+/**
  * The one client the app talks through.
  *
  * It needs the router to send a lost session to login, and the router needs

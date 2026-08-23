@@ -1,44 +1,34 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
-import { DEVICE_NAME, useApiClient } from '@/api';
+import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import TextField from '@/components/TextField.vue';
-import { useSessionStore } from '@/stores/session';
 
 const client = useApiClient();
-const session = useSessionStore();
-const router = useRouter();
-const route = useRoute();
 
 const email = ref('');
-const password = ref('');
 const submitting = ref(false);
+const sent = ref<string | null>(null);
 const error = ref<ApiError | null>(null);
-
-/** Set when a password reset landed but signing in with it did not. */
-const afterReset = computed(() => route.query.reset === '1');
 
 function fieldErrors(field: string): string[] {
   return error.value?.fields[field] ?? [];
 }
 
+/**
+ * The API answers the same way whether or not the address is on an account,
+ * so this screen does too: anything else would let a stranger test addresses.
+ */
 async function submit(): Promise<void> {
   submitting.value = true;
+  sent.value = null;
   error.value = null;
 
   try {
-    await client.login(email.value, password.value, DEVICE_NAME);
-
-    // Logging in with a password is the end of any invited session that came
-    // before it, so nothing is left to confine this one to one Event.
-    session.forgetInvite();
-    await session.load(client);
-
-    const redirect = route.query.redirect;
-
-    await router.replace(typeof redirect === 'string' && redirect !== '' ? redirect : { name: 'my-game', params: { eventSlug: 'end-to-end-open' } });
+    const response = await client.post<{ message: string }>('/api/auth/forgot-password', { email: email.value });
+    sent.value = response.message;
   } catch (caught) {
     error.value = caught instanceof ApiError ? caught : null;
   } finally {
@@ -49,24 +39,25 @@ async function submit(): Promise<void> {
 
 <template>
   <main class="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center gap-8 p-6">
-    <header>
+    <header class="flex flex-col gap-2">
       <h1 class="text-2xl font-semibold tracking-tight text-ink">
-        Battlezones
+        Forgotten password
       </h1>
-      <p class="mt-1 text-sm text-ink-muted">
-        Log in to see your game.
+      <p class="text-sm text-ink-muted">
+        We will email you a link to set a new one.
       </p>
     </header>
 
     <p
-      v-if="afterReset"
-      data-testid="password-was-reset"
+      v-if="sent"
+      data-testid="reset-link-sent"
       class="rounded-2xl bg-surface-raised p-5 text-success"
     >
-      Your password has been reset. Log in with it to carry on.
+      {{ sent }}
     </p>
 
     <form
+      v-else
       class="flex flex-col gap-4"
       novalidate
       @submit.prevent="submit"
@@ -77,22 +68,13 @@ async function submit(): Promise<void> {
         type="email"
         inputmode="email"
         autocomplete="email"
-        testid="email"
+        testid="forgot-email"
         :errors="fieldErrors('email')"
-      />
-
-      <TextField
-        v-model="password"
-        label="Password"
-        type="password"
-        autocomplete="current-password"
-        testid="password"
-        :errors="fieldErrors('password')"
       />
 
       <p
         v-if="error && error.kind !== 'validation'"
-        data-testid="login-error"
+        data-testid="forgot-error"
         class="text-sm text-danger"
       >
         {{ error.message }}
@@ -100,20 +82,20 @@ async function submit(): Promise<void> {
 
       <button
         type="submit"
-        data-testid="submit-login"
+        data-testid="submit-forgot"
         :disabled="submitting"
         class="mt-2 rounded-lg bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
       >
-        {{ submitting ? 'Logging in…' : 'Log in' }}
+        {{ submitting ? 'Sending…' : 'Send the link' }}
       </button>
     </form>
 
     <RouterLink
-      :to="{ name: 'forgot-password' }"
-      data-testid="forgot-password-link"
+      :to="{ name: 'login' }"
+      data-testid="back-to-login"
       class="text-center text-ink-muted underline underline-offset-4"
     >
-      I have forgotten my password
+      Back to log in
     </RouterLink>
   </main>
 </template>

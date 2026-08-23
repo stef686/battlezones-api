@@ -8,6 +8,7 @@ export type ApiErrorKind =
     | 'forbidden'
     | 'not_found'
     | 'conflict'
+    | 'gone'
     | 'rate_limited'
     | 'server'
     | 'network';
@@ -50,6 +51,10 @@ const MESSAGES: Record<ApiErrorKind, string> = {
     // look like, and guessing which would leak the difference.
     not_found: 'That could not be found.',
     conflict: 'That has already been done.',
+    // An Invite that has expired or been used. Distinct from a 404 on
+    // purpose: the holder had something real, and what to do about it —
+    // log in, or ask for a new one — depends on knowing that.
+    gone: 'That link is no longer usable.',
     rate_limited: 'Too many attempts. Give it a moment.',
     server: 'Something went wrong at our end.',
     network: 'You appear to be offline. Check your connection and try again.',
@@ -65,6 +70,8 @@ function kindFor(status: number): ApiErrorKind {
             return 'not_found';
         case 409:
             return 'conflict';
+        case 410:
+            return 'gone';
         case 422:
             return 'validation';
         case 429:
