@@ -11,6 +11,21 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class EventResource extends JsonResource
 {
+    private bool $withViewer = false;
+
+    /**
+     * Include what the reader may see and do at this Event.
+     *
+     * Opt-in rather than automatic: the listing renders many Events, and the
+     * viewer block costs a query or two each.
+     */
+    public function withViewer(): static
+    {
+        $this->withViewer = true;
+
+        return $this;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -36,6 +51,7 @@ class EventResource extends JsonResource
             'documents' => EventDocumentResource::collection($this->whenLoaded('documents')),
             'created_at' => $this->created_at?->toIso8601ZuluString(),
             'updated_at' => $this->updated_at?->toIso8601ZuluString(),
+            ...($this->withViewer ? ['viewer' => EventViewer::for($this->resource, $request->user('sanctum'))] : []),
         ];
     }
 }

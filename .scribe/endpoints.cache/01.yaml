@@ -32,10 +32,43 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1074,"updated_at":"2026-08-23T17:41:36Z","public_name":"Ms. Elisabeth Okuneva","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":12,"updated_at":"2026-08-01T10:00:00Z","public_name":"Ada Lovelace","country":"GB","email":"ada@example.com","is_claimed":true,"email_verified":true,"unread_notifications_count":3,"game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":4,"following_count":7}}'
         headers: []
         description: ''
-    responseFields: []
+    responseFields:
+      data.is_claimed:
+        custom: []
+        name: data.is_claimed
+        description: 'Whether this account has been claimed with a password. An unclaimed account exists only because someone invited it, and the SPA restricts what it may do.'
+        required: true
+        example: null
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      data.email_verified:
+        custom: []
+        name: data.email_verified
+        description: 'Whether the email address on the account has been verified.'
+        required: true
+        example: null
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      data.unread_notifications_count:
+        custom: []
+        name: data.unread_notifications_count
+        description: 'How many in-app notifications are unread.'
+        required: true
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
     auth: []
     controller: null
     method: null
@@ -365,7 +398,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1075,"updated_at":"2026-08-23T17:41:36Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1126,"updated_at":"2026-08-23T17:49:46Z","public_name":"Ms. Audra Crooks II","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
       -
@@ -554,7 +587,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1076,"updated_at":"2026-08-23T17:41:36Z","public_name":"Ms. Audra Crooks II","country":"IL","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1127,"updated_at":"2026-08-23T17:49:46Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -783,7 +816,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -797,7 +830,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -839,7 +872,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -851,15 +884,15 @@ endpoints:
       primary_messages:
         - push
       message_requests:
-        - push
+        - email
       event_messages:
-        - push
+        - email
       round_live:
         - email
       result_activity:
         - push
       voting_open:
-        - push
+        - email
     fileParameters: []
     responses:
       -
@@ -1034,7 +1067,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1081,"public_name":"Ms. Audra Crooks II","username":"marquardt.noah"},{"id":1082,"public_name":"Mina Bauch","username":"okeefe.isidro"}]}'
+        content: '{"data":[{"id":1132,"public_name":"Ms. Audra Crooks II","username":"breitenberg.gilbert"},{"id":1133,"public_name":"Miss Jazlyn Keebler III","username":"bauch.marcelo"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -1083,7 +1116,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1083,"updated_at":"2026-08-23T17:41:36Z","public_name":"Domingo Leuschke","country":"MF","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1134,"updated_at":"2026-08-23T17:49:46Z","public_name":"Eulalia VonRueden","country":"MF","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1132,7 +1165,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1084,"updated_at":"2026-08-23T17:41:36Z","public_name":"Hank Batz","country":"AW","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1135,"updated_at":"2026-08-23T17:49:46Z","public_name":"Akeem Hettinger","country":"MR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1181,7 +1214,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1085,"public_name":"Rodrigo O''Connell","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1136,"public_name":"Colt Balistreri","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1230,7 +1263,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1086,"public_name":"Brennon Anderson","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1137,"public_name":"Dr. Alan Green","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1279,7 +1312,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1087,"updated_at":"2026-08-23T17:41:36Z","public_name":"Michelle Cassin","country":"TO","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1138,"updated_at":"2026-08-23T17:49:46Z","public_name":"Fausto Conroy","country":"IN","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1328,7 +1361,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1088,"updated_at":"2026-08-23T17:41:36Z","public_name":"Kayden Robel","country":"PK","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1139,"updated_at":"2026-08-23T17:49:46Z","public_name":"Garett Runolfsson","country":"CD","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1365,7 +1398,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1089,"public_name":"Emilie Glover","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1140,"public_name":"Noemy Klocko","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []

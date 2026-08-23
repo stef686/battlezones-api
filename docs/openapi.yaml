@@ -1121,10 +1121,62 @@ paths:
                             type: string
                           country:
                             type: string
+                      game_system:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          slug:
+                            type: string
+                      documents:
+                        type: array
                       created_at:
                         type: string
                       updated_at:
                         type: string
+                      viewer:
+                        type: object
+                        properties:
+                          is_organiser:
+                            type: boolean
+                            description: 'Whether the reader runs this Event.'
+                          is_lead_organiser:
+                            type: boolean
+                            description: 'Whether the reader leads it, and so may appoint Organisers.'
+                          is_attendee:
+                            type: boolean
+                            description: 'Whether the reader is competing here.'
+                          attendee_id:
+                            type: integer
+                            description: 'The party the reader competes as, if any.'
+                            nullable: true
+                          permissions:
+                            type: object
+                            properties:
+                              organise:
+                                type: boolean
+                                description: 'Publish Rounds, correct results, open Polls, read tallies.'
+                              register:
+                                type: boolean
+                                description: 'Enter the Event.'
+                              manage_organisers:
+                                type: boolean
+                                description: 'Appoint and remove Organisers.'
+                            required:
+                              - organise
+                              - register
+                              - manage_organisers
+                        required:
+                          - is_organiser
+                          - is_lead_organiser
+                          - is_attendee
+                          - attendee_id
+                        description: 'What the reader may see and do at this Event. Null for an anonymous request.'
+                        nullable: true
+                    required:
+                      - viewer
       tags:
         - Events
       security: []
@@ -5290,6 +5342,17 @@ paths:
                         type: string
                       country:
                         type: string
+                      email:
+                        type: string
+                      is_claimed:
+                        type: boolean
+                        description: 'Whether this account has been claimed with a password. An unclaimed account exists only because someone invited it, and the SPA restricts what it may do.'
+                      email_verified:
+                        type: boolean
+                        description: 'Whether the email address on the account has been verified.'
+                      unread_notifications_count:
+                        type: integer
+                        description: 'How many in-app notifications are unread.'
                       game_systems:
                         type: array
                       avatar:
@@ -5302,6 +5365,10 @@ paths:
                         type: integer
                       following_count:
                         type: integer
+                    required:
+                      - is_claimed
+                      - email_verified
+                      - unread_notifications_count
       tags:
         - Users
       security: []

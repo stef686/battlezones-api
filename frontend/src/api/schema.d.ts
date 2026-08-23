@@ -2758,8 +2758,33 @@ export interface operations {
                                 city?: string;
                                 country?: string;
                             };
+                            game_system?: {
+                                id?: number;
+                                name?: string;
+                                slug?: string;
+                            };
+                            documents?: unknown[];
                             created_at?: string;
                             updated_at?: string;
+                            /** @description What the reader may see and do at this Event. Null for an anonymous request. */
+                            viewer: {
+                                /** @description Whether the reader runs this Event. */
+                                is_organiser: boolean;
+                                /** @description Whether the reader leads it, and so may appoint Organisers. */
+                                is_lead_organiser: boolean;
+                                /** @description Whether the reader is competing here. */
+                                is_attendee: boolean;
+                                /** @description The party the reader competes as, if any. */
+                                attendee_id: number | null;
+                                permissions?: {
+                                    /** @description Publish Rounds, correct results, open Polls, read tallies. */
+                                    organise: boolean;
+                                    /** @description Enter the Event. */
+                                    register: boolean;
+                                    /** @description Appoint and remove Organisers. */
+                                    manage_organisers: boolean;
+                                };
+                            } | null;
                         };
                     };
                 };
@@ -5953,6 +5978,13 @@ export interface operations {
                             updated_at?: string;
                             public_name?: string;
                             country?: string;
+                            email?: string;
+                            /** @description Whether this account has been claimed with a password. An unclaimed account exists only because someone invited it, and the SPA restricts what it may do. */
+                            is_claimed: boolean;
+                            /** @description Whether the email address on the account has been verified. */
+                            email_verified: boolean;
+                            /** @description How many in-app notifications are unread. */
+                            unread_notifications_count: number;
                             game_systems?: unknown[];
                             avatar?: string;
                             location?: string;
