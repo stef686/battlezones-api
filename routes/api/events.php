@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Events\ClaimInviteController;
+use App\Http\Controllers\Events\CloseEventPollController;
 use App\Http\Controllers\Events\DeleteAttendeeMemberController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
 use App\Http\Controllers\Events\DeleteEventScheduleBlockController;
@@ -10,18 +11,22 @@ use App\Http\Controllers\Events\ListEventAttendeesController;
 use App\Http\Controllers\Events\ListEventFlaggedResultsController;
 use App\Http\Controllers\Events\ListEventGalleryController;
 use App\Http\Controllers\Events\ListEventOrganisersController;
+use App\Http\Controllers\Events\ListEventPollsController;
 use App\Http\Controllers\Events\ListEventRoundsController;
 use App\Http\Controllers\Events\ListEventScheduleController;
 use App\Http\Controllers\Events\ListEventsController;
 use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
+use App\Http\Controllers\Events\OpenEventPollController;
 use App\Http\Controllers\Events\PublishRoundController;
 use App\Http\Controllers\Events\ReorderEventScheduleController;
+use App\Http\Controllers\Events\ReplaceBallotController;
 use App\Http\Controllers\Events\ResolveGameResultFlagController;
 use App\Http\Controllers\Events\RevealArmyListsController;
 use App\Http\Controllers\Events\ShowEventAttendeeController;
 use App\Http\Controllers\Events\ShowEventController;
 use App\Http\Controllers\Events\ShowEventGameController;
+use App\Http\Controllers\Events\ShowEventPollResultsController;
 use App\Http\Controllers\Events\ShowEventRoundController;
 use App\Http\Controllers\Events\ShowInviteController;
 use App\Http\Controllers\Events\ShowMyGameController;
@@ -29,6 +34,7 @@ use App\Http\Controllers\Events\StoreAttendeeMemberController;
 use App\Http\Controllers\Events\StoreEventAttendeeController;
 use App\Http\Controllers\Events\StoreEventInviteController;
 use App\Http\Controllers\Events\StoreEventOrganiserController;
+use App\Http\Controllers\Events\StoreEventPollController;
 use App\Http\Controllers\Events\StoreEventScheduleBlockController;
 use App\Http\Controllers\Events\StoreGameResultController;
 use App\Http\Controllers\Events\StoreInviteSessionController;
@@ -39,6 +45,7 @@ use App\Http\Controllers\Events\UpdateArmyListController;
 use App\Http\Controllers\Events\UpdateEventAttendeeController;
 use App\Http\Controllers\Events\UpdateEventScheduleBlockController;
 use App\Http\Controllers\Events\UpdateGameResultController;
+use App\Http\Controllers\Events\UpdatePaintingEntryController;
 
 Route::get('events', ListEventsController::class)->name('events.index');
 Route::get('events/{event:slug}', ShowEventController::class)->name('events.show');
@@ -71,6 +78,23 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::post('events/{event:slug}/invites', StoreEventInviteController::class)
         ->name('events.invites.store');
+
+    Route::get('events/{event:slug}/polls', ListEventPollsController::class)
+        ->name('events.polls.index');
+    Route::post('events/{event:slug}/polls', StoreEventPollController::class)
+        ->name('events.polls.store');
+    Route::scopeBindings()->post('events/{event:slug}/polls/{poll}/open', OpenEventPollController::class)
+        ->name('events.polls.open');
+    Route::scopeBindings()->get('events/{event:slug}/polls/{poll}/results', ShowEventPollResultsController::class)
+        ->name('events.polls.results');
+    Route::scopeBindings()->post('events/{event:slug}/polls/{poll}/close', CloseEventPollController::class)
+        ->name('events.polls.close');
+
+    Route::scopeBindings()->put('events/{event:slug}/polls/{poll}/ballot', ReplaceBallotController::class)
+        ->name('events.polls.ballot.update');
+
+    Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}/painting', UpdatePaintingEntryController::class)
+        ->name('events.attendees.painting.update');
 
     Route::post('events/{event:slug}/schedule', StoreEventScheduleBlockController::class)
         ->name('events.schedule.store');

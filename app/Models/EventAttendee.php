@@ -20,6 +20,8 @@ use Illuminate\Support\Carbon;
  * @property Allegiance|null $allegiance
  * @property Carbon|null $army_lists_revealed_at
  * @property Carbon|null $checked_in_at
+ * @property bool $painting_entered
+ * @property int|null $display_number
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, EventCustomFieldResponse> $customFieldResponses
@@ -42,9 +44,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|EventAttendee whereArmyListsRevealedAt($value)
  * @method static Builder<static>|EventAttendee whereCheckedInAt($value)
  * @method static Builder<static>|EventAttendee whereCreatedAt($value)
+ * @method static Builder<static>|EventAttendee whereDisplayNumber($value)
  * @method static Builder<static>|EventAttendee whereEventId($value)
  * @method static Builder<static>|EventAttendee whereId($value)
  * @method static Builder<static>|EventAttendee whereName($value)
+ * @method static Builder<static>|EventAttendee wherePaintingEntered($value)
  * @method static Builder<static>|EventAttendee whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -63,6 +67,8 @@ class EventAttendee extends Model
         'allegiance',
         'army_lists_revealed_at',
         'checked_in_at',
+        'painting_entered',
+        'display_number',
     ];
 
     /**
@@ -74,6 +80,8 @@ class EventAttendee extends Model
             'allegiance' => Allegiance::class,
             'army_lists_revealed_at' => 'datetime',
             'checked_in_at' => 'datetime',
+            'painting_entered' => 'boolean',
+            'display_number' => 'integer',
         ];
     }
 

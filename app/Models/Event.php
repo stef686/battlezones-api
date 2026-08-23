@@ -341,6 +341,14 @@ class Event extends Model
     }
 
     /**
+     * @return HasMany<EventPoll, $this>
+     */
+    public function polls(): HasMany
+    {
+        return $this->hasMany(EventPoll::class);
+    }
+
+    /**
      * @return HasMany<EventScheduleBlock, $this>
      */
     public function scheduleBlocks(): HasMany
