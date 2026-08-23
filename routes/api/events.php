@@ -31,6 +31,7 @@ use App\Http\Controllers\Events\ShowEventController;
 use App\Http\Controllers\Events\ShowEventFeedbackController;
 use App\Http\Controllers\Events\ShowEventGameController;
 use App\Http\Controllers\Events\ShowEventPollResultsController;
+use App\Http\Controllers\Events\ShowEventPulseController;
 use App\Http\Controllers\Events\ShowEventRoundController;
 use App\Http\Controllers\Events\ShowFeedbackFormController;
 use App\Http\Controllers\Events\ShowInviteController;
@@ -64,6 +65,9 @@ Route::scopeBindings()->get('events/{event:slug}/rounds/{round}', ShowEventRound
     ->name('events.rounds.show');
 Route::get('events/{event:slug}/games/{game}', ShowEventGameController::class)->name('events.games.show');
 Route::get('events/{event:slug}/standings', ListEventStandingsController::class)->name('events.standings.index');
+
+// Polled every few seconds during a live Event, so it must stay cheap.
+Route::get('events/{event:slug}/pulse', ShowEventPulseController::class)->name('events.pulse');
 Route::get('events/{event:slug}/gallery', ListEventGalleryController::class)->name('events.gallery.index');
 Route::get('events/{event:slug}/schedule', ListEventScheduleController::class)->name('events.schedule.index');
 

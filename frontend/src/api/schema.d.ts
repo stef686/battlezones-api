@@ -612,6 +612,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/events/{event_slug}/pulse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        /**
+         * Event Pulse
+         * @description Change stamps for the live-critical resources of an Event. Cheap enough to poll: four aggregates, no recomputation, and a fixed number of queries however large the Event.
+         */
+        get: operations["eventPulse"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events/{event_slug}/gallery": {
         parameters: {
             query?: never;
@@ -3356,6 +3379,42 @@ export interface operations {
                                 };
                             }[];
                         }[];
+                    };
+                };
+            };
+        };
+    };
+    eventPulse: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @description The highest-numbered Live Round, or null before any Round is published. */
+                            current_round: {
+                                id?: number;
+                                number?: number;
+                            } | null;
+                            /** @description When a Round was last created, published or unpublished. Null when the Event has no Rounds. */
+                            rounds: string | null;
+                            /** @description When a score last changed. Null before any result is in. */
+                            standings: string | null;
+                            /** @description When a Poll was last opened, closed or changed. Null when the Event has no Polls. */
+                            polls: string | null;
+                        };
                     };
                 };
             };

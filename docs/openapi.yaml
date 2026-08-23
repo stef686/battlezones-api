@@ -2000,6 +2000,60 @@ paths:
         required: true
         schema:
           type: string
+  '/api/events/{event_slug}/pulse':
+    get:
+      summary: 'Event Pulse'
+      operationId: eventPulse
+      description: 'Change stamps for the live-critical resources of an Event. Cheap enough to poll: four aggregates, no recomputation, and a fixed number of queries however large the Event.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      current_round:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          number:
+                            type: integer
+                        description: 'The highest-numbered Live Round, or null before any Round is published.'
+                        nullable: true
+                      rounds:
+                        type: string
+                        description: 'When a Round was last created, published or unpublished. Null when the Event has no Rounds.'
+                        nullable: true
+                      standings:
+                        type: string
+                        description: 'When a score last changed. Null before any result is in.'
+                        nullable: true
+                      polls:
+                        type: string
+                        description: 'When a Poll was last opened, closed or changed. Null when the Event has no Polls.'
+                        nullable: true
+                    required:
+                      - current_round
+                      - rounds
+                      - standings
+                      - polls
+      tags:
+        - Events
+      security: []
+    parameters:
+      -
+        in: path
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        schema:
+          type: string
   '/api/events/{event_slug}/gallery':
     get:
       summary: 'List Event Gallery'

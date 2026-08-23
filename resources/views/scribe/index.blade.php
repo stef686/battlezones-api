@@ -172,6 +172,9 @@
                                                                                 <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--standings">
                                 <a href="#events-GETapi-events--event_slug--standings">List Event Standings</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--pulse">
+                                <a href="#events-GETapi-events--event_slug--pulse">Event Pulse</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--gallery">
                                 <a href="#events-GETapi-events--event_slug--gallery">List Event Gallery</a>
                             </li>
@@ -1593,14 +1596,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 310,
+        &quot;id&quot;: 317,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -1759,14 +1762,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 311,
+        &quot;id&quot;: 318,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -1950,17 +1953,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 133,
-        &quot;conversation_id&quot;: 312,
-        &quot;user_id&quot;: 1198,
-        &quot;body&quot;: &quot;Quidem aliquam at aut nobis. Et nihil ut aut velit ab sequi voluptatum. Itaque ut consequuntur architecto iusto. Officia aspernatur facere corporis modi eos eveniet. Reiciendis cum quas ipsum numquam quod sunt.&quot;,
+        &quot;id&quot;: 136,
+        &quot;conversation_id&quot;: 319,
+        &quot;user_id&quot;: 1223,
+        &quot;body&quot;: &quot;Quidem voluptatem quam nesciunt necessitatibus rerum sapiente id. Sunt enim odio est et quisquam. Aliquam expedita est rerum. Non quia aperiam ipsam porro.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
         &quot;is_deleted&quot;: false,
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -2115,14 +2118,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 313,
+        &quot;id&quot;: 320,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -2614,14 +2617,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 314,
+        &quot;id&quot;: 321,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -3367,9 +3370,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 134,
-        &quot;conversation_id&quot;: 315,
-        &quot;user_id&quot;: 1199,
+        &quot;id&quot;: 137,
+        &quot;conversation_id&quot;: 322,
+        &quot;user_id&quot;: 1224,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3377,7 +3380,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -3555,9 +3558,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 135,
-        &quot;conversation_id&quot;: 316,
-        &quot;user_id&quot;: 1200,
+        &quot;id&quot;: 138,
+        &quot;conversation_id&quot;: 323,
+        &quot;user_id&quot;: 1225,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3565,7 +3568,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -3919,14 +3922,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 547,
+        &quot;id&quot;: 560,
         &quot;name&quot;: &quot;Eius et animi&quot;,
         &quot;slug&quot;: &quot;eius-et-animi-565&quot;,
         &quot;description&quot;: &quot;Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2027-02-12T11:15:51Z&quot;,
-        &quot;ends_at&quot;: &quot;2027-02-14T11:15:51Z&quot;,
+        &quot;starts_at&quot;: &quot;2027-02-12T11:23:16Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-02-14T11:23:16Z&quot;,
         &quot;max_attendees&quot;: 100,
         &quot;venue&quot;: {
             &quot;name&quot;: &quot;McLaughlin, Leuschke and Bauch Hall&quot;,
@@ -3934,8 +3937,8 @@ fetch(url, {
             &quot;city&quot;: &quot;South Matildaburgh&quot;,
             &quot;country&quot;: &quot;IE&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -4376,17 +4379,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 51,
+        &quot;id&quot;: 52,
         &quot;title&quot;: &quot;Fugit deleniti distinctio eum doloremque&quot;,
         &quot;body&quot;: &quot;Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.&quot;,
         &quot;pinned&quot;: false,
-        &quot;published_at&quot;: &quot;2026-08-05T19:17:11Z&quot;,
+        &quot;published_at&quot;: &quot;2026-08-05T19:24:36Z&quot;,
         &quot;author&quot;: {
-            &quot;id&quot;: 1201,
+            &quot;id&quot;: 1226,
             &quot;name&quot;: &quot;Cordia Cummings&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -4539,7 +4542,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 121,
+        &quot;id&quot;: 123,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
         &quot;members&quot;: []
@@ -4699,7 +4702,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 122,
+        &quot;id&quot;: 124,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
         &quot;members&quot;: [],
@@ -4862,13 +4865,13 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 80,
+            &quot;id&quot;: 82,
             &quot;number&quot;: 1,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
         },
         {
-            &quot;id&quot;: 81,
+            &quot;id&quot;: 83,
             &quot;number&quot;: 3,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
@@ -5558,7 +5561,203 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                 </form>
 
-                    <h2 id="events-GETapi-events--event_slug--gallery">List Event Gallery</h2>
+                    <h2 id="events-GETapi-events--event_slug--pulse">Event Pulse</h2>
+
+<p>
+</p>
+
+<p>Change stamps for the live-critical resources of an Event. Cheap enough to poll: four aggregates, no recomputation, and a fixed number of queries however large the Event.</p>
+
+<span id="example-requests-GETapi-events--event_slug--pulse">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/london-grand-tournament/pulse';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/london-grand-tournament/pulse"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--pulse">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;current_round&quot;: {
+            &quot;id&quot;: 4,
+            &quot;number&quot;: 2
+        },
+        &quot;rounds&quot;: &quot;2026-09-12T13:30:00Z&quot;,
+        &quot;standings&quot;: &quot;2026-09-12T14:05:12Z&quot;,
+        &quot;polls&quot;: &quot;2026-09-12T16:00:00Z&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--pulse" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--pulse"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--pulse"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--pulse" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--pulse">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--pulse" data-method="GET"
+      data-path="api/events/{event_slug}/pulse"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--pulse', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--pulse"
+                    onclick="tryItOut('GETapi-events--event_slug--pulse');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--pulse"
+                    onclick="cancelTryOut('GETapi-events--event_slug--pulse');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--pulse"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/pulse</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--pulse"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--pulse"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--pulse"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    </form>
+
+    <h3>Response</h3>
+    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>data</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+
+            </summary>
+                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>current_round</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The highest-numbered Live Round, or null before any Round is published.</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>rounds</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>When a Round was last created, published or unpublished. Null when the Event has no Rounds.</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>standings</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>When a score last changed. Null before any result is in.</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>polls</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>When a Poll was last opened, closed or changed. Null when the Event has no Polls.</p>
+                    </div>
+                                    </details>
+        </div>
+                        <h2 id="events-GETapi-events--event_slug--gallery">List Event Gallery</h2>
 
 <p>
 </p>
@@ -5611,13 +5810,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 260,
-        &quot;name&quot;: &quot;Officiis aspernatur quis itaque.&quot;,
-        &quot;description&quot;: &quot;Sapiente fugit quaerat id quae officia velit ea. Voluptatibus quo ut nesciunt. Totam nisi ipsa suscipit quia architecto. Error consequatur aut ipsam suscipit dolorem nisi autem.&quot;,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/06eaf28f-9dd1-3cd2-adcb-cd88d8775050.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/63d23486-2df6-3727-b645-ee301ebd2b55.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;id&quot;: 266,
+        &quot;name&quot;: &quot;Culpa voluptatem vel.&quot;,
+        &quot;description&quot;: &quot;Amet sed occaecati ut esse et. Voluptatum minima sequi quo voluptas laboriosam quis delectus est. Ipsa alias vel velit est.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/01794813-a0b1-3d5d-890b-8d6f073cecc1.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/e9713237-e864-336d-9ae3-073c7f3ecd10.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -8077,7 +8276,7 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 181,
+            &quot;id&quot;: 186,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -8087,7 +8286,7 @@ fetch(url, {
             &quot;is_open_for_me&quot;: null
         },
         {
-            &quot;id&quot;: 182,
+            &quot;id&quot;: 187,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -8260,7 +8459,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 183,
+        &quot;id&quot;: 188,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -8472,7 +8671,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 184,
+        &quot;id&quot;: 189,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -9012,7 +9211,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 185,
+        &quot;id&quot;: 190,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -9648,11 +9847,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 68,
+        &quot;id&quot;: 70,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-08-31T20:39:54+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-08-31T21:39:54+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-08-31T20:47:19+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-08-31T21:47:19+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
         &quot;is_target_live&quot;: false,
@@ -10112,11 +10311,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 69,
+        &quot;id&quot;: 71,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-08-31T20:39:55+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-08-31T21:39:55+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-08-31T20:47:19+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-08-31T21:47:19+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
         &quot;is_target_live&quot;: false,
@@ -14303,13 +14502,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 255,
+        &quot;id&quot;: 261,
         &quot;name&quot;: &quot;Sunt suscipit doloribus fugiat.&quot;,
         &quot;description&quot;: &quot;Deserunt et error neque recusandae et. Dolorem et ut dicta. Assumenda consequatur ut et sunt quisquam. Repellendus ut eaque alias ratione dolores.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/2b9698b7-206f-39ef-afe7-680996a8a00c.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/b791a78a-bdb6-3c15-a840-a911ad9b9a6e.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -14419,7 +14618,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpj3df1q0abp082TWLqJS', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpvl70lv4iru3gbR9ReJ7', 'r')
             ],
         ],
     ]
@@ -14459,13 +14658,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 256,
+        &quot;id&quot;: 262,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -14578,7 +14777,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpj3df1q0abp082TWLqJS</code></p>
+<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpvl70lv4iru3gbR9ReJ7</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -14647,13 +14846,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 257,
+        &quot;id&quot;: 263,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -14776,7 +14975,7 @@ $response = $client-&gt;patch(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpkq7v7ahpha843TTrizG', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php9kuffgt32laa6DvAti0', 'r')
             ],
         ],
     ]
@@ -14816,13 +15015,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 258,
+        &quot;id&quot;: 264,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -14948,7 +15147,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpkq7v7ahpha843TTrizG</code></p>
+<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php9kuffgt32laa6DvAti0</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -15159,13 +15358,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 259,
+        &quot;id&quot;: 265,
         &quot;name&quot;: &quot;Fugit deleniti distinctio eum.&quot;,
         &quot;description&quot;: &quot;Aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/dc407d02-9b9b-35e5-8d69-87904a6787e3.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/b3dfd3b4-abf6-34e6-9ab5-ef739060a5da.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;
     }
 }</code>
  </pre>
@@ -15655,8 +15854,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1178,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
+        &quot;id&quot;: 1203,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;NR&quot;,
         &quot;game_systems&quot;: [],
@@ -16224,8 +16423,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1179,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
+        &quot;id&quot;: 1204,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;MX&quot;,
         &quot;game_systems&quot;: [],
@@ -16987,11 +17186,11 @@ $response = $client-&gt;patch(
         ],
         'json' =&gt; [
             'primary_messages' =&gt; ['email'],
-            'message_requests' =&gt; ['push'],
+            'message_requests' =&gt; ['email'],
             'event_messages' =&gt; ['email'],
             'round_live' =&gt; ['push'],
-            'result_activity' =&gt; ['email'],
-            'voting_open' =&gt; ['push'],
+            'result_activity' =&gt; ['push'],
+            'voting_open' =&gt; ['email'],
         ],
     ]
 );
@@ -17014,7 +17213,7 @@ let body = {
         "email"
     ],
     "message_requests": [
-        "push"
+        "email"
     ],
     "event_messages": [
         "email"
@@ -17023,10 +17222,10 @@ let body = {
         "push"
     ],
     "result_activity": [
-        "email"
+        "push"
     ],
     "voting_open": [
-        "push"
+        "email"
     ]
 };
 
@@ -17711,12 +17910,12 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 1184,
+            &quot;id&quot;: 1209,
             &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
             &quot;username&quot;: &quot;breitenberg.gilbert&quot;
         },
         {
-            &quot;id&quot;: 1185,
+            &quot;id&quot;: 1210,
             &quot;public_name&quot;: &quot;Miss Jazlyn Keebler III&quot;,
             &quot;username&quot;: &quot;bauch.marcelo&quot;
         }
@@ -17863,8 +18062,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1186,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
+        &quot;id&quot;: 1211,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
         &quot;public_name&quot;: &quot;Eulalia VonRueden&quot;,
         &quot;country&quot;: &quot;MF&quot;,
         &quot;game_systems&quot;: [],
@@ -18016,8 +18215,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1187,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
+        &quot;id&quot;: 1212,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
         &quot;public_name&quot;: &quot;Akeem Hettinger&quot;,
         &quot;country&quot;: &quot;MR&quot;,
         &quot;game_systems&quot;: [],
@@ -18169,7 +18368,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1188,
+        &quot;id&quot;: 1213,
         &quot;public_name&quot;: &quot;Colt Balistreri&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
@@ -18316,7 +18515,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1189,
+        &quot;id&quot;: 1214,
         &quot;public_name&quot;: &quot;Dr. Alan Green&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
@@ -18463,8 +18662,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1190,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
+        &quot;id&quot;: 1215,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
         &quot;public_name&quot;: &quot;Fausto Conroy&quot;,
         &quot;country&quot;: &quot;IN&quot;,
         &quot;game_systems&quot;: [],
@@ -18616,8 +18815,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1191,
-        &quot;updated_at&quot;: &quot;2026-08-23T21:45:57Z&quot;,
+        &quot;id&quot;: 1216,
+        &quot;updated_at&quot;: &quot;2026-08-23T21:53:22Z&quot;,
         &quot;public_name&quot;: &quot;Garett Runolfsson&quot;,
         &quot;country&quot;: &quot;CD&quot;,
         &quot;game_systems&quot;: [],
@@ -18769,7 +18968,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1192,
+        &quot;id&quot;: 1217,
         &quot;public_name&quot;: &quot;Noemy Klocko&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
