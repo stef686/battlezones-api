@@ -15,6 +15,11 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string $slug
  * @property SortDirection $sort_direction
+ * @property bool $is_derived
+ * @property int|null $ranking_order
+ * @property numeric|null $win_points
+ * @property numeric|null $draw_points
+ * @property numeric|null $loss_points
  * @property int $display_order
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -26,12 +31,17 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereDisplayOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereDrawPoints($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereIsDerived($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereLossPoints($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereRankingOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereSortDirection($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereWinPoints($value)
  *
  * @mixin \Eloquent
  */
@@ -48,6 +58,11 @@ class EventScoreType extends Model
         'name',
         'slug',
         'sort_direction',
+        'is_derived',
+        'ranking_order',
+        'win_points',
+        'draw_points',
+        'loss_points',
         'display_order',
     ];
 
@@ -58,6 +73,11 @@ class EventScoreType extends Model
     {
         return [
             'sort_direction' => SortDirection::class,
+            'is_derived' => 'boolean',
+            'ranking_order' => 'integer',
+            'win_points' => 'decimal:2',
+            'draw_points' => 'decimal:2',
+            'loss_points' => 'decimal:2',
             'display_order' => 'integer',
         ];
     }

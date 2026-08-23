@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Events\RoundDetailResource;
 use App\Models\Event;
 use App\Models\Round;
+use Illuminate\Http\Request;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\UrlParam;
@@ -13,14 +14,15 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Group('Events', 'APIs for Events')]
 class ShowEventRoundController extends Controller
 {
-    #[Endpoint('Show Event Round', 'Round detail with games for an event.')]
+    #[Endpoint('Show Event Round', 'Round detail with games for an event. Draft rounds are visible to Organisers only.')]
     #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('round', 'integer', 'The id of the round.', example: 1)]
-    public function __invoke(Event $event, Round $round): RoundDetailResource
+    public function __invoke(Request $request, Event $event, Round $round): RoundDetailResource
     {
         abort_unless($event->status->hasRoundsVisible(), 404);
+        abort_if($round->isDraft() && ! $event->isOrganisedBy($request->user('sanctum')), 404);
 
-        $round->load(['games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.user', 'games.attendees.faction']);
+        $round->load(['games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType']);
 
         return RoundDetailResource::make($round);
     }

@@ -2,19 +2,23 @@
 
 namespace App\Models;
 
+use App\Enums\RoundStatus;
 use Database\Factories\RoundFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
  * @property int $event_id
  * @property int $number
  * @property string|null $name
+ * @property RoundStatus $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event $event
@@ -22,15 +26,17 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $games_count
  *
  * @method static \Database\Factories\RoundFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Round newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Round newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Round query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereEventId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Round whereUpdatedAt($value)
+ * @method static Builder<static>|Round live()
+ * @method static Builder<static>|Round newModelQuery()
+ * @method static Builder<static>|Round newQuery()
+ * @method static Builder<static>|Round query()
+ * @method static Builder<static>|Round whereCreatedAt($value)
+ * @method static Builder<static>|Round whereEventId($value)
+ * @method static Builder<static>|Round whereId($value)
+ * @method static Builder<static>|Round whereName($value)
+ * @method static Builder<static>|Round whereNumber($value)
+ * @method static Builder<static>|Round whereStatus($value)
+ * @method static Builder<static>|Round whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
@@ -46,7 +52,87 @@ class Round extends Model
         'event_id',
         'number',
         'name',
+        'status',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'status' => RoundStatus::class,
+        ];
+    }
+
+    /**
+     * Whether Players can see this Round's Games.
+     *
+     * Live is a latch: earlier Rounds stay Live as later ones are published.
+     */
+    public function isLive(): bool
+    {
+        return $this->status === RoundStatus::Live;
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->status === RoundStatus::Draft;
+    }
+
+    /**
+     * Whether any result has been recorded against this Round's Games.
+     *
+     * Publishing can only be reversed while this is false: the alternative
+     * once results exist is silently hiding scores Players have already seen.
+     */
+    public function hasResults(): bool
+    {
+        return GameScore::query()
+            ->whereIn('game_id', $this->games()->select('id'))
+            ->exists();
+    }
+
+    /**
+     * The Games in this Round between Attendees who have already met.
+     *
+     * A rematch is not blocked — an Organiser swapping pairings has reasons of
+     * their own — but the draft view has to say so, and stay truthful after
+     * every swap, which is why this is derived rather than stored.
+     *
+     * @return array<int, true>
+     */
+    public function rematchGameIds(): array
+    {
+        $rows = DB::table('game_attendee as side')
+            ->join('game_attendee as opponent', function ($join): void {
+                $join->on('side.game_id', '=', 'opponent.game_id')
+                    ->whereColumn('side.event_attendee_id', '<', 'opponent.event_attendee_id');
+            })
+            ->join('game_attendee as past_side', 'past_side.event_attendee_id', '=', 'side.event_attendee_id')
+            ->join('game_attendee as past_opponent', function ($join): void {
+                $join->on('past_opponent.game_id', '=', 'past_side.game_id')
+                    ->whereColumn('past_opponent.event_attendee_id', '=', 'opponent.event_attendee_id');
+            })
+            ->join('games', 'games.id', '=', 'side.game_id')
+            ->join('games as past_games', 'past_games.id', '=', 'past_side.game_id')
+            ->join('rounds as past_rounds', 'past_rounds.id', '=', 'past_games.round_id')
+            ->where('games.round_id', $this->getKey())
+            ->where('past_games.id', '!=', DB::raw('games.id'))
+            ->where('past_rounds.event_id', $this->event_id)
+            ->distinct()
+            ->pluck('side.game_id');
+
+        return array_fill_keys($rows->map(fn ($id): int => (int) $id)->all(), true);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    public function scopeLive(Builder $query): void
+    {
+        $query->where('status', RoundStatus::Live);
+    }
 
     /**
      * @return BelongsTo<Event, $this>

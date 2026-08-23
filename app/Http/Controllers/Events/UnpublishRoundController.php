@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Http\Controllers\Events;
+
+use App\Enums\RoundStatus;
+use App\Exceptions\RoundHasResults;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Events\RoundDetailResource;
+use App\Models\Event;
+use App\Models\Round;
+use Illuminate\Support\Facades\Gate;
+use Knuckles\Scribe\Attributes\Authenticated;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\UrlParam;
+
+#[Group('Events', 'APIs for Events')]
+#[Authenticated]
+class UnpublishRoundController extends Controller
+{
+    #[Endpoint('Unpublish a Round', 'Organisers only. Returns a Round to Draft so a broken pairing can be fixed out of sight. Rejected once any result exists.')]
+    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('round', 'integer', 'The id of the round.', example: 1)]
+    public function __invoke(Event $event, Round $round): RoundDetailResource
+    {
+        Gate::authorize('organise', $event);
+
+        if ($round->hasResults()) {
+            throw RoundHasResults::cannotBeUnpublished($round->number);
+        }
+
+        $round->update(['status' => RoundStatus::Draft]);
+
+        $round->load(['games' => fn ($query) => $query->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType']);
+
+        return RoundDetailResource::make($round);
+    }
+}

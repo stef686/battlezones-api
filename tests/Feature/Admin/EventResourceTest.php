@@ -11,7 +11,6 @@ use App\Filament\Resources\Events\RelationManagers\CustomFieldsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\DocumentsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\RoundsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\ScoreTypesRelationManager;
-use App\Filament\Resources\Events\RelationManagers\StandingsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\UpdatesRelationManager;
 use App\Models\Club;
 use App\Models\Event;
@@ -19,9 +18,7 @@ use App\Models\EventAttendee;
 use App\Models\EventCustomField;
 use App\Models\EventDocument;
 use App\Models\EventScoreType;
-use App\Models\EventStanding;
 use App\Models\EventUpdate;
-use App\Models\Faction;
 use App\Models\GameSystem;
 use App\Models\Round;
 use App\Models\User;
@@ -159,49 +156,44 @@ test('attendees relation manager renders on edit page', function () {
 
 test('can create an attendee via relation manager', function () {
     $event = Event::factory()->create();
-    $user = User::factory()->create();
-    $faction = Faction::factory()->create();
 
     Livewire::test(AttendeesRelationManager::class, [
         'ownerRecord' => $event,
         'pageClass' => EditEvent::class,
     ])
         ->callAction(TestAction::make(CreateAction::class)->table(), [
-            'user_id' => $user->id,
-            'faction_id' => $faction->id,
+            'name' => 'Sons of Terra',
         ])
         ->assertNotified();
 
     assertDatabaseHas(EventAttendee::class, [
         'event_id' => $event->id,
-        'user_id' => $user->id,
-        'faction_id' => $faction->id,
+        'name' => 'Sons of Terra',
     ]);
 });
 
 test('can edit an attendee via relation manager', function () {
     $event = Event::factory()->create();
-    $attendee = EventAttendee::factory()->for($event)->create();
-    $newFaction = Faction::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember()->create();
 
     Livewire::test(AttendeesRelationManager::class, [
         'ownerRecord' => $event,
         'pageClass' => EditEvent::class,
     ])
         ->callAction(TestAction::make(EditAction::class)->table($attendee), [
-            'faction_id' => $newFaction->id,
+            'name' => 'Legio Custodes',
         ])
         ->assertNotified();
 
     assertDatabaseHas(EventAttendee::class, [
         'id' => $attendee->id,
-        'faction_id' => $newFaction->id,
+        'name' => 'Legio Custodes',
     ]);
 });
 
 test('can delete an attendee via relation manager', function () {
     $event = Event::factory()->create();
-    $attendee = EventAttendee::factory()->for($event)->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember()->create();
 
     Livewire::test(AttendeesRelationManager::class, [
         'ownerRecord' => $event,
@@ -213,16 +205,16 @@ test('can delete an attendee via relation manager', function () {
     assertDatabaseMissing(EventAttendee::class, ['id' => $attendee->id]);
 });
 
-test('can search attendees by user name', function () {
+test('can search attendees by the name they compete under', function () {
     $event = Event::factory()->create();
     $matching = EventAttendee::factory()
         ->for($event)
-        ->for(User::factory()->create(['name' => 'John Smith']), 'user')
-        ->create();
+        ->withMember()
+        ->create(['name' => 'John Smith']);
     $other = EventAttendee::factory()
         ->for($event)
-        ->for(User::factory()->create(['name' => 'Jane Doe']), 'user')
-        ->create();
+        ->withMember()
+        ->create(['name' => 'Jane Doe']);
 
     Livewire::test(AttendeesRelationManager::class, [
         'ownerRecord' => $event,
@@ -297,22 +289,6 @@ test('can delete a round via relation manager', function () {
         ->assertNotified();
 
     assertDatabaseMissing(Round::class, ['id' => $round->id]);
-});
-
-test('standings relation manager renders on edit page', function () {
-    $event = Event::factory()->create();
-    $attendees = EventAttendee::factory()->count(3)->for($event)->create();
-    $standings = $attendees->map(fn (EventAttendee $attendee, int $index) => EventStanding::factory()->for($event)->create([
-        'event_attendee_id' => $attendee->id,
-        'position' => $index + 1,
-    ]));
-
-    Livewire::test(StandingsRelationManager::class, [
-        'ownerRecord' => $event,
-        'pageClass' => EditEvent::class,
-    ])
-        ->assertOk()
-        ->assertCanSeeTableRecords($standings);
 });
 
 test('custom fields relation manager renders on edit page', function () {

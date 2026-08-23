@@ -25,19 +25,23 @@ class ListEventAttendeesController extends Controller
         abort_unless($event->status->isPubliclyVisible(), 404);
 
         $attendees = $event->attendees()
-            ->with(['user.clubs', 'faction'])
-            ->join('users', 'users.id', '=', 'event_attendees.user_id')
+            ->with(['memberships.user.clubs', 'memberships.faction'])
             ->when($request->filled('search'), function (Builder $query) use ($request): void {
                 $term = '%'.$request->string('search').'%';
 
                 $query->where(function (Builder $query) use ($term): void {
-                    $query->whereHas('user', fn (Builder $q) => $q->where('users.name', 'like', $term))
-                        ->orWhereHas('faction', fn (Builder $q) => $q->where('factions.name', 'like', $term))
-                        ->orWhereHas('user.clubs', fn (Builder $q) => $q->where('clubs.name', 'like', $term));
+                    $query->where('event_attendees.name', 'like', $term)
+                        ->orWhereHas('memberships.user', fn (Builder $q) => $q->where('users.name', 'like', $term))
+                        ->orWhereHas('memberships.user.clubs', fn (Builder $q) => $q->where('clubs.name', 'like', $term))
+                        ->orWhereHas('memberships.faction', fn (Builder $q) => $q->where('factions.name', 'like', $term));
                 });
             })
-            ->orderBy('users.name')
-            ->select('event_attendees.*')
+            ->orderByRaw('COALESCE(event_attendees.name, (
+                SELECT MIN(users.name)
+                FROM event_attendee_user
+                JOIN users ON users.id = event_attendee_user.user_id
+                WHERE event_attendee_user.event_attendee_id = event_attendees.id
+            ))')
             ->paginate();
 
         return EventAttendeeResource::collection($attendees);

@@ -31,19 +31,27 @@ test('active event has attendees, rounds, games, and scores', function () {
         ->and(GameScore::query()
             ->whereHas('game', fn ($q) => $q->whereHas('round', fn ($q) => $q->where('event_id', $event->id)))
             ->count()
-        )->toBeGreaterThan(0)
-        ->and($event->standings()->count())->toBe(16);
+        )->toBeGreaterThan(0);
+
+    $this->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->assertJsonPath('meta.total', 16);
 });
 
-test('completed event has full standings for all attendees', function () {
+test('completed event has standings for all attendees', function () {
     $this->seed(EventSeeder::class);
 
     $event = Event::where('status', EventStatus::Completed)->first();
     $attendeeCount = $event->attendees()->count();
 
-    expect($attendeeCount)->toBeGreaterThan(0)
-        ->and($event->standings()->count())->toBe($attendeeCount)
-        ->and($event->standings()->first()->scores()->count())->toBe(2);
+    expect($attendeeCount)->toBeGreaterThan(0);
+
+    $response = $this->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->assertJsonPath('meta.total', $attendeeCount);
+
+    expect($response->json('data.0.scores'))->toHaveCount(2)
+        ->and($response->json('data.0.position'))->toBe(1);
 });
 
 test('gallery endpoint returns photos for seeded events', function () {

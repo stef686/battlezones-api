@@ -11,9 +11,11 @@ use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -33,7 +35,8 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property bool $show_public_name
  * @property string $email
  * @property Carbon|null $email_verified_at
- * @property string $password
+ * @property Carbon|null $claimed_at
+ * @property string|null $password
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -64,24 +67,26 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property-read Collection<int, PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  *
+ * @method static Builder<static>|User claimed()
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCountry($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereIsAdmin($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNotificationSettings($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePrivacySettings($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereShowPublicName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
+ * @method static Builder<static>|User newModelQuery()
+ * @method static Builder<static>|User newQuery()
+ * @method static Builder<static>|User query()
+ * @method static Builder<static>|User whereClaimedAt($value)
+ * @method static Builder<static>|User whereCountry($value)
+ * @method static Builder<static>|User whereCreatedAt($value)
+ * @method static Builder<static>|User whereEmail($value)
+ * @method static Builder<static>|User whereEmailVerifiedAt($value)
+ * @method static Builder<static>|User whereId($value)
+ * @method static Builder<static>|User whereIsAdmin($value)
+ * @method static Builder<static>|User whereName($value)
+ * @method static Builder<static>|User whereNotificationSettings($value)
+ * @method static Builder<static>|User wherePassword($value)
+ * @method static Builder<static>|User wherePrivacySettings($value)
+ * @method static Builder<static>|User whereRememberToken($value)
+ * @method static Builder<static>|User whereShowPublicName($value)
+ * @method static Builder<static>|User whereUpdatedAt($value)
+ * @method static Builder<static>|User whereUsername($value)
  *
  * @mixin \Eloquent
  */
@@ -106,6 +111,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'show_public_name',
         'email',
         'password',
+        'claimed_at',
         'notification_settings',
         'privacy_settings',
     ];
@@ -130,6 +136,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'claimed_at' => 'datetime',
             'country' => Country::class,
             'is_admin' => 'boolean',
             'show_public_name' => 'boolean',
@@ -255,6 +262,46 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     }
 
     /**
+     * Whether this Player has turned their invited account into a real one.
+     *
+     * An unclaimed account exists because someone else entered their email;
+     * until they set a password it is reachable only through an emailed
+     * credential, so it stays out of public surfaces and cannot authenticate.
+     */
+    public function isClaimed(): bool
+    {
+        return $this->claimed_at !== null;
+    }
+
+    /**
+     * Accounts that exist by their owner's own doing.
+     *
+     * @param  Builder<self>  $query
+     */
+    public function scopeClaimed(Builder $query): void
+    {
+        $query->whereNotNull('users.claimed_at');
+    }
+
+    /**
+     * Unclaimed accounts are not addressable by route.
+     *
+     * Someone else's invitation created them, so until they are claimed they
+     * have no public presence to link to, follow, or read a profile from.
+     * Enforcing it at binding keeps every current and future /users route
+     * honest rather than relying on each one to remember.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     */
+    public function resolveRouteBinding($value, $field = null): ?Model
+    {
+        $user = parent::resolveRouteBinding($value, $field);
+
+        return $user instanceof self && $user->isClaimed() ? $user : null;
+    }
+
+    /**
      * @return list<NotificationChannel>
      */
     public function getNotificationChannels(NotificationType $type): array
@@ -276,7 +323,8 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
      *
      * Channels the application has no registered driver for are dropped, so a
      * preference for a channel that is not built yet cannot break delivery on
-     * the channels that are.
+     * the channels that are. Event notifications always keep the database
+     * driver on top of whatever the preference asks for.
      *
      * @return list<string>
      */
@@ -287,7 +335,11 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
             $this->getNotificationChannels($type),
         );
 
-        return array_values(array_filter($drivers));
+        $drivers = array_values(array_filter($drivers));
+
+        return $type->alwaysInApp()
+            ? array_values(array_unique(['database', ...$drivers]))
+            : $drivers;
     }
 
     public function getMessagingPrivacy(): PrivacyOption
