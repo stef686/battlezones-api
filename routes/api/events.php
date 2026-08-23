@@ -67,17 +67,19 @@ Route::get('events/{event:slug}/standings', ListEventStandingsController::class)
 Route::get('events/{event:slug}/gallery', ListEventGalleryController::class)->name('events.gallery.index');
 Route::get('events/{event:slug}/schedule', ListEventScheduleController::class)->name('events.schedule.index');
 
+// Budgeted per token rather than per address: a hall full of Players sharing
+// one venue IP must not share one budget. See AppServiceProvider.
 Route::get('feedback/{token}', ShowFeedbackFormController::class)->name('feedback.show')
-    ->middleware('throttle:30,1');
+    ->middleware('throttle:token-read');
 Route::post('feedback/{token}', SubmitFeedbackController::class)->name('feedback.store')
-    ->middleware('throttle:10,1');
+    ->middleware('throttle:token-write');
 
 Route::get('invites/{token}', ShowInviteController::class)->name('invites.show')
-    ->middleware('throttle:30,1');
+    ->middleware('throttle:token-read');
 Route::post('invites/{token}/session', StoreInviteSessionController::class)->name('invites.session')
-    ->middleware('throttle:auth');
+    ->middleware('throttle:token-write');
 Route::post('invites/{token}/claim', ClaimInviteController::class)->name('invites.claim')
-    ->middleware('throttle:auth');
+    ->middleware('throttle:token-write');
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('events/{event:slug}/organisers', ListEventOrganisersController::class)

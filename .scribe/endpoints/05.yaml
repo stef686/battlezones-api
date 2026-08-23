@@ -71,7 +71,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":533,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T07:24:45Z","ends_at":"2027-02-14T07:24:45Z","max_attendees":100,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-23T17:54:51Z","updated_at":"2026-08-23T17:54:51Z"}}'
+        content: '{"data":{"id":547,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T11:15:51Z","ends_at":"2027-02-14T11:15:51Z","max_attendees":100,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-23T21:45:57Z","updated_at":"2026-08-23T21:45:57Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -257,7 +257,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":50,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-05T15:26:05Z","author":{"id":1174,"name":"Cordia Cummings"},"created_at":"2026-08-23T17:54:51Z","updated_at":"2026-08-23T17:54:51Z"}}'
+        content: '{"data":{"id":51,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-05T19:17:11Z","author":{"id":1201,"name":"Cordia Cummings"},"created_at":"2026-08-23T21:45:57Z","updated_at":"2026-08-23T21:45:57Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -318,7 +318,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":117,"name":"","allegiance":null,"members":[]}}'
+        content: '{"data":{"id":121,"name":"","allegiance":null,"members":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -379,7 +379,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":118,"name":"","allegiance":null,"members":[],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":122,"name":"","allegiance":null,"members":[],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -428,7 +428,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":77,"number":1,"name":null,"status":"draft"},{"id":78,"number":3,"name":null,"status":"draft"}]}'
+        content: '{"data":[{"id":80,"number":1,"name":null,"status":"draft"},{"id":81,"number":3,"name":null,"status":"draft"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -672,7 +672,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":254,"name":"Labore aut possimus.","description":"Aut illo illo veniam culpa et rerum repellendus. Alias numquam ipsam est accusantium et nihil. Sunt voluptatem dolor quis.","url":"https:\/\/battlezones.test\/storage\/photos\/364ee478-37c7-3e1f-b9a3-aaf044d532df.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/749f6dd5-a501-3b6a-b988-c97bc83191c2.jpg","created_at":"2026-08-23T17:54:51Z","updated_at":"2026-08-23T17:54:51Z"}}'
+        content: '{"data":{"id":260,"name":"Officiis aspernatur quis itaque.","description":"Sapiente fugit quaerat id quae officia velit ea. Voluptatibus quo ut nesciunt. Totam nisi ipsa suscipit quia architecto. Error consequatur aut ipsam suscipit dolorem nisi autem.","url":"https:\/\/battlezones.test\/storage\/photos\/06eaf28f-9dd1-3cd2-adcb-cd88d8775050.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/63d23486-2df6-3727-b645-ee301ebd2b55.jpg","created_at":"2026-08-23T21:45:57Z","updated_at":"2026-08-23T21:45:57Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -1599,7 +1599,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":176,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null},{"id":177,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}]}'
+        content: '{"data":[{"id":181,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null},{"id":182,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}]}'
         headers: []
         description: ''
       -
@@ -1690,7 +1690,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":178,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":183,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
         headers: []
         description: ''
       -
@@ -1763,7 +1763,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":179,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":184,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
         headers: []
         description: ''
       -
@@ -1964,7 +1964,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":180,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":185,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
         headers: []
         description: ''
       -
@@ -2277,7 +2277,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":66,"label":"Awards","type":"info","starts_at":"2026-08-31T16:48:48+00:00","ends_at":"2026-08-31T17:48:48+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":68,"label":"Awards","type":"info","starts_at":"2026-08-31T20:39:54+00:00","ends_at":"2026-08-31T21:39:54+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -2501,7 +2501,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":67,"label":"Awards","type":"info","starts_at":"2026-08-31T16:48:48+00:00","ends_at":"2026-08-31T17:48:48+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":69,"label":"Awards","type":"info","starts_at":"2026-08-31T20:39:55+00:00","ends_at":"2026-08-31T21:39:55+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
