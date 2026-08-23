@@ -78,10 +78,7 @@
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ],
         "analyse": "phpstan analyse",
-        "docs": [
-            "@php artisan scribe:generate --no-interaction",
-            "@php -r \"copy('storage/app/private/scribe/openapi.yaml', 'docs/openapi.yaml');\""
-        ],
+        "docs": "@php artisan docs:spec",
         "format": "pint --parallel --test",
         "format:fix": "pint --parallel"
     },

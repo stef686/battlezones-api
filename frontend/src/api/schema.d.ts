@@ -153,10 +153,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 id: number;
             };
             cookie?: never;
@@ -183,10 +180,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -209,15 +203,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -240,10 +228,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -266,10 +251,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -292,10 +274,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -318,10 +297,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -344,10 +320,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -370,10 +343,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -396,15 +366,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
-                /**
-                 * @description The ID of the message.
-                 * @example 16
-                 */
+                /** @description The ID of the message. */
                 id: number;
             };
             cookie?: never;
@@ -451,10 +415,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example summer-showdown-2026
-                 */
+                /** @description The slug of the event. */
                 slug: string;
             };
             cookie?: never;
@@ -477,10 +438,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example summer-showdown-2026
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -503,10 +461,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -533,15 +488,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 id: number;
             };
             cookie?: never;
@@ -568,10 +517,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -598,15 +544,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the round.
-                 * @example 1
-                 */
+                /** @description The id of the round. */
                 id: number;
             };
             cookie?: never;
@@ -629,15 +569,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the game.
-                 * @example 1
-                 */
+                /** @description The id of the game. */
                 id: number;
             };
             cookie?: never;
@@ -660,10 +594,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -686,10 +617,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -712,10 +640,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -742,10 +667,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The token from the feedback email.
-                 * @example aVeryLongRandomToken
-                 */
+                /** @description The token from the feedback email. */
                 token: string;
             };
             cookie?: never;
@@ -772,10 +694,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The token from the invitation email.
-                 * @example architecto
-                 */
+                /** @description The token from the invitation email. */
                 token: string;
             };
             cookie?: never;
@@ -798,10 +717,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The token from the invitation email.
-                 * @example architecto
-                 */
+                /** @description The token from the invitation email. */
                 token: string;
             };
             cookie?: never;
@@ -824,10 +740,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The token from the invitation email.
-                 * @example architecto
-                 */
+                /** @description The token from the invitation email. */
                 token: string;
             };
             cookie?: never;
@@ -850,10 +763,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -880,15 +790,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the organiser to remove.
-                 * @example 1
-                 */
+                /** @description The id of the organiser to remove. */
                 user_id: number;
             };
             cookie?: never;
@@ -911,10 +815,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -937,10 +838,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -963,10 +861,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -989,10 +884,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -1015,10 +907,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -1045,15 +934,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -1076,15 +959,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -1107,15 +984,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -1138,15 +1009,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -1169,15 +1034,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -1200,15 +1059,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
             };
             cookie?: never;
@@ -1231,10 +1084,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -1257,15 +1107,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the schedule block.
-                 * @example 1
-                 */
+                /** @description The id of the schedule block. */
                 block_id: number;
             };
             cookie?: never;
@@ -1292,10 +1136,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -1318,15 +1159,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the game.
-                 * @example 1
-                 */
+                /** @description The id of the game. */
                 game_id: number;
             };
             cookie?: never;
@@ -1353,15 +1188,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the game.
-                 * @example 1
-                 */
+                /** @description The id of the game. */
                 game_id: number;
             };
             cookie?: never;
@@ -1384,15 +1213,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the game.
-                 * @example 1
-                 */
+                /** @description The id of the game. */
                 game_id: number;
             };
             cookie?: never;
@@ -1415,10 +1238,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -1441,15 +1261,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the round.
-                 * @example 1
-                 */
+                /** @description The id of the round. */
                 round_id: number;
             };
             cookie?: never;
@@ -1476,15 +1290,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the round.
-                 * @example 1
-                 */
+                /** @description The id of the round. */
                 round_id: number;
             };
             cookie?: never;
@@ -1507,10 +1315,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -1533,15 +1338,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
             };
             cookie?: never;
@@ -1564,20 +1363,11 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
-                /**
-                 * @description The id of the Player whose list to reopen.
-                 * @example 1
-                 */
+                /** @description The id of the Player whose list to reopen. */
                 member_id: number;
             };
             cookie?: never;
@@ -1600,15 +1390,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
             };
             cookie?: never;
@@ -1631,20 +1415,11 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
-                /**
-                 * @description The id of the Player to remove.
-                 * @example 1
-                 */
+                /** @description The id of the Player to remove. */
                 id: number;
             };
             cookie?: never;
@@ -1691,10 +1466,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the photo.
-                 * @example 1
-                 */
+                /** @description The ID of the photo. */
                 photo_id: number;
             };
             cookie?: never;
@@ -1725,10 +1497,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -1751,10 +1520,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the photo.
-                 * @example 1
-                 */
+                /** @description The ID of the photo. */
                 photo_id: number;
             };
             cookie?: never;
@@ -1841,10 +1607,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -1907,10 +1670,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The id of the notification.
-                 * @example 9b1d4d0a-1f5f-4a8c-9c1e-2b6f2b3f0a11
-                 */
+                /** @description The id of the notification. */
                 notification: string;
             };
             cookie?: never;
@@ -2001,10 +1761,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -2031,10 +1788,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -2057,10 +1811,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -2083,10 +1834,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -2150,20 +1898,11 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The user's email address. Must be a valid email address.
-                     * @example player@example.com
-                     */
+                    /** @description The user's email address. Must be a valid email address. */
                     email: string;
-                    /**
-                     * @description The user's password.
-                     * @example password
-                     */
+                    /** @description The user's password. */
                     password: string;
-                    /**
-                     * @description The name of the device logging in.
-                     * @example iPhone
-                     */
+                    /** @description The name of the device logging in. */
                     device_name: string;
                 };
             };
@@ -2175,7 +1914,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example {AUTH_TOKEN} */
                         token?: string;
                     };
                 };
@@ -2186,11 +1924,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       "The provided credentials are incorrect."
-                         *     ]
-                         */
                         email?: string[];
                     };
                 };
@@ -2207,30 +1940,15 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The user's display name.
-                     * @example John Doe
-                     */
+                    /** @description The user's display name. */
                     name: string;
-                    /**
-                     * @description The user's email address. Must be a valid email address.
-                     * @example player@example.com
-                     */
+                    /** @description The user's email address. Must be a valid email address. */
                     email: string;
-                    /**
-                     * @description The new user's desired password.
-                     * @example password
-                     */
+                    /** @description The new user's desired password. */
                     password: string;
-                    /**
-                     * @description The name of the device logging in.
-                     * @example iPhone
-                     */
+                    /** @description The name of the device logging in. */
                     device_name: string;
-                    /**
-                     * @description Confirmation of the password field.
-                     * @example password
-                     */
+                    /** @description Confirmation of the password field. */
                     password_confirmation: string;
                 };
             };
@@ -2242,7 +1960,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example {AUTH_TOKEN} */
                         token?: string;
                     };
                 };
@@ -2254,14 +1971,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -2284,9 +1995,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example {AUTH_TOKEN} */
                         token?: string;
-                        /** @example 2026-05-04T00:00:00Z */
                         expires_at?: string;
                     };
                 };
@@ -2297,7 +2006,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -2314,10 +2022,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The new user's email address to send the verification email to.
-                     * @example test@test.com
-                     */
+                    /** @description The new user's email address to send the verification email to. */
                     email: string;
                 };
             };
@@ -2329,7 +2034,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Verification link resent! */
                         message?: string;
                     };
                 };
@@ -2340,7 +2044,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Email already verified. */
                         message?: string;
                     };
                 };
@@ -2351,7 +2054,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example User not found. */
                         message?: string;
                     };
                 };
@@ -2363,14 +2065,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -2388,10 +2084,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The email address associated with the account.
-                     * @example user@example.com
-                     */
+                    /** @description The email address associated with the account. */
                     email: string;
                 };
             };
@@ -2403,7 +2096,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example If a user with that email address exists, we have sent a password reset link. Please check your email. */
                         message?: string;
                     };
                 };
@@ -2415,14 +2107,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -2440,25 +2126,13 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The password reset token from the reset email.
-                     * @example architecto
-                     */
+                    /** @description The password reset token from the reset email. */
                     token: string;
-                    /**
-                     * @description The email address associated with the account.
-                     * @example user@example.com
-                     */
+                    /** @description The email address associated with the account. */
                     email: string;
-                    /**
-                     * @description The new password (minimum 8 characters).
-                     * @example new-password
-                     */
+                    /** @description The new password (minimum 8 characters). */
                     password: string;
-                    /**
-                     * @description Confirmation of the new password.
-                     * @example new-password
-                     */
+                    /** @description Confirmation of the new password. */
                     password_confirmation: string;
                 };
             };
@@ -2470,7 +2144,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Your password has been reset. You may now log in with your new password. */
                         message?: string;
                     };
                 };
@@ -2481,7 +2154,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example This password reset token is invalid or has expired. */
                         message?: string;
                     };
                 };
@@ -2491,10 +2163,7 @@ export interface operations {
     listConversations: {
         parameters: {
             query?: {
-                /**
-                 * @description Filter by tab. One of: primary, events, requests, archived.
-                 * @example primary
-                 */
+                /** @description Filter by tab. One of: primary, events, requests, archived. */
                 tab?: "primary" | "events" | "requests" | "archived";
             };
             header?: never;
@@ -2510,21 +2179,13 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 134 */
                             id?: number;
-                            /** @example false */
                             is_group?: boolean;
-                            /** @example null */
                             name?: string | null;
-                            /** @example [] */
                             participants?: unknown[];
-                            /** @example false */
                             is_archived?: boolean;
-                            /** @example 0 */
                             unread_count?: number;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -2542,22 +2203,11 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description Must match an existing stored value.
-                     * @example [
-                     *       16
-                     *     ]
-                     */
+                    /** @description Must match an existing stored value. */
                     recipient_ids: number[];
-                    /**
-                     * @description The group name (required when starting a group conversation with multiple recipients). Must not be greater than 255 characters.
-                     * @example Game Night Chat
-                     */
+                    /** @description The group name (required when starting a group conversation with multiple recipients). Must not be greater than 255 characters. */
                     name?: string | null;
-                    /**
-                     * @description The initial message body. Must not be greater than 1000 characters.
-                     * @example Hey, want to play this weekend?
-                     */
+                    /** @description The initial message body. Must not be greater than 1000 characters. */
                     body: string;
                 };
             };
@@ -2570,21 +2220,13 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 135 */
                             id?: number;
-                            /** @example false */
                             is_group?: boolean;
-                            /** @example null */
                             name?: string | null;
-                            /** @example [] */
                             participants?: unknown[];
-                            /** @example false */
                             is_archived?: boolean;
-                            /** @example 0 */
                             unread_count?: number;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -2597,14 +2239,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -2617,10 +2253,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 id: number;
             };
             cookie?: never;
@@ -2634,27 +2267,16 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 58 */
                             id?: number;
-                            /** @example 136 */
                             conversation_id?: number;
-                            /** @example 533 */
                             user_id?: number;
-                            /** @example Sit repellat eligendi fugiat eos. Aut libero voluptatibus voluptatum quos error nesciunt dolores ea. Ad quia iure maxime laboriosam dignissimos. Quas quaerat similique dolorem dolor necessitatibus tempore voluptas. */
                             body?: string;
-                            /** @example null */
                             type?: string | null;
-                            /** @example false */
                             is_system?: boolean;
-                            /** @example false */
                             is_deleted?: boolean;
-                            /** @example false */
                             is_edited?: boolean;
-                            /** @example true */
                             is_editable?: boolean;
-                            /** @example null */
                             edited_at?: string | null;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
                         };
                     };
@@ -2667,10 +2289,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 id: number;
             };
             cookie?: never;
@@ -2683,7 +2302,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Conversation deleted. */
                         message?: string;
                     };
                 };
@@ -2695,10 +2313,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -2706,17 +2321,9 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description Must match an existing stored value.
-                     * @example [
-                     *       16
-                     *     ]
-                     */
+                    /** @description Must match an existing stored value. */
                     recipient_ids: number[];
-                    /**
-                     * @description Whether new members should see existing message history.
-                     * @example false
-                     */
+                    /** @description Whether new members should see existing message history. */
                     include_history?: boolean;
                 };
             };
@@ -2729,21 +2336,13 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 137 */
                             id?: number;
-                            /** @example false */
                             is_group?: boolean;
-                            /** @example null */
                             name?: string | null;
-                            /** @example [] */
                             participants?: unknown[];
-                            /** @example false */
                             is_archived?: boolean;
-                            /** @example 0 */
                             unread_count?: number;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -2756,14 +2355,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -2776,15 +2369,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -2806,10 +2393,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -2831,10 +2415,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -2842,10 +2423,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The new group conversation name. Must not be greater than 255 characters.
-                     * @example Weekend Warriors
-                     */
+                    /** @description The new group conversation name. Must not be greater than 255 characters. */
                     name: string;
                 };
             };
@@ -2858,21 +2436,13 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 138 */
                             id?: number;
-                            /** @example false */
                             is_group?: boolean;
-                            /** @example null */
                             name?: string | null;
-                            /** @example [] */
                             participants?: unknown[];
-                            /** @example false */
                             is_archived?: boolean;
-                            /** @example 0 */
                             unread_count?: number;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -2885,14 +2455,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -2905,10 +2469,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -2921,7 +2482,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Conversation archived. */
                         message?: string;
                     };
                 };
@@ -2933,10 +2493,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -2949,7 +2506,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Conversation unarchived. */
                         message?: string;
                     };
                 };
@@ -2961,10 +2517,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -2977,7 +2530,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Conversation marked as read. */
                         message?: string;
                     };
                 };
@@ -2989,10 +2541,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
             };
             cookie?: never;
@@ -3000,10 +2549,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The message content. Must be at least 1 character. Must not be greater than 1000 characters.
-                     * @example Looking forward to the game!
-                     */
+                    /** @description The message content. Must be at least 1 character. Must not be greater than 1000 characters. */
                     body: string;
                 };
             };
@@ -3016,27 +2562,16 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 59 */
                             id?: number;
-                            /** @example 139 */
                             conversation_id?: number;
-                            /** @example 534 */
                             user_id?: number;
-                            /** @example Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. */
                             body?: string;
-                            /** @example null */
                             type?: string | null;
-                            /** @example false */
                             is_system?: boolean;
-                            /** @example false */
                             is_deleted?: boolean;
-                            /** @example false */
                             is_edited?: boolean;
-                            /** @example true */
                             is_editable?: boolean;
-                            /** @example null */
                             edited_at?: string | null;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
                         };
                     };
@@ -3049,14 +2584,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -3069,15 +2598,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
-                /**
-                 * @description The ID of the message.
-                 * @example 16
-                 */
+                /** @description The ID of the message. */
                 id: number;
             };
             cookie?: never;
@@ -3090,7 +2613,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Message deleted. */
                         message?: string;
                     };
                 };
@@ -3102,15 +2624,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the conversation.
-                 * @example 16
-                 */
+                /** @description The ID of the conversation. */
                 conversation_id: number;
-                /**
-                 * @description The ID of the message.
-                 * @example 16
-                 */
+                /** @description The ID of the message. */
                 id: number;
             };
             cookie?: never;
@@ -3118,10 +2634,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The updated message content. Must be at least 1 character. Must not be greater than 1000 characters.
-                     * @example Updated: Looking forward to the game!
-                     */
+                    /** @description The updated message content. Must be at least 1 character. Must not be greater than 1000 characters. */
                     body: string;
                 };
             };
@@ -3134,27 +2647,16 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 60 */
                             id?: number;
-                            /** @example 140 */
                             conversation_id?: number;
-                            /** @example 535 */
                             user_id?: number;
-                            /** @example Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. */
                             body?: string;
-                            /** @example null */
                             type?: string | null;
-                            /** @example false */
                             is_system?: boolean;
-                            /** @example false */
                             is_deleted?: boolean;
-                            /** @example false */
                             is_edited?: boolean;
-                            /** @example true */
                             is_editable?: boolean;
-                            /** @example null */
                             edited_at?: string | null;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
                         };
                     };
@@ -3167,14 +2669,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -3185,20 +2681,11 @@ export interface operations {
     listEvents: {
         parameters: {
             query?: {
-                /**
-                 * @description Search events by name. Must not be greater than 255 characters.
-                 * @example Grand Tournament
-                 */
+                /** @description Search events by name. Must not be greater than 255 characters. */
                 search?: string;
-                /**
-                 * @description Filter by event status. One of: published, active, completed.
-                 * @example active
-                 */
+                /** @description Filter by event status. One of: published, active, completed. */
                 status?: "draft" | "published" | "active" | "completed" | "cancelled";
-                /**
-                 * @description Filter by game system slug. Must match an existing stored value.
-                 * @example warhammer-40k
-                 */
+                /** @description Filter by game system slug. Must match an existing stored value. */
                 game_system?: string;
             };
             header?: never;
@@ -3214,37 +2701,22 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 198 */
                             id?: number;
-                            /** @example Eius et animi */
                             name?: string;
-                            /** @example eius-et-animi-565 */
                             slug?: string;
-                            /** @example Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. */
                             description?: string;
-                            /** @example draft */
                             status?: string;
-                            /** @example swiss */
                             pairing_format?: string;
-                            /** @example 2027-02-12T06:47:02Z */
                             starts_at?: string;
-                            /** @example 2027-02-14T06:47:02Z */
                             ends_at?: string;
-                            /** @example 100 */
                             max_attendees?: number;
                             venue?: {
-                                /** @example McLaughlin, Leuschke and Bauch Hall */
                                 name?: string;
-                                /** @example 45058 Bailee Rue */
                                 address?: string;
-                                /** @example South Matildaburgh */
                                 city?: string;
-                                /** @example IE */
                                 country?: string;
                             };
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -3257,10 +2729,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example summer-showdown-2026
-                 */
+                /** @description The slug of the event. */
                 slug: string;
             };
             cookie?: never;
@@ -3274,37 +2743,22 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 199 */
                             id?: number;
-                            /** @example Fugit deleniti distinctio eum */
                             name?: string;
-                            /** @example fugit-deleniti-distinctio-eum-65128 */
                             slug?: string;
-                            /** @example Aliquam veniam corporis dolorem mollitia deleniti nemo. Quia officia est dignissimos neque. Odio veritatis excepturi doloribus delectus fugit qui repudiandae. Est alias tenetur ratione. */
                             description?: string;
-                            /** @example draft */
                             status?: string;
-                            /** @example swiss */
                             pairing_format?: string;
-                            /** @example 2027-01-24T13:39:17Z */
                             starts_at?: string;
-                            /** @example 2027-01-26T13:39:17Z */
                             ends_at?: string;
-                            /** @example 40 */
                             max_attendees?: number;
                             venue?: {
-                                /** @example Casper-Smith Hall */
                                 name?: string;
-                                /** @example 5481 Dibbert Stravenue Suite 237 */
                                 address?: string;
-                                /** @example Ednaside */
                                 city?: string;
-                                /** @example AU */
                                 country?: string;
                             };
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -3317,10 +2771,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example summer-showdown-2026
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -3334,29 +2785,16 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 26 */
                             id?: number;
-                            /** @example Quia maiores assumenda */
                             title?: string;
-                            /**
-                             * @example Repellat officiis corporis nesciunt ut. Iure impedit molestiae ut rem est esse sint. Molestiae sunt suscipit doloribus fugiat ut aut. Et error neque recusandae et.
-                             *
-                             *     Et ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut.
-                             */
                             body?: string;
-                            /** @example false */
                             pinned?: boolean;
-                            /** @example 2026-07-26T16:40:27Z */
                             published_at?: string;
                             author?: {
-                                /** @example 536 */
                                 id?: number;
-                                /** @example Christian Klocko PhD */
                                 name?: string;
                             };
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -3367,18 +2805,12 @@ export interface operations {
     listEventAttendees: {
         parameters: {
             query?: {
-                /**
-                 * @description Search attendees by name or username. Must not be greater than 255 characters.
-                 * @example john
-                 */
+                /** @description Search attendees by name or username. Must not be greater than 255 characters. */
                 search?: string;
             };
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -3392,13 +2824,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 69 */
                             id?: number;
-                            /** @example  */
                             name?: string;
-                            /** @example null */
                             allegiance?: string | null;
-                            /** @example [] */
                             members?: unknown[];
                         };
                     };
@@ -3411,10 +2839,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -3422,42 +2847,19 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The name the party competes under.
-                     * @example Sons of Terra
-                     */
+                    /** @description The name the party competes under. */
                     name?: string;
-                    /**
-                     * @description The side the party fights for, where the Event divides the field.
-                     * @example loyalist
-                     */
+                    /** @description The side the party fights for, where the Event divides the field. */
                     allegiance?: string;
-                    /**
-                     * @description One entry per Player, including whoever is registering.
-                     * @example [
-                     *       []
-                     *     ]
-                     */
+                    /** @description One entry per Player, including whoever is registering. */
                     players: {
-                        /**
-                         * @description The Player's name.
-                         * @example Tarik Torgaddon
-                         */
+                        /** @description The Player's name. */
                         name?: string;
-                        /**
-                         * @description The Player's email address.
-                         * @example tarik@example.com
-                         */
+                        /** @description The Player's email address. */
                         email: string;
-                        /**
-                         * @description The Faction this Player brings.
-                         * @example 1
-                         */
+                        /** @description The Faction this Player brings. */
                         faction_id?: number;
-                        /**
-                         * @description This Player's army list.
-                         * @example architecto
-                         */
+                        /** @description This Player's army list. */
                         army_list?: string;
                     }[];
                 };
@@ -3471,128 +2873,40 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 9 */
                             id?: number;
-                            /** @example Ada and Grace */
                             name?: string;
-                            /** @example loyalist */
                             allegiance?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 12,
-                             *         "name": "Ada Lovelace",
-                             *         "faction": {
-                             *           "id": 3,
-                             *           "name": "Sons of Horus"
-                             *         },
-                             *         "army_list": "Legion Tactical Squad, 10 models...",
-                             *         "clubs": [
-                             *           {
-                             *             "id": 2,
-                             *             "name": "The Ordo Ludi"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             members?: {
-                                /** @example 12 */
                                 id?: number;
-                                /** @example Ada Lovelace */
                                 name?: string;
                                 faction?: {
-                                    /** @example 3 */
                                     id?: number;
-                                    /** @example Sons of Horus */
                                     name?: string;
                                 };
-                                /** @example Legion Tactical Squad, 10 models... */
                                 army_list?: string;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 2,
-                                 *         "name": "The Ordo Ludi"
-                                 *       }
-                                 *     ]
-                                 */
                                 clubs?: {
-                                    /** @example 2 */
                                     id?: number;
-                                    /** @example The Ordo Ludi */
                                     name?: string;
                                 }[];
                             }[];
-                            /** @example null */
                             checked_in_at?: string | null;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 1,
-                             *         "name": "Dietary requirements",
-                             *         "type": "text",
-                             *         "value": "None"
-                             *       }
-                             *     ]
-                             */
                             custom_field_responses?: {
-                                /** @example 1 */
                                 id?: number;
-                                /** @example Dietary requirements */
                                 name?: string;
-                                /** @example text */
                                 type?: string;
-                                /** @example None */
                                 value?: string;
                             }[];
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 18,
-                             *         "round_number": 2,
-                             *         "table_number": 5,
-                             *         "is_bye": false,
-                             *         "scores": {
-                             *           "match-points": 3,
-                             *           "victory-points": 85
-                             *         },
-                             *         "opponents": [
-                             *           {
-                             *             "id": 11,
-                             *             "name": "Grace and Alan"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             games?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 2 */
                                 round_number?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
                                 scores?: {
-                                    /** @example 3 */
                                     "match-points"?: number;
-                                    /** @example 85 */
                                     "victory-points"?: number;
                                 };
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 11,
-                                 *         "name": "Grace and Alan"
-                                 *       }
-                                 *     ]
-                                 */
                                 opponents?: {
-                                    /** @example 11 */
                                     id?: number;
-                                    /** @example Grace and Alan */
                                     name?: string;
                                 }[];
                             }[];
@@ -3607,7 +2921,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -3619,14 +2932,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -3639,15 +2946,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 id: number;
             };
             cookie?: never;
@@ -3661,19 +2962,12 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 70 */
                             id?: number;
-                            /** @example  */
                             name?: string;
-                            /** @example null */
                             allegiance?: string | null;
-                            /** @example [] */
                             members?: unknown[];
-                            /** @example null */
                             checked_in_at?: string | null;
-                            /** @example [] */
                             custom_field_responses?: unknown[];
-                            /** @example [] */
                             games?: unknown[];
                         };
                     };
@@ -3686,15 +2980,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 id: number;
             };
             cookie?: never;
@@ -3702,15 +2990,9 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The name the party competes under.
-                     * @example Sons of Terra
-                     */
+                    /** @description The name the party competes under. */
                     name?: string;
-                    /**
-                     * @description The side the party fights for. Frozen once a Round is Live.
-                     * @example traitor
-                     */
+                    /** @description The side the party fights for. Frozen once a Round is Live. */
                     allegiance?: string;
                 };
             };
@@ -3723,128 +3005,40 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 9 */
                             id?: number;
-                            /** @example Ada and Grace */
                             name?: string;
-                            /** @example loyalist */
                             allegiance?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 12,
-                             *         "name": "Ada Lovelace",
-                             *         "faction": {
-                             *           "id": 3,
-                             *           "name": "Sons of Horus"
-                             *         },
-                             *         "army_list": "Legion Tactical Squad, 10 models...",
-                             *         "clubs": [
-                             *           {
-                             *             "id": 2,
-                             *             "name": "The Ordo Ludi"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             members?: {
-                                /** @example 12 */
                                 id?: number;
-                                /** @example Ada Lovelace */
                                 name?: string;
                                 faction?: {
-                                    /** @example 3 */
                                     id?: number;
-                                    /** @example Sons of Horus */
                                     name?: string;
                                 };
-                                /** @example Legion Tactical Squad, 10 models... */
                                 army_list?: string;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 2,
-                                 *         "name": "The Ordo Ludi"
-                                 *       }
-                                 *     ]
-                                 */
                                 clubs?: {
-                                    /** @example 2 */
                                     id?: number;
-                                    /** @example The Ordo Ludi */
                                     name?: string;
                                 }[];
                             }[];
-                            /** @example null */
                             checked_in_at?: string | null;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 1,
-                             *         "name": "Dietary requirements",
-                             *         "type": "text",
-                             *         "value": "None"
-                             *       }
-                             *     ]
-                             */
                             custom_field_responses?: {
-                                /** @example 1 */
                                 id?: number;
-                                /** @example Dietary requirements */
                                 name?: string;
-                                /** @example text */
                                 type?: string;
-                                /** @example None */
                                 value?: string;
                             }[];
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 18,
-                             *         "round_number": 2,
-                             *         "table_number": 5,
-                             *         "is_bye": false,
-                             *         "scores": {
-                             *           "match-points": 3,
-                             *           "victory-points": 85
-                             *         },
-                             *         "opponents": [
-                             *           {
-                             *             "id": 11,
-                             *             "name": "Grace and Alan"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             games?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 2 */
                                 round_number?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
                                 scores?: {
-                                    /** @example 3 */
                                     "match-points"?: number;
-                                    /** @example 85 */
                                     "victory-points"?: number;
                                 };
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 11,
-                                 *         "name": "Grace and Alan"
-                                 *       }
-                                 *     ]
-                                 */
                                 opponents?: {
-                                    /** @example 11 */
                                     id?: number;
-                                    /** @example Grace and Alan */
                                     name?: string;
                                 }[];
                             }[];
@@ -3859,7 +3053,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -3871,14 +3064,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -3891,10 +3078,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -3907,30 +3091,10 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       {
-                         *         "id": 29,
-                         *         "number": 1,
-                         *         "name": null,
-                         *         "status": "draft"
-                         *       },
-                         *       {
-                         *         "id": 30,
-                         *         "number": 3,
-                         *         "name": null,
-                         *         "status": "draft"
-                         *       }
-                         *     ]
-                         */
                         data?: {
-                            /** @example 29 */
                             id?: number;
-                            /** @example 1 */
                             number?: number;
-                            /** @example null */
                             name?: string | null;
-                            /** @example draft */
                             status?: string;
                         }[];
                     };
@@ -3943,10 +3107,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -3960,108 +3121,28 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 4 */
                             id?: number;
-                            /** @example 2 */
                             number?: number;
-                            /** @example Round 2 */
                             name?: string;
-                            /** @example live */
                             status?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 18,
-                             *         "table_number": 5,
-                             *         "is_bye": false,
-                             *         "is_rematch": false,
-                             *         "attendees": [
-                             *           {
-                             *             "id": 9,
-                             *             "name": "Ada and Grace",
-                             *             "members": [
-                             *               {
-                             *                 "id": 12,
-                             *                 "name": "Ada Lovelace",
-                             *                 "faction": {
-                             *                   "id": 3,
-                             *                   "name": "Sons of Horus"
-                             *                 }
-                             *               }
-                             *             ],
-                             *             "scores": {
-                             *               "match-points": 3,
-                             *               "victory-points": 85
-                             *             }
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             games?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
-                                /** @example false */
                                 is_rematch?: boolean;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 9,
-                                 *         "name": "Ada and Grace",
-                                 *         "members": [
-                                 *           {
-                                 *             "id": 12,
-                                 *             "name": "Ada Lovelace",
-                                 *             "faction": {
-                                 *               "id": 3,
-                                 *               "name": "Sons of Horus"
-                                 *             }
-                                 *           }
-                                 *         ],
-                                 *         "scores": {
-                                 *           "match-points": 3,
-                                 *           "victory-points": 85
-                                 *         }
-                                 *       }
-                                 *     ]
-                                 */
                                 attendees?: {
-                                    /** @example 9 */
                                     id?: number;
-                                    /** @example Ada and Grace */
                                     name?: string;
-                                    /**
-                                     * @example [
-                                     *       {
-                                     *         "id": 12,
-                                     *         "name": "Ada Lovelace",
-                                     *         "faction": {
-                                     *           "id": 3,
-                                     *           "name": "Sons of Horus"
-                                     *         }
-                                     *       }
-                                     *     ]
-                                     */
                                     members?: {
-                                        /** @example 12 */
                                         id?: number;
-                                        /** @example Ada Lovelace */
                                         name?: string;
                                         faction?: {
-                                            /** @example 3 */
                                             id?: number;
-                                            /** @example Sons of Horus */
                                             name?: string;
                                         };
                                     }[];
                                     scores?: {
-                                        /** @example 3 */
                                         "match-points"?: number;
-                                        /** @example 85 */
                                         "victory-points"?: number;
                                     };
                                 }[];
@@ -4077,7 +3158,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -4089,15 +3169,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the round.
-                 * @example 1
-                 */
+                /** @description The id of the round. */
                 id: number;
             };
             cookie?: never;
@@ -4111,108 +3185,28 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 4 */
                             id?: number;
-                            /** @example 2 */
                             number?: number;
-                            /** @example Round 2 */
                             name?: string;
-                            /** @example live */
                             status?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 18,
-                             *         "table_number": 5,
-                             *         "is_bye": false,
-                             *         "is_rematch": false,
-                             *         "attendees": [
-                             *           {
-                             *             "id": 9,
-                             *             "name": "Ada and Grace",
-                             *             "members": [
-                             *               {
-                             *                 "id": 12,
-                             *                 "name": "Ada Lovelace",
-                             *                 "faction": {
-                             *                   "id": 3,
-                             *                   "name": "Sons of Horus"
-                             *                 }
-                             *               }
-                             *             ],
-                             *             "scores": {
-                             *               "match-points": 3,
-                             *               "victory-points": 85
-                             *             }
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             games?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
-                                /** @example false */
                                 is_rematch?: boolean;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 9,
-                                 *         "name": "Ada and Grace",
-                                 *         "members": [
-                                 *           {
-                                 *             "id": 12,
-                                 *             "name": "Ada Lovelace",
-                                 *             "faction": {
-                                 *               "id": 3,
-                                 *               "name": "Sons of Horus"
-                                 *             }
-                                 *           }
-                                 *         ],
-                                 *         "scores": {
-                                 *           "match-points": 3,
-                                 *           "victory-points": 85
-                                 *         }
-                                 *       }
-                                 *     ]
-                                 */
                                 attendees?: {
-                                    /** @example 9 */
                                     id?: number;
-                                    /** @example Ada and Grace */
                                     name?: string;
-                                    /**
-                                     * @example [
-                                     *       {
-                                     *         "id": 12,
-                                     *         "name": "Ada Lovelace",
-                                     *         "faction": {
-                                     *           "id": 3,
-                                     *           "name": "Sons of Horus"
-                                     *         }
-                                     *       }
-                                     *     ]
-                                     */
                                     members?: {
-                                        /** @example 12 */
                                         id?: number;
-                                        /** @example Ada Lovelace */
                                         name?: string;
                                         faction?: {
-                                            /** @example 3 */
                                             id?: number;
-                                            /** @example Sons of Horus */
                                             name?: string;
                                         };
                                     }[];
                                     scores?: {
-                                        /** @example 3 */
                                         "match-points"?: number;
-                                        /** @example 85 */
                                         "victory-points"?: number;
                                     };
                                 }[];
@@ -4228,15 +3222,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the game.
-                 * @example 1
-                 */
+                /** @description The id of the game. */
                 id: number;
             };
             cookie?: never;
@@ -4250,95 +3238,38 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 18 */
                             id?: number;
-                            /** @example 5 */
                             table_number?: number;
-                            /** @example false */
                             is_bye?: boolean;
                             round?: {
-                                /** @example 4 */
                                 id?: number;
-                                /** @example 2 */
                                 number?: number;
-                                /** @example Round 2 */
                                 name?: string;
                             };
                             result?: {
-                                /** @example 2026-09-12T14:05:00+00:00 */
                                 submitted_at?: string;
                                 submitted_by?: {
-                                    /** @example 12 */
                                     id?: number;
-                                    /** @example Ada Lovelace */
                                     name?: string;
                                 };
-                                /** @example null */
                                 edited_at?: string | null;
-                                /** @example null */
                                 edited_by?: string | null;
-                                /** @example false */
                                 is_flagged?: boolean;
                             };
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 9,
-                             *         "name": "Ada and Grace",
-                             *         "members": [
-                             *           {
-                             *             "id": 12,
-                             *             "name": "Ada Lovelace",
-                             *             "faction": {
-                             *               "id": 3,
-                             *               "name": "Sons of Horus"
-                             *             },
-                             *             "army_list": "Legion Tactical Squad, 10 models..."
-                             *           }
-                             *         ],
-                             *         "scores": {
-                             *           "match-points": 3,
-                             *           "victory-points": 85
-                             *         }
-                             *       }
-                             *     ]
-                             */
                             attendees?: {
-                                /** @example 9 */
                                 id?: number;
-                                /** @example Ada and Grace */
                                 name?: string;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 12,
-                                 *         "name": "Ada Lovelace",
-                                 *         "faction": {
-                                 *           "id": 3,
-                                 *           "name": "Sons of Horus"
-                                 *         },
-                                 *         "army_list": "Legion Tactical Squad, 10 models..."
-                                 *       }
-                                 *     ]
-                                 */
                                 members?: {
-                                    /** @example 12 */
                                     id?: number;
-                                    /** @example Ada Lovelace */
                                     name?: string;
                                     faction?: {
-                                        /** @example 3 */
                                         id?: number;
-                                        /** @example Sons of Horus */
                                         name?: string;
                                     };
-                                    /** @example Legion Tactical Squad, 10 models... */
                                     army_list?: string;
                                 }[];
                                 scores?: {
-                                    /** @example 3 */
                                     "match-points"?: number;
-                                    /** @example 85 */
                                     "victory-points"?: number;
                                 };
                             }[];
@@ -4351,23 +3282,14 @@ export interface operations {
     listEventStandings: {
         parameters: {
             query?: {
-                /**
-                 * @description Search standings by player name or username. Must not be greater than 255 characters.
-                 * @example john
-                 */
+                /** @description Search standings by player name or username. Must not be greater than 255 characters. */
                 search?: string;
-                /**
-                 * @description The field to sort standings by. Must not be greater than 255 characters.
-                 * @example points
-                 */
+                /** @description The field to sort standings by. Must not be greater than 255 characters. */
                 sort_by?: string;
             };
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -4380,124 +3302,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       {
-                         *         "id": 9,
-                         *         "position": 1,
-                         *         "attendee": {
-                         *           "id": 9,
-                         *           "name": "Ada and Grace",
-                         *           "members": [
-                         *             {
-                         *               "id": 12,
-                         *               "name": "Ada Lovelace",
-                         *               "faction": {
-                         *                 "id": 3,
-                         *                 "name": "Sons of Horus"
-                         *               },
-                         *               "clubs": [
-                         *                 {
-                         *                   "id": 2,
-                         *                   "name": "The Ordo Ludi"
-                         *                 }
-                         *               ]
-                         *             }
-                         *           ]
-                         *         },
-                         *         "scores": [
-                         *           {
-                         *             "value": 6,
-                         *             "score_type": {
-                         *               "id": 1,
-                         *               "name": "Match Points",
-                         *               "slug": "match-points",
-                         *               "sort_direction": "desc"
-                         *             }
-                         *           }
-                         *         ]
-                         *       }
-                         *     ]
-                         */
                         data?: {
-                            /** @example 9 */
                             id?: number;
-                            /** @example 1 */
                             position?: number;
                             attendee?: {
-                                /** @example 9 */
                                 id?: number;
-                                /** @example Ada and Grace */
                                 name?: string;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 12,
-                                 *         "name": "Ada Lovelace",
-                                 *         "faction": {
-                                 *           "id": 3,
-                                 *           "name": "Sons of Horus"
-                                 *         },
-                                 *         "clubs": [
-                                 *           {
-                                 *             "id": 2,
-                                 *             "name": "The Ordo Ludi"
-                                 *           }
-                                 *         ]
-                                 *       }
-                                 *     ]
-                                 */
                                 members?: {
-                                    /** @example 12 */
                                     id?: number;
-                                    /** @example Ada Lovelace */
                                     name?: string;
                                     faction?: {
-                                        /** @example 3 */
                                         id?: number;
-                                        /** @example Sons of Horus */
                                         name?: string;
                                     };
-                                    /**
-                                     * @example [
-                                     *       {
-                                     *         "id": 2,
-                                     *         "name": "The Ordo Ludi"
-                                     *       }
-                                     *     ]
-                                     */
                                     clubs?: {
-                                        /** @example 2 */
                                         id?: number;
-                                        /** @example The Ordo Ludi */
                                         name?: string;
                                     }[];
                                 }[];
                             };
-                            /**
-                             * @example [
-                             *       {
-                             *         "value": 6,
-                             *         "score_type": {
-                             *           "id": 1,
-                             *           "name": "Match Points",
-                             *           "slug": "match-points",
-                             *           "sort_direction": "desc"
-                             *         }
-                             *       }
-                             *     ]
-                             */
                             scores?: {
-                                /** @example 6 */
                                 value?: number;
                                 score_type?: {
-                                    /** @example 1 */
                                     id?: number;
-                                    /** @example Match Points */
                                     name?: string;
-                                    /** @example match-points */
                                     slug?: string;
-                                    /** @example desc */
                                     sort_direction?: string;
                                 };
                             }[];
@@ -4512,10 +3341,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -4529,19 +3355,12 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 110 */
                             id?: number;
-                            /** @example Reprehenderit voluptatem sit repellat. */
                             name?: string;
-                            /** @example Harum repudiandae quasi error. Sunt sint perspiciatis ex provident saepe praesentium. Qui quia qui sunt asperiores non. */
                             description?: string;
-                            /** @example https://battlezones.test/storage/photos/11113d9d-3dfa-3442-a03d-b268f8f6a8e1.jpg */
                             url?: string;
-                            /** @example https://battlezones.test/storage/photos/thumbs/ccba112b-f4a8-3a42-b3d8-ad617a45e807.jpg */
                             thumbnail_url?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -4554,10 +3373,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -4570,75 +3386,20 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       {
-                         *         "date": "2026-09-12",
-                         *         "blocks": [
-                         *           {
-                         *             "id": 1,
-                         *             "label": "Round 1",
-                         *             "type": "round",
-                         *             "starts_at": "2026-09-12T09:30:00+00:00",
-                         *             "ends_at": "2026-09-12T12:00:00+00:00",
-                         *             "display_order": 0,
-                         *             "target_id": 4,
-                         *             "is_target_live": true,
-                         *             "round": {
-                         *               "id": 4,
-                         *               "number": 1,
-                         *               "name": "Round 1"
-                         *             }
-                         *           }
-                         *         ]
-                         *       }
-                         *     ]
-                         */
                         data?: {
-                            /** @example 2026-09-12 */
                             date?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 1,
-                             *         "label": "Round 1",
-                             *         "type": "round",
-                             *         "starts_at": "2026-09-12T09:30:00+00:00",
-                             *         "ends_at": "2026-09-12T12:00:00+00:00",
-                             *         "display_order": 0,
-                             *         "target_id": 4,
-                             *         "is_target_live": true,
-                             *         "round": {
-                             *           "id": 4,
-                             *           "number": 1,
-                             *           "name": "Round 1"
-                             *         }
-                             *       }
-                             *     ]
-                             */
                             blocks?: {
-                                /** @example 1 */
                                 id?: number;
-                                /** @example Round 1 */
                                 label?: string;
-                                /** @example round */
                                 type?: string;
-                                /** @example 2026-09-12T09:30:00+00:00 */
                                 starts_at?: string;
-                                /** @example 2026-09-12T12:00:00+00:00 */
                                 ends_at?: string;
-                                /** @example 0 */
                                 display_order?: number;
-                                /** @example 4 */
                                 target_id?: number;
-                                /** @example true */
                                 is_target_live?: boolean;
                                 round?: {
-                                    /** @example 4 */
                                     id?: number;
-                                    /** @example 1 */
                                     number?: number;
-                                    /** @example Round 1 */
                                     name?: string;
                                 };
                             }[];
@@ -4653,10 +3414,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -4664,35 +3422,17 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description What the block is called on the schedule.
-                     * @example Round 1
-                     */
+                    /** @description What the block is called on the schedule. */
                     label: string;
-                    /**
-                     * @description One of info, round, painting_voting.
-                     * @example round
-                     */
+                    /** @description One of info, round, painting_voting. */
                     type: string;
-                    /**
-                     * @description When the block starts, as an ISO 8601 timestamp.
-                     * @example 2026-07-11T09:00:00+01:00
-                     */
+                    /** @description When the block starts, as an ISO 8601 timestamp. */
                     starts_at: string;
-                    /**
-                     * @description When the block ends, as an ISO 8601 timestamp.
-                     * @example 2026-07-11T11:30:00+01:00
-                     */
+                    /** @description When the block ends, as an ISO 8601 timestamp. */
                     ends_at: string;
-                    /**
-                     * @description Must be at least 0.
-                     * @example 39
-                     */
+                    /** @description Must be at least 0. */
                     display_order?: number;
-                    /**
-                     * @description The Round this block runs. Required for a round block, and rejected on any other type.
-                     * @example 4
-                     */
+                    /** @description The Round this block runs. Required for a round block, and rejected on any other type. */
                     round_id?: number;
                 };
             };
@@ -4705,23 +3445,14 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 18 */
                             id?: number;
-                            /** @example Awards */
                             label?: string;
-                            /** @example info */
                             type?: string;
-                            /** @example 2026-08-31T16:11:05+00:00 */
                             starts_at?: string;
-                            /** @example 2026-08-31T17:11:05+00:00 */
                             ends_at?: string;
-                            /** @example 0 */
                             display_order?: number;
-                            /** @example null */
                             target_id?: string | null;
-                            /** @example false */
                             is_target_live?: boolean;
-                            /** @example null */
                             round?: string | null;
                         };
                     };
@@ -4734,7 +3465,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -4746,14 +3476,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -4766,10 +3490,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The token from the feedback email.
-                 * @example aVeryLongRandomToken
-                 */
+                /** @description The token from the feedback email. */
                 token: string;
             };
             cookie?: never;
@@ -4784,33 +3505,15 @@ export interface operations {
                     "application/json": {
                         data?: {
                             event?: {
-                                /** @example 1 */
                                 id?: number;
-                                /** @example London Grand Tournament */
                                 name?: string;
-                                /** @example london-grand-tournament */
                                 slug?: string;
                             };
-                            /** @example 2026-09-20T09:00:00+00:00 */
                             expires_at?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 1,
-                             *         "key": "overall",
-                             *         "prompt": "How was the Event overall?",
-                             *         "type": "rating"
-                             *       }
-                             *     ]
-                             */
                             questions?: {
-                                /** @example 1 */
                                 id?: number;
-                                /** @example overall */
                                 key?: string;
-                                /** @example How was the Event overall? */
                                 prompt?: string;
-                                /** @example rating */
                                 type?: string;
                             }[];
                         };
@@ -4824,7 +3527,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Not Found. */
                         message?: string;
                     };
                 };
@@ -4836,10 +3538,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The token from the feedback email.
-                 * @example aVeryLongRandomToken
-                 */
+                /** @description The token from the feedback email. */
                 token: string;
             };
             cookie?: never;
@@ -4847,34 +3546,13 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description One entry per question answered: a rating for rating questions, an answer for text questions. Unanswered questions may be left out.
-                     * @example [
-                     *       {
-                     *         "question_id": 1,
-                     *         "rating": 5
-                     *       },
-                     *       {
-                     *         "question_id": 8,
-                     *         "answer": "The missions were excellent."
-                     *       }
-                     *     ]
-                     */
+                    /** @description One entry per question answered: a rating for rating questions, an answer for text questions. Unanswered questions may be left out. */
                     answers: {
-                        /**
-                         * @description Must match an existing stored value.
-                         * @example 16
-                         */
+                        /** @description Must match an existing stored value. */
                         question_id: number;
-                        /**
-                         * @description Must be at least 1. Must not be greater than 5.
-                         * @example 2
-                         */
+                        /** @description Must be at least 1. Must not be greater than 5. */
                         rating?: number | null;
-                        /**
-                         * @description Must not be greater than 5000 characters.
-                         * @example g
-                         */
+                        /** @description Must not be greater than 5000 characters. */
                         answer?: string | null;
                     }[];
                 };
@@ -4888,7 +3566,6 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example true */
                             submitted?: boolean;
                         };
                     };
@@ -4901,7 +3578,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Not Found. */
                         message?: string;
                     };
                 };
@@ -4913,14 +3589,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -4933,10 +3603,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The token from the invitation email.
-                 * @example architecto
-                 */
+                /** @description The token from the invitation email. */
                 token: string;
             };
             cookie?: never;
@@ -4950,31 +3617,19 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 7 */
                             id?: number;
-                            /** @example captain */
                             role?: string;
-                            /** @example captain@example.com */
                             email?: string;
-                            /** @example Ada Lovelace */
                             name?: string;
-                            /** @example false */
                             is_claimed?: boolean;
-                            /** @example null */
                             attendee_id?: string | null;
                             event?: {
-                                /** @example london-grand-tournament */
                                 slug?: string;
-                                /** @example London Grand Tournament */
                                 name?: string;
-                                /** @example 2026-09-12T09:00:00+00:00 */
                                 starts_at?: string;
-                                /** @example 2026-09-13T18:00:00+00:00 */
                                 ends_at?: string;
                             };
-                            /** @example 2026-09-12T09:00:00+00:00 */
                             expires_at?: string;
-                            /** @example null */
                             revoked_at?: string | null;
                         };
                     };
@@ -4987,7 +3642,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Not Found. */
                         message?: string;
                     };
                 };
@@ -4999,10 +3653,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The token from the invitation email.
-                 * @example architecto
-                 */
+                /** @description The token from the invitation email. */
                 token: string;
             };
             cookie?: never;
@@ -5010,10 +3661,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The name of the device entering.
-                     * @example iPhone
-                     */
+                    /** @description The name of the device entering. */
                     device_name: string;
                 };
             };
@@ -5025,7 +3673,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example {AUTH_TOKEN} */
                         token?: string;
                     };
                 };
@@ -5037,14 +3684,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -5057,10 +3698,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The token from the invitation email.
-                 * @example architecto
-                 */
+                /** @description The token from the invitation email. */
                 token: string;
             };
             cookie?: never;
@@ -5068,20 +3706,11 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The password to set on the account. Must be at least 8 characters.
-                     * @example password
-                     */
+                    /** @description The password to set on the account. Must be at least 8 characters. */
                     password: string;
-                    /**
-                     * @description A name identifying the device requesting the token. Must not be greater than 255 characters.
-                     * @example iPhone 15
-                     */
+                    /** @description A name identifying the device requesting the token. Must not be greater than 255 characters. */
                     device_name: string;
-                    /**
-                     * @description The name to go by, if it differs from the one the organiser entered. Must not be greater than 255 characters.
-                     * @example Horus Lupercal
-                     */
+                    /** @description The name to go by, if it differs from the one the organiser entered. Must not be greater than 255 characters. */
                     name?: string | null;
                 };
             };
@@ -5093,7 +3722,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example {AUTH_TOKEN} */
                         token?: string;
                     };
                 };
@@ -5105,14 +3733,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -5125,10 +3747,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -5141,21 +3760,9 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       {
-                         *         "id": 12,
-                         *         "name": "Ada Lovelace",
-                         *         "role": "lead"
-                         *       }
-                         *     ]
-                         */
                         data?: {
-                            /** @example 12 */
                             id?: number;
-                            /** @example Ada Lovelace */
                             name?: string;
-                            /** @example lead */
                             role?: string;
                         }[];
                     };
@@ -5168,7 +3775,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5180,10 +3786,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -5191,10 +3794,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The email of the claimed account to appoint.
-                     * @example organiser@example.com
-                     */
+                    /** @description The email of the claimed account to appoint. */
                     email: string;
                 };
             };
@@ -5207,11 +3807,8 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 12 */
                             id?: number;
-                            /** @example Ada Lovelace */
                             name?: string;
-                            /** @example lead */
                             role?: string;
                         };
                     };
@@ -5224,7 +3821,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5236,14 +3832,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -5256,15 +3846,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the organiser to remove.
-                 * @example 1
-                 */
+                /** @description The id of the organiser to remove. */
                 user_id: number;
             };
             cookie?: never;
@@ -5287,7 +3871,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5299,10 +3882,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -5310,15 +3890,9 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The email address to invite.
-                     * @example captain@example.com
-                     */
+                    /** @description The email address to invite. */
                     email: string;
-                    /**
-                     * @description The name to give the invited account, if it does not exist yet.
-                     * @example Horus Lupercal
-                     */
+                    /** @description The name to give the invited account, if it does not exist yet. */
                     name?: string;
                 };
             };
@@ -5331,31 +3905,19 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 7 */
                             id?: number;
-                            /** @example captain */
                             role?: string;
-                            /** @example captain@example.com */
                             email?: string;
-                            /** @example Ada Lovelace */
                             name?: string;
-                            /** @example false */
                             is_claimed?: boolean;
-                            /** @example null */
                             attendee_id?: string | null;
                             event?: {
-                                /** @example london-grand-tournament */
                                 slug?: string;
-                                /** @example London Grand Tournament */
                                 name?: string;
-                                /** @example 2026-09-12T09:00:00+00:00 */
                                 starts_at?: string;
-                                /** @example 2026-09-13T18:00:00+00:00 */
                                 ends_at?: string;
                             };
-                            /** @example 2026-09-12T09:00:00+00:00 */
                             expires_at?: string;
-                            /** @example null */
                             revoked_at?: string | null;
                         };
                     };
@@ -5368,7 +3930,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5380,14 +3941,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -5400,10 +3955,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -5417,7 +3969,6 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 24 */
                             invited?: number;
                         };
                     };
@@ -5430,7 +3981,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5442,10 +3992,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -5460,50 +4007,20 @@ export interface operations {
                     "application/json": {
                         data?: {
                             invitations?: {
-                                /** @example 32 */
                                 sent?: number;
-                                /** @example 19 */
                                 submitted?: number;
                             };
-                            /**
-                             * @example [
-                             *       {
-                             *         "key": "overall",
-                             *         "prompt": "How was the Event overall?",
-                             *         "type": "rating",
-                             *         "response_count": 19,
-                             *         "average": 4.42,
-                             *         "distribution": {
-                             *           "1": 0,
-                             *           "2": 1,
-                             *           "3": 2,
-                             *           "4": 5,
-                             *           "5": 11
-                             *         }
-                             *       }
-                             *     ]
-                             */
                             questions?: {
-                                /** @example overall */
                                 key?: string;
-                                /** @example How was the Event overall? */
                                 prompt?: string;
-                                /** @example rating */
                                 type?: string;
-                                /** @example 19 */
                                 response_count?: number;
-                                /** @example 4.42 */
                                 average?: number;
                                 distribution?: {
-                                    /** @example 0 */
                                     1?: number;
-                                    /** @example 1 */
                                     2?: number;
-                                    /** @example 2 */
                                     3?: number;
-                                    /** @example 5 */
                                     4?: number;
-                                    /** @example 11 */
                                     5?: number;
                                 };
                             }[];
@@ -5518,7 +4035,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5530,10 +4046,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -5556,7 +4069,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5568,10 +4080,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -5584,46 +4093,14 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       {
-                         *         "id": 56,
-                         *         "name": "Best Painted Army",
-                         *         "type": "painting",
-                         *         "votes_per_player": 1,
-                         *         "opens_at": null,
-                         *         "closes_at": null,
-                         *         "is_open": false,
-                         *         "is_open_for_me": null
-                         *       },
-                         *       {
-                         *         "id": 57,
-                         *         "name": "Best Painted Army",
-                         *         "type": "painting",
-                         *         "votes_per_player": 1,
-                         *         "opens_at": null,
-                         *         "closes_at": null,
-                         *         "is_open": false,
-                         *         "is_open_for_me": null
-                         *       }
-                         *     ]
-                         */
                         data?: {
-                            /** @example 56 */
                             id?: number;
-                            /** @example Best Painted Army */
                             name?: string;
-                            /** @example painting */
                             type?: string;
-                            /** @example 1 */
                             votes_per_player?: number;
-                            /** @example null */
                             opens_at?: string | null;
-                            /** @example null */
                             closes_at?: string | null;
-                            /** @example false */
                             is_open?: boolean;
-                            /** @example null */
                             is_open_for_me?: string | null;
                         }[];
                     };
@@ -5636,7 +4113,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5648,10 +4124,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -5659,20 +4132,11 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description What the Poll is called.
-                     * @example Best Painted Army
-                     */
+                    /** @description What the Poll is called. */
                     name: string;
-                    /**
-                     * @description Which Attendees may be picked: painting or favourite_opponent.
-                     * @example painting
-                     */
+                    /** @description Which Attendees may be picked: painting or favourite_opponent. */
                     type: string;
-                    /**
-                     * @description How many Attendees each Player may pick. Defaults to one.
-                     * @example 3
-                     */
+                    /** @description How many Attendees each Player may pick. Defaults to one. */
                     votes_per_player?: number;
                 };
             };
@@ -5685,21 +4149,13 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 58 */
                             id?: number;
-                            /** @example Best Painted Army */
                             name?: string;
-                            /** @example painting */
                             type?: string;
-                            /** @example 1 */
                             votes_per_player?: number;
-                            /** @example null */
                             opens_at?: string | null;
-                            /** @example null */
                             closes_at?: string | null;
-                            /** @example false */
                             is_open?: boolean;
-                            /** @example null */
                             is_open_for_me?: string | null;
                         };
                     };
@@ -5712,7 +4168,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5724,14 +4179,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -5744,15 +4193,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -5766,21 +4209,13 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 59 */
                             id?: number;
-                            /** @example Best Painted Army */
                             name?: string;
-                            /** @example painting */
                             type?: string;
-                            /** @example 1 */
                             votes_per_player?: number;
-                            /** @example null */
                             opens_at?: string | null;
-                            /** @example null */
                             closes_at?: string | null;
-                            /** @example false */
                             is_open?: boolean;
-                            /** @example null */
                             is_open_for_me?: string | null;
                         };
                     };
@@ -5793,7 +4228,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5805,15 +4239,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -5826,79 +4254,19 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       {
-                         *         "id": 9,
-                         *         "name": "Ada and Grace",
-                         *         "allegiance": "loyalist",
-                         *         "members": [
-                         *           {
-                         *             "id": 12,
-                         *             "name": "Ada Lovelace",
-                         *             "faction": {
-                         *               "id": 3,
-                         *               "name": "Sons of Horus"
-                         *             },
-                         *             "clubs": [
-                         *               {
-                         *                 "id": 2,
-                         *                 "name": "The Ordo Ludi"
-                         *               }
-                         *             ]
-                         *           }
-                         *         ]
-                         *       }
-                         *     ]
-                         */
                         data?: {
-                            /** @example 9 */
                             id?: number;
-                            /** @example Ada and Grace */
                             name?: string;
-                            /** @example loyalist */
                             allegiance?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 12,
-                             *         "name": "Ada Lovelace",
-                             *         "faction": {
-                             *           "id": 3,
-                             *           "name": "Sons of Horus"
-                             *         },
-                             *         "clubs": [
-                             *           {
-                             *             "id": 2,
-                             *             "name": "The Ordo Ludi"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             members?: {
-                                /** @example 12 */
                                 id?: number;
-                                /** @example Ada Lovelace */
                                 name?: string;
                                 faction?: {
-                                    /** @example 3 */
                                     id?: number;
-                                    /** @example Sons of Horus */
                                     name?: string;
                                 };
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 2,
-                                 *         "name": "The Ordo Ludi"
-                                 *       }
-                                 *     ]
-                                 */
                                 clubs?: {
-                                    /** @example 2 */
                                     id?: number;
-                                    /** @example The Ordo Ludi */
                                     name?: string;
                                 }[];
                             }[];
@@ -5913,7 +4281,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -5925,15 +4292,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -5948,37 +4309,17 @@ export interface operations {
                     "application/json": {
                         data?: {
                             poll?: {
-                                /** @example 1 */
                                 id?: number;
-                                /** @example Best Painted Army */
                                 name?: string;
-                                /** @example best_painted */
                                 type?: string;
-                                /** @example false */
                                 is_open?: boolean;
                             };
-                            /**
-                             * @example [
-                             *       {
-                             *         "attendee": {
-                             *           "id": 9,
-                             *           "name": "Ada and Grace",
-                             *           "display_number": 4
-                             *         },
-                             *         "votes": 11
-                             *       }
-                             *     ]
-                             */
                             tallies?: {
                                 attendee?: {
-                                    /** @example 9 */
                                     id?: number;
-                                    /** @example Ada and Grace */
                                     name?: string;
-                                    /** @example 4 */
                                     display_number?: number;
                                 };
-                                /** @example 11 */
                                 votes?: number;
                             }[];
                         };
@@ -5992,7 +4333,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6004,15 +4344,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -6026,21 +4360,13 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 60 */
                             id?: number;
-                            /** @example Best Painted Army */
                             name?: string;
-                            /** @example painting */
                             type?: string;
-                            /** @example 1 */
                             votes_per_player?: number;
-                            /** @example null */
                             opens_at?: string | null;
-                            /** @example null */
                             closes_at?: string | null;
-                            /** @example false */
                             is_open?: boolean;
-                            /** @example null */
                             is_open_for_me?: string | null;
                         };
                     };
@@ -6053,7 +4379,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6065,15 +4390,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the poll.
-                 * @example 1
-                 */
+                /** @description The id of the poll. */
                 poll_id: number;
             };
             cookie?: never;
@@ -6081,13 +4400,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The complete Ballot: every Attendee this Player is picking. An empty array clears it.
-                     * @example [
-                     *       4,
-                     *       9
-                     *     ]
-                     */
+                    /** @description The complete Ballot: every Attendee this Player is picking. An empty array clears it. */
                     attendee_ids: number[];
                 };
             };
@@ -6100,14 +4413,7 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 1 */
                             poll_id?: number;
-                            /**
-                             * @example [
-                             *       4,
-                             *       9
-                             *     ]
-                             */
                             attendee_ids?: number[];
                         };
                     };
@@ -6120,7 +4426,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6132,7 +4437,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Voting is not open for you in this poll. */
                         message?: string;
                     };
                 };
@@ -6144,15 +4448,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
             };
             cookie?: never;
@@ -6160,15 +4458,9 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": {
-                    /**
-                     * @description Whether this Attendee has an army on the display table.
-                     * @example true
-                     */
+                    /** @description Whether this Attendee has an army on the display table. */
                     painting_entered?: boolean;
-                    /**
-                     * @description The number their army sits under. Independent of entry: teams get ticked off before anyone numbers them.
-                     * @example 14
-                     */
+                    /** @description The number their army sits under. Independent of entry: teams get ticked off before anyone numbers them. */
                     display_number?: number;
                 };
             };
@@ -6181,53 +4473,18 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 9 */
                             id?: number;
-                            /** @example Ada and Grace */
                             name?: string;
-                            /** @example loyalist */
                             allegiance?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 12,
-                             *         "name": "Ada Lovelace",
-                             *         "faction": {
-                             *           "id": 3,
-                             *           "name": "Sons of Horus"
-                             *         },
-                             *         "clubs": [
-                             *           {
-                             *             "id": 2,
-                             *             "name": "The Ordo Ludi"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             members?: {
-                                /** @example 12 */
                                 id?: number;
-                                /** @example Ada Lovelace */
                                 name?: string;
                                 faction?: {
-                                    /** @example 3 */
                                     id?: number;
-                                    /** @example Sons of Horus */
                                     name?: string;
                                 };
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 2,
-                                 *         "name": "The Ordo Ludi"
-                                 *       }
-                                 *     ]
-                                 */
                                 clubs?: {
-                                    /** @example 2 */
                                     id?: number;
-                                    /** @example The Ordo Ludi */
                                     name?: string;
                                 }[];
                             }[];
@@ -6242,7 +4499,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6254,14 +4510,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -6274,10 +4524,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -6285,14 +4532,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The block ids in the order they should appear.
-                     * @example [
-                     *       3,
-                     *       1,
-                     *       2
-                     *     ]
-                     */
+                    /** @description The block ids in the order they should appear. */
                     block_ids: number[];
                 };
             };
@@ -6305,13 +4545,6 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /**
-                             * @example [
-                             *       3,
-                             *       1,
-                             *       2
-                             *     ]
-                             */
                             block_ids?: number[];
                         };
                     };
@@ -6324,7 +4557,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6336,14 +4568,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -6356,15 +4582,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the schedule block.
-                 * @example 1
-                 */
+                /** @description The id of the schedule block. */
                 block_id: number;
             };
             cookie?: never;
@@ -6386,7 +4606,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6398,15 +4617,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the schedule block.
-                 * @example 1
-                 */
+                /** @description The id of the schedule block. */
                 block_id: number;
             };
             cookie?: never;
@@ -6414,35 +4627,17 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": {
-                    /**
-                     * @description What the block is called on the schedule.
-                     * @example Round 1
-                     */
+                    /** @description What the block is called on the schedule. */
                     label?: string;
-                    /**
-                     * @description One of info, round, painting_voting.
-                     * @example round
-                     */
+                    /** @description One of info, round, painting_voting. */
                     type?: string;
-                    /**
-                     * @description When the block starts, as an ISO 8601 timestamp.
-                     * @example 2026-07-11T09:00:00+01:00
-                     */
+                    /** @description When the block starts, as an ISO 8601 timestamp. */
                     starts_at?: string;
-                    /**
-                     * @description When the block ends, as an ISO 8601 timestamp.
-                     * @example 2026-07-11T11:30:00+01:00
-                     */
+                    /** @description When the block ends, as an ISO 8601 timestamp. */
                     ends_at?: string;
-                    /**
-                     * @description Must be at least 0.
-                     * @example 39
-                     */
+                    /** @description Must be at least 0. */
                     display_order?: number;
-                    /**
-                     * @description The Round this block runs. Required for a round block, and rejected on any other type.
-                     * @example 4
-                     */
+                    /** @description The Round this block runs. Required for a round block, and rejected on any other type. */
                     round_id?: number;
                 };
             };
@@ -6455,23 +4650,14 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 19 */
                             id?: number;
-                            /** @example Awards */
                             label?: string;
-                            /** @example info */
                             type?: string;
-                            /** @example 2026-08-31T16:11:05+00:00 */
                             starts_at?: string;
-                            /** @example 2026-08-31T17:11:05+00:00 */
                             ends_at?: string;
-                            /** @example 0 */
                             display_order?: number;
-                            /** @example null */
                             target_id?: string | null;
-                            /** @example false */
                             is_target_live?: boolean;
-                            /** @example null */
                             round?: string | null;
                         };
                     };
@@ -6484,7 +4670,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6496,14 +4681,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -6516,10 +4695,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -6533,101 +4709,43 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 18 */
                             id?: number;
-                            /** @example 5 */
                             table_number?: number;
-                            /** @example false */
                             is_bye?: boolean;
                             round?: {
-                                /** @example 4 */
                                 id?: number;
-                                /** @example 2 */
                                 number?: number;
-                                /** @example Round 2 */
                                 name?: string;
                             };
                             result?: {
-                                /** @example 2026-09-12T14:05:00+00:00 */
                                 submitted_at?: string;
                                 submitted_by?: {
-                                    /** @example 12 */
                                     id?: number;
-                                    /** @example Ada Lovelace */
                                     name?: string;
                                 };
-                                /** @example null */
                                 edited_at?: string | null;
-                                /** @example null */
                                 edited_by?: string | null;
-                                /** @example false */
                                 is_flagged?: boolean;
                             };
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 9,
-                             *         "name": "Ada and Grace",
-                             *         "members": [
-                             *           {
-                             *             "id": 12,
-                             *             "name": "Ada Lovelace",
-                             *             "faction": {
-                             *               "id": 3,
-                             *               "name": "Sons of Horus"
-                             *             },
-                             *             "army_list": "Legion Tactical Squad, 10 models..."
-                             *           }
-                             *         ],
-                             *         "scores": {
-                             *           "match-points": 3,
-                             *           "victory-points": 85
-                             *         }
-                             *       }
-                             *     ]
-                             */
                             attendees?: {
-                                /** @example 9 */
                                 id?: number;
-                                /** @example Ada and Grace */
                                 name?: string;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 12,
-                                 *         "name": "Ada Lovelace",
-                                 *         "faction": {
-                                 *           "id": 3,
-                                 *           "name": "Sons of Horus"
-                                 *         },
-                                 *         "army_list": "Legion Tactical Squad, 10 models..."
-                                 *       }
-                                 *     ]
-                                 */
                                 members?: {
-                                    /** @example 12 */
                                     id?: number;
-                                    /** @example Ada Lovelace */
                                     name?: string;
                                     faction?: {
-                                        /** @example 3 */
                                         id?: number;
-                                        /** @example Sons of Horus */
                                         name?: string;
                                     };
-                                    /** @example Legion Tactical Squad, 10 models... */
                                     army_list?: string;
                                 }[];
                                 scores?: {
-                                    /** @example 3 */
                                     "match-points"?: number;
-                                    /** @example 85 */
                                     "victory-points"?: number;
                                 };
                             }[];
                         };
                     } | {
-                        /** @example null */
                         data?: string | null;
                     };
                 };
@@ -6639,7 +4757,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6651,15 +4768,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the game.
-                 * @example 1
-                 */
+                /** @description The id of the game. */
                 game_id: number;
             };
             cookie?: never;
@@ -6667,17 +4778,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description Scores keyed by Attendee id, then by Score Type slug. Every Attendee in the Game must be present, and derived Score Types are rejected.
-                     * @example {
-                     *       "1": {
-                     *         "victory-points": 85
-                     *       },
-                     *       "2": {
-                     *         "victory-points": 70
-                     *       }
-                     *     }
-                     */
+                    /** @description Scores keyed by Attendee id, then by Score Type slug. Every Attendee in the Game must be present, and derived Score Types are rejected. */
                     scores: Record<string, never>;
                 };
             };
@@ -6690,95 +4791,38 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 18 */
                             id?: number;
-                            /** @example 5 */
                             table_number?: number;
-                            /** @example false */
                             is_bye?: boolean;
                             round?: {
-                                /** @example 4 */
                                 id?: number;
-                                /** @example 2 */
                                 number?: number;
-                                /** @example Round 2 */
                                 name?: string;
                             };
                             result?: {
-                                /** @example 2026-09-12T14:05:00+00:00 */
                                 submitted_at?: string;
                                 submitted_by?: {
-                                    /** @example 12 */
                                     id?: number;
-                                    /** @example Ada Lovelace */
                                     name?: string;
                                 };
-                                /** @example null */
                                 edited_at?: string | null;
-                                /** @example null */
                                 edited_by?: string | null;
-                                /** @example false */
                                 is_flagged?: boolean;
                             };
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 9,
-                             *         "name": "Ada and Grace",
-                             *         "members": [
-                             *           {
-                             *             "id": 12,
-                             *             "name": "Ada Lovelace",
-                             *             "faction": {
-                             *               "id": 3,
-                             *               "name": "Sons of Horus"
-                             *             },
-                             *             "army_list": "Legion Tactical Squad, 10 models..."
-                             *           }
-                             *         ],
-                             *         "scores": {
-                             *           "match-points": 3,
-                             *           "victory-points": 85
-                             *         }
-                             *       }
-                             *     ]
-                             */
                             attendees?: {
-                                /** @example 9 */
                                 id?: number;
-                                /** @example Ada and Grace */
                                 name?: string;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 12,
-                                 *         "name": "Ada Lovelace",
-                                 *         "faction": {
-                                 *           "id": 3,
-                                 *           "name": "Sons of Horus"
-                                 *         },
-                                 *         "army_list": "Legion Tactical Squad, 10 models..."
-                                 *       }
-                                 *     ]
-                                 */
                                 members?: {
-                                    /** @example 12 */
                                     id?: number;
-                                    /** @example Ada Lovelace */
                                     name?: string;
                                     faction?: {
-                                        /** @example 3 */
                                         id?: number;
-                                        /** @example Sons of Horus */
                                         name?: string;
                                     };
-                                    /** @example Legion Tactical Squad, 10 models... */
                                     army_list?: string;
                                 }[];
                                 scores?: {
-                                    /** @example 3 */
                                     "match-points"?: number;
-                                    /** @example 85 */
                                     "victory-points"?: number;
                                 };
                             }[];
@@ -6793,7 +4837,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6805,14 +4848,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -6825,15 +4862,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the game.
-                 * @example 1
-                 */
+                /** @description The id of the game. */
                 game_id: number;
             };
             cookie?: never;
@@ -6841,17 +4872,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description Scores keyed by Attendee id, then by Score Type slug. Every Attendee in the Game must be present, and derived Score Types are rejected.
-                     * @example {
-                     *       "1": {
-                     *         "victory-points": 85
-                     *       },
-                     *       "2": {
-                     *         "victory-points": 70
-                     *       }
-                     *     }
-                     */
+                    /** @description Scores keyed by Attendee id, then by Score Type slug. Every Attendee in the Game must be present, and derived Score Types are rejected. */
                     scores: Record<string, never>;
                 };
             };
@@ -6864,95 +4885,38 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 18 */
                             id?: number;
-                            /** @example 5 */
                             table_number?: number;
-                            /** @example false */
                             is_bye?: boolean;
                             round?: {
-                                /** @example 4 */
                                 id?: number;
-                                /** @example 2 */
                                 number?: number;
-                                /** @example Round 2 */
                                 name?: string;
                             };
                             result?: {
-                                /** @example 2026-09-12T14:05:00+00:00 */
                                 submitted_at?: string;
                                 submitted_by?: {
-                                    /** @example 12 */
                                     id?: number;
-                                    /** @example Ada Lovelace */
                                     name?: string;
                                 };
-                                /** @example null */
                                 edited_at?: string | null;
-                                /** @example null */
                                 edited_by?: string | null;
-                                /** @example false */
                                 is_flagged?: boolean;
                             };
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 9,
-                             *         "name": "Ada and Grace",
-                             *         "members": [
-                             *           {
-                             *             "id": 12,
-                             *             "name": "Ada Lovelace",
-                             *             "faction": {
-                             *               "id": 3,
-                             *               "name": "Sons of Horus"
-                             *             },
-                             *             "army_list": "Legion Tactical Squad, 10 models..."
-                             *           }
-                             *         ],
-                             *         "scores": {
-                             *           "match-points": 3,
-                             *           "victory-points": 85
-                             *         }
-                             *       }
-                             *     ]
-                             */
                             attendees?: {
-                                /** @example 9 */
                                 id?: number;
-                                /** @example Ada and Grace */
                                 name?: string;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 12,
-                                 *         "name": "Ada Lovelace",
-                                 *         "faction": {
-                                 *           "id": 3,
-                                 *           "name": "Sons of Horus"
-                                 *         },
-                                 *         "army_list": "Legion Tactical Squad, 10 models..."
-                                 *       }
-                                 *     ]
-                                 */
                                 members?: {
-                                    /** @example 12 */
                                     id?: number;
-                                    /** @example Ada Lovelace */
                                     name?: string;
                                     faction?: {
-                                        /** @example 3 */
                                         id?: number;
-                                        /** @example Sons of Horus */
                                         name?: string;
                                     };
-                                    /** @example Legion Tactical Squad, 10 models... */
                                     army_list?: string;
                                 }[];
                                 scores?: {
-                                    /** @example 3 */
                                     "match-points"?: number;
-                                    /** @example 85 */
                                     "victory-points"?: number;
                                 };
                             }[];
@@ -6967,7 +4931,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -6979,7 +4942,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example A result has already been submitted for this game. Flag it if it needs correcting. */
                         message?: string;
                     };
                 };
@@ -6991,14 +4953,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -7011,15 +4967,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the game.
-                 * @example 1
-                 */
+                /** @description The id of the game. */
                 game_id: number;
             };
             cookie?: never;
@@ -7027,10 +4977,7 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": {
-                    /**
-                     * @description Why the result is wrong. Optional, but it is what an Organiser adjudicates on.
-                     * @example We agreed 85-70 the other way round.
-                     */
+                    /** @description Why the result is wrong. Optional, but it is what an Organiser adjudicates on. */
                     reason?: string;
                 };
             };
@@ -7043,23 +4990,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 3 */
                             id?: number;
-                            /** @example 18 */
                             game_id?: number;
-                            /** @example We agreed 85-70 but it went in the other way round. */
                             reason?: string;
-                            /** @example 2026-09-12T14:20:00+00:00 */
                             flagged_at?: string;
                             flagged_by?: {
-                                /** @example 12 */
                                 id?: number;
-                                /** @example Ada Lovelace */
                                 name?: string;
                             };
-                            /** @example null */
                             resolved_at?: string | null;
-                            /** @example null */
                             resolved_by?: string | null;
                         };
                     };
@@ -7072,7 +5011,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -7084,14 +5022,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -7104,15 +5036,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the game.
-                 * @example 1
-                 */
+                /** @description The id of the game. */
                 game_id: number;
             };
             cookie?: never;
@@ -7126,23 +5052,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 3 */
                             id?: number;
-                            /** @example 18 */
                             game_id?: number;
-                            /** @example We agreed 85-70 but it went in the other way round. */
                             reason?: string;
-                            /** @example 2026-09-12T14:20:00+00:00 */
                             flagged_at?: string;
                             flagged_by?: {
-                                /** @example 12 */
                                 id?: number;
-                                /** @example Ada Lovelace */
                                 name?: string;
                             };
-                            /** @example null */
                             resolved_at?: string | null;
-                            /** @example null */
                             resolved_by?: string | null;
                         };
                     };
@@ -7155,7 +5073,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -7167,10 +5084,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -7183,100 +5097,34 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       {
-                         *         "id": 3,
-                         *         "game_id": 18,
-                         *         "reason": "We agreed 85-70 but it went in the other way round.",
-                         *         "flagged_at": "2026-09-12T14:20:00+00:00",
-                         *         "flagged_by": {
-                         *           "id": 12,
-                         *           "name": "Ada Lovelace"
-                         *         },
-                         *         "game": {
-                         *           "id": 18,
-                         *           "table_number": 5,
-                         *           "is_bye": false,
-                         *           "round": {
-                         *             "id": 4,
-                         *             "number": 2,
-                         *             "name": "Round 2"
-                         *           },
-                         *           "attendees": [
-                         *             {
-                         *               "id": 9,
-                         *               "name": "Ada and Grace",
-                         *               "scores": {
-                         *                 "match-points": 3,
-                         *                 "victory-points": 85
-                         *               }
-                         *             }
-                         *           ]
-                         *         },
-                         *         "resolved_at": null,
-                         *         "resolved_by": null
-                         *       }
-                         *     ]
-                         */
                         data?: {
-                            /** @example 3 */
                             id?: number;
-                            /** @example 18 */
                             game_id?: number;
-                            /** @example We agreed 85-70 but it went in the other way round. */
                             reason?: string;
-                            /** @example 2026-09-12T14:20:00+00:00 */
                             flagged_at?: string;
                             flagged_by?: {
-                                /** @example 12 */
                                 id?: number;
-                                /** @example Ada Lovelace */
                                 name?: string;
                             };
                             game?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
                                 round?: {
-                                    /** @example 4 */
                                     id?: number;
-                                    /** @example 2 */
                                     number?: number;
-                                    /** @example Round 2 */
                                     name?: string;
                                 };
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 9,
-                                 *         "name": "Ada and Grace",
-                                 *         "scores": {
-                                 *           "match-points": 3,
-                                 *           "victory-points": 85
-                                 *         }
-                                 *       }
-                                 *     ]
-                                 */
                                 attendees?: {
-                                    /** @example 9 */
                                     id?: number;
-                                    /** @example Ada and Grace */
                                     name?: string;
                                     scores?: {
-                                        /** @example 3 */
                                         "match-points"?: number;
-                                        /** @example 85 */
                                         "victory-points"?: number;
                                     };
                                 }[];
                             };
-                            /** @example null */
                             resolved_at?: string | null;
-                            /** @example null */
                             resolved_by?: string | null;
                         }[];
                     };
@@ -7289,7 +5137,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -7301,15 +5148,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the round.
-                 * @example 1
-                 */
+                /** @description The id of the round. */
                 round_id: number;
             };
             cookie?: never;
@@ -7323,108 +5164,28 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 4 */
                             id?: number;
-                            /** @example 2 */
                             number?: number;
-                            /** @example Round 2 */
                             name?: string;
-                            /** @example live */
                             status?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 18,
-                             *         "table_number": 5,
-                             *         "is_bye": false,
-                             *         "is_rematch": false,
-                             *         "attendees": [
-                             *           {
-                             *             "id": 9,
-                             *             "name": "Ada and Grace",
-                             *             "members": [
-                             *               {
-                             *                 "id": 12,
-                             *                 "name": "Ada Lovelace",
-                             *                 "faction": {
-                             *                   "id": 3,
-                             *                   "name": "Sons of Horus"
-                             *                 }
-                             *               }
-                             *             ],
-                             *             "scores": {
-                             *               "match-points": 3,
-                             *               "victory-points": 85
-                             *             }
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             games?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
-                                /** @example false */
                                 is_rematch?: boolean;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 9,
-                                 *         "name": "Ada and Grace",
-                                 *         "members": [
-                                 *           {
-                                 *             "id": 12,
-                                 *             "name": "Ada Lovelace",
-                                 *             "faction": {
-                                 *               "id": 3,
-                                 *               "name": "Sons of Horus"
-                                 *             }
-                                 *           }
-                                 *         ],
-                                 *         "scores": {
-                                 *           "match-points": 3,
-                                 *           "victory-points": 85
-                                 *         }
-                                 *       }
-                                 *     ]
-                                 */
                                 attendees?: {
-                                    /** @example 9 */
                                     id?: number;
-                                    /** @example Ada and Grace */
                                     name?: string;
-                                    /**
-                                     * @example [
-                                     *       {
-                                     *         "id": 12,
-                                     *         "name": "Ada Lovelace",
-                                     *         "faction": {
-                                     *           "id": 3,
-                                     *           "name": "Sons of Horus"
-                                     *         }
-                                     *       }
-                                     *     ]
-                                     */
                                     members?: {
-                                        /** @example 12 */
                                         id?: number;
-                                        /** @example Ada Lovelace */
                                         name?: string;
                                         faction?: {
-                                            /** @example 3 */
                                             id?: number;
-                                            /** @example Sons of Horus */
                                             name?: string;
                                         };
                                     }[];
                                     scores?: {
-                                        /** @example 3 */
                                         "match-points"?: number;
-                                        /** @example 85 */
                                         "victory-points"?: number;
                                     };
                                 }[];
@@ -7440,7 +5201,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -7452,15 +5212,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the round.
-                 * @example 1
-                 */
+                /** @description The id of the round. */
                 round_id: number;
             };
             cookie?: never;
@@ -7474,108 +5228,28 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 4 */
                             id?: number;
-                            /** @example 2 */
                             number?: number;
-                            /** @example Round 2 */
                             name?: string;
-                            /** @example live */
                             status?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 18,
-                             *         "table_number": 5,
-                             *         "is_bye": false,
-                             *         "is_rematch": false,
-                             *         "attendees": [
-                             *           {
-                             *             "id": 9,
-                             *             "name": "Ada and Grace",
-                             *             "members": [
-                             *               {
-                             *                 "id": 12,
-                             *                 "name": "Ada Lovelace",
-                             *                 "faction": {
-                             *                   "id": 3,
-                             *                   "name": "Sons of Horus"
-                             *                 }
-                             *               }
-                             *             ],
-                             *             "scores": {
-                             *               "match-points": 3,
-                             *               "victory-points": 85
-                             *             }
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             games?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
-                                /** @example false */
                                 is_rematch?: boolean;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 9,
-                                 *         "name": "Ada and Grace",
-                                 *         "members": [
-                                 *           {
-                                 *             "id": 12,
-                                 *             "name": "Ada Lovelace",
-                                 *             "faction": {
-                                 *               "id": 3,
-                                 *               "name": "Sons of Horus"
-                                 *             }
-                                 *           }
-                                 *         ],
-                                 *         "scores": {
-                                 *           "match-points": 3,
-                                 *           "victory-points": 85
-                                 *         }
-                                 *       }
-                                 *     ]
-                                 */
                                 attendees?: {
-                                    /** @example 9 */
                                     id?: number;
-                                    /** @example Ada and Grace */
                                     name?: string;
-                                    /**
-                                     * @example [
-                                     *       {
-                                     *         "id": 12,
-                                     *         "name": "Ada Lovelace",
-                                     *         "faction": {
-                                     *           "id": 3,
-                                     *           "name": "Sons of Horus"
-                                     *         }
-                                     *       }
-                                     *     ]
-                                     */
                                     members?: {
-                                        /** @example 12 */
                                         id?: number;
-                                        /** @example Ada Lovelace */
                                         name?: string;
                                         faction?: {
-                                            /** @example 3 */
                                             id?: number;
-                                            /** @example Sons of Horus */
                                             name?: string;
                                         };
                                     }[];
                                     scores?: {
-                                        /** @example 3 */
                                         "match-points"?: number;
-                                        /** @example 85 */
                                         "victory-points"?: number;
                                     };
                                 }[];
@@ -7591,7 +5265,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -7603,15 +5276,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the round.
-                 * @example 1
-                 */
+                /** @description The id of the round. */
                 round_id: number;
             };
             cookie?: never;
@@ -7619,13 +5286,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The two Games to recombine. The exchange itself is not a choice: the system performs the only legal one.
-                     * @example [
-                     *       12,
-                     *       15
-                     *     ]
-                     */
+                    /** @description The two Games to recombine. The exchange itself is not a choice: the system performs the only legal one. */
                     game_ids: number[];
                 };
             };
@@ -7638,108 +5299,28 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 4 */
                             id?: number;
-                            /** @example 2 */
                             number?: number;
-                            /** @example Round 2 */
                             name?: string;
-                            /** @example live */
                             status?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 18,
-                             *         "table_number": 5,
-                             *         "is_bye": false,
-                             *         "is_rematch": false,
-                             *         "attendees": [
-                             *           {
-                             *             "id": 9,
-                             *             "name": "Ada and Grace",
-                             *             "members": [
-                             *               {
-                             *                 "id": 12,
-                             *                 "name": "Ada Lovelace",
-                             *                 "faction": {
-                             *                   "id": 3,
-                             *                   "name": "Sons of Horus"
-                             *                 }
-                             *               }
-                             *             ],
-                             *             "scores": {
-                             *               "match-points": 3,
-                             *               "victory-points": 85
-                             *             }
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             games?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
-                                /** @example false */
                                 is_rematch?: boolean;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 9,
-                                 *         "name": "Ada and Grace",
-                                 *         "members": [
-                                 *           {
-                                 *             "id": 12,
-                                 *             "name": "Ada Lovelace",
-                                 *             "faction": {
-                                 *               "id": 3,
-                                 *               "name": "Sons of Horus"
-                                 *             }
-                                 *           }
-                                 *         ],
-                                 *         "scores": {
-                                 *           "match-points": 3,
-                                 *           "victory-points": 85
-                                 *         }
-                                 *       }
-                                 *     ]
-                                 */
                                 attendees?: {
-                                    /** @example 9 */
                                     id?: number;
-                                    /** @example Ada and Grace */
                                     name?: string;
-                                    /**
-                                     * @example [
-                                     *       {
-                                     *         "id": 12,
-                                     *         "name": "Ada Lovelace",
-                                     *         "faction": {
-                                     *           "id": 3,
-                                     *           "name": "Sons of Horus"
-                                     *         }
-                                     *       }
-                                     *     ]
-                                     */
                                     members?: {
-                                        /** @example 12 */
                                         id?: number;
-                                        /** @example Ada Lovelace */
                                         name?: string;
                                         faction?: {
-                                            /** @example 3 */
                                             id?: number;
-                                            /** @example Sons of Horus */
                                             name?: string;
                                         };
                                     }[];
                                     scores?: {
-                                        /** @example 3 */
                                         "match-points"?: number;
-                                        /** @example 85 */
                                         "victory-points"?: number;
                                     };
                                 }[];
@@ -7755,7 +5336,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -7767,14 +5347,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -7787,10 +5361,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
             };
             cookie?: never;
@@ -7798,10 +5369,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The list as free text. No format is imposed.
-                     * @example 2000pts Ultramarines...
-                     */
+                    /** @description The list as free text. No format is imposed. */
                     army_list: string;
                 };
             };
@@ -7814,11 +5382,8 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example Legion Tactical Squad, 10 models... */
                             army_list?: string;
-                            /** @example 2026-09-10T18:30:00+00:00 */
                             submitted_at?: string;
-                            /** @example false */
                             is_locked?: boolean;
                         };
                     };
@@ -7831,7 +5396,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -7843,14 +5407,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -7863,15 +5421,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
             };
             cookie?: never;
@@ -7885,128 +5437,40 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 9 */
                             id?: number;
-                            /** @example Ada and Grace */
                             name?: string;
-                            /** @example loyalist */
                             allegiance?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 12,
-                             *         "name": "Ada Lovelace",
-                             *         "faction": {
-                             *           "id": 3,
-                             *           "name": "Sons of Horus"
-                             *         },
-                             *         "army_list": "Legion Tactical Squad, 10 models...",
-                             *         "clubs": [
-                             *           {
-                             *             "id": 2,
-                             *             "name": "The Ordo Ludi"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             members?: {
-                                /** @example 12 */
                                 id?: number;
-                                /** @example Ada Lovelace */
                                 name?: string;
                                 faction?: {
-                                    /** @example 3 */
                                     id?: number;
-                                    /** @example Sons of Horus */
                                     name?: string;
                                 };
-                                /** @example Legion Tactical Squad, 10 models... */
                                 army_list?: string;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 2,
-                                 *         "name": "The Ordo Ludi"
-                                 *       }
-                                 *     ]
-                                 */
                                 clubs?: {
-                                    /** @example 2 */
                                     id?: number;
-                                    /** @example The Ordo Ludi */
                                     name?: string;
                                 }[];
                             }[];
-                            /** @example null */
                             checked_in_at?: string | null;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 1,
-                             *         "name": "Dietary requirements",
-                             *         "type": "text",
-                             *         "value": "None"
-                             *       }
-                             *     ]
-                             */
                             custom_field_responses?: {
-                                /** @example 1 */
                                 id?: number;
-                                /** @example Dietary requirements */
                                 name?: string;
-                                /** @example text */
                                 type?: string;
-                                /** @example None */
                                 value?: string;
                             }[];
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 18,
-                             *         "round_number": 2,
-                             *         "table_number": 5,
-                             *         "is_bye": false,
-                             *         "scores": {
-                             *           "match-points": 3,
-                             *           "victory-points": 85
-                             *         },
-                             *         "opponents": [
-                             *           {
-                             *             "id": 11,
-                             *             "name": "Grace and Alan"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             games?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 2 */
                                 round_number?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
                                 scores?: {
-                                    /** @example 3 */
                                     "match-points"?: number;
-                                    /** @example 85 */
                                     "victory-points"?: number;
                                 };
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 11,
-                                 *         "name": "Grace and Alan"
-                                 *       }
-                                 *     ]
-                                 */
                                 opponents?: {
-                                    /** @example 11 */
                                     id?: number;
-                                    /** @example Grace and Alan */
                                     name?: string;
                                 }[];
                             }[];
@@ -8021,7 +5485,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -8033,20 +5496,11 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
-                /**
-                 * @description The id of the Player whose list to reopen.
-                 * @example 1
-                 */
+                /** @description The id of the Player whose list to reopen. */
                 member_id: number;
             };
             cookie?: never;
@@ -8060,11 +5514,8 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example Legion Tactical Squad, 10 models... */
                             army_list?: string;
-                            /** @example 2026-09-10T18:30:00+00:00 */
                             submitted_at?: string;
-                            /** @example false */
                             is_locked?: boolean;
                         };
                     };
@@ -8077,7 +5528,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -8089,15 +5539,9 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
             };
             cookie?: never;
@@ -8105,25 +5549,13 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The Player's name, used if they have no account yet.
-                     * @example Tarik Torgaddon
-                     */
+                    /** @description The Player's name, used if they have no account yet. */
                     name?: string;
-                    /**
-                     * @description The Player's email address.
-                     * @example tarik@example.com
-                     */
+                    /** @description The Player's email address. */
                     email: string;
-                    /**
-                     * @description The Faction this Player brings.
-                     * @example 1
-                     */
+                    /** @description The Faction this Player brings. */
                     faction_id?: number;
-                    /**
-                     * @description This Player's army list.
-                     * @example architecto
-                     */
+                    /** @description This Player's army list. */
                     army_list?: string;
                 };
             };
@@ -8136,128 +5568,40 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 9 */
                             id?: number;
-                            /** @example Ada and Grace */
                             name?: string;
-                            /** @example loyalist */
                             allegiance?: string;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 12,
-                             *         "name": "Ada Lovelace",
-                             *         "faction": {
-                             *           "id": 3,
-                             *           "name": "Sons of Horus"
-                             *         },
-                             *         "army_list": "Legion Tactical Squad, 10 models...",
-                             *         "clubs": [
-                             *           {
-                             *             "id": 2,
-                             *             "name": "The Ordo Ludi"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             members?: {
-                                /** @example 12 */
                                 id?: number;
-                                /** @example Ada Lovelace */
                                 name?: string;
                                 faction?: {
-                                    /** @example 3 */
                                     id?: number;
-                                    /** @example Sons of Horus */
                                     name?: string;
                                 };
-                                /** @example Legion Tactical Squad, 10 models... */
                                 army_list?: string;
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 2,
-                                 *         "name": "The Ordo Ludi"
-                                 *       }
-                                 *     ]
-                                 */
                                 clubs?: {
-                                    /** @example 2 */
                                     id?: number;
-                                    /** @example The Ordo Ludi */
                                     name?: string;
                                 }[];
                             }[];
-                            /** @example null */
                             checked_in_at?: string | null;
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 1,
-                             *         "name": "Dietary requirements",
-                             *         "type": "text",
-                             *         "value": "None"
-                             *       }
-                             *     ]
-                             */
                             custom_field_responses?: {
-                                /** @example 1 */
                                 id?: number;
-                                /** @example Dietary requirements */
                                 name?: string;
-                                /** @example text */
                                 type?: string;
-                                /** @example None */
                                 value?: string;
                             }[];
-                            /**
-                             * @example [
-                             *       {
-                             *         "id": 18,
-                             *         "round_number": 2,
-                             *         "table_number": 5,
-                             *         "is_bye": false,
-                             *         "scores": {
-                             *           "match-points": 3,
-                             *           "victory-points": 85
-                             *         },
-                             *         "opponents": [
-                             *           {
-                             *             "id": 11,
-                             *             "name": "Grace and Alan"
-                             *           }
-                             *         ]
-                             *       }
-                             *     ]
-                             */
                             games?: {
-                                /** @example 18 */
                                 id?: number;
-                                /** @example 2 */
                                 round_number?: number;
-                                /** @example 5 */
                                 table_number?: number;
-                                /** @example false */
                                 is_bye?: boolean;
                                 scores?: {
-                                    /** @example 3 */
                                     "match-points"?: number;
-                                    /** @example 85 */
                                     "victory-points"?: number;
                                 };
-                                /**
-                                 * @example [
-                                 *       {
-                                 *         "id": 11,
-                                 *         "name": "Grace and Alan"
-                                 *       }
-                                 *     ]
-                                 */
                                 opponents?: {
-                                    /** @example 11 */
                                     id?: number;
-                                    /** @example Grace and Alan */
                                     name?: string;
                                 }[];
                             }[];
@@ -8272,7 +5616,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -8284,14 +5627,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -8304,20 +5641,11 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The slug of the event.
-                 * @example london-grand-tournament
-                 */
+                /** @description The slug of the event. */
                 event_slug: string;
-                /**
-                 * @description The id of the attendee.
-                 * @example 1
-                 */
+                /** @description The id of the attendee. */
                 attendee_id: number;
-                /**
-                 * @description The id of the Player to remove.
-                 * @example 1
-                 */
+                /** @description The id of the Player to remove. */
                 id: number;
             };
             cookie?: never;
@@ -8340,7 +5668,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -8363,19 +5690,12 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 105 */
                             id?: number;
-                            /** @example Et error neque. */
                             name?: string;
-                            /** @example null */
                             description?: string | null;
-                            /** @example https://battlezones.test/storage/photos/0946df97-37a5-38d3-ad41-d635320184d0.jpg */
                             url?: string;
-                            /** @example https://battlezones.test/storage/photos/thumbs/e01e6c64-459d-37af-9000-f6cce4a86480.jpg */
                             thumbnail_url?: string;
-                            /** @example 2026-08-23T17:17:07Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
                         };
                     };
@@ -8393,20 +5713,14 @@ export interface operations {
         requestBody: {
             content: {
                 "multipart/form-data": {
-                    /**
-                     * @description The photo title. Must not be greater than 255 characters.
-                     * @example My painted army
-                     */
+                    /** @description The photo title. Must not be greater than 255 characters. */
                     name: string;
                     /**
                      * Format: binary
                      * @description The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes.
                      */
                     photo: string;
-                    /**
-                     * @description An optional description of the photo. Must not be greater than 1000 characters.
-                     * @example My fully painted Space Marines army.
-                     */
+                    /** @description An optional description of the photo. Must not be greater than 1000 characters. */
                     description?: string | null;
                 };
             };
@@ -8419,19 +5733,12 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 106 */
                             id?: number;
-                            /** @example Eius et animi. */
                             name?: string;
-                            /** @example Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. */
                             description?: string;
-                            /** @example https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg */
                             url?: string;
-                            /** @example https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg */
                             thumbnail_url?: string;
-                            /** @example 2026-08-23T17:17:07Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
                         };
                     };
@@ -8444,14 +5751,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -8464,10 +5765,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the photo.
-                 * @example 1
-                 */
+                /** @description The ID of the photo. */
                 photo_id: number;
             };
             cookie?: never;
@@ -8481,19 +5779,12 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 107 */
                             id?: number;
-                            /** @example Eius et animi. */
                             name?: string;
-                            /** @example Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. */
                             description?: string;
-                            /** @example https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg */
                             url?: string;
-                            /** @example https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg */
                             thumbnail_url?: string;
-                            /** @example 2026-08-23T17:17:07Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
                         };
                     };
@@ -8506,10 +5797,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the photo.
-                 * @example 1
-                 */
+                /** @description The ID of the photo. */
                 photo_id: number;
             };
             cookie?: never;
@@ -8522,7 +5810,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Photo successfully deleted. */
                         message?: string;
                     };
                 };
@@ -8534,10 +5821,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the photo.
-                 * @example 1
-                 */
+                /** @description The ID of the photo. */
                 photo_id: number;
             };
             cookie?: never;
@@ -8545,20 +5829,14 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
-                    /**
-                     * @description The photo title. Must not be greater than 255 characters.
-                     * @example My painted army
-                     */
+                    /** @description The photo title. Must not be greater than 255 characters. */
                     name?: string;
                     /**
                      * Format: binary
                      * @description A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes.
                      */
                     photo?: string;
-                    /**
-                     * @description An updated description of the photo. Must not be greater than 1000 characters.
-                     * @example My fully painted Space Marines army.
-                     */
+                    /** @description An updated description of the photo. Must not be greater than 1000 characters. */
                     description?: string | null;
                 };
             };
@@ -8571,19 +5849,12 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 108 */
                             id?: number;
-                            /** @example Eius et animi. */
                             name?: string;
-                            /** @example Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. */
                             description?: string;
-                            /** @example https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg */
                             url?: string;
-                            /** @example https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg */
                             thumbnail_url?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -8596,14 +5867,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -8616,10 +5881,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -8633,19 +5895,12 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 109 */
                             id?: number;
-                            /** @example Libero aliquam veniam corporis. */
                             name?: string;
-                            /** @example Nemo odit quia officia est dignissimos. Blanditiis odio veritatis excepturi doloribus delectus fugit. Repudiandae laboriosam est alias tenetur ratione. */
                             description?: string;
-                            /** @example https://battlezones.test/storage/photos/cc18252a-110c-3e9b-83cc-81f0ab1d55ab.jpg */
                             url?: string;
-                            /** @example https://battlezones.test/storage/photos/thumbs/a7f7c0d1-9882-3fbe-aef6-3354f397e54c.jpg */
                             thumbnail_url?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             created_at?: string;
-                            /** @example 2026-08-23T17:17:08Z */
                             updated_at?: string;
                         };
                     };
@@ -8658,10 +5913,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the photo.
-                 * @example 1
-                 */
+                /** @description The ID of the photo. */
                 photo_id: number;
             };
             cookie?: never;
@@ -8674,9 +5926,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example 5 */
                         reactions_count?: number;
-                        /** @example true */
                         has_reacted?: boolean;
                     };
                 };
@@ -8699,25 +5949,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 512 */
                             id?: number;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
-                            /** @example Ms. Elisabeth Okuneva */
                             public_name?: string;
-                            /** @example NR */
                             country?: string;
-                            /** @example [] */
                             game_systems?: unknown[];
-                            /** @example  */
                             avatar?: string;
-                            /** @example  */
                             location?: string;
-                            /** @example 0 */
                             events_count?: number;
-                            /** @example 0 */
                             followers_count?: number;
-                            /** @example 0 */
                             following_count?: number;
                         };
                     };
@@ -8735,26 +5975,16 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The user's display name. Must not be greater than 255 characters.
-                     * @example John Doe
-                     */
+                    /** @description The user's display name. Must not be greater than 255 characters. */
                     name?: string;
-                    /**
-                     * @description A unique username (3-30 chars, starts with letter, allows letters/digits/underscores/hyphens). Must match the regex /^[a-zA-Z][a-zA-Z0-9_-]{2,29}$/.
-                     * @example johndoe
-                     */
+                    /** @description A unique username (3-30 chars, starts with letter, allows letters/digits/underscores/hyphens). Must match the regex /^[a-zA-Z][a-zA-Z0-9_-]{2,29}$/. */
                     username?: string;
                     /**
                      * @description An ISO 3166-1 alpha-2 country code.
-                     * @example US
                      * @enum {string|null}
                      */
                     country?: "AF" | "AX" | "AL" | "DZ" | "AS" | "AD" | "AO" | "AI" | "AQ" | "AG" | "AR" | "AM" | "AW" | "AU" | "AT" | "AZ" | "BS" | "BH" | "BD" | "BB" | "BY" | "BE" | "BZ" | "BJ" | "BM" | "BT" | "BO" | "BA" | "BW" | "BV" | "BR" | "IO" | "BN" | "BG" | "BF" | "BI" | "CV" | "KH" | "CM" | "CA" | "KY" | "CF" | "TD" | "CL" | "CN" | "CX" | "CC" | "CO" | "KM" | "CG" | "CD" | "CK" | "CR" | "CI" | "HR" | "CU" | "CW" | "CY" | "CZ" | "DK" | "DJ" | "DM" | "DO" | "EC" | "EG" | "SV" | "GQ" | "ER" | "EE" | "SZ" | "ET" | "FK" | "FO" | "FJ" | "FI" | "FR" | "GF" | "PF" | "TF" | "GA" | "GM" | "GE" | "DE" | "GH" | "GI" | "GR" | "GL" | "GD" | "GP" | "GU" | "GT" | "GG" | "GN" | "GW" | "GY" | "HT" | "HM" | "VA" | "HN" | "HK" | "HU" | "IS" | "IN" | "ID" | "IR" | "IQ" | "IE" | "IM" | "IL" | "IT" | "JM" | "JP" | "JE" | "JO" | "KZ" | "KE" | "KI" | "KP" | "KR" | "KW" | "KG" | "LA" | "LV" | "LB" | "LS" | "LR" | "LY" | "LI" | "LT" | "LU" | "MO" | "MG" | "MW" | "MY" | "MV" | "ML" | "MT" | "MH" | "MQ" | "MR" | "MU" | "YT" | "MX" | "FM" | "MD" | "MC" | "MN" | "ME" | "MS" | "MA" | "MZ" | "MM" | "NA" | "NR" | "NP" | "NL" | "NC" | "NZ" | "NI" | "NE" | "NG" | "NU" | "NF" | "MK" | "MP" | "NO" | "OM" | "PK" | "PW" | "PS" | "PA" | "PG" | "PY" | "PE" | "PH" | "PN" | "PL" | "PT" | "PR" | "QA" | "RE" | "RO" | "RU" | "RW" | "BL" | "SH" | "KN" | "LC" | "MF" | "PM" | "VC" | "WS" | "SM" | "ST" | "SA" | "SN" | "RS" | "SC" | "SL" | "SG" | "SX" | "SK" | "SI" | "SB" | "SO" | "ZA" | "GS" | "SS" | "ES" | "LK" | "SD" | "SR" | "SJ" | "SE" | "CH" | "SY" | "TW" | "TJ" | "TZ" | "TH" | "TL" | "TG" | "TK" | "TO" | "TT" | "TN" | "TR" | "TM" | "TC" | "TV" | "UG" | "UA" | "AE" | "GB" | "US" | "UM" | "UY" | "UZ" | "VU" | "VE" | "VN" | "VG" | "VI" | "WF" | "EH" | "YE" | "ZM" | "ZW" | null;
-                    /**
-                     * @description Whether to display the user's real name publicly.
-                     * @example true
-                     */
+                    /** @description Whether to display the user's real name publicly. */
                     show_public_name?: boolean;
                 };
             };
@@ -8767,25 +5997,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 513 */
                             id?: number;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
-                            /** @example Ms. Audra Crooks II */
                             public_name?: string;
-                            /** @example MX */
                             country?: string;
-                            /** @example [] */
                             game_systems?: unknown[];
-                            /** @example  */
                             avatar?: string;
-                            /** @example  */
                             location?: string;
-                            /** @example 0 */
                             events_count?: number;
-                            /** @example 0 */
                             followers_count?: number;
-                            /** @example 0 */
                             following_count?: number;
                         };
                     };
@@ -8798,14 +6018,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -8823,15 +6037,9 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The user's current password for verification.
-                     * @example password
-                     */
+                    /** @description The user's current password for verification. */
                     current_password: string;
-                    /**
-                     * @description The new email address. Must be a valid email address.
-                     * @example newemail@example.com
-                     */
+                    /** @description The new email address. Must be a valid email address. */
                     email: string;
                 };
             };
@@ -8843,7 +6051,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example A verification link has been sent to your new email address. */
                         message?: string;
                     };
                 };
@@ -8855,14 +6062,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -8880,15 +6081,9 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /**
-                     * @description The user's current password for verification.
-                     * @example password
-                     */
+                    /** @description The user's current password for verification. */
                     current_password: string;
-                    /**
-                     * @description The new password (min 8 characters). Must be at least 8 characters.
-                     * @example newpassword
-                     */
+                    /** @description The new password (min 8 characters). Must be at least 8 characters. */
                     password: string;
                 };
             };
@@ -8900,7 +6095,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example A confirmation link has been sent to your email address. */
                         message?: string;
                     };
                 };
@@ -8912,14 +6106,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -8932,10 +6120,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -8949,25 +6134,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 514 */
                             id?: number;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
-                            /** @example Ms. Audra Crooks II */
                             public_name?: string;
-                            /** @example IL */
                             country?: string;
-                            /** @example [] */
                             game_systems?: unknown[];
-                            /** @example  */
                             avatar?: string;
-                            /** @example  */
                             location?: string;
-                            /** @example 0 */
                             events_count?: number;
-                            /** @example 0 */
                             followers_count?: number;
-                            /** @example 0 */
                             following_count?: number;
                         };
                     };
@@ -8990,62 +6165,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       {
-                         *         "id": "9c1f0f4e-1d2a-4f3b-9a5c-2f6f3f9e1a11",
-                         *         "data": {
-                         *           "type": "round_published",
-                         *           "event_slug": "london-grand-tournament",
-                         *           "round_id": 4
-                         *         },
-                         *         "read_at": null,
-                         *         "created_at": "2026-09-12T12:00:00+00:00"
-                         *       }
-                         *     ]
-                         */
                         data?: {
-                            /** @example 9c1f0f4e-1d2a-4f3b-9a5c-2f6f3f9e1a11 */
                             id?: string;
                             data?: {
-                                /** @example round_published */
                                 type?: string;
-                                /** @example london-grand-tournament */
                                 event_slug?: string;
-                                /** @example 4 */
                                 round_id?: number;
                             };
-                            /** @example null */
                             read_at?: string | null;
-                            /** @example 2026-09-12T12:00:00+00:00 */
                             created_at?: string;
                         }[];
                         links?: {
-                            /** @example https://api.battlezones.test/api/notifications?page=1 */
                             first?: string;
-                            /** @example https://api.battlezones.test/api/notifications?page=1 */
                             last?: string;
-                            /** @example null */
                             prev?: string | null;
-                            /** @example null */
                             next?: string | null;
                         };
                         meta?: {
-                            /** @example 1 */
                             current_page?: number;
-                            /** @example 1 */
                             from?: number;
-                            /** @example 1 */
                             last_page?: number;
-                            /** @example https://api.battlezones.test/api/notifications */
                             path?: string;
-                            /** @example 15 */
                             per_page?: number;
-                            /** @example 1 */
                             to?: number;
-                            /** @example 1 */
                             total?: number;
-                            /** @example 3 */
                             unread_count?: number;
                         };
                     };
@@ -9058,7 +6201,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -9081,7 +6223,6 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 0 */
                             unread_count?: number;
                         };
                     };
@@ -9094,7 +6235,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -9106,10 +6246,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The id of the notification.
-                 * @example 9b1d4d0a-1f5f-4a8c-9c1e-2b6f2b3f0a11
-                 */
+                /** @description The id of the notification. */
                 notification: string;
             };
             cookie?: never;
@@ -9123,19 +6260,13 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 9c1f0f4e-1d2a-4f3b-9a5c-2f6f3f9e1a11 */
                             id?: string;
                             data?: {
-                                /** @example round_published */
                                 type?: string;
-                                /** @example london-grand-tournament */
                                 event_slug?: string;
-                                /** @example 4 */
                                 round_id?: number;
                             };
-                            /** @example 2026-09-12T12:01:00+00:00 */
                             read_at?: string;
-                            /** @example 2026-09-12T12:00:00+00:00 */
                             created_at?: string;
                         };
                     };
@@ -9148,7 +6279,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example Unauthenticated. */
                         message?: string;
                     };
                 };
@@ -9172,75 +6302,33 @@ export interface operations {
                     "application/json": {
                         data?: {
                             primary_messages?: {
-                                /** @example Primary Messages */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example false */
                                 always_in_app?: boolean;
                             };
                             message_requests?: {
-                                /** @example Message Requests */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example false */
                                 always_in_app?: boolean;
                             };
                             event_messages?: {
-                                /** @example Event Messages */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example false */
                                 always_in_app?: boolean;
                             };
                             round_live?: {
-                                /** @example Round Live */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example true */
                                 always_in_app?: boolean;
                             };
                             result_activity?: {
-                                /** @example Result Activity */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example true */
                                 always_in_app?: boolean;
                             };
                             voting_open?: {
-                                /** @example Voting Open */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example true */
                                 always_in_app?: boolean;
                             };
                         };
@@ -9259,41 +6347,11 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": {
-                    /**
-                     * @example [
-                     *       "email"
-                     *     ]
-                     */
                     primary_messages?: ("email" | "push")[];
-                    /**
-                     * @example [
-                     *       "email"
-                     *     ]
-                     */
                     message_requests?: ("email" | "push")[];
-                    /**
-                     * @example [
-                     *       "push"
-                     *     ]
-                     */
                     event_messages?: ("email" | "push")[];
-                    /**
-                     * @example [
-                     *       "email"
-                     *     ]
-                     */
                     round_live?: ("email" | "push")[];
-                    /**
-                     * @example [
-                     *       "email"
-                     *     ]
-                     */
                     result_activity?: ("email" | "push")[];
-                    /**
-                     * @example [
-                     *       "push"
-                     *     ]
-                     */
                     voting_open?: ("email" | "push")[];
                 };
             };
@@ -9307,75 +6365,33 @@ export interface operations {
                     "application/json": {
                         data?: {
                             primary_messages?: {
-                                /** @example Primary Messages */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example false */
                                 always_in_app?: boolean;
                             };
                             message_requests?: {
-                                /** @example Message Requests */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example false */
                                 always_in_app?: boolean;
                             };
                             event_messages?: {
-                                /** @example Event Messages */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example false */
                                 always_in_app?: boolean;
                             };
                             round_live?: {
-                                /** @example Round Live */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example true */
                                 always_in_app?: boolean;
                             };
                             result_activity?: {
-                                /** @example Result Activity */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example true */
                                 always_in_app?: boolean;
                             };
                             voting_open?: {
-                                /** @example Voting Open */
                                 label?: string;
-                                /**
-                                 * @example [
-                                 *       "email"
-                                 *     ]
-                                 */
                                 channels?: string[];
-                                /** @example true */
                                 always_in_app?: boolean;
                             };
                         };
@@ -9389,14 +6405,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -9421,45 +6431,15 @@ export interface operations {
                     "application/json": {
                         data?: {
                             messaging?: {
-                                /** @example anyone */
                                 value?: string;
-                                /** @example Anyone */
                                 label?: string;
                             };
                             profile?: {
-                                /** @example anyone */
                                 value?: string;
-                                /** @example Anyone */
                                 label?: string;
                             };
-                            /**
-                             * @example [
-                             *       {
-                             *         "value": "anyone",
-                             *         "label": "Anyone"
-                             *       },
-                             *       {
-                             *         "value": "followers_only",
-                             *         "label": "Followers Only"
-                             *       },
-                             *       {
-                             *         "value": "following_only",
-                             *         "label": "Following Only"
-                             *       },
-                             *       {
-                             *         "value": "mutual_followers",
-                             *         "label": "Mutual Followers"
-                             *       },
-                             *       {
-                             *         "value": "fellow_club_members",
-                             *         "label": "Fellow Club Members"
-                             *       }
-                             *     ]
-                             */
                             options?: {
-                                /** @example anyone */
                                 value?: string;
-                                /** @example Anyone */
                                 label?: string;
                             }[];
                         };
@@ -9480,13 +6460,11 @@ export interface operations {
                 "application/json": {
                     /**
                      * @description Who can send messages. One of: anyone, followers_only, following_only, mutual_followers, fellow_club_members.
-                     * @example anyone
                      * @enum {string}
                      */
                     messaging?: "anyone" | "followers_only" | "following_only" | "mutual_followers" | "fellow_club_members";
                     /**
                      * @description Who can view the profile. One of: anyone, followers_only, following_only, mutual_followers, fellow_club_members.
-                     * @example anyone
                      * @enum {string}
                      */
                     profile?: "anyone" | "followers_only" | "following_only" | "mutual_followers" | "fellow_club_members";
@@ -9502,45 +6480,15 @@ export interface operations {
                     "application/json": {
                         data?: {
                             messaging?: {
-                                /** @example anyone */
                                 value?: string;
-                                /** @example Anyone */
                                 label?: string;
                             };
                             profile?: {
-                                /** @example anyone */
                                 value?: string;
-                                /** @example Anyone */
                                 label?: string;
                             };
-                            /**
-                             * @example [
-                             *       {
-                             *         "value": "anyone",
-                             *         "label": "Anyone"
-                             *       },
-                             *       {
-                             *         "value": "followers_only",
-                             *         "label": "Followers Only"
-                             *       },
-                             *       {
-                             *         "value": "following_only",
-                             *         "label": "Following Only"
-                             *       },
-                             *       {
-                             *         "value": "mutual_followers",
-                             *         "label": "Mutual Followers"
-                             *       },
-                             *       {
-                             *         "value": "fellow_club_members",
-                             *         "label": "Fellow Club Members"
-                             *       }
-                             *     ]
-                             */
                             options?: {
-                                /** @example anyone */
                                 value?: string;
-                                /** @example Anyone */
                                 label?: string;
                             }[];
                         };
@@ -9554,14 +6502,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @example The given data was invalid. */
                         message?: string;
                         errors?: {
-                            /**
-                             * @example [
-                             *       "The field name field is required."
-                             *     ]
-                             */
                             field_name?: string[];
                         };
                     };
@@ -9572,10 +6514,7 @@ export interface operations {
     searchUsers: {
         parameters: {
             query: {
-                /**
-                 * @description The search query to find users by name or username. Must be at least 1 character.
-                 * @example john
-                 */
+                /** @description The search query to find users by name or username. Must be at least 1 character. */
                 q: string;
             };
             header?: never;
@@ -9590,26 +6529,9 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       {
-                         *         "id": 519,
-                         *         "public_name": "Ms. Audra Crooks II",
-                         *         "username": "marquardt.noah"
-                         *       },
-                         *       {
-                         *         "id": 520,
-                         *         "public_name": "Mina Bauch",
-                         *         "username": "okeefe.isidro"
-                         *       }
-                         *     ]
-                         */
                         data?: {
-                            /** @example 519 */
                             id?: number;
-                            /** @example Ms. Audra Crooks II */
                             public_name?: string;
-                            /** @example marquardt.noah */
                             username?: string;
                         }[];
                     };
@@ -9622,10 +6544,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -9639,25 +6558,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 521 */
                             id?: number;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
-                            /** @example Domingo Leuschke */
                             public_name?: string;
-                            /** @example MF */
                             country?: string;
-                            /** @example [] */
                             game_systems?: unknown[];
-                            /** @example  */
                             avatar?: string;
-                            /** @example  */
                             location?: string;
-                            /** @example 0 */
                             events_count?: number;
-                            /** @example 0 */
                             followers_count?: number;
-                            /** @example 0 */
                             following_count?: number;
                         };
                     };
@@ -9670,10 +6579,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -9687,25 +6593,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 522 */
                             id?: number;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
-                            /** @example Hank Batz */
                             public_name?: string;
-                            /** @example AW */
                             country?: string;
-                            /** @example [] */
                             game_systems?: unknown[];
-                            /** @example  */
                             avatar?: string;
-                            /** @example  */
                             location?: string;
-                            /** @example 0 */
                             events_count?: number;
-                            /** @example 0 */
                             followers_count?: number;
-                            /** @example 0 */
                             following_count?: number;
                         };
                     };
@@ -9718,10 +6614,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -9735,13 +6628,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 523 */
                             id?: number;
-                            /** @example Rodrigo O'Connell */
                             public_name?: string;
-                            /** @example  */
                             avatar?: string;
-                            /** @example false */
                             is_following?: boolean;
                         };
                     };
@@ -9754,10 +6643,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -9771,13 +6657,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 524 */
                             id?: number;
-                            /** @example Brennon Anderson */
                             public_name?: string;
-                            /** @example  */
                             avatar?: string;
-                            /** @example false */
                             is_following?: boolean;
                         };
                     };
@@ -9790,10 +6672,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -9807,25 +6686,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 525 */
                             id?: number;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
-                            /** @example Michelle Cassin */
                             public_name?: string;
-                            /** @example TO */
                             country?: string;
-                            /** @example [] */
                             game_systems?: unknown[];
-                            /** @example  */
                             avatar?: string;
-                            /** @example  */
                             location?: string;
-                            /** @example 0 */
                             events_count?: number;
-                            /** @example 0 */
                             followers_count?: number;
-                            /** @example 0 */
                             following_count?: number;
                         };
                     };
@@ -9838,10 +6707,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description The ID of the user.
-                 * @example 1
-                 */
+                /** @description The ID of the user. */
                 user_id: number;
             };
             cookie?: never;
@@ -9855,25 +6721,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 526 */
                             id?: number;
-                            /** @example 2026-08-23T17:17:07Z */
                             updated_at?: string;
-                            /** @example Kayden Robel */
                             public_name?: string;
-                            /** @example PK */
                             country?: string;
-                            /** @example [] */
                             game_systems?: unknown[];
-                            /** @example  */
                             avatar?: string;
-                            /** @example  */
                             location?: string;
-                            /** @example 0 */
                             events_count?: number;
-                            /** @example 0 */
                             followers_count?: number;
-                            /** @example 0 */
                             following_count?: number;
                         };
                     };
@@ -9897,13 +6753,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         data?: {
-                            /** @example 527 */
                             id?: number;
-                            /** @example Emilie Glover */
                             public_name?: string;
-                            /** @example  */
                             avatar?: string;
-                            /** @example false */
                             is_following?: boolean;
                         };
                     };

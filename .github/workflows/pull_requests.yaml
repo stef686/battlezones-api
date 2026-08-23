@@ -209,8 +209,10 @@ jobs:
         env:
           DB_DATABASE: battlezones_test
 
+      # Only the spec is checked: Scribe's .scribe/ intermediates carry
+      # factory-created ids and timestamps, so they differ on every run.
       - name: Fail when the committed spec is out of date
-        run: git diff --exit-code -- docs/openapi.yaml .scribe
+        run: git diff --exit-code -- docs/openapi.yaml
 
   pint:
     needs: changes
