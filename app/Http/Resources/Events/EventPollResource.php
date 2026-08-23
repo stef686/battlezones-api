@@ -24,6 +24,7 @@ class EventPollResource extends JsonResource
             'opens_at' => $this->opens_at?->toIso8601String(),
             'closes_at' => $this->closes_at?->toIso8601String(),
             'is_open' => $this->isOpen(),
+            'is_open_for_me' => $request->user() === null ? null : $this->isOpenFor($request->user()),
         ];
     }
 }

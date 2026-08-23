@@ -352,6 +352,43 @@ class Event extends Model
     }
 
     /**
+     * Whether this Attendee has a result in every Round of a complete Event.
+     *
+     * Derived, never stored: a per-Attendee flag would need a writer on every
+     * path that can complete a team's last Game — submission, Organiser
+     * correction, bye scoring — and the one that gets missed silently locks a
+     * team out of voting.
+     *
+     * The Round count clause is what makes the denominator definite. Without
+     * it a team that finished Round 3 looks complete while Round 4 has yet to
+     * be generated.
+     */
+    public function hasCompletedEveryRound(EventAttendee $attendee): bool
+    {
+        $roundCount = $this->settings->roundCount;
+
+        if ($roundCount === null) {
+            return false;
+        }
+
+        $rounds = $this->rounds()->count();
+
+        if ($rounds !== $roundCount) {
+            return false;
+        }
+
+        $scoredRounds = GameScore::query()
+            ->where('event_attendee_id', $attendee->getKey())
+            ->join('games', 'games.id', '=', 'game_scores.game_id')
+            ->join('rounds', 'rounds.id', '=', 'games.round_id')
+            ->where('rounds.event_id', $this->getKey())
+            ->distinct()
+            ->count('rounds.id');
+
+        return $scoredRounds === $roundCount;
+    }
+
+    /**
      * The Poll of this type that is taking votes right now, if any.
      *
      * Memoised per instance: a schedule of twenty blocks would otherwise ask

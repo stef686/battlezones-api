@@ -82,6 +82,42 @@ class EventPoll extends Model
     }
 
     /**
+     * Whether this voter can cast a Ballot right now.
+     *
+     * A painting Poll has one window for everybody. Favourite-opponent voting
+     * opens per Attendee the moment that team has a result in every Round, so
+     * a team that finishes early votes without waiting on the rest of the
+     * field. Either way a closed Poll is closed for everyone: an Organiser
+     * force-closing at day's end overrides the per-Attendee derivation.
+     */
+    public function isOpenFor(User $voter): bool
+    {
+        if ($this->closes_at !== null && $this->closes_at->isPast()) {
+            return false;
+        }
+
+        return match ($this->type) {
+            PollType::Painting => $this->isOpen(),
+            PollType::FavouriteOpponent => $this->votersAttendees($voter)
+                ->contains(fn (EventAttendee $attendee): bool => $this->event->hasCompletedEveryRound($attendee)),
+        };
+    }
+
+    /**
+     * @return Collection<int, EventAttendee>
+     */
+    private function votersAttendees(User $voter): Collection
+    {
+        return EventAttendee::query()
+            ->where('event_id', $this->event_id)
+            ->whereIn('id', EventAttendeeMembership::query()
+                ->where('event_id', $this->event_id)
+                ->where('user_id', $voter->getKey())
+                ->select('event_attendee_id'))
+            ->get();
+    }
+
+    /**
      * @param  Builder<self>  $query
      */
     public function scopeOpen(Builder $query): void

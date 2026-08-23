@@ -17,6 +17,7 @@ use App\Http\Controllers\Events\ListEventScheduleController;
 use App\Http\Controllers\Events\ListEventsController;
 use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
+use App\Http\Controllers\Events\ListPollCandidatesController;
 use App\Http\Controllers\Events\OpenEventPollController;
 use App\Http\Controllers\Events\PublishRoundController;
 use App\Http\Controllers\Events\ReorderEventScheduleController;
@@ -85,6 +86,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.polls.store');
     Route::scopeBindings()->post('events/{event:slug}/polls/{poll}/open', OpenEventPollController::class)
         ->name('events.polls.open');
+    Route::scopeBindings()->get('events/{event:slug}/polls/{poll}/candidates', ListPollCandidatesController::class)
+        ->name('events.polls.candidates');
     Route::scopeBindings()->get('events/{event:slug}/polls/{poll}/results', ShowEventPollResultsController::class)
         ->name('events.polls.results');
     Route::scopeBindings()->post('events/{event:slug}/polls/{poll}/close', CloseEventPollController::class)

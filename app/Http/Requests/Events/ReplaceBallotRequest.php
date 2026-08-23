@@ -23,7 +23,7 @@ class ReplaceBallotRequest extends FormRequest
 
         abort_unless($poll->event_id === $this->event()->getKey(), 404);
 
-        abort_unless($poll->isOpen(), 422, 'Voting is not open for this poll.');
+        abort_unless($poll->isOpenFor($this->user()), 422, 'Voting is not open for you in this poll.');
     }
 
     /**
