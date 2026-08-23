@@ -5692,7 +5692,7 @@ export interface operations {
                         data?: {
                             id?: number;
                             name?: string;
-                            description?: string | null;
+                            description?: string;
                             url?: string;
                             thumbnail_url?: string;
                             created_at?: string;

@@ -207,7 +207,12 @@ return [
         // With API resources and transformers, Scribe tries to generate example models to use in your API responses.
         // By default, Scribe will try the model's factory, and if that fails, try fetching the first from the database.
         // You can reorder or remove strategies here.
-        'models_source' => ['factoryCreate', 'factoryMake', 'databaseFirst'],
+        // No `databaseFirst`: the committed spec is drift-checked in CI, so a
+        // shape must never be inferred from whatever rows a developer happens
+        // to have. Factory models are created inside a transaction that is
+        // rolled back, and their ids and timestamps are stripped out of the
+        // committed spec along with every other example.
+        'models_source' => ['factoryCreate', 'factoryMake'],
     ],
 
     // The strategies Scribe will use to extract information about your routes at each stage.
@@ -233,19 +238,14 @@ return [
         'bodyParameters' => [
             ...Defaults::BODY_PARAMETERS_STRATEGIES,
         ],
-        'responses' => configureStrategy(
-            [
-                ...Defaults::RESPONSES_STRATEGIES,
-                AddStandardErrorResponses::class,
-            ],
-            Strategies\Responses\ResponseCalls::withSettings(
-                only: ['GET *'],
-                // Recommended: disable debug mode in response calls to avoid error stack traces in responses
-                config: [
-                    'app.debug' => false,
-                ]
-            )
-        ),
+        // Every endpoint documents its own response (see the API documentation
+        // architecture test), so responses are never obtained by calling the
+        // endpoint: a response call answers from whatever the database holds,
+        // which differs between a developer's machine and CI.
+        'responses' => [
+            ...removeStrategies(Defaults::RESPONSES_STRATEGIES, [Strategies\Responses\ResponseCalls::class]),
+            AddStandardErrorResponses::class,
+        ],
         'responseFields' => [
             ...Defaults::RESPONSE_FIELDS_STRATEGIES,
         ],

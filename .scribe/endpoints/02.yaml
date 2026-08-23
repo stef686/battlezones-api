@@ -30,7 +30,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":153,"name":"Et error neque.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/0946df97-37a5-38d3-ad41-d635320184d0.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/e01e6c64-459d-37af-9000-f6cce4a86480.jpg","created_at":"2026-08-23T17:25:04Z","updated_at":"2026-08-23T17:25:04Z"}}'
+        content: '{"data":{"id":1,"name":"Deleniti nemo odit.","description":"Est dignissimos neque blanditiis odio veritatis excepturi doloribus. Fugit qui repudiandae laboriosam est alias. Ratione nemo voluptate accusamus ut et recusandae modi rerum. Repellendus assumenda et tenetur ab reiciendis.","url":"https:\/\/battlezones.test\/storage\/photos\/128dddd1-af1b-310e-a6a4-c38c0253b195.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/3dd3dce1-4b7c-321e-848a-0aab7c899d4a.jpg","created_at":"2026-08-23T17:30:40Z","updated_at":"2026-08-23T17:30:40Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -103,7 +103,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":154,"name":"Eius et animi.","description":"Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","url":"https:\/\/battlezones.test\/storage\/photos\/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg","created_at":"2026-08-23T17:25:04Z","updated_at":"2026-08-23T17:25:04Z"}}'
+        content: '{"data":{"id":2,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-23T17:30:40Z","updated_at":"2026-08-23T17:30:40Z"}}'
         headers: []
         description: ''
       -
@@ -141,14 +141,14 @@ endpoints:
         name: photo_id
         description: 'The ID of the photo.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      photo_id: 1
+      photo_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -158,7 +158,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":155,"name":"Eius et animi.","description":"Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","url":"https:\/\/battlezones.test\/storage\/photos\/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg","created_at":"2026-08-23T17:25:04Z","updated_at":"2026-08-23T17:25:04Z"}}'
+        content: '{"data":{"id":3,"name":"Et animi quos.","description":"Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","url":"https:\/\/battlezones.test\/storage\/photos\/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg","created_at":"2026-08-23T17:30:40Z","updated_at":"2026-08-23T17:30:40Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -190,14 +190,14 @@ endpoints:
         name: photo_id
         description: 'The ID of the photo.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      photo_id: 1
+      photo_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -243,7 +243,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":156,"name":"Eius et animi.","description":"Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","url":"https:\/\/battlezones.test\/storage\/photos\/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg","created_at":"2026-08-23T17:25:04Z","updated_at":"2026-08-23T17:25:04Z"}}'
+        content: '{"data":{"id":4,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-23T17:30:40Z","updated_at":"2026-08-23T17:30:40Z"}}'
         headers: []
         description: ''
       -
@@ -281,14 +281,14 @@ endpoints:
         name: photo_id
         description: 'The ID of the photo.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      photo_id: 1
+      photo_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -330,14 +330,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -347,7 +347,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":157,"name":"Libero aliquam veniam corporis.","description":"Nemo odit quia officia est dignissimos. Blanditiis odio veritatis excepturi doloribus delectus fugit. Repudiandae laboriosam est alias tenetur ratione.","url":"https:\/\/battlezones.test\/storage\/photos\/cc18252a-110c-3e9b-83cc-81f0ab1d55ab.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/a7f7c0d1-9882-3fbe-aef6-3354f397e54c.jpg","created_at":"2026-08-23T17:25:04Z","updated_at":"2026-08-23T17:25:04Z"}}'
+        content: '{"data":{"id":5,"name":"Et animi quos.","description":"Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","url":"https:\/\/battlezones.test\/storage\/photos\/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg","created_at":"2026-08-23T17:30:40Z","updated_at":"2026-08-23T17:30:40Z"}}'
         headers: []
         description: ''
     responseFields: []

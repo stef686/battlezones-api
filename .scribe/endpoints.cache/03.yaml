@@ -27,14 +27,14 @@ endpoints:
         name: photo_id
         description: 'The ID of the photo.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      photo_id: 1
+      photo_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
