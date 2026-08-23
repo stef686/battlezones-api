@@ -1,7 +1,8 @@
 ---
 paths:
-  - 'app/Actions/Events/GenerateRoundPairings.php'
-  - 'app/Services/HungarianMatcher.php'
+  - app/Actions/Events/GenerateRoundPairings.php
+  - app/Services/HungarianMatcher.php
+  - app/Actions/Events/SwapRoundPairings.php
 ---
 
 # Pairing
@@ -19,3 +20,6 @@ The cost matrix is squared score-group distance plus a rematch penalty of `field
 
 ## Events that do not oppose Allegiances are paired by folding the ranked field
 Matching within one set is general graph matching (blossom), which is not implemented. `divide()` instead splits the ranked field top-half against bottom-half so the graph stays bipartite and the Hungarian solve remains exact. The fold is the classic Swiss arrangement, but it does restrict the solution space: two top-half Attendees can never meet, however cheap that pairing would be.
+
+## A swap exchanges the second Attendee of each Game
+`SwapRoundPairings` keeps each Game's first Attendee (pivot order) and exchanges the second. Under an opposed-allegiance Event that is what keeps both Games opposed; the alternative recombination pairs like against like. Do not add a free-form "put this team against that team" endpoint — it is a different feature with a different guard set. Swapping with a Bye moves the Bye instead, and the incoming bye Attendee must be on the majority Allegiance or the Round cannot be paired.
