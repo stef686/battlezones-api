@@ -4,6 +4,7 @@ namespace App\Notifications\Events;
 
 use App\Enums\EventInviteRole;
 use App\Models\Event;
+use App\Services\Frontend;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -35,7 +36,7 @@ class EventInviteNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        $url = url(route('invites.show', ['token' => $this->plainToken], false));
+        $url = Frontend::inviteUrl($this->plainToken);
 
         $message = (new MailMessage())
             ->subject("You have been invited to {$this->event->name}")

@@ -1593,14 +1593,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
+        &quot;id&quot;: 282,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -1759,14 +1759,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 2,
+        &quot;id&quot;: 283,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -1950,17 +1950,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
-        &quot;conversation_id&quot;: 3,
-        &quot;user_id&quot;: 22,
-        &quot;body&quot;: &quot;Animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
+        &quot;id&quot;: 121,
+        &quot;conversation_id&quot;: 284,
+        &quot;user_id&quot;: 1095,
+        &quot;body&quot;: &quot;Qui voluptatem corporis nostrum quia quis. Aliquam quo et sed odit dolores. Ad tempore natus id odit. Aut vel sunt voluptas sit laborum.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
         &quot;is_deleted&quot;: false,
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -2115,14 +2115,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 4,
+        &quot;id&quot;: 285,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -2277,7 +2277,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/conversations/16/members/16';
+$url = 'https://battlezones.test/api/conversations/16/members/1';
 $response = $client-&gt;delete(
     $url,
     [
@@ -2293,7 +2293,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/conversations/16/members/16"
+    "https://battlezones.test/api/conversations/16/members/1"
 );
 
 const headers = {
@@ -2408,10 +2408,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="DELETEapi-conversations--conversation_id--members--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -2614,14 +2614,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 5,
+        &quot;id&quot;: 286,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -3367,9 +3367,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 2,
-        &quot;conversation_id&quot;: 6,
-        &quot;user_id&quot;: 23,
+        &quot;id&quot;: 122,
+        &quot;conversation_id&quot;: 287,
+        &quot;user_id&quot;: 1096,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3377,7 +3377,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -3555,9 +3555,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 3,
-        &quot;conversation_id&quot;: 7,
-        &quot;user_id&quot;: 24,
+        &quot;id&quot;: 123,
+        &quot;conversation_id&quot;: 288,
+        &quot;user_id&quot;: 1097,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3565,7 +3565,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -3919,14 +3919,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
+        &quot;id&quot;: 492,
         &quot;name&quot;: &quot;Eius et animi&quot;,
         &quot;slug&quot;: &quot;eius-et-animi-565&quot;,
         &quot;description&quot;: &quot;Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2027-02-12T07:00:34Z&quot;,
-        &quot;ends_at&quot;: &quot;2027-02-14T07:00:34Z&quot;,
+        &quot;starts_at&quot;: &quot;2027-02-12T07:11:31Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-02-14T07:11:31Z&quot;,
         &quot;max_attendees&quot;: 100,
         &quot;venue&quot;: {
             &quot;name&quot;: &quot;McLaughlin, Leuschke and Bauch Hall&quot;,
@@ -3934,8 +3934,8 @@ fetch(url, {
             &quot;city&quot;: &quot;South Matildaburgh&quot;,
             &quot;country&quot;: &quot;IE&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -4065,7 +4065,7 @@ Must be one of:
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/architecto';
+$url = 'https://battlezones.test/api/events/summer-showdown-2026';
 $response = $client-&gt;get(
     $url,
     [
@@ -4081,7 +4081,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/architecto"
+    "https://battlezones.test/api/events/summer-showdown-2026"
 );
 
 const headers = {
@@ -4105,23 +4105,23 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 2,
-        &quot;name&quot;: &quot;Et animi quos&quot;,
-        &quot;slug&quot;: &quot;et-animi-quos-89433&quot;,
-        &quot;description&quot;: &quot;Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.&quot;,
+        &quot;id&quot;: 493,
+        &quot;name&quot;: &quot;Fugit deleniti distinctio eum&quot;,
+        &quot;slug&quot;: &quot;fugit-deleniti-distinctio-eum-65128&quot;,
+        &quot;description&quot;: &quot;Aliquam veniam corporis dolorem mollitia deleniti nemo. Quia officia est dignissimos neque. Odio veritatis excepturi doloribus delectus fugit qui repudiandae. Est alias tenetur ratione.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2027-02-07T23:23:53Z&quot;,
-        &quot;ends_at&quot;: &quot;2027-02-09T23:23:53Z&quot;,
-        &quot;max_attendees&quot;: 100,
+        &quot;starts_at&quot;: &quot;2027-01-24T14:03:46Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-01-26T14:03:46Z&quot;,
+        &quot;max_attendees&quot;: 40,
         &quot;venue&quot;: {
-            &quot;name&quot;: &quot;McLaughlin, Leuschke and Bauch Hall&quot;,
-            &quot;address&quot;: &quot;45058 Bailee Rue&quot;,
-            &quot;city&quot;: &quot;South Matildaburgh&quot;,
-            &quot;country&quot;: &quot;IE&quot;
+            &quot;name&quot;: &quot;Casper-Smith Hall&quot;,
+            &quot;address&quot;: &quot;5481 Dibbert Stravenue Suite 237&quot;,
+            &quot;city&quot;: &quot;Ednaside&quot;,
+            &quot;country&quot;: &quot;AU&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -4205,10 +4205,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="slug"                data-endpoint="GETapi-events--slug-"
-               value="architecto"
+               value="summer-showdown-2026"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>architecto</code></p>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
             </div>
                     </form>
 
@@ -4225,7 +4225,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/architecto/updates';
+$url = 'https://battlezones.test/api/events/summer-showdown-2026/updates';
 $response = $client-&gt;get(
     $url,
     [
@@ -4241,7 +4241,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/architecto/updates"
+    "https://battlezones.test/api/events/summer-showdown-2026/updates"
 );
 
 const headers = {
@@ -4265,17 +4265,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
-        &quot;title&quot;: &quot;Et animi quos velit&quot;,
-        &quot;body&quot;: &quot;Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.\n\nEt modi ipsum nostrum omnis autem et consequatur. Dolores enim non facere tempora. Voluptatem laboriosam praesentium quis adipisci.&quot;,
+        &quot;id&quot;: 47,
+        &quot;title&quot;: &quot;Quia maiores assumenda&quot;,
+        &quot;body&quot;: &quot;Repellat officiis corporis nesciunt ut. Iure impedit molestiae ut rem est esse sint. Molestiae sunt suscipit doloribus fugiat ut aut. Et error neque recusandae et.\n\nEt ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut.&quot;,
         &quot;pinned&quot;: false,
-        &quot;published_at&quot;: &quot;2026-08-21T18:28:07Z&quot;,
+        &quot;published_at&quot;: &quot;2026-07-26T17:04:56Z&quot;,
         &quot;author&quot;: {
-            &quot;id&quot;: 25,
-            &quot;name&quot;: &quot;Alexa Hamill DDS&quot;
+            &quot;id&quot;: 1098,
+            &quot;name&quot;: &quot;Christian Klocko PhD&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -4359,10 +4359,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_slug"                data-endpoint="GETapi-events--event_slug--updates"
-               value="architecto"
+               value="summer-showdown-2026"
                data-component="url">
     <br>
-<p>The slug of the event. Example: <code>architecto</code></p>
+<p>The slug of the event. Example: <code>summer-showdown-2026</code></p>
             </div>
                     </form>
 
@@ -4428,7 +4428,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
+        &quot;id&quot;: 111,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
         &quot;members&quot;: []
@@ -4588,7 +4588,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 2,
+        &quot;id&quot;: 112,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
         &quot;members&quot;: [],
@@ -4751,13 +4751,13 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 1,
-            &quot;number&quot;: 4,
+            &quot;id&quot;: 71,
+            &quot;number&quot;: 1,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
         },
         {
-            &quot;id&quot;: 2,
+            &quot;id&quot;: 72,
             &quot;number&quot;: 3,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
@@ -5500,13 +5500,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 6,
-        &quot;name&quot;: &quot;Et animi quos.&quot;,
-        &quot;description&quot;: &quot;Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;id&quot;: 236,
+        &quot;name&quot;: &quot;Nihil voluptas quam.&quot;,
+        &quot;description&quot;: &quot;Quia quo voluptas molestias omnis. Quae vitae fuga quia voluptates. Nobis doloremque ipsum explicabo culpa.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/0ee3110f-51d5-3520-a422-327a0d7b9bc6.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/cdfe8c55-2e02-30f2-a2f9-e2f68ee3c5e6.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -7966,7 +7966,7 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 1,
+            &quot;id&quot;: 161,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -7976,7 +7976,7 @@ fetch(url, {
             &quot;is_open_for_me&quot;: null
         },
         {
-            &quot;id&quot;: 2,
+            &quot;id&quot;: 162,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -8149,7 +8149,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 3,
+        &quot;id&quot;: 163,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -8361,7 +8361,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 4,
+        &quot;id&quot;: 164,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -8901,7 +8901,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 5,
+        &quot;id&quot;: 165,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -9537,11 +9537,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
+        &quot;id&quot;: 60,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-08-31T16:24:37+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-08-31T17:24:37+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-08-31T16:35:34+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-08-31T17:35:34+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
         &quot;is_target_live&quot;: false,
@@ -10001,11 +10001,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 2,
+        &quot;id&quot;: 61,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-08-31T16:24:37+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-08-31T17:24:37+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-08-31T16:35:34+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-08-31T17:35:34+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
         &quot;is_target_live&quot;: false,
@@ -13374,7 +13374,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/16';
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1';
 $response = $client-&gt;patch(
     $url,
     [
@@ -13394,7 +13394,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/events/london-grand-tournament/attendees/16"
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1"
 );
 
 const headers = {
@@ -13588,10 +13588,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="PATCHapi-events--event_slug--attendees--id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the attendee. Example: <code>16</code></p>
+<p>The ID of the attendee. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
@@ -14151,13 +14151,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
-        &quot;name&quot;: &quot;Deleniti nemo odit.&quot;,
-        &quot;description&quot;: &quot;Est dignissimos neque blanditiis odio veritatis excepturi doloribus. Fugit qui repudiandae laboriosam est alias. Ratione nemo voluptate accusamus ut et recusandae modi rerum. Repellendus assumenda et tenetur ab reiciendis.&quot;,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/128dddd1-af1b-310e-a6a4-c38c0253b195.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/3dd3dce1-4b7c-321e-848a-0aab7c899d4a.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;id&quot;: 231,
+        &quot;name&quot;: &quot;Et error neque.&quot;,
+        &quot;description&quot;: &quot;Ipsam dolorem et ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut. Alias ratione dolores sed rem. Ut aut deserunt sint quis in quod id aspernatur.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/2732ab27-f17b-3e6e-865a-d6aa85021c6c.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/bea6f3b7-be19-33a7-a1c1-8e4be9f8ede4.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;
     }
 }</code>
  </pre>
@@ -14267,7 +14267,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php2dgn7p7mvdvm4NzmUq0', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpdu1rfre95nt99E6Zzq3', 'r')
             ],
         ],
     ]
@@ -14307,13 +14307,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 2,
+        &quot;id&quot;: 232,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;
     }
 }</code>
  </pre>
@@ -14426,7 +14426,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php2dgn7p7mvdvm4NzmUq0</code></p>
+<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpdu1rfre95nt99E6Zzq3</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -14455,7 +14455,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/gallery/16';
+$url = 'https://battlezones.test/api/gallery/1';
 $response = $client-&gt;get(
     $url,
     [
@@ -14471,7 +14471,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/gallery/16"
+    "https://battlezones.test/api/gallery/1"
 );
 
 const headers = {
@@ -14495,13 +14495,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 3,
-        &quot;name&quot;: &quot;Et animi quos.&quot;,
-        &quot;description&quot;: &quot;Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;id&quot;: 233,
+        &quot;name&quot;: &quot;Eius et animi.&quot;,
+        &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;
     }
 }</code>
  </pre>
@@ -14585,10 +14585,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="photo_id"                data-endpoint="GETapi-gallery--photo_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the photo. Example: <code>16</code></p>
+<p>The ID of the photo. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -14605,7 +14605,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/gallery/16';
+$url = 'https://battlezones.test/api/gallery/1';
 $response = $client-&gt;patch(
     $url,
     [
@@ -14624,7 +14624,7 @@ $response = $client-&gt;patch(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpkm19ffr3b29o44TRVZx', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php9jb1clh76fur5UdQsCf', 'r')
             ],
         ],
     ]
@@ -14635,7 +14635,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/gallery/16"
+    "https://battlezones.test/api/gallery/1"
 );
 
 const headers = {
@@ -14664,13 +14664,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 4,
+        &quot;id&quot;: 234,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
         &quot;url&quot;: &quot;https://battlezones.test/storage/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg&quot;,
         &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;
     }
 }</code>
  </pre>
@@ -14768,10 +14768,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="photo_id"                data-endpoint="PATCHapi-gallery--photo_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the photo. Example: <code>16</code></p>
+<p>The ID of the photo. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -14796,7 +14796,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpkm19ffr3b29o44TRVZx</code></p>
+<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php9jb1clh76fur5UdQsCf</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -14825,7 +14825,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/gallery/16';
+$url = 'https://battlezones.test/api/gallery/1';
 $response = $client-&gt;delete(
     $url,
     [
@@ -14841,7 +14841,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/gallery/16"
+    "https://battlezones.test/api/gallery/1"
 );
 
 const headers = {
@@ -14947,10 +14947,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="photo_id"                data-endpoint="DELETEapi-gallery--photo_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the photo. Example: <code>16</code></p>
+<p>The ID of the photo. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -14967,7 +14967,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/users/16/gallery';
+$url = 'https://battlezones.test/api/users/1/gallery';
 $response = $client-&gt;get(
     $url,
     [
@@ -14983,7 +14983,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/users/16/gallery"
+    "https://battlezones.test/api/users/1/gallery"
 );
 
 const headers = {
@@ -15007,13 +15007,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 5,
-        &quot;name&quot;: &quot;Et animi quos.&quot;,
-        &quot;description&quot;: &quot;Fugiat sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
-        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/d9be5934-80e7-34a9-a136-841b5f0aea83.jpg&quot;,
-        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/6c868c6d-85fb-3170-87f4-2bdcd8769991.jpg&quot;,
-        &quot;created_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;
+        &quot;id&quot;: 235,
+        &quot;name&quot;: &quot;Libero aliquam veniam corporis.&quot;,
+        &quot;description&quot;: &quot;Deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.&quot;,
+        &quot;url&quot;: &quot;https://battlezones.test/storage/photos/3637ab3b-64aa-3e77-a6a7-c306cb6519a5.jpg&quot;,
+        &quot;thumbnail_url&quot;: &quot;https://battlezones.test/storage/photos/thumbs/1026961e-d438-3edd-a9dd-a91c32f7c838.jpg&quot;,
+        &quot;created_at&quot;: &quot;2026-08-23T17:41:37Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:37Z&quot;
     }
 }</code>
  </pre>
@@ -15097,10 +15097,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="GETapi-users--user_id--gallery"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -15121,7 +15121,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/gallery/16/react';
+$url = 'https://battlezones.test/api/gallery/1/react';
 $response = $client-&gt;post(
     $url,
     [
@@ -15137,7 +15137,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/gallery/16/react"
+    "https://battlezones.test/api/gallery/1/react"
 );
 
 const headers = {
@@ -15244,10 +15244,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="photo_id"                data-endpoint="POSTapi-gallery--photo_id--react"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the photo. Example: <code>16</code></p>
+<p>The ID of the photo. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -15308,8 +15308,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
+        &quot;id&quot;: 1074,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
         &quot;country&quot;: &quot;NR&quot;,
         &quot;game_systems&quot;: [],
@@ -15461,8 +15461,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 2,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
+        &quot;id&quot;: 1075,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;MX&quot;,
         &quot;game_systems&quot;: [],
@@ -15990,7 +15990,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/profile/16';
+$url = 'https://battlezones.test/api/profile/1';
 $response = $client-&gt;get(
     $url,
     [
@@ -16006,7 +16006,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/profile/16"
+    "https://battlezones.test/api/profile/1"
 );
 
 const headers = {
@@ -16030,9 +16030,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 3,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
+        &quot;id&quot;: 1076,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
+        &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;IL&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
@@ -16123,10 +16123,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="GETapi-profile--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -16793,8 +16793,8 @@ $response = $client-&gt;patch(
         ],
         'json' =&gt; [
             'primary_messages' =&gt; ['push'],
-            'message_requests' =&gt; ['email'],
-            'event_messages' =&gt; ['email'],
+            'message_requests' =&gt; ['push'],
+            'event_messages' =&gt; ['push'],
             'round_live' =&gt; ['email'],
             'result_activity' =&gt; ['push'],
             'voting_open' =&gt; ['push'],
@@ -16820,10 +16820,10 @@ let body = {
         "push"
     ],
     "message_requests": [
-        "email"
+        "push"
     ],
     "event_messages": [
-        "email"
+        "push"
     ],
     "round_live": [
         "email"
@@ -17517,12 +17517,12 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 8,
+            &quot;id&quot;: 1081,
             &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
             &quot;username&quot;: &quot;marquardt.noah&quot;
         },
         {
-            &quot;id&quot;: 9,
+            &quot;id&quot;: 1082,
             &quot;public_name&quot;: &quot;Mina Bauch&quot;,
             &quot;username&quot;: &quot;okeefe.isidro&quot;
         }
@@ -17629,7 +17629,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/users/16/follow';
+$url = 'https://battlezones.test/api/users/1/follow';
 $response = $client-&gt;post(
     $url,
     [
@@ -17645,7 +17645,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/users/16/follow"
+    "https://battlezones.test/api/users/1/follow"
 );
 
 const headers = {
@@ -17669,10 +17669,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 10,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
-        &quot;country&quot;: &quot;ZM&quot;,
+        &quot;id&quot;: 1083,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
+        &quot;public_name&quot;: &quot;Domingo Leuschke&quot;,
+        &quot;country&quot;: &quot;MF&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
         &quot;location&quot;: &quot;&quot;,
@@ -17762,10 +17762,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="POSTapi-users--user_id--follow"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -17782,7 +17782,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/users/16/follow';
+$url = 'https://battlezones.test/api/users/1/follow';
 $response = $client-&gt;delete(
     $url,
     [
@@ -17798,7 +17798,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/users/16/follow"
+    "https://battlezones.test/api/users/1/follow"
 );
 
 const headers = {
@@ -17822,10 +17822,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 11,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
-        &quot;country&quot;: &quot;DK&quot;,
+        &quot;id&quot;: 1084,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
+        &quot;public_name&quot;: &quot;Hank Batz&quot;,
+        &quot;country&quot;: &quot;AW&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
         &quot;location&quot;: &quot;&quot;,
@@ -17915,10 +17915,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="DELETEapi-users--user_id--follow"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -17935,7 +17935,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/users/16/followers';
+$url = 'https://battlezones.test/api/users/1/followers';
 $response = $client-&gt;get(
     $url,
     [
@@ -17951,7 +17951,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/users/16/followers"
+    "https://battlezones.test/api/users/1/followers"
 );
 
 const headers = {
@@ -17975,8 +17975,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 12,
-        &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
+        &quot;id&quot;: 1085,
+        &quot;public_name&quot;: &quot;Rodrigo O&#039;Connell&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
     }
@@ -18062,10 +18062,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="GETapi-users--user_id--followers"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -18082,7 +18082,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/users/16/following';
+$url = 'https://battlezones.test/api/users/1/following';
 $response = $client-&gt;get(
     $url,
     [
@@ -18098,7 +18098,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/users/16/following"
+    "https://battlezones.test/api/users/1/following"
 );
 
 const headers = {
@@ -18122,8 +18122,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 13,
-        &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
+        &quot;id&quot;: 1086,
+        &quot;public_name&quot;: &quot;Brennon Anderson&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
     }
@@ -18209,10 +18209,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="GETapi-users--user_id--following"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -18229,7 +18229,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/users/16/block';
+$url = 'https://battlezones.test/api/users/1/block';
 $response = $client-&gt;post(
     $url,
     [
@@ -18245,7 +18245,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/users/16/block"
+    "https://battlezones.test/api/users/1/block"
 );
 
 const headers = {
@@ -18269,10 +18269,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 14,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
-        &quot;country&quot;: &quot;MH&quot;,
+        &quot;id&quot;: 1087,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
+        &quot;public_name&quot;: &quot;Michelle Cassin&quot;,
+        &quot;country&quot;: &quot;TO&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
         &quot;location&quot;: &quot;&quot;,
@@ -18362,10 +18362,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="POSTapi-users--user_id--block"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -18382,7 +18382,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://battlezones.test/api/users/16/block';
+$url = 'https://battlezones.test/api/users/1/block';
 $response = $client-&gt;delete(
     $url,
     [
@@ -18398,7 +18398,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://battlezones.test/api/users/16/block"
+    "https://battlezones.test/api/users/1/block"
 );
 
 const headers = {
@@ -18422,10 +18422,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 15,
-        &quot;updated_at&quot;: &quot;2026-08-23T17:30:40Z&quot;,
-        &quot;public_name&quot;: &quot;Ms. Elisabeth Okuneva&quot;,
-        &quot;country&quot;: &quot;IE&quot;,
+        &quot;id&quot;: 1088,
+        &quot;updated_at&quot;: &quot;2026-08-23T17:41:36Z&quot;,
+        &quot;public_name&quot;: &quot;Kayden Robel&quot;,
+        &quot;country&quot;: &quot;PK&quot;,
         &quot;game_systems&quot;: [],
         &quot;avatar&quot;: &quot;&quot;,
         &quot;location&quot;: &quot;&quot;,
@@ -18515,10 +18515,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="DELETEapi-users--user_id--block"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -18575,8 +18575,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 16,
-        &quot;public_name&quot;: &quot;Prof. Annabelle Kshlerin&quot;,
+        &quot;id&quot;: 1089,
+        &quot;public_name&quot;: &quot;Emilie Glover&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
     }

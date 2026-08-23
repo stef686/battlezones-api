@@ -30,7 +30,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"updated_at":"2026-08-23T17:30:40Z","public_name":"Ms. Elisabeth Okuneva","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1074,"updated_at":"2026-08-23T17:41:36Z","public_name":"Ms. Elisabeth Okuneva","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -363,7 +363,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":2,"updated_at":"2026-08-23T17:30:40Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1075,"updated_at":"2026-08-23T17:41:36Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
       -
@@ -535,14 +535,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -552,7 +552,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":3,"updated_at":"2026-08-23T17:30:40Z","public_name":"Ms. Elisabeth Okuneva","country":"IL","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1076,"updated_at":"2026-08-23T17:41:36Z","public_name":"Ms. Audra Crooks II","country":"IL","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -781,7 +781,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - email
+          - push
         type: 'string[]'
         enumValues:
           - email
@@ -795,7 +795,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - email
+          - push
         type: 'string[]'
         enumValues:
           - email
@@ -849,9 +849,9 @@ endpoints:
       primary_messages:
         - push
       message_requests:
-        - email
+        - push
       event_messages:
-        - email
+        - push
       round_live:
         - email
       result_activity:
@@ -1032,7 +1032,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":8,"public_name":"Ms. Audra Crooks II","username":"marquardt.noah"},{"id":9,"public_name":"Mina Bauch","username":"okeefe.isidro"}]}'
+        content: '{"data":[{"id":1081,"public_name":"Ms. Audra Crooks II","username":"marquardt.noah"},{"id":1082,"public_name":"Mina Bauch","username":"okeefe.isidro"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -1064,14 +1064,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1081,7 +1081,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":10,"updated_at":"2026-08-23T17:30:40Z","public_name":"Ms. Elisabeth Okuneva","country":"ZM","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1083,"updated_at":"2026-08-23T17:41:36Z","public_name":"Domingo Leuschke","country":"MF","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1113,14 +1113,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1130,7 +1130,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":11,"updated_at":"2026-08-23T17:30:40Z","public_name":"Ms. Elisabeth Okuneva","country":"DK","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1084,"updated_at":"2026-08-23T17:41:36Z","public_name":"Hank Batz","country":"AW","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1162,14 +1162,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1179,7 +1179,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":12,"public_name":"Ms. Elisabeth Okuneva","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1085,"public_name":"Rodrigo O''Connell","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1211,14 +1211,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1228,7 +1228,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":13,"public_name":"Ms. Elisabeth Okuneva","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1086,"public_name":"Brennon Anderson","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1260,14 +1260,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1277,7 +1277,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":14,"updated_at":"2026-08-23T17:30:40Z","public_name":"Ms. Elisabeth Okuneva","country":"MH","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1087,"updated_at":"2026-08-23T17:41:36Z","public_name":"Michelle Cassin","country":"TO","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1309,14 +1309,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1326,7 +1326,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":15,"updated_at":"2026-08-23T17:30:40Z","public_name":"Ms. Elisabeth Okuneva","country":"IE","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1088,"updated_at":"2026-08-23T17:41:36Z","public_name":"Kayden Robel","country":"PK","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1363,7 +1363,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":16,"public_name":"Prof. Annabelle Kshlerin","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1089,"public_name":"Emilie Glover","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []

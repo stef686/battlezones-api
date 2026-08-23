@@ -3,6 +3,7 @@
 namespace App\Notifications\Events;
 
 use App\Models\Event;
+use App\Services\Frontend;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -34,7 +35,7 @@ class FeedbackRequestNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        $url = url(route('feedback.show', ['token' => $this->plainToken], false));
+        $url = Frontend::feedbackUrl($this->plainToken);
 
         return (new MailMessage())
             ->subject("How was {$this->event->name}?")

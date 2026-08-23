@@ -3,6 +3,7 @@
 use App\Models\PendingPasswordChange;
 use App\Models\User;
 use App\Notifications\Profile\ConfirmPasswordChangeNotification;
+use App\Services\Frontend;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
@@ -82,8 +83,7 @@ test('valid confirmation link within 1 day changes password and revokes tokens',
     ]);
 
     $this->get($url)
-        ->assertSuccessful()
-        ->assertJsonPath('message', 'Your password has been updated.');
+        ->assertRedirect(Frontend::resultUrl(Frontend::PASSWORD_CHANGED_PATH, 'changed'));
 
     $user->refresh();
     expect(Hash::check('new-password', $user->password))->toBeTrue()
@@ -108,8 +108,7 @@ test('expired confirmation link returns 410 and password is unchanged', function
     ]);
 
     $this->get($url)
-        ->assertStatus(410)
-        ->assertJsonPath('message', 'This confirmation link has expired. Please request a new password change. Your password has not been changed.');
+        ->assertRedirect(Frontend::resultUrl(Frontend::PASSWORD_CHANGED_PATH, 'expired'));
 
     expect($user->fresh()->password)->toBe($originalPassword)
         ->and(PendingPasswordChange::query()->where('user_id', $user->id)->count())->toBe(0);
@@ -130,7 +129,7 @@ test('invalid token returns 403', function () {
         'token' => 'wrong-token',
     ]);
 
-    $this->get($url)->assertForbidden();
+    $this->get($url)->assertRedirect(Frontend::resultUrl(Frontend::PASSWORD_CHANGED_PATH, 'invalid'));
 });
 
 test('requesting a new password change replaces the previous pending change', function () {

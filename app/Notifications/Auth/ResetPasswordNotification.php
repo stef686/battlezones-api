@@ -2,6 +2,7 @@
 
 namespace App\Notifications\Auth;
 
+use App\Services\Frontend;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -23,10 +24,7 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        $resetUrl = url(route('password.update', [
-            'token' => $this->token,
-            'email' => $notifiable->getEmailForPasswordReset(),
-        ], false));
+        $resetUrl = Frontend::resetPasswordUrl($this->token, $notifiable->getEmailForPasswordReset());
 
         return (new MailMessage())
             ->subject('Reset Your Battlezones Password')
