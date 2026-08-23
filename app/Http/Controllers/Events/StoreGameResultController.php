@@ -26,6 +26,25 @@ class StoreGameResultController extends Controller
     #[Endpoint('Submit a Game Result', 'Either Player in a Game submits scores for both Attendees. The first submission wins and locks the Game: a later one is rejected and the result has to be flagged for an Organiser instead. Derived Score Types such as Match Points are computed server-side.')]
     #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('game', 'integer', 'The id of the game.', example: 1)]
+    #[Response(['data' => [
+        'id' => 18,
+        'table_number' => 5,
+        'is_bye' => false,
+        'round' => ['id' => 4, 'number' => 2, 'name' => 'Round 2'],
+        'result' => [
+            'submitted_at' => '2026-09-12T14:05:00+00:00',
+            'submitted_by' => ['id' => 12, 'name' => 'Ada Lovelace'],
+            'edited_at' => null,
+            'edited_by' => null,
+            'is_flagged' => false,
+        ],
+        'attendees' => [[
+            'id' => 9,
+            'name' => 'Ada and Grace',
+            'members' => [['id' => 12, 'name' => 'Ada Lovelace', 'faction' => ['id' => 3, 'name' => 'Sons of Horus'], 'army_list' => 'Legion Tactical Squad, 10 models...']],
+            'scores' => ['match-points' => 3, 'victory-points' => 85],
+        ]],
+    ]])]
     #[Response(['message' => 'A result has already been submitted for this game. Flag it if it needs correcting.'], 409, 'A result already exists.')]
     public function __invoke(SubmitGameResultRequest $request, Event $event, Game $game): GameDetailResource
     {

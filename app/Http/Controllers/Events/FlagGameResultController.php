@@ -12,6 +12,7 @@ use App\Models\GameResultFlag;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Events', 'APIs for Events')]
@@ -21,6 +22,15 @@ class FlagGameResultController extends Controller
     #[Endpoint('Flag a Game Result', 'A Player in the Game, or an Organiser, claims the submitted result is wrong. Flagging again while a flag is open returns the open flag rather than raising a second one.')]
     #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('game', 'integer', 'The id of the game.', example: 1)]
+    #[Response(['data' => [
+        'id' => 3,
+        'game_id' => 18,
+        'reason' => 'We agreed 85-70 but it went in the other way round.',
+        'flagged_at' => '2026-09-12T14:20:00+00:00',
+        'flagged_by' => ['id' => 12, 'name' => 'Ada Lovelace'],
+        'resolved_at' => null,
+        'resolved_by' => null,
+    ]])]
     public function __invoke(FlagGameResultRequest $request, Event $event, Game $game): GameResultFlagResource
     {
         $flag = GameResultFlag::query()->firstOrCreate(

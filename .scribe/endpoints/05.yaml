@@ -52,7 +52,7 @@ endpoints:
       game_system:
         custom: []
         name: game_system
-        description: 'Filter by game system slug. The <code>slug</code> of an existing record in the game_systems table.'
+        description: 'Filter by game system slug. Must match an existing stored value.'
         required: false
         example: warhammer-40k
         type: string
@@ -71,7 +71,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":36,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2026-08-21T10:03:46Z","ends_at":"2026-08-23T10:03:46Z","max_attendees":100,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
+        content: '{"data":{"id":156,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T06:38:58Z","ends_at":"2027-02-14T06:38:58Z","max_attendees":100,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -120,7 +120,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":37,"name":"Fugit deleniti distinctio eum","slug":"fugit-deleniti-distinctio-eum-65128","description":"Aliquam veniam corporis dolorem mollitia deleniti nemo. Quia officia est dignissimos neque. Odio veritatis excepturi doloribus delectus fugit qui repudiandae. Est alias tenetur ratione.","status":"draft","pairing_format":"swiss","starts_at":"2026-08-10T16:56:01Z","ends_at":"2026-08-12T16:56:01Z","max_attendees":40,"venue":{"name":"Casper-Smith Hall","address":"5481 Dibbert Stravenue Suite 237","city":"Ednaside","country":"AU"},"created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
+        content: '{"data":{"id":157,"name":"Fugit deleniti distinctio eum","slug":"fugit-deleniti-distinctio-eum-65128","description":"Aliquam veniam corporis dolorem mollitia deleniti nemo. Quia officia est dignissimos neque. Odio veritatis excepturi doloribus delectus fugit qui repudiandae. Est alias tenetur ratione.","status":"draft","pairing_format":"swiss","starts_at":"2027-01-24T13:31:13Z","ends_at":"2027-01-26T13:31:13Z","max_attendees":40,"venue":{"name":"Casper-Smith Hall","address":"5481 Dibbert Stravenue Suite 237","city":"Ednaside","country":"AU"},"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -169,7 +169,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":13,"title":"Quia maiores assumenda","body":"Repellat officiis corporis nesciunt ut. Iure impedit molestiae ut rem est esse sint. Molestiae sunt suscipit doloribus fugiat ut aut. Et error neque recusandae et.\n\nEt ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut.","pinned":false,"published_at":"2026-03-27T19:57:13Z","author":{"id":204,"name":"Christian Klocko PhD"},"created_at":"2026-04-24T20:33:54Z","updated_at":"2026-04-24T20:33:54Z"}}'
+        content: '{"data":{"id":23,"title":"Quia maiores assumenda","body":"Repellat officiis corporis nesciunt ut. Iure impedit molestiae ut rem est esse sint. Molestiae sunt suscipit doloribus fugiat ut aut. Et error neque recusandae et.\n\nEt ut dicta vitae assumenda consequatur. Et sunt quisquam sit repellendus ut.","pinned":false,"published_at":"2026-07-26T16:32:23Z","author":{"id":458,"name":"Christian Klocko PhD"},"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -242,7 +242,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":41,"user":{"id":205,"name":"Rodrigo O''Connell"},"faction":{"id":23,"name":"Tenetur Ratione"},"clubs":[]}}'
+        content: '{"data":{"id":63,"name":"","allegiance":null,"members":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -327,7 +327,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":42,"user":{"id":206,"name":"Cordia Cummings"},"faction":{"id":24,"name":"Accusantium Odit"},"clubs":[],"army_list":"Modi rerum ex repellendus assumenda et tenetur. Reiciendis quia perspiciatis deserunt ducimus corrupti et. Quia maiores assumenda odit. Repellat officiis corporis nesciunt ut.","checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":64,"name":"","allegiance":null,"members":[],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -347,7 +347,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'List Event Rounds'
-      description: 'List rounds for an event. Only visible for Active/Completed events.'
+      description: 'List rounds for an event. Only visible for Active/Completed events. Draft rounds are shown to Organisers only.'
       authenticated: false
       deprecated: false
     headers:
@@ -387,16 +387,10 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
-        content: |-
-          {
-              "message": ""
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
+        status: 200
+        content: '{"data":[{"id":23,"number":1,"name":null,"status":"draft"},{"id":24,"number":3,"name":null,"status":"draft"}]}'
+        headers: []
+        description: ''
     responseFields: []
     auth: []
     controller: null
@@ -414,7 +408,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'Show Event Round'
-      description: 'Round detail with games for an event.'
+      description: 'Round detail with games for an event. Draft rounds are visible to Organisers only.'
       authenticated: false
       deprecated: false
     headers:
@@ -478,16 +472,10 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
-        content: |-
-          {
-              "message": "No query results for model [App\\Models\\Round] 1"
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
+        status: 200
+        content: '{"data":{"id":4,"number":2,"name":"Round 2","status":"live","games":[{"id":18,"table_number":5,"is_bye":false,"is_rematch":false,"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"}}],"scores":{"match-points":3,"victory-points":85}}]}]}}'
+        headers: []
+        description: ''
     responseFields: []
     auth: []
     controller: null
@@ -505,7 +493,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'Show Event Game'
-      description: 'Game detail with full score breakdown and army lists.'
+      description: 'Game detail with full score breakdown and army lists. Games in a Draft round are visible to Organisers only.'
       authenticated: false
       deprecated: false
     headers:
@@ -569,16 +557,10 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
-        content: |-
-          {
-              "message": ""
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
+        status: 200
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        headers: []
+        description: ''
     responseFields: []
     auth: []
     controller: null
@@ -596,7 +578,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'List Event Standings'
-      description: 'Paginated standings for a publicly visible event with optional search and sorting.'
+      description: 'Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position.'
       authenticated: false
       deprecated: false
     headers:
@@ -661,7 +643,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":29,"position":76,"attendee":{"id":43,"name":"Jovanny Cartwright","faction":{"id":25,"name":"Sed Rem"},"clubs":[]},"scores":[]}}'
+        content: '{"data":[{"id":9,"position":1,"attendee":{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"clubs":[{"id":2,"name":"The Ordo Ludi"}]}]},"scores":[{"value":6,"score_type":{"id":1,"name":"Match Points","slug":"match-points","sort_direction":"desc"}}]}]}'
         headers: []
         description: ''
     responseFields: []
@@ -722,9 +704,4037 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":45,"name":"In quod id aspernatur.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/488b4973-cced-39cd-9019-4e5670dd35d4.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/338aa13c-ee9b-3c59-9dad-eeca56f85ba2.jpg","created_at":"2026-04-24T20:33:54Z","updated_at":"2026-04-24T20:33:54Z"}}'
+        content: '{"data":{"id":92,"name":"Voluptas qui nulla.","description":null,"url":"https:\/\/battlezones.test\/storage\/photos\/18d00301-fc96-3d24-969c-8fdaf4fe3b6b.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/2fb85718-aced-3bbf-ace8-16ea8d6bd73b.jpg","created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/schedule'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List the Event Schedule'
+      description: "The Event's schedule grouped by day in the Event's own timezone, each day's blocks in time order."
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"date":"2026-09-12","blocks":[{"id":1,"label":"Round 1","type":"round","starts_at":"2026-09-12T09:30:00+00:00","ends_at":"2026-09-12T12:00:00+00:00","display_order":0,"target_id":4,"is_target_live":true,"round":{"id":4,"number":1,"name":"Round 1"}}]}]}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/feedback/{token}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show the Feedback Form'
+      description: 'The questions behind a feedback link. A spent or expired link is not found rather than explained, since the token is the only credential.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      token:
+        custom: []
+        name: token
+        description: 'The token from the feedback email.'
+        required: true
+        example: aVeryLongRandomToken
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      token: aVeryLongRandomToken
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"event":{"id":1,"name":"London Grand Tournament","slug":"london-grand-tournament"},"expires_at":"2026-09-20T09:00:00+00:00","questions":[{"id":1,"key":"overall","prompt":"How was the Event overall?","type":"rating"}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{"message":"Not Found."}'
+        headers: []
+        description: 'The link is unknown, already used, or expired.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/feedback/{token}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Submit Feedback'
+      description: 'Answers are stored against the Event and the question only — never against the Player. The link is spent afterwards, which is the sole reason the invitation records who it belonged to.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      token:
+        custom: []
+        name: token
+        description: 'The token from the feedback email.'
+        required: true
+        example: aVeryLongRandomToken
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      token: aVeryLongRandomToken
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      answers:
+        custom: []
+        name: answers
+        description: 'One entry per question answered: a rating for rating questions, an answer for text questions. Unanswered questions may be left out.'
+        required: true
+        example:
+          - question_id: 1
+            rating: 5
+          - question_id: 8
+            answer: 'The missions were excellent.'
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'answers[].question_id':
+        custom: []
+        name: 'answers[].question_id'
+        description: 'Must match an existing stored value.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'answers[].rating':
+        custom: []
+        name: 'answers[].rating'
+        description: 'Must be at least 1. Must not be greater than 5.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'answers[].answer':
+        custom: []
+        name: 'answers[].answer'
+        description: 'Must not be greater than 5000 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      answers:
+        - question_id: 1
+          rating: 5
+        - question_id: 8
+          answer: 'The missions were excellent.'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"submitted":true}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{"message":"Not Found."}'
+        headers: []
+        description: 'The link is unknown, already used, or expired.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/invites/{token}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Open an Invitation'
+      description: 'Resolve an emailed invite token. The link is reusable for the life of the invite.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      token:
+        custom: []
+        name: token
+        description: 'The token from the invitation email.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      token: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":7,"role":"captain","email":"captain@example.com","name":"Ada Lovelace","is_claimed":false,"attendee_id":null,"event":{"slug":"london-grand-tournament","name":"London Grand Tournament","starts_at":"2026-09-12T09:00:00+00:00","ends_at":"2026-09-13T18:00:00+00:00"},"expires_at":"2026-09-12T09:00:00+00:00","revoked_at":null}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{"message":"Not Found."}'
+        headers: []
+        description: 'The token is unknown, spent, revoked or expired.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/invites/{token}/session'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Enter with an Invitation'
+      description: 'Exchange an invite token for an API token acting as the invited account. The token expires with the invitation.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      token:
+        custom: []
+        name: token
+        description: 'The token from the invitation email.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      token: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      device_name:
+        custom: []
+        name: device_name
+        description: 'The name of the device entering.'
+        required: true
+        example: iPhone
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      device_name: iPhone
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"token":"{AUTH_TOKEN}"}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/invites/{token}/claim'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Claim an Invited Account'
+      description: 'Set a password on the invited account, turning it into a real one. This revokes the invitation.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      token:
+        custom: []
+        name: token
+        description: 'The token from the invitation email.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      token: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      password:
+        custom: []
+        name: password
+        description: 'The password to set on the account. Must be at least 8 characters.'
+        required: true
+        example: password
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      device_name:
+        custom: []
+        name: device_name
+        description: 'A name identifying the device requesting the token. Must not be greater than 255 characters.'
+        required: true
+        example: 'iPhone 15'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name:
+        custom: []
+        name: name
+        description: 'The name to go by, if it differs from the one the organiser entered. Must not be greater than 255 characters.'
+        required: false
+        example: 'Horus Lupercal'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      password: password
+      device_name: 'iPhone 15'
+      name: 'Horus Lupercal'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"token":"{AUTH_TOKEN}"}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/organisers'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Event Organisers'
+      description: 'The Players trusted to run this event. Organisers only.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":12,"name":"Ada Lovelace","role":"lead"}]}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/organisers'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Appoint an Organiser'
+      description: 'Lead organisers only. The account must already be claimed.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: 'The email of the claimed account to appoint.'
+        required: true
+        example: organiser@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: organiser@example.com
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":12,"name":"Ada Lovelace","role":"lead"}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/events/{event_slug}/organisers/{user_id}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove an Organiser'
+      description: 'Lead organisers only.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      user:
+        custom: []
+        name: user
+        description: 'The id of the organiser to remove.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      user_id: 1
+      event: london-grand-tournament
+      user: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: null
+        headers: []
+        description: 'The Organiser was removed.'
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/invites'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Invite a Captain'
+      description: 'Organisers only. Emails a time-limited credential for this Event.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: 'The email address to invite.'
+        required: true
+        example: captain@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name:
+        custom: []
+        name: name
+        description: 'The name to give the invited account, if it does not exist yet.'
+        required: false
+        example: 'Horus Lupercal'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: captain@example.com
+      name: 'Horus Lupercal'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: '{"data":{"id":7,"role":"captain","email":"captain@example.com","name":"Ada Lovelace","is_claimed":false,"attendee_id":null,"event":{"slug":"london-grand-tournament","name":"London Grand Tournament","starts_at":"2026-09-12T09:00:00+00:00","ends_at":"2026-09-13T18:00:00+00:00"},"expires_at":"2026-09-12T09:00:00+00:00","revoked_at":null}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/feedback/requests'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Send Feedback Requests'
+      description: 'Organisers only. Emails every Player their own one-time link, valid for 30 days. Players who have already answered are left alone.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"invited":24}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/feedback'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Read Feedback'
+      description: 'Organisers only. Ratings summarised, free text listed, and nothing tying either to a Player — the responses carry no such link to begin with.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"invitations":{"sent":32,"submitted":19},"questions":[{"key":"overall","prompt":"How was the Event overall?","type":"rating","response_count":19,"average":4.42,"distribution":{"1":0,"2":1,"3":2,"4":5,"5":11}}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/feedback/export'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Export Feedback'
+      description: 'Organisers only. A CSV of every answer, grouped by question and shuffled within it, so no row can be tied to a Player or to another row. Synchronous: one Event is a few hundred rows.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |
+          question_key,prompt,type,rating,answer
+          overall,How was the Event overall?,rating,5,
+        headers: []
+        description: 'A CSV download.'
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/polls'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Polls'
+      description: "The Event's Polls and whether each is open. Tallies are not here, and are never readable by Players."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":41,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null},{"id":42,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}]}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/polls'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create a Poll'
+      description: 'Organisers only. A Poll opens closed: the window is set by opening it, not by creating it.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'What the Poll is called.'
+        required: true
+        example: 'Best Painted Army'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      type:
+        custom: []
+        name: type
+        description: 'Which Attendees may be picked: painting or favourite_opponent.'
+        required: true
+        example: painting
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      votes_per_player:
+        custom: []
+        name: votes_per_player
+        description: 'How many Attendees each Player may pick. Defaults to one.'
+        required: false
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'Best Painted Army'
+      type: painting
+      votes_per_player: 3
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":43,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/polls/{poll_id}/open'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Open a Poll'
+      description: "Organisers only. Opens this Poll's voting window, independently of every other Poll."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll_id:
+        custom: []
+        name: poll_id
+        description: 'The ID of the poll.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll:
+        custom: []
+        name: poll
+        description: 'The id of the poll.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      poll_id: 16
+      event: london-grand-tournament
+      poll: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":44,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/polls/{poll_id}/candidates'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Poll Candidates'
+      description: 'The Attendees this Player may pick in this Poll: armies on the display table for a painting Poll, and the teams this Player actually played for a favourite-opponent Poll. A Bye shortens the list rather than appearing in it.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll_id:
+        custom: []
+        name: poll_id
+        description: 'The ID of the poll.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll:
+        custom: []
+        name: poll
+        description: 'The id of the poll.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      poll_id: 16
+      event: london-grand-tournament
+      poll: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"clubs":[{"id":2,"name":"The Ordo Ludi"}]}]}]}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/polls/{poll_id}/results'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Read Poll Tallies'
+      description: 'Organisers only, permanently — not live, not after close, not to Players. Winners are announced in the venue, and the announcement is an Event update. Ties come back unresolved: which of two equal armies wins is a judgement, not a rule to invent in code.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll_id:
+        custom: []
+        name: poll_id
+        description: 'The ID of the poll.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll:
+        custom: []
+        name: poll
+        description: 'The id of the poll.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      poll_id: 16
+      event: london-grand-tournament
+      poll: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"poll":{"id":1,"name":"Best Painted Army","type":"best_painted","is_open":false},"tallies":[{"attendee":{"id":9,"name":"Ada and Grace","display_number":4},"votes":11}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/polls/{poll_id}/close'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Close a Poll'
+      description: "Organisers only. Closes this Poll's voting window. Results stay Organiser-only afterwards: winners are announced in the venue."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll_id:
+        custom: []
+        name: poll_id
+        description: 'The ID of the poll.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll:
+        custom: []
+        name: poll
+        description: 'The id of the poll.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      poll_id: 16
+      event: london-grand-tournament
+      poll: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":45,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/events/{event_slug}/polls/{poll_id}/ballot'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Replace your Ballot'
+      description: 'Send the complete set of Attendees you are picking; an empty array clears your Ballot. In doubles both Players vote independently.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll_id:
+        custom: []
+        name: poll_id
+        description: 'The ID of the poll.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      poll:
+        custom: []
+        name: poll
+        description: 'The id of the poll.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      poll_id: 16
+      event: london-grand-tournament
+      poll: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      attendee_ids:
+        custom: []
+        name: attendee_ids
+        description: 'The complete Ballot: every Attendee this Player is picking. An empty array clears it.'
+        required: true
+        example:
+          - 4
+          - 9
+        type: 'integer[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      attendee_ids:
+        - 4
+        - 9
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"poll_id":1,"attendee_ids":[4,9]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"Voting is not open for you in this poll."}'
+        headers: []
+        description: 'The Poll is closed, or this Player may not vote in it.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/events/{event_slug}/attendees/{attendee_id}/painting'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Mark a Painting Entry'
+      description: 'Organisers only. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_id:
+        custom: []
+        name: attendee_id
+        description: 'The ID of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee:
+        custom: []
+        name: attendee
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      attendee_id: 1
+      event: london-grand-tournament
+      attendee: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      painting_entered:
+        custom: []
+        name: painting_entered
+        description: 'Whether this Attendee has an army on the display table.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      display_number:
+        custom: []
+        name: display_number
+        description: 'The number their army sits under. Independent of entry: teams get ticked off before anyone numbers them.'
+        required: false
+        example: 14
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      painting_entered: true
+      display_number: 14
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"clubs":[{"id":2,"name":"The Ordo Ludi"}]}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/schedule'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Add a Schedule Block'
+      description: 'Organisers only. The day the block appears under is derived from its start time in the Event timezone.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      label:
+        custom: []
+        name: label
+        description: 'What the block is called on the schedule.'
+        required: true
+        example: 'Round 1'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      type:
+        custom: []
+        name: type
+        description: 'One of info, round, painting_voting.'
+        required: true
+        example: round
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      starts_at:
+        custom: []
+        name: starts_at
+        description: 'When the block starts, as an ISO 8601 timestamp.'
+        required: true
+        example: '2026-07-11T09:00:00+01:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      ends_at:
+        custom: []
+        name: ends_at
+        description: 'When the block ends, as an ISO 8601 timestamp.'
+        required: true
+        example: '2026-07-11T11:30:00+01:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      display_order:
+        custom: []
+        name: display_order
+        description: 'Must be at least 0.'
+        required: false
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round_id:
+        custom: []
+        name: round_id
+        description: 'The Round this block runs. Required for a round block, and rejected on any other type.'
+        required: false
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      label: 'Round 1'
+      type: round
+      starts_at: '2026-07-11T09:00:00+01:00'
+      ends_at: '2026-07-11T11:30:00+01:00'
+      display_order: 39
+      round_id: 4
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":12,"label":"Awards","type":"info","starts_at":"2026-08-31T16:03:01+00:00","ends_at":"2026-08-31T17:03:01+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/schedule/reorder'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Reorder Schedule Blocks'
+      description: "Organisers only. Sets the order blocks appear in when they start at the same time — two things at ten o'clock still need an order on the page."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      block_ids:
+        custom: []
+        name: block_ids
+        description: 'The block ids in the order they should appear.'
+        required: true
+        example:
+          - 3
+          - 1
+          - 2
+        type: 'integer[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      block_ids:
+        - 3
+        - 1
+        - 2
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"block_ids":[3,1,2]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/events/{event_slug}/schedule/{block_id}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Edit a Schedule Block'
+      description: 'Organisers only. Moving a block across midnight moves it to the other day, because the day is derived rather than stored.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      block_id:
+        custom: []
+        name: block_id
+        description: 'The ID of the block.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      block:
+        custom: []
+        name: block
+        description: 'The id of the schedule block.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      block_id: 16
+      event: london-grand-tournament
+      block: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      label:
+        custom: []
+        name: label
+        description: 'What the block is called on the schedule.'
+        required: false
+        example: 'Round 1'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      type:
+        custom: []
+        name: type
+        description: 'One of info, round, painting_voting.'
+        required: false
+        example: round
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      starts_at:
+        custom: []
+        name: starts_at
+        description: 'When the block starts, as an ISO 8601 timestamp.'
+        required: false
+        example: '2026-07-11T09:00:00+01:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      ends_at:
+        custom: []
+        name: ends_at
+        description: 'When the block ends, as an ISO 8601 timestamp.'
+        required: false
+        example: '2026-07-11T11:30:00+01:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      display_order:
+        custom: []
+        name: display_order
+        description: 'Must be at least 0.'
+        required: false
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round_id:
+        custom: []
+        name: round_id
+        description: 'The Round this block runs. Required for a round block, and rejected on any other type.'
+        required: false
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      label: 'Round 1'
+      type: round
+      starts_at: '2026-07-11T09:00:00+01:00'
+      ends_at: '2026-07-11T11:30:00+01:00'
+      display_order: 39
+      round_id: 4
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":13,"label":"Awards","type":"info","starts_at":"2026-08-31T16:03:01+00:00","ends_at":"2026-08-31T17:03:01+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/events/{event_slug}/schedule/{block_id}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Delete a Schedule Block'
+      description: 'Organisers only.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      block_id:
+        custom: []
+        name: block_id
+        description: 'The ID of the block.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      block:
+        custom: []
+        name: block
+        description: 'The id of the schedule block.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      block_id: 16
+      event: london-grand-tournament
+      block: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 204
+        content: ''
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/my-game'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show My Current Game'
+      description: "The authenticated Player's Game and table number in the current Round. Null until that Round is published."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 200
+        content: '{"data":null}'
+        headers: []
+        description: 'The current Round is not published, or this Player is not playing in it.'
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/games/{game_id}/result'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Submit a Game Result'
+      description: 'Either Player in a Game submits scores for both Attendees. The first submission wins and locks the Game: a later one is rejected and the result has to be flagged for an Organiser instead. Derived Score Types such as Match Points are computed server-side.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game_id:
+        custom: []
+        name: game_id
+        description: 'The ID of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game:
+        custom: []
+        name: game
+        description: 'The id of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      game_id: 1
+      event: london-grand-tournament
+      game: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      scores:
+        custom: []
+        name: scores
+        description: 'Scores keyed by Attendee id, then by Score Type slug. Every Attendee in the Game must be present, and derived Score Types are rejected.'
+        required: true
+        example:
+          1:
+            victory-points: 85
+          2:
+            victory-points: 70
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      scores:
+        1:
+          victory-points: 85
+        2:
+          victory-points: 70
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 409
+        content: '{"message":"A result has already been submitted for this game. Flag it if it needs correcting."}'
+        headers: []
+        description: 'A result already exists.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/events/{event_slug}/games/{game_id}/result'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Correct a Game Result'
+      description: 'Organisers only, at any point and in any Round. Correcting is separate from resolving a flag: an Organiser who corrects a result still has to close the flag, and one who finds the result was right can close it without touching the scores.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game_id:
+        custom: []
+        name: game_id
+        description: 'The ID of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game:
+        custom: []
+        name: game
+        description: 'The id of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      game_id: 1
+      event: london-grand-tournament
+      game: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      scores:
+        custom: []
+        name: scores
+        description: 'Scores keyed by Attendee id, then by Score Type slug. Every Attendee in the Game must be present, and derived Score Types are rejected.'
+        required: true
+        example:
+          1:
+            victory-points: 85
+          2:
+            victory-points: 70
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      scores:
+        1:
+          victory-points: 85
+        2:
+          victory-points: 70
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/games/{game_id}/flag'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Flag a Game Result'
+      description: 'A Player in the Game, or an Organiser, claims the submitted result is wrong. Flagging again while a flag is open returns the open flag rather than raising a second one.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game_id:
+        custom: []
+        name: game_id
+        description: 'The ID of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game:
+        custom: []
+        name: game
+        description: 'The id of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      game_id: 1
+      event: london-grand-tournament
+      game: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason:
+        custom: []
+        name: reason
+        description: 'Why the result is wrong. Optional, but it is what an Organiser adjudicates on.'
+        required: false
+        example: 'We agreed 85-70 the other way round.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason: 'We agreed 85-70 the other way round.'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":3,"game_id":18,"reason":"We agreed 85-70 but it went in the other way round.","flagged_at":"2026-09-12T14:20:00+00:00","flagged_by":{"id":12,"name":"Ada Lovelace"},"resolved_at":null,"resolved_by":null}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/games/{game_id}/flag/resolve'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Resolve a Flagged Result'
+      description: 'Organisers only. Closes the open flag on a Game. Resolving is deliberately separate from editing: an Organiser who checks a flag and finds the original result was right still needs a way to clear it.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game_id:
+        custom: []
+        name: game_id
+        description: 'The ID of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      game:
+        custom: []
+        name: game
+        description: 'The id of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      game_id: 1
+      event: london-grand-tournament
+      game: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":3,"game_id":18,"reason":"We agreed 85-70 but it went in the other way round.","flagged_at":"2026-09-12T14:20:00+00:00","flagged_by":{"id":12,"name":"Ada Lovelace"},"resolved_at":null,"resolved_by":null}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/flags'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Flagged Results'
+      description: 'Organisers only. The open flags on this Event, oldest first, with the Game and its current scores.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":3,"game_id":18,"reason":"We agreed 85-70 but it went in the other way round.","flagged_at":"2026-09-12T14:20:00+00:00","flagged_by":{"id":12,"name":"Ada Lovelace"},"game":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"attendees":[{"id":9,"name":"Ada and Grace","scores":{"match-points":3,"victory-points":85}}]},"resolved_at":null,"resolved_by":null}]}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/rounds'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Generate the next Round'
+      description: "Organisers only. Pairs the field into a new Draft Round. Rejected while the current Round is unpublished or has results outstanding, and once the Event's round count is reached."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":4,"number":2,"name":"Round 2","status":"live","games":[{"id":18,"table_number":5,"is_bye":false,"is_rematch":false,"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"}}],"scores":{"match-points":3,"victory-points":85}}]}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/rounds/{round_id}/publish'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Publish a Round'
+      description: "Organisers only. Makes the Round's pairings and table numbers visible to Players. Earlier Rounds stay Live."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round_id:
+        custom: []
+        name: round_id
+        description: 'The ID of the round.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round:
+        custom: []
+        name: round
+        description: 'The id of the round.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      round_id: 1
+      event: london-grand-tournament
+      round: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":4,"number":2,"name":"Round 2","status":"live","games":[{"id":18,"table_number":5,"is_bye":false,"is_rematch":false,"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"}}],"scores":{"match-points":3,"victory-points":85}}]}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/rounds/{round_id}/swap'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Swap two Pairings'
+      description: 'Organisers only, on a Draft Round. Exchanges the same-allegiance side between two Games, or moves the Bye when one of them is a Bye. Table numbers stay with the Game, and rematch flags are recomputed.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round_id:
+        custom: []
+        name: round_id
+        description: 'The ID of the round.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round:
+        custom: []
+        name: round
+        description: 'The id of the round.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      round_id: 1
+      event: london-grand-tournament
+      round: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      game_ids:
+        custom: []
+        name: game_ids
+        description: 'The two Games to recombine. The exchange itself is not a choice: the system performs the only legal one.'
+        required: true
+        example:
+          - 12
+          - 15
+        type: 'integer[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      game_ids:
+        - 12
+        - 15
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":4,"number":2,"name":"Round 2","status":"live","games":[{"id":18,"table_number":5,"is_bye":false,"is_rematch":false,"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"}}],"scores":{"match-points":3,"victory-points":85}}]}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/events/{event_slug}/rounds/{round_id}/publish'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Unpublish a Round'
+      description: 'Organisers only. Returns a Round to Draft so a broken pairing can be fixed out of sight. Rejected once any result exists.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round_id:
+        custom: []
+        name: round_id
+        description: 'The ID of the round.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      round:
+        custom: []
+        name: round
+        description: 'The id of the round.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      round_id: 1
+      event: london-grand-tournament
+      round: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":4,"number":2,"name":"Round 2","status":"live","games":[{"id":18,"table_number":5,"is_bye":false,"is_rematch":false,"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"}}],"scores":{"match-points":3,"victory-points":85}}]}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/events/{event_slug}/army-list'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Submit Your Army List'
+      description: 'Submitting locks the list. Only an Organiser can reopen it.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      army_list:
+        custom: []
+        name: army_list
+        description: 'The list as free text. No format is imposed.'
+        required: true
+        example: '2000pts Ultramarines...'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      army_list: '2000pts Ultramarines...'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"army_list":"Legion Tactical Squad, 10 models...","submitted_at":"2026-09-10T18:30:00+00:00","is_locked":false}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/attendees/{attendee_id}/army-lists/reveal'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Reveal a Team's Army Lists"
+      description: 'Organisers only. Frees a team held hostage by a Player who never submitted.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_id:
+        custom: []
+        name: attendee_id
+        description: 'The ID of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee:
+        custom: []
+        name: attendee
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      attendee_id: 1
+      event: london-grand-tournament
+      attendee: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models...","clubs":[{"id":2,"name":"The Ordo Ludi"}]}],"checked_in_at":null,"custom_field_responses":[{"id":1,"name":"Dietary requirements","type":"text","value":"None"}],"games":[{"id":18,"round_number":2,"table_number":5,"is_bye":false,"scores":{"match-points":3,"victory-points":85},"opponents":[{"id":11,"name":"Grace and Alan"}]}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/attendees/{attendee_id}/members/{member_id}/army-list/unlock'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Unlock an Army List'
+      description: 'Organisers only. Locking has no other escape, and a wrong list matters for every opponent who prepares against it.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_id:
+        custom: []
+        name: attendee_id
+        description: 'The ID of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      member_id:
+        custom: []
+        name: member_id
+        description: 'The ID of the member.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee:
+        custom: []
+        name: attendee
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      member:
+        custom: []
+        name: member
+        description: 'The id of the Player whose list to reopen.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      attendee_id: 1
+      member_id: 1
+      event: london-grand-tournament
+      attendee: 1
+      member: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"army_list":"Legion Tactical Squad, 10 models...","submitted_at":"2026-09-10T18:30:00+00:00","is_locked":false}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/attendees'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Register a Team'
+      description: 'Enters a party for the Event, inviting any Player who has no account yet.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      event: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'The name the party competes under.'
+        required: false
+        example: 'Sons of Terra'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      allegiance:
+        custom: []
+        name: allegiance
+        description: 'The side the party fights for, where the Event divides the field.'
+        required: false
+        example: loyalist
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      players:
+        custom: []
+        name: players
+        description: 'One entry per Player, including whoever is registering.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'players[].name':
+        custom: []
+        name: 'players[].name'
+        description: "The Player's name."
+        required: false
+        example: 'Tarik Torgaddon'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'players[].email':
+        custom: []
+        name: 'players[].email'
+        description: "The Player's email address."
+        required: true
+        example: tarik@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'players[].faction_id':
+        custom: []
+        name: 'players[].faction_id'
+        description: 'The Faction this Player brings.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'players[].army_list':
+        custom: []
+        name: 'players[].army_list'
+        description: "This Player's army list."
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'Sons of Terra'
+      allegiance: loyalist
+      players:
+        - name: 'Tarik Torgaddon'
+          email: tarik@example.com
+          faction_id: 1
+          army_list: architecto
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: '{"data":{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models...","clubs":[{"id":2,"name":"The Ordo Ludi"}]}],"checked_in_at":null,"custom_field_responses":[{"id":1,"name":"Dietary requirements","type":"text","value":"None"}],"games":[{"id":18,"round_number":2,"table_number":5,"is_bye":false,"scores":{"match-points":3,"victory-points":85},"opponents":[{"id":11,"name":"Grace and Alan"}]}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/events/{event_slug}/attendees/{id}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Amend a Team'
+      description: 'Members and Organisers may change the party name; allegiance freezes once a Round is Live.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee:
+        custom: []
+        name: attendee
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      id: 1
+      event: london-grand-tournament
+      attendee: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'The name the party competes under.'
+        required: false
+        example: 'Sons of Terra'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      allegiance:
+        custom: []
+        name: allegiance
+        description: 'The side the party fights for. Frozen once a Round is Live.'
+        required: false
+        example: traitor
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'Sons of Terra'
+      allegiance: traitor
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models...","clubs":[{"id":2,"name":"The Ordo Ludi"}]}],"checked_in_at":null,"custom_field_responses":[{"id":1,"name":"Dietary requirements","type":"text","value":"None"}],"games":[{"id":18,"round_number":2,"table_number":5,"is_bye":false,"scores":{"match-points":3,"victory-points":85},"opponents":[{"id":11,"name":"Grace and Alan"}]}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/attendees/{attendee_id}/members'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Add a Player to a Team'
+      description: 'Invites the Player if they have no account yet. Closed to members once registration closes; Organisers are never blocked.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_id:
+        custom: []
+        name: attendee_id
+        description: 'The ID of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee:
+        custom: []
+        name: attendee
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      attendee_id: 1
+      event: london-grand-tournament
+      attendee: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: "The Player's name, used if they have no account yet."
+        required: false
+        example: 'Tarik Torgaddon'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: "The Player's email address."
+        required: true
+        example: tarik@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      faction_id:
+        custom: []
+        name: faction_id
+        description: 'The Faction this Player brings.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      army_list:
+        custom: []
+        name: army_list
+        description: "This Player's army list."
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'Tarik Torgaddon'
+      email: tarik@example.com
+      faction_id: 1
+      army_list: architecto
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: '{"data":{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models...","clubs":[{"id":2,"name":"The Ordo Ludi"}]}],"checked_in_at":null,"custom_field_responses":[{"id":1,"name":"Dietary requirements","type":"text","value":"None"}],"games":[{"id":18,"round_number":2,"table_number":5,"is_bye":false,"scores":{"match-points":3,"victory-points":85},"opponents":[{"id":11,"name":"Grace and Alan"}]}]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/events/{event_slug}/attendees/{attendee_id}/members/{id}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove a Player from a Team'
+      description: 'Closed to members once registration closes; Organisers are never blocked.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_id:
+        custom: []
+        name: attendee_id
+        description: 'The ID of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the member.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event:
+        custom: []
+        name: event
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee:
+        custom: []
+        name: attendee
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      member:
+        custom: []
+        name: member
+        description: 'The id of the Player to remove.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: summer-showdown-2026
+      attendee_id: 1
+      id: 1
+      event: london-grand-tournament
+      attendee: 1
+      member: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: null
+        headers: []
+        description: 'The member was removed from the Attendee.'
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
     responseFields: []
     auth: []
     controller: null

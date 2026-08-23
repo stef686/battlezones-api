@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -19,6 +20,7 @@ class ExportEventFeedbackController extends Controller
 {
     #[Endpoint('Export Feedback', 'Organisers only. A CSV of every answer, grouped by question and shuffled within it, so no row can be tied to a Player or to another row. Synchronous: one Event is a few hundred rows.')]
     #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[Response(content: "question_key,prompt,type,rating,answer\noverall,How was the Event overall?,rating,5,\n", description: 'A CSV download.')]
     public function __invoke(Event $event): StreamedResponse
     {
         Gate::authorize('organise', $event);

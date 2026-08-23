@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Documentation\AddStandardErrorResponses;
 use Knuckles\Scribe\Config\AuthIn;
 use Knuckles\Scribe\Config\Defaults;
 use Knuckles\Scribe\Extracting\Strategies;
@@ -233,7 +234,10 @@ return [
             ...Defaults::BODY_PARAMETERS_STRATEGIES,
         ],
         'responses' => configureStrategy(
-            Defaults::RESPONSES_STRATEGIES,
+            [
+                ...Defaults::RESPONSES_STRATEGIES,
+                AddStandardErrorResponses::class,
+            ],
             Strategies\Responses\ResponseCalls::withSettings(
                 only: ['GET *'],
                 // Recommended: disable debug mode in response calls to avoid error stack traces in responses

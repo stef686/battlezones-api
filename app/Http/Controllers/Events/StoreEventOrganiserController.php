@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Events', 'APIs for Events')]
@@ -19,6 +20,7 @@ class StoreEventOrganiserController extends Controller
 {
     #[Endpoint('Appoint an Organiser', 'Lead organisers only. The account must already be claimed.')]
     #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[Response(['data' => ['id' => 12, 'name' => 'Ada Lovelace', 'role' => 'lead']])]
     public function __invoke(StoreEventOrganiserRequest $request, Event $event): EventOrganiserResource
     {
         Gate::authorize('manageOrganisers', $event);

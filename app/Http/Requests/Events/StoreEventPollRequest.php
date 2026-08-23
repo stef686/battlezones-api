@@ -31,11 +31,14 @@ class StoreEventPollRequest extends FormRequest
         ];
     }
 
+    /**
+     * Empty when route model binding has not run, which only happens where the
+     * docs generator instantiates this request outside a real request cycle.
+     */
     public function event(): Event
     {
-        /** @var Event $event */
         $event = $this->route('event');
 
-        return $event;
+        return $event instanceof Event ? $event : new Event();
     }
 }

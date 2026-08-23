@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Events', 'APIs for Events')]
@@ -22,6 +23,17 @@ class ShowEventFeedbackController extends Controller
 {
     #[Endpoint('Read Feedback', 'Organisers only. Ratings summarised, free text listed, and nothing tying either to a Player — the responses carry no such link to begin with.')]
     #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[Response(['data' => [
+        'invitations' => ['sent' => 32, 'submitted' => 19],
+        'questions' => [[
+            'key' => 'overall',
+            'prompt' => 'How was the Event overall?',
+            'type' => 'rating',
+            'response_count' => 19,
+            'average' => 4.42,
+            'distribution' => ['1' => 0, '2' => 1, '3' => 2, '4' => 5, '5' => 11],
+        ]],
+    ]])]
     public function __invoke(Event $event): JsonResponse
     {
         Gate::authorize('organise', $event);

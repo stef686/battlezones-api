@@ -46,7 +46,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":43,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
+        content: '{"data":{"id":113,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -80,7 +80,7 @@ endpoints:
       recipient_ids:
         custom: []
         name: recipient_ids
-        description: 'The <code>id</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example:
           - 16
@@ -121,9 +121,15 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":44,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
+        content: '{"data":{"id":114,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -170,7 +176,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":19,"conversation_id":45,"user_id":201,"body":"Animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-04-24T20:33:53Z"}}'
+        content: '{"data":{"id":49,"conversation_id":115,"user_id":455,"body":"Harum nulla eos beatae consequatur molestiae qui. Unde dolorem non dolor corporis. Laborum dolor quos et maxime alias.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -216,7 +222,7 @@ endpoints:
       recipient_ids:
         custom: []
         name: recipient_ids
-        description: 'The <code>id</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example:
           - 16
@@ -245,9 +251,15 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":46,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
+        content: '{"data":{"id":116,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -416,9 +428,15 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":47,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-04-24T20:33:53Z","updated_at":"2026-04-24T20:33:53Z"}}'
+        content: '{"data":{"id":117,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-08-23T17:09:04Z","updated_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -673,9 +691,15 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":20,"conversation_id":48,"user_id":202,"body":"Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-04-24T20:33:53Z"}}'
+        content: '{"data":{"id":50,"conversation_id":118,"user_id":456,"body":"Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -746,9 +770,15 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":21,"conversation_id":49,"user_id":203,"body":"Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-04-24T20:33:53Z"}}'
+        content: '{"data":{"id":51,"conversation_id":119,"user_id":457,"body":"Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-08-23T17:09:04Z"}}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null

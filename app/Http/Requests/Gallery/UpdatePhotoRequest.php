@@ -25,7 +25,7 @@ class UpdatePhotoRequest extends FormRequest
     }
 
     /**
-     * @return array<string, array{description: string, example: string}>
+     * @return array<string, array{description: string, example?: string}>
      */
     public function bodyParameters(): array
     {
@@ -36,7 +36,6 @@ class UpdatePhotoRequest extends FormRequest
             ],
             'photo' => [
                 'description' => 'A replacement photo file (jpg, jpeg, png, or webp, max 10MB).',
-                'example' => 'photo.jpg',
             ],
             'description' => [
                 'description' => 'An updated description of the photo.',
