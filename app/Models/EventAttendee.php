@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Allegiance;
 use Database\Factories\EventAttendeeFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -164,5 +165,22 @@ class EventAttendee extends Model
         return $this->belongsToMany(Game::class, 'game_attendee')
             ->using(GameAttendeePivot::class)
             ->withTimestamps();
+    }
+
+    /**
+     * The Attendees this Attendee has actually faced.
+     *
+     * A Bye is not an opponent: nobody sat across the table, so it is neither
+     * a rematch to avoid nor a candidate for a favourite-opponent vote.
+     *
+     * @return Builder<self>
+     */
+    public function opponents(): Builder
+    {
+        return self::query()
+            ->whereKeyNot($this->getKey())
+            ->whereHas('games', fn (Builder $query) => $query
+                ->where('games.is_bye', false)
+                ->whereIn('games.id', $this->games()->where('games.is_bye', false)->select('games.id')));
     }
 }

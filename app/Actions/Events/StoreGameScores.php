@@ -62,6 +62,12 @@ class StoreGameScores
 
         $attendeeIds = array_keys($scoresByAttendee);
 
+        if ($game->is_bye) {
+            $this->awardByeWin($game);
+
+            return;
+        }
+
         if (count($attendeeIds) !== 2) {
             return;
         }
@@ -89,6 +95,36 @@ class StoreGameScores
                         'event_score_type_id' => $derivedType->id,
                     ],
                     ['value' => $points],
+                );
+            }
+        }
+    }
+
+    /**
+     * Award a Bye its win.
+     *
+     * There is no opponent to compare against, so the Match Points come from
+     * `is_bye` rather than from two scores. This runs when the Bye is paired
+     * rather than waiting on an Organiser: the win is a fact of the draw, and
+     * an Attendee should not sit below their true position in the Standings
+     * until someone remembers to type their Victory Points in.
+     */
+    public function awardByeWin(Game $game): void
+    {
+        $derivedTypes = $game->round->event->scoreTypes()
+            ->where('is_derived', true)
+            ->whereNotNull('win_points')
+            ->get();
+
+        foreach ($game->attendees()->pluck('event_attendees.id') as $attendeeId) {
+            foreach ($derivedTypes as $derivedType) {
+                GameScore::updateOrCreate(
+                    [
+                        'game_id' => $game->id,
+                        'event_attendee_id' => $attendeeId,
+                        'event_score_type_id' => $derivedType->id,
+                    ],
+                    ['value' => $derivedType->win_points],
                 );
             }
         }

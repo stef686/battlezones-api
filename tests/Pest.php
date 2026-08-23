@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Events\GenerateRoundPairings;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScoreType;
@@ -78,4 +79,24 @@ function submittedGame(?User $player = null): array
         ->assertSuccessful();
 
     return [$event, $game->refresh(), $mine, $theirs, $player];
+}
+
+function generatePairings(Event $event): Round
+{
+    return app(GenerateRoundPairings::class)->execute($event);
+}
+
+/**
+ * An Event that ranks on Match Points, with Victory Points as the tiebreaker.
+ *
+ * @param  array<string, mixed>  $settings
+ */
+function pairableEvent(array $settings = []): Event
+{
+    $event = Event::factory()->active()->settings($settings)->create();
+
+    EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create(['display_order' => 0]);
+    EventScoreType::factory()->victoryPoints()->rankedAt(2)->for($event)->create(['display_order' => 1]);
+
+    return $event;
 }

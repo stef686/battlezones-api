@@ -24,7 +24,10 @@ use Illuminate\Support\Facades\DB;
  */
 class GenerateRoundPairings
 {
-    public function __construct(private readonly HungarianMatcher $matcher) {}
+    public function __construct(
+        private readonly HungarianMatcher $matcher,
+        private readonly StoreGameScores $storeGameScores,
+    ) {}
 
     public function execute(Event $event): Round
     {
@@ -456,6 +459,8 @@ class GenerateRoundPairings
                 ]);
 
                 $game->attendees()->attach($attendee->id);
+
+                $this->storeGameScores->awardByeWin($game);
             }
 
             return $round;

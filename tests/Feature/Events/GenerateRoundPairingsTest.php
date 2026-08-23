@@ -1,6 +1,5 @@
 <?php
 
-use App\Actions\Events\GenerateRoundPairings;
 use App\Actions\Events\StoreGameScores;
 use App\Enums\Allegiance;
 use App\Enums\EventOrganiserRole;
@@ -8,31 +7,10 @@ use App\Enums\RoundStatus;
 use App\Exceptions\CannotGeneratePairings;
 use App\Models\Event;
 use App\Models\EventAttendee;
-use App\Models\EventScoreType;
 use App\Models\Game;
 use App\Models\Round;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-
-function generatePairings(Event $event): Round
-{
-    return app(GenerateRoundPairings::class)->execute($event);
-}
-
-/**
- * An Event that ranks on Match Points, with Victory Points as the tiebreaker.
- *
- * @param  array<string, mixed>  $settings
- */
-function pairableEvent(array $settings = []): Event
-{
-    $event = Event::factory()->active()->settings($settings)->create();
-
-    EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create(['display_order' => 0]);
-    EventScoreType::factory()->victoryPoints()->rankedAt(2)->for($event)->create(['display_order' => 1]);
-
-    return $event;
-}
 
 /**
  * Play a Round to a fixed set of results, deriving Match Points as a real
