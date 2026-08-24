@@ -8,6 +8,7 @@ use App\Filament\Resources\Events\Pages\ListEvents;
 use App\Filament\Resources\Events\RelationManagers\AttendeesRelationManager;
 use App\Filament\Resources\Events\RelationManagers\CustomFieldsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\DocumentsRelationManager;
+use App\Filament\Resources\Events\RelationManagers\OrganisersRelationManager;
 use App\Filament\Resources\Events\RelationManagers\RoundsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\ScoreTypesRelationManager;
 use App\Filament\Resources\Events\RelationManagers\UpdatesRelationManager;
@@ -39,6 +40,7 @@ class EventResource extends Resource
     public static function getRelations(): array
     {
         return [
+            OrganisersRelationManager::class,
             AttendeesRelationManager::class,
             RoundsRelationManager::class,
             CustomFieldsRelationManager::class,

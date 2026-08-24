@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\CustomFieldType;
+use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
 use App\Enums\SortDirection;
 use App\Filament\Resources\Events\Pages\CreateEvent;
@@ -9,6 +10,7 @@ use App\Filament\Resources\Events\Pages\ListEvents;
 use App\Filament\Resources\Events\RelationManagers\AttendeesRelationManager;
 use App\Filament\Resources\Events\RelationManagers\CustomFieldsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\DocumentsRelationManager;
+use App\Filament\Resources\Events\RelationManagers\OrganisersRelationManager;
 use App\Filament\Resources\Events\RelationManagers\RoundsRelationManager;
 use App\Filament\Resources\Events\RelationManagers\ScoreTypesRelationManager;
 use App\Filament\Resources\Events\RelationManagers\UpdatesRelationManager;
@@ -22,8 +24,10 @@ use App\Models\EventUpdate;
 use App\Models\GameSystem;
 use App\Models\Round;
 use App\Models\User;
+use Filament\Actions\AttachAction;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\DetachAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\Testing\TestAction;
 use Livewire\Livewire;
@@ -139,6 +143,54 @@ test('can delete an event', function () {
         ->assertRedirect();
 
     assertDatabaseMissing(Event::class, ['id' => $event->id]);
+});
+
+test('organisers relation manager renders on edit page', function () {
+    $organiser = User::factory()->create();
+    $event = Event::factory()
+        ->hasAttached($organiser, ['role' => EventOrganiserRole::Lead->value], 'organisers')
+        ->create();
+
+    Livewire::test(OrganisersRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->assertOk()
+        ->assertCanSeeTableRecords($event->organisers);
+});
+
+test('can attach an organiser via relation manager', function () {
+    $event = Event::factory()->create();
+    $user = User::factory()->create();
+
+    Livewire::test(OrganisersRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(AttachAction::class)->table(), [
+            'recordId' => $user->id,
+            'role' => EventOrganiserRole::Organiser->value,
+        ])
+        ->assertNotified();
+
+    expect($event->organisers()->whereKey($user->id)->exists())->toBeTrue();
+    expect($event->organisers()->whereKey($user->id)->first()->pivot->role)->toBe(EventOrganiserRole::Organiser->value);
+});
+
+test('can detach an organiser via relation manager', function () {
+    $organiser = User::factory()->create();
+    $event = Event::factory()
+        ->hasAttached($organiser, ['role' => EventOrganiserRole::Organiser->value], 'organisers')
+        ->create();
+
+    Livewire::test(OrganisersRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(DetachAction::class)->table($organiser))
+        ->assertNotified();
+
+    expect($event->organisers()->whereKey($organiser->id)->exists())->toBeFalse();
 });
 
 test('attendees relation manager renders on edit page', function () {
