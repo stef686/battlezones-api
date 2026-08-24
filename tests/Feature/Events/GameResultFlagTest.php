@@ -192,3 +192,46 @@ test('players cannot resolve a flag', function () {
         ->postJson(route('events.games.flag.resolve', ['event' => $event->slug, 'game' => $game->id]))
         ->assertForbidden();
 });
+
+test('correcting a flagged result moves the standings and empties the queue', function () {
+    [$event, $game, $mine, $theirs, $player] = submittedGame();
+
+    $event->forceFill(['settings' => $event->settings->with(['standings_visible' => true])])->save();
+
+    $organiser = organiserOf($event);
+
+    $this->actingAs($player)
+        ->postJson(route('events.games.flag.store', ['event' => $event->slug, 'game' => $game->id]), [
+            'reason' => 'It went in the wrong way round.',
+        ])
+        ->assertSuccessful();
+
+    // The Organiser decides the score, then closes the dispute they decided.
+    $this->actingAs($organiser)
+        ->putJson(route('events.games.result.update', ['event' => $event->slug, 'game' => $game->id]), [
+            'scores' => [
+                $mine->id => ['victory-points' => 70],
+                $theirs->id => ['victory-points' => 85],
+            ],
+        ])
+        ->assertSuccessful();
+
+    $this->actingAs($organiser)
+        ->postJson(route('events.games.flag.resolve', ['event' => $event->slug, 'game' => $game->id]))
+        ->assertSuccessful();
+
+    $standings = collect($this->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->json('data'));
+
+    $winner = $standings->firstWhere('attendee.id', $theirs->id);
+
+    expect(collect($winner['scores'])->keyBy('score_type.slug')['victory-points']['value'])->toBe('85.00')
+        ->and($winner['position'])->toBe(1)
+        ->and($game->refresh()->edited_by_user_id)->toBe($organiser->id);
+
+    $this->actingAs($organiser)
+        ->getJson(route('events.flags.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->assertJsonCount(0, 'data');
+});

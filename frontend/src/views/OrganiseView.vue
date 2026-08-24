@@ -6,9 +6,9 @@ import { RouterLink } from 'vue-router';
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
+import { fetchFlags } from '@/api/flags';
 import { keys } from '@/api/keys';
 import {
-  correctGameResult,
   fetchRound,
   fetchRounds,
   generateRound,
@@ -17,6 +17,7 @@ import {
   unpublishRound,
   type Pairing,
 } from '@/api/rounds';
+import { correctGameResult } from '@/api/results';
 import { fetchStandings, positionsByAttendee } from '@/api/standings';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
@@ -61,6 +62,19 @@ const { data: standings } = useQuery({
 });
 
 const positions = computed(() => positionsByAttendee(standings.value ?? []));
+
+/**
+ * Open disputes are counted here so the queue is somewhere an Organiser is
+ * sent, rather than somewhere they have to remember to go and look.
+ */
+const { data: flags } = useQuery({
+  queryKey: computed(() => keys.flags(props.eventSlug)),
+  queryFn: () => fetchFlags(client, props.eventSlug),
+  enabled: mayOrganise,
+  retry: false,
+});
+
+const disputed = computed(() => (flags.value ?? []).length);
 
 const draft = computed(() => (rounds.value ?? []).find((round) => round.status === 'draft') ?? null);
 const live = computed(() => [...(rounds.value ?? [])]
@@ -279,6 +293,18 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
           Run the event
         </h1>
       </header>
+
+      <RouterLink
+        :to="{ name: 'flags', params: { eventSlug: props.eventSlug } }"
+        data-testid="flags-link"
+        class="flex items-center justify-between gap-3 rounded-2xl bg-surface-raised p-5 text-ink"
+      >
+        <span>Disputed results</span>
+        <span
+          class="text-sm tabular-nums"
+          :class="disputed > 0 ? 'text-danger' : 'text-ink-muted'"
+        >{{ disputed > 0 ? `${disputed} waiting` : 'None' }}</span>
+      </RouterLink>
 
       <!-- What is holding up the next Round, first, because that is the
            question an Organiser is standing there asking. -->

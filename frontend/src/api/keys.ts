@@ -19,4 +19,5 @@ export const keys = {
     round: (slug: string, roundId: number) => ['events', slug, 'rounds', roundId] as const,
     standings: (slug: string) => ['events', slug, 'standings'] as const,
     myGame: (slug: string) => ['events', slug, 'my-game'] as const,
+    flags: (slug: string) => ['events', slug, 'flags'] as const,
 };

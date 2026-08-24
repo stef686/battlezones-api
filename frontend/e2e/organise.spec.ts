@@ -74,7 +74,7 @@ test('a published round reaches the Players it was published to', async ({ page 
     await page.goto(`/events/${EVENT_SLUG}/rounds`);
 
     await expect(page.locator('[data-testid^="round-"]')).toHaveCount(2);
-    await expect(page.getByTestId('round-draft')).toHaveCount(0);
+    await expect(page.getByTestId('draft-badge')).toHaveCount(0);
 });
 
 test('a Player has no organiser screen to find', async ({ page }) => {

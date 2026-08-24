@@ -63,7 +63,7 @@ test('a Player reads the pairings for a live round, with table numbers', async (
     // Only the live Round is listed: the second is still a Draft, and a Player
     // is never sent one.
     await expect(page.locator('[data-testid^="round-"]')).toHaveCount(1);
-    await expect(page.getByTestId('round-draft')).toHaveCount(0);
+    await expect(page.getByTestId('draft-badge')).toHaveCount(0);
 
     await page.locator('[data-testid^="round-"]').first().click();
 

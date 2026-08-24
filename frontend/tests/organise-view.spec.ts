@@ -565,3 +565,33 @@ describe('scoring a bye', () => {
         expect(view.get('[data-testid="bye-saved-21"]').text()).toContain('Saved');
     });
 });
+
+describe('disputed results from the organiser screen', () => {
+    function withFlags(flags: unknown[]) {
+        return {
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: { data: [] } },
+            [`/api/events/${EVENT_SLUG}/standings`]: { status: 200, body: STANDINGS },
+            [`/api/events/${EVENT_SLUG}/flags`]: { status: 200, body: { data: flags } },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: { data: { current_round: null, rounds: null, standings: null, polls: null } } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        };
+    }
+
+    it('says how many results are disputed, so a queue is not somewhere to remember to look', async () => {
+        stubApi(withFlags([{ id: 3 }, { id: 4 }]));
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="flags-link"]').text()).toContain('2');
+    });
+
+    it('offers the queue even when nothing is in it', async () => {
+        stubApi(withFlags([]));
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="flags-link"]').text()).toContain('Disputed results');
+    });
+});

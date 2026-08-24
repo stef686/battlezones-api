@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router';
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
+import { flagResult } from '@/api/flags';
 import { keys } from '@/api/keys';
 import { submitResult, type Game, type Scores } from '@/api/results';
 import { useEventPulse } from '@/composables/useEventPulse';
@@ -49,6 +50,28 @@ const theirScore = ref<number | null>(null);
 const submitting = ref(false);
 const notice = ref<string | null>(null);
 const problem = ref<string | null>(null);
+
+const flagReason = ref('');
+const flagging = ref(false);
+
+async function flag(): Promise<void> {
+  if (game.value === null) {
+    return;
+  }
+
+  flagging.value = true;
+  notice.value = null;
+  problem.value = null;
+
+  try {
+    await flagResult(client, props.eventSlug, game.value.id, flagReason.value);
+    await queryClient.invalidateQueries({ queryKey: keys.myGame(props.eventSlug) });
+  } catch (caught) {
+    problem.value = caught instanceof ApiError ? caught.message : 'That could not be sent.';
+  } finally {
+    flagging.value = false;
+  }
+}
 
 async function submit(): Promise<void> {
   if (game.value === null || mine.value === null || theirs.value === null || session.viewer === null) {
@@ -196,13 +219,58 @@ async function submit(): Promise<void> {
         </button>
       </form>
 
-      <p
-        v-else-if="!isBye"
-        data-testid="result-submitted"
-        class="rounded-2xl bg-surface-raised p-5 text-success"
-      >
-        Result recorded. Flag it with an organiser if it needs correcting.
-      </p>
+      <template v-else-if="!isBye">
+        <p
+          data-testid="result-submitted"
+          class="rounded-2xl bg-surface-raised p-5 text-success"
+        >
+          Result recorded.
+        </p>
+
+        <p
+          v-if="game.result.edited_by"
+          data-testid="result-corrected"
+          class="rounded-2xl bg-surface-raised p-5 text-ink"
+        >
+          Corrected by {{ game.result.edited_by.name }}.
+        </p>
+
+        <p
+          v-if="game.result.is_flagged"
+          data-testid="result-flagged"
+          class="rounded-2xl bg-surface-raised p-5 text-ink"
+        >
+          An organiser is looking at this result. They will correct it if it is wrong.
+        </p>
+
+        <!-- A result cannot be resubmitted, so disagreeing means asking an
+             Organiser to look at it. -->
+        <section
+          v-else
+          data-testid="flag-form"
+          class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+        >
+          <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+            Something wrong with it?
+          </h2>
+          <textarea
+            v-model="flagReason"
+            data-testid="flag-reason"
+            rows="3"
+            placeholder="What should it have been?"
+            class="rounded-lg border border-border bg-surface-sunken px-3 py-2.5 text-ink outline-none focus:border-accent"
+          />
+          <button
+            type="button"
+            data-testid="flag-result"
+            :disabled="flagging"
+            class="rounded-xl border border-border px-4 py-3 font-semibold text-ink disabled:opacity-60"
+            @click="flag"
+          >
+            {{ flagging ? 'Sending…' : 'Flag for an organiser' }}
+          </button>
+        </section>
+      </template>
 
       <p
         v-if="notice"

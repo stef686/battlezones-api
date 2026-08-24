@@ -17,6 +17,8 @@ export interface Game {
         submitted_at: string | null;
         submitted_by?: { id: number; name: string } | null;
         edited_at: string | null;
+        /** Who corrected it, since a correction is somebody else's change. */
+        edited_by?: { id: number; name: string } | null;
         is_flagged: boolean;
     };
     attendees: GameAttendee[];
@@ -115,6 +117,22 @@ async function reconcile(
             ? { status: 'already_submitted', game }
             : { status: 'conflict', game, message: error.message };
     }
+}
+
+/**
+ * Write a result an Organiser is responsible for.
+ *
+ * Two cases share this: a Bye, which has no opponent to agree scores with,
+ * and a disputed result an Organiser has decided. Neither is a Player
+ * submission, so the correction is recorded against the Organiser's name.
+ */
+export function correctGameResult(
+    client: ApiClient,
+    eventSlug: string,
+    gameId: number,
+    scores: Scores,
+): Promise<unknown> {
+    return client.put(`/api/events/${eventSlug}/games/${gameId}/result`, { scores: scoresForRequest(scores) });
 }
 
 async function sendOnce(client: ApiClient, path: string, body: unknown): Promise<Game> {

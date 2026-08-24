@@ -99,7 +99,7 @@ function title(round: { number: number; name: string | null }): string {
 
           <span
             v-if="round.id === currentRound?.id"
-            data-testid="round-now"
+            data-testid="now-playing"
             class="rounded-md bg-accent px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-accent-ink"
           >
             Now
@@ -108,7 +108,7 @@ function title(round: { number: number; name: string | null }): string {
                Player's screen hiding something: they never received it. -->
           <span
             v-else-if="round.status === 'draft'"
-            data-testid="round-draft"
+            data-testid="draft-badge"
             class="rounded-md border border-border px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-ink-faint"
           >
             Draft

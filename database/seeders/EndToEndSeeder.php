@@ -276,6 +276,21 @@ class EndToEndSeeder extends Seeder
         EventAttendee $otherLoyalist,
         EventAttendee $otherTraitor,
     ): void {
+        // A browser test that pairs the next Round leaves a third one behind,
+        // and the Rounds list is asserted on by count. The fixture owns two.
+        $later = Round::query()->where('event_id', $event->getKey())->where('number', '>', 2)->get();
+
+        foreach ($later as $extra) {
+            $extra->games()->each(function (Game $game): void {
+                $game->scores()->delete();
+                $game->resultFlags()->delete();
+                $game->attendees()->detach();
+                $game->delete();
+            });
+
+            $extra->delete();
+        }
+
         $round = Round::query()->updateOrCreate(
             ['event_id' => $event->getKey(), 'number' => 2],
             ['name' => 'Round 2', 'status' => RoundStatus::Draft],
@@ -299,6 +314,7 @@ class EndToEndSeeder extends Seeder
             );
 
             $game->scores()->delete();
+            $game->resultFlags()->delete();
             // Detached first so pairing order is rewritten every run: a swap
             // exchanges the second Attendee, and the browser test asserts on
             // which one that is.
@@ -404,6 +420,9 @@ class EndToEndSeeder extends Seeder
         );
 
         $game->scores()->delete();
+        // Flags raised by an earlier run would still be waiting in the
+        // Organiser's queue, which the queue test reads as its own.
+        $game->resultFlags()->delete();
         $game->attendees()->sync([$mine->getKey(), $theirs->getKey()]);
 
         return $round;

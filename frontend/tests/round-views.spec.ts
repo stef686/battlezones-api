@@ -161,8 +161,8 @@ describe('the rounds list', () => {
         // Unnamed rounds fall back to their number rather than showing blank.
         expect(view.get('[data-testid="round-4"]').text()).toContain('Round 2');
 
-        expect(view.get('[data-testid="round-4"]').find('[data-testid="round-now"]').exists()).toBe(true);
-        expect(view.get('[data-testid="round-3"]').find('[data-testid="round-now"]').exists()).toBe(false);
+        expect(view.get('[data-testid="round-4"]').find('[data-testid="now-playing"]').exists()).toBe(true);
+        expect(view.get('[data-testid="round-3"]').find('[data-testid="now-playing"]').exists()).toBe(false);
     });
 
     it('shows a Player nothing about drafts, because the API sends them none', async () => {
@@ -175,7 +175,7 @@ describe('the rounds list', () => {
         const view = mountView(RoundsView);
         await flushPromises();
 
-        expect(view.find('[data-testid="round-draft"]').exists()).toBe(false);
+        expect(view.find('[data-testid="draft-badge"]').exists()).toBe(false);
     });
 
     it('marks a draft for the organiser who was sent one', async () => {
@@ -191,7 +191,7 @@ describe('the rounds list', () => {
         const view = mountView(RoundsView);
         await flushPromises();
 
-        expect(view.get('[data-testid="round-5"]').find('[data-testid="round-draft"]').exists()).toBe(true);
+        expect(view.get('[data-testid="round-5"]').find('[data-testid="draft-badge"]').exists()).toBe(true);
     });
 
     it('says pairings will appear rather than showing an empty page', async () => {
@@ -342,5 +342,76 @@ describe('a Player with the bye', () => {
 
         // No table to cross the hall to.
         expect(view.get('[data-testid="table-number"]').text()).toBe('—');
+    });
+});
+
+describe('a Player who disagrees with the result', () => {
+    function submittedGame(overrides: Record<string, unknown> = {}) {
+        return {
+            data: {
+                id: 18,
+                table_number: 5,
+                is_bye: false,
+                round: { id: 4, number: 2, name: 'Round 2' },
+                result: { submitted_at: '2026-09-12T14:05:00Z', edited_at: null, is_flagged: false, ...overrides },
+                attendees: [
+                    { id: 9, name: 'Mine', members: [], scores: { 'victory-points': 70 } },
+                    { id: 10, name: 'Theirs', members: [], scores: { 'victory-points': 85 } },
+                ],
+            },
+        };
+    }
+
+    it('flags it for an organiser, in their own words', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/my-game`]: { status: 200, body: submittedGame() },
+            [`/api/events/${EVENT_SLUG}/games/18/flag`]: { status: 200, body: { data: {} } },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(MyGameView);
+        await flushPromises();
+
+        await view.get('[data-testid="flag-reason"]').setValue('We agreed 85-70 the other way round.');
+        await view.get('[data-testid="flag-result"]').trigger('click');
+        await flushPromises();
+
+        const flagged = fetch.mock.calls.find(([url]) => String(url).endsWith('/games/18/flag'))!;
+        expect(flagged[1]?.method).toBe('POST');
+        expect(JSON.parse(flagged[1]?.body as string)).toEqual({ reason: 'We agreed 85-70 the other way round.' });
+    });
+
+    it('is told an organiser has it, and is not asked to flag it twice', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/my-game`]: { status: 200, body: submittedGame({ is_flagged: true }) },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(MyGameView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="result-flagged"]').text()).toContain('organiser');
+        expect(view.find('[data-testid="flag-form"]').exists()).toBe(false);
+    });
+
+    it('sees who corrected the result, since the change was not theirs', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/my-game`]: {
+                status: 200,
+                body: submittedGame({
+                    edited_at: '2026-09-12T15:00:00Z',
+                    edited_by: { id: 4, name: 'Rogal Dorn' },
+                }),
+            },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(MyGameView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="result-corrected"]').text()).toContain('Rogal Dorn');
     });
 });

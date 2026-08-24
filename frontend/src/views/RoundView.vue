@@ -93,7 +93,7 @@ function names(pairing: Pairing): string[] {
         </h1>
         <span
           v-if="round.status === 'draft'"
-          data-testid="round-draft"
+          data-testid="draft-badge"
           class="rounded-md border border-border px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-ink-faint"
         >
           Draft
