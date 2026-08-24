@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>Battlezones (maskable)</title>
+  <!-- The same mark inside the maskable safe zone: a launcher may crop to a
+       circle, so nothing that matters sits outside the middle 80%. -->
+  <rect width="512" height="512" fill="#0d1014"/>
+  <g transform="translate(256 256) scale(0.66) translate(-256 -256)">
+  <!-- Two wedges leaning into each other: the opposed Allegiances every
+       pairing is built from, over the line of the table they meet across. -->
+  <path d="M96 352 L216 128 L272 128 L152 352 Z" fill="#eb883b"/>
+  <path d="M416 352 L296 128 L240 128 L360 352 Z" fill="#eb883b" opacity="0.55"/>
+  <rect x="96" y="380" width="320" height="28" rx="14" fill="#eceff2"/>
+  </g>
+</svg>

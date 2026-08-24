@@ -1,11 +1,17 @@
 {
     "compilerOptions": {
         "target": "ES2022",
-        "lib": ["ES2023"],
+        // WebWorker joins ES2023 for the sake of vite-plugin-pwa's Workbox
+        // types, which describe a service worker and are written against it.
+        // Config-file scope only: the app itself never sees these.
+        "lib": ["ES2023", "WebWorker"],
         "module": "ESNext",
         "moduleResolution": "bundler",
         "types": ["node"],
         "strict": true,
+        // As the app project does: third-party declarations are their
+        // authors' problem, and Workbox's do not compile under strict.
+        "skipLibCheck": true,
         "noEmit": true,
         "composite": true,
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo"
