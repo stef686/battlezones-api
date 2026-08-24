@@ -1120,7 +1120,7 @@ export interface paths {
         head?: never;
         /**
          * Mark a Painting Entry
-         * @description Organisers only. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later.
+         * @description A Player enters their own army; an Organiser enters anyone's and assigns the display number. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later.
          */
         patch: operations["markAPaintingEntry"];
         trace?: never;
@@ -3114,6 +3114,8 @@ export interface operations {
                             allegiance?: string | null;
                             members?: unknown[];
                             checked_in_at?: string | null;
+                            painting_entered?: boolean;
+                            display_number?: string | null;
                             custom_field_responses?: unknown[];
                             games?: unknown[];
                         };
@@ -4300,6 +4302,7 @@ export interface operations {
                             closes_at?: string | null;
                             is_open?: boolean;
                             is_open_for_me?: string | null;
+                            my_ballot?: unknown[];
                         }[];
                     };
                 };
@@ -4355,6 +4358,7 @@ export interface operations {
                             closes_at?: string | null;
                             is_open?: boolean;
                             is_open_for_me?: string | null;
+                            my_ballot?: unknown[];
                         };
                     };
                 };
@@ -4415,6 +4419,7 @@ export interface operations {
                             closes_at?: string | null;
                             is_open?: boolean;
                             is_open_for_me?: string | null;
+                            my_ballot?: unknown[];
                         };
                     };
                 };
@@ -4567,6 +4572,7 @@ export interface operations {
                             closes_at?: string | null;
                             is_open?: boolean;
                             is_open_for_me?: string | null;
+                            my_ballot?: unknown[];
                         };
                     };
                 };

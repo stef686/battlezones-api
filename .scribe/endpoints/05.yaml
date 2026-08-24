@@ -71,7 +71,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":625,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T22:27:40Z","ends_at":"2027-02-14T22:27:40Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-24T08:57:46Z","updated_at":"2026-08-24T08:57:46Z"}}'
+        content: '{"data":{"id":638,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T22:45:50Z","ends_at":"2027-02-14T22:45:50Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-24T09:15:56Z","updated_at":"2026-08-24T09:15:56Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -301,7 +301,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":57,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-06T06:29:00Z","author":{"id":1393,"name":"Cordia Cummings"},"created_at":"2026-08-24T08:57:46Z","updated_at":"2026-08-24T08:57:46Z"}}'
+        content: '{"data":{"id":58,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-06T06:47:10Z","author":{"id":1421,"name":"Cordia Cummings"},"created_at":"2026-08-24T09:15:56Z","updated_at":"2026-08-24T09:15:56Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -362,7 +362,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":172,"name":"","allegiance":null,"members":[]}}'
+        content: '{"data":{"id":177,"name":"","allegiance":null,"members":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -472,7 +472,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":173,"name":"","allegiance":null,"members":[],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":178,"name":"","allegiance":null,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -521,7 +521,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":93,"number":1,"name":null,"status":"draft"},{"id":94,"number":3,"name":null,"status":"draft"}]}'
+        content: '{"data":[{"id":95,"number":1,"name":null,"status":"draft"},{"id":96,"number":3,"name":null,"status":"draft"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -858,7 +858,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":296,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-24T08:57:46Z","updated_at":"2026-08-24T08:57:46Z"}}'
+        content: '{"data":{"id":302,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-24T09:15:56Z","updated_at":"2026-08-24T09:15:56Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -1785,7 +1785,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":211,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null},{"id":212,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}]}'
+        content: '{"data":[{"id":217,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":218,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
         headers: []
         description: ''
       -
@@ -1876,7 +1876,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":213,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":219,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -1949,7 +1949,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":214,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":220,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2150,7 +2150,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":215,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null}}'
+        content: '{"data":{"id":221,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2265,7 +2265,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'Mark a Painting Entry'
-      description: 'Organisers only. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later.'
+      description: "A Player enters their own army; an Organiser enters anyone's and assigns the display number. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later."
       authenticated: true
       deprecated: false
     headers:
@@ -2463,7 +2463,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":82,"label":"Awards","type":"info","starts_at":"2026-09-01T07:51:43+00:00","ends_at":"2026-09-01T08:51:43+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":84,"label":"Awards","type":"info","starts_at":"2026-09-01T08:09:53+00:00","ends_at":"2026-09-01T09:09:53+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -2687,7 +2687,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":83,"label":"Awards","type":"info","starts_at":"2026-09-01T07:51:43+00:00","ends_at":"2026-09-01T08:51:43+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":85,"label":"Awards","type":"info","starts_at":"2026-09-01T08:09:53+00:00","ends_at":"2026-09-01T09:09:53+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -

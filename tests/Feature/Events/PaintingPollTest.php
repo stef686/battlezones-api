@@ -286,3 +286,89 @@ test('players list the polls of an event without seeing any tallies', function (
     expect(collect($response->json('data'))->firstWhere('id', $poll->id)['is_open'])->toBeTrue()
         ->and($response->json('data.0'))->not->toHaveKey('tallies');
 });
+
+test('a poll hands a player back their own ballot, and nobody else\'s', function () {
+    [$event, $poll, $voter, , $first, $second] = paintingPoll();
+
+    $this->actingAs($voter)
+        ->putJson(route('events.polls.ballot.update', ['event' => $event->slug, 'poll' => $poll->id]), [
+            'attendee_ids' => [$first->id],
+        ])
+        ->assertSuccessful();
+
+    // Revising a Ballot means seeing what is on it: without this a Player
+    // reopening the screen would be picking from scratch.
+    $mine = $this->actingAs($voter)
+        ->getJson(route('events.polls.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->json('data.0.my_ballot');
+
+    expect($mine)->toBe([$first->id]);
+
+    $other = User::factory()->create();
+    EventAttendee::factory()->for($event)->withMember($other)->create(['painting_entered' => true]);
+
+    $theirs = $this->actingAs($other)
+        ->getJson(route('events.polls.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->json('data.0.my_ballot');
+
+    expect($theirs)->toBe([])
+        ->and($second->id)->toBeInt();
+});
+
+test('a player enters their own army for painting, but does not number it', function () {
+    $event = Event::factory()->active()->create();
+    $player = User::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember($player)->create();
+
+    $url = route('events.attendees.painting.update', ['event' => $event->slug, 'attendee' => $attendee->id]);
+
+    $this->actingAs($player)
+        ->patchJson($url, ['painting_entered' => true])
+        ->assertSuccessful();
+
+    expect($attendee->refresh()->painting_entered)->toBeTrue();
+
+    // The display number belongs to whoever lays the table out, not to the
+    // Player: two teams choosing the same number is a mess in the room.
+    $this->actingAs($player)
+        ->patchJson($url, ['display_number' => 14])
+        ->assertForbidden();
+
+    expect($attendee->refresh()->display_number)->toBeNull();
+});
+
+test('a player cannot enter somebody else\'s army', function () {
+    $event = Event::factory()->active()->create();
+    $player = User::factory()->create();
+    EventAttendee::factory()->for($event)->withMember($player)->create();
+    $theirs = EventAttendee::factory()->for($event)->withMember()->create();
+
+    $this->actingAs($player)
+        ->patchJson(route('events.attendees.painting.update', ['event' => $event->slug, 'attendee' => $theirs->id]), [
+            'painting_entered' => true,
+        ])
+        ->assertForbidden();
+
+    expect($theirs->refresh()->painting_entered)->toBeFalse();
+});
+
+test('a team says whether its army is on the display table', function () {
+    $event = Event::factory()->active()->create();
+    $player = User::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember($player)->create([
+        'painting_entered' => true,
+        'display_number' => 4,
+    ]);
+
+    // A Player toggling their entry has to see which way it is set, and the
+    // number is what somebody walking the display table reads off.
+    $data = $this->actingAs($player)
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+        ->assertSuccessful()
+        ->json('data');
+
+    expect($data['painting_entered'])->toBeTrue()
+        ->and($data['display_number'])->toBe(4);
+});

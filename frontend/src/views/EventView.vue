@@ -7,6 +7,7 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
+import { fetchPolls } from '@/api/polls';
 import MissingNotice from '@/components/MissingNotice.vue';
 import { formatDateRange } from '@/lib/dates';
 
@@ -25,6 +26,20 @@ const { data: event, isPending, error } = useQuery({
  * does. The screen must not distinguish them either.
  */
 const missing = computed(() => error.value instanceof ApiError && error.value.kind === 'not_found');
+
+/**
+ * Polls are read here only to answer one question: is there a vote this
+ * reader can cast right now. A Player who has to go looking for the window
+ * misses it, and the window is the whole point of a Poll being open.
+ */
+const { data: polls } = useQuery({
+  queryKey: computed(() => keys.polls(props.eventSlug)),
+  queryFn: () => fetchPolls(client, props.eventSlug),
+  enabled: computed(() => event.value?.viewer !== null && event.value?.viewer !== undefined),
+  retry: false,
+});
+
+const openToMe = computed(() => (polls.value ?? []).find((poll) => poll.is_open_for_me === true) ?? null);
 
 const dates = computed(() => formatDateRange(event.value?.starts_at ?? null, event.value?.ends_at ?? null));
 
@@ -134,6 +149,13 @@ const viewer = computed(() => event.value?.viewer ?? null);
           Who is here
         </RouterLink>
         <RouterLink
+          :to="{ name: 'polls', params: { eventSlug: props.eventSlug } }"
+          data-testid="polls-link"
+          class="rounded-xl bg-surface-raised px-4 py-3 text-ink"
+        >
+          Votes
+        </RouterLink>
+        <RouterLink
           :to="{ name: 'standings', params: { eventSlug: props.eventSlug } }"
           data-testid="standings-link"
           class="rounded-xl bg-surface-raised px-4 py-3 text-ink"
@@ -157,6 +179,17 @@ const viewer = computed(() => event.value?.viewer ?? null);
           Enter this event
         </RouterLink>
       </nav>
+
+      <!-- The one Poll fact worth interrupting for: there is a window, and it
+           is open to you now. -->
+      <RouterLink
+        v-if="openToMe"
+        :to="{ name: 'poll', params: { eventSlug: props.eventSlug, pollId: openToMe.id } }"
+        data-testid="voting-open"
+        class="rounded-2xl bg-accent px-4 py-3 text-center font-semibold text-accent-ink"
+      >
+        Voting is open: {{ openToMe.name }}
+      </RouterLink>
 
       <!-- Organiser controls exist only where the viewer context grants them,
            never hidden by CSS: an unauthorised reader is not sent them. -->

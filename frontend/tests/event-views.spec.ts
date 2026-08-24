@@ -368,6 +368,63 @@ describe('the attendee list', () => {
     });
 });
 
+describe('a vote that has opened', () => {
+    const ENTERED = eventBody({
+        viewer: {
+            is_organiser: false,
+            is_lead_organiser: false,
+            is_attendee: true,
+            attendee_id: 9,
+            permissions: { organise: false, register: false, manage_organisers: false },
+        },
+    });
+
+    function poll(overrides: Record<string, unknown> = {}) {
+        return {
+            id: 1,
+            name: 'Best Painted Army',
+            type: 'painting',
+            votes_per_player: 2,
+            opens_at: null,
+            closes_at: null,
+            is_open: false,
+            is_open_for_me: false,
+            my_ballot: [],
+            ...overrides,
+        };
+    }
+
+    it('tells a Player voting is open on the screen they are already on', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/polls`]: { status: 200, body: { data: [poll({ is_open: true, is_open_for_me: true })] } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(EventView);
+        await flushPromises();
+
+        // Nobody should have to go looking for a vote that has a window.
+        expect(view.get('[data-testid="voting-open"]').text()).toContain('Best Painted Army');
+        expect(view.get('[data-testid="voting-open"]').attributes('href')).toBe(`/events/${EVENT_SLUG}/polls/1`);
+    });
+
+    it('does not announce a vote this Player cannot cast yet', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/polls`]: { status: 200, body: { data: [poll({ is_open: true, is_open_for_me: false })] } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(EventView);
+        await flushPromises();
+
+        expect(view.find('[data-testid="voting-open"]').exists()).toBe(false);
+
+        // The way in is still there, because a Poll they may read about is
+        // not the same as one they may vote in.
+        expect(view.find('[data-testid="polls-link"]').exists()).toBe(true);
+    });
+});
+
 describe('the attendee detail', () => {
     it('shows the players and the faction each of them brings', async () => {
         stubApi({ [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE } });

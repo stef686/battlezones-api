@@ -100,6 +100,10 @@ export interface Attendee {
     allegiance: string | null;
     members: AttendeeMember[];
     checked_in_at: string | null;
+    /** Whether this army is on the display table for the painting vote. */
+    painting_entered?: boolean;
+    /** The number it sits under there, assigned by whoever laid the table out. */
+    display_number?: number | null;
 }
 
 export type Allegiance = 'loyalist' | 'traitor';

@@ -17,7 +17,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Authenticated]
 class UpdatePaintingEntryController extends Controller
 {
-    #[Endpoint('Mark a Painting Entry', 'Organisers only. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later.')]
+    #[Endpoint('Mark a Painting Entry', 'A Player enters their own army; an Organiser enters anyone\'s and assigns the display number. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
     #[Response(['data' => [

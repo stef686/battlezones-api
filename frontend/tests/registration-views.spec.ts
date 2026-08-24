@@ -445,6 +445,46 @@ describe('amending a team', () => {
         expect(view.get('[data-testid="team-mate-13"]').text()).toContain('List not submitted');
     });
 
+    it('enters this team\'s army for the painting vote, and says when it is in', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/painting`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, painting_entered: false, display_number: null } },
+            },
+            [`/api/events/${EVENT_SLUG}/polls`]: {
+                status: 200,
+                body: { data: [{ id: 1, name: 'Best Painted Army', type: 'painting', votes_per_player: 2, opens_at: null, closes_at: null, is_open: false, is_open_for_me: false, my_ballot: [] }] },
+            },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(MyTeamView);
+        await flushPromises();
+
+        await view.get('[data-testid="enter-painting"]').trigger('click');
+        await flushPromises();
+
+        const entered = fetch.mock.calls.find(([url]) => String(url).endsWith('/attendees/9/painting'))!;
+        expect(entered[1]?.method).toBe('PATCH');
+        expect(JSON.parse(entered[1]?.body as string)).toEqual({ painting_entered: true });
+    });
+
+    it('offers no painting entry where the event runs no painting vote', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}/polls`]: { status: 200, body: { data: [] } },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(MyTeamView);
+        await flushPromises();
+
+        expect(view.find('[data-testid="enter-painting"]').exists()).toBe(false);
+    });
+
     it('sends a reader who has not entered to the entry form', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },

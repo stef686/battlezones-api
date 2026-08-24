@@ -9,12 +9,14 @@ use App\Enums\EventInviteRole;
 use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
+use App\Enums\PollType;
 use App\Enums\RoundStatus;
 use App\Enums\ScheduleBlockType;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventAttendeeMembership;
 use App\Models\EventInvite;
+use App\Models\EventPoll;
 use App\Models\EventScheduleBlock;
 use App\Models\EventScoreType;
 use App\Models\Faction;
@@ -90,6 +92,8 @@ class EndToEndSeeder extends Seeder
         $this->schedule($event, $round);
 
         $this->nextRound($event, $mine, $theirs, $otherLoyalist, $otherTraitor);
+
+        $this->paintingPoll($event, [$otherLoyalist, $otherTraitor]);
 
         $this->organiser($event);
 
@@ -266,7 +270,12 @@ class EndToEndSeeder extends Seeder
             'army_list_submitted_at' => null,
         ]);
 
-        $attendee->forceFill(['army_lists_revealed_at' => null])->save();
+        $attendee->forceFill([
+            'army_lists_revealed_at' => null,
+            // The browser test enters this team in the painting Poll, so the
+            // next run has to find it out of the vote again.
+            'painting_entered' => false,
+        ])->save();
 
         return $attendee;
     }
@@ -357,6 +366,33 @@ class EndToEndSeeder extends Seeder
         $bye->attendees()->sync([$unpaired->getKey()]);
 
         app(StoreGameScores::class)->awardByeWin($bye->fresh(['round']));
+    }
+
+    /**
+     * A painting Poll nobody has opened yet, with two armies on the table.
+     *
+     * Reset on every run: the browser test opens it, votes in it and closes
+     * it, and the next run needs the window shut and the votes gone.
+     *
+     * @param  list<EventAttendee>  $entered
+     */
+    private function paintingPoll(Event $event, array $entered): void
+    {
+        $poll = EventPoll::query()->updateOrCreate(
+            ['event_id' => $event->getKey(), 'name' => 'Best Painted Army'],
+            [
+                'type' => PollType::Painting,
+                'votes_per_player' => 2,
+                'opens_at' => null,
+                'closes_at' => null,
+            ],
+        );
+
+        $poll->votes()->delete();
+
+        foreach ($entered as $attendee) {
+            $attendee->forceFill(['painting_entered' => true])->save();
+        }
     }
 
     private function organiser(Event $event): void

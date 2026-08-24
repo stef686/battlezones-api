@@ -8,6 +8,7 @@ import { submitArmyList } from '@/api/army-lists';
 import { amendAttendee, fetchAttendee, fetchEvent, fetchFactions, recordMyFaction, type Allegiance } from '@/api/events';
 import { ApiError } from '@/api/errors';
 import { keys } from '@/api/keys';
+import { enterPainting, fetchPolls } from '@/api/polls';
 import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
 import { useSessionStore } from '@/stores/session';
@@ -60,6 +61,38 @@ watch(event, (loaded) => {
 const partyName = ref('');
 const allegiance = ref('');
 const myFactionId = ref('');
+/**
+ * The painting Poll, if this Event runs one.
+ *
+ * Entering is the Player saying their army is on the display table, which is
+ * theirs to say — the number beside it is not, and belongs to whoever laid
+ * the table out.
+ */
+const { data: polls } = useQuery({
+  queryKey: computed(() => keys.polls(props.eventSlug)),
+  queryFn: () => fetchPolls(client, props.eventSlug),
+  retry: false,
+});
+
+const paintingPoll = computed(() => (polls.value ?? []).find((poll) => poll.type === 'painting') ?? null);
+const paintingEntered = computed(() => attendee.value?.painting_entered === true);
+const enteringPainting = ref(false);
+
+async function togglePainting(): Promise<void> {
+  if (attendeeId.value === null) {
+    return;
+  }
+
+  enteringPainting.value = true;
+
+  try {
+    await enterPainting(client, props.eventSlug, attendeeId.value, !paintingEntered.value);
+    await queryClient.invalidateQueries({ queryKey: ['events', props.eventSlug, 'attendees'] });
+  } finally {
+    enteringPainting.value = false;
+  }
+}
+
 const armyList = ref('');
 const submittingList = ref(false);
 const listProblem = ref<string | null>(null);
@@ -184,6 +217,40 @@ async function save(): Promise<void> {
         <p class="text-sm text-ink-faint">
           They were sent their own invitation. They choose their own faction.
         </p>
+      </section>
+
+      <section
+        v-if="paintingPoll"
+        data-testid="painting-entry"
+        class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+      >
+        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+          {{ paintingPoll.name }}
+        </h2>
+
+        <p
+          v-if="paintingEntered"
+          data-testid="painting-entered"
+          class="text-success"
+        >
+          Your army is on the display table{{ attendee.display_number ? ` under number ${attendee.display_number}` : '' }}.
+        </p>
+        <p
+          v-else
+          class="text-sm text-ink-muted"
+        >
+          Put your army on the display table and enter it here, so people can vote for it.
+        </p>
+
+        <button
+          type="button"
+          data-testid="enter-painting"
+          :disabled="enteringPainting"
+          class="self-start rounded-lg border border-border px-3 py-2 text-sm text-ink disabled:opacity-60"
+          @click="togglePainting"
+        >
+          {{ paintingEntered ? 'Take it out of the vote' : 'Enter my army' }}
+        </button>
       </section>
 
       <section

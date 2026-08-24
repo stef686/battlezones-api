@@ -29,6 +29,10 @@ class EventAttendeeDetailResource extends JsonResource
             'allegiance' => $this->allegiance?->value,
             'members' => $this->serialiseMembers($this->resource, withArmyList: true, withClubs: true),
             'checked_in_at' => $this->checked_in_at?->toIso8601ZuluString(),
+            // Whether this army is on the display table, and the number it
+            // sits under. Neither is a vote, and neither is secret.
+            'painting_entered' => (bool) $this->painting_entered,
+            'display_number' => $this->display_number,
             'custom_field_responses' => $this->customFieldResponses
                 ->sortBy(fn (EventCustomFieldResponse $response): int => $response->field->display_order)
                 ->values()

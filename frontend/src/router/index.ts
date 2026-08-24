@@ -131,6 +131,18 @@ const routes: RouteRecordRaw[] = [
         props: true,
     },
     {
+        path: '/events/:eventSlug/polls',
+        name: 'polls',
+        component: () => import('@/views/PollsView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/polls/:pollId',
+        name: 'poll',
+        component: () => import('@/views/PollView.vue'),
+        props: true,
+    },
+    {
         path: '/events/:eventSlug/standings',
         name: 'standings',
         component: () => import('@/views/StandingsView.vue'),

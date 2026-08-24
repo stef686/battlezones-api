@@ -1541,6 +1541,11 @@ paths:
                       checked_in_at:
                         type: string
                         nullable: true
+                      painting_entered:
+                        type: boolean
+                      display_number:
+                        type: string
+                        nullable: true
                       custom_field_responses:
                         type: array
                       games:
@@ -3090,6 +3095,8 @@ paths:
                         is_open_for_me:
                           type: string
                           nullable: true
+                        my_ballot:
+                          type: array
         401:
           description: 'The request carries no valid token.'
           content:
@@ -3136,6 +3143,8 @@ paths:
                       is_open_for_me:
                         type: string
                         nullable: true
+                      my_ballot:
+                        type: array
         401:
           description: 'The request carries no valid token.'
           content:
@@ -3226,6 +3235,8 @@ paths:
                       is_open_for_me:
                         type: string
                         nullable: true
+                      my_ballot:
+                        type: array
         401:
           description: 'The request carries no valid token.'
           content:
@@ -3436,6 +3447,8 @@ paths:
                       is_open_for_me:
                         type: string
                         nullable: true
+                      my_ballot:
+                        type: array
         401:
           description: 'The request carries no valid token.'
           content:
@@ -3538,7 +3551,7 @@ paths:
     patch:
       summary: 'Mark a Painting Entry'
       operationId: markAPaintingEntry
-      description: 'Organisers only. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later.'
+      description: "A Player enters their own army; an Organiser enters anyone's and assigns the display number. Entry and display number are separate fields, so someone walking the display table can tick teams off one-handed and number them later."
       parameters: []
       responses:
         200:
