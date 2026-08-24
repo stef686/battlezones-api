@@ -210,3 +210,30 @@ test('players cannot read the feedback dashboard or export', function () {
         ->get(route('events.feedback.export', ['event' => $event->slug]))
         ->assertForbidden();
 });
+
+test('one player exhausting their link does not shut out everyone on the same wifi', function () {
+    // A venue, a hotel, a train home: everyone answering shares one address,
+    // so a budget kept per address would lock the room out of the form.
+    $mine = 'a-token-of-my-own';
+    $theirs = 'a-token-of-their-own';
+
+    $payload = ['answers' => []];
+
+    $refused = false;
+
+    for ($attempt = 0; $attempt < 12; $attempt++) {
+        $response = $this->postJson(route('feedback.store', ['token' => $mine]), $payload);
+
+        if ($response->getStatusCode() === 429) {
+            $refused = true;
+
+            break;
+        }
+    }
+
+    expect($refused)->toBeTrue();
+
+    // Not found, not rate limited: their link is their own budget.
+    $this->postJson(route('feedback.store', ['token' => $theirs]), $payload)
+        ->assertNotFound();
+});

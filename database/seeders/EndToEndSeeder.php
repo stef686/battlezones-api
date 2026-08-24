@@ -8,6 +8,7 @@ use App\Enums\Allegiance;
 use App\Enums\EventInviteRole;
 use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
+use App\Enums\FeedbackQuestionType;
 use App\Enums\PairingFormat;
 use App\Enums\PollType;
 use App\Enums\RoundStatus;
@@ -20,6 +21,8 @@ use App\Models\EventPoll;
 use App\Models\EventScheduleBlock;
 use App\Models\EventScoreType;
 use App\Models\Faction;
+use App\Models\FeedbackInvitation;
+use App\Models\FeedbackQuestion;
 use App\Models\Game;
 use App\Models\GameSystem;
 use App\Models\Round;
@@ -70,6 +73,12 @@ class EndToEndSeeder extends Seeder
      */
     public const INVITE_TOKEN = 'end-to-end-invite-token';
 
+    /**
+     * A fixed feedback link, so the browser test can open the one the Player
+     * would have been emailed. Stored hashed, as in production.
+     */
+    public const FEEDBACK_TOKEN = 'end-to-end-feedback-token';
+
     public function run(): void
     {
         $event = $this->event();
@@ -100,6 +109,40 @@ class EndToEndSeeder extends Seeder
         $this->invite($event);
 
         $this->unregisteredCaptain($event);
+
+        $this->feedback($event, $mine);
+    }
+
+    /**
+     * The questions the form asks, and an unspent link into it.
+     *
+     * Reset on every run: the browser test submits the form, which spends the
+     * link, and the next run needs it usable again.
+     */
+    private function feedback(Event $event, EventAttendee $attendee): void
+    {
+        $questions = [
+            ['key' => 'overall', 'prompt' => 'Overall, how was the event?', 'type' => FeedbackQuestionType::Rating, 'display_order' => 0],
+            ['key' => 'venue', 'prompt' => 'How were the venue and the tables?', 'type' => FeedbackQuestionType::Rating, 'display_order' => 1],
+            ['key' => 'anything_else', 'prompt' => 'Anything else the organisers should know?', 'type' => FeedbackQuestionType::Text, 'display_order' => 2],
+        ];
+
+        foreach ($questions as $question) {
+            FeedbackQuestion::query()->updateOrCreate(['key' => $question['key']], $question);
+        }
+
+        $player = $attendee->memberships()->firstOrFail()->user;
+
+        FeedbackInvitation::query()->updateOrCreate(
+            ['token' => FeedbackInvitation::hashToken(self::FEEDBACK_TOKEN)],
+            [
+                'event_id' => $event->getKey(),
+                'user_id' => $player->getKey(),
+                'sent_at' => now(),
+                'expires_at' => now()->addDays(FeedbackInvitation::LIFETIME_DAYS),
+                'submitted_at' => null,
+            ],
+        );
     }
 
     /**

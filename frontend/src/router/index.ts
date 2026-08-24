@@ -53,6 +53,16 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true, unclaimed: true },
     },
     {
+        // Emailed after the Event, opened on a device that may never have
+        // signed in: the token is the whole credential, so this is public and
+        // stays reachable from a restricted session too.
+        path: '/feedback/:token',
+        name: 'feedback',
+        component: () => import('@/views/FeedbackView.vue'),
+        props: true,
+        meta: { public: true, unclaimed: true },
+    },
+    {
         path: '/claim',
         name: 'claim',
         component: () => import('@/views/ClaimView.vue'),

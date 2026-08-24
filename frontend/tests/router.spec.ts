@@ -84,6 +84,18 @@ describe('route guards', () => {
         expect(router.currentRoute.value.name).toBe('standings');
     });
 
+    it('opens a feedback link with no session at all, and to a restricted one', async () => {
+        const { router } = routerWithSession(null);
+
+        await router.push('/feedback/a-very-long-random-token');
+        await router.isReady();
+
+        // The email lands on a phone that may never have signed in, and the
+        // token is the whole credential.
+        expect(router.currentRoute.value.name).toBe('feedback');
+        expect(router.currentRoute.value.params.token).toBe('a-very-long-random-token');
+    });
+
     it('sends a reader whose session dies back to login, keeping their route', async () => {
         const { router, client } = routerWithSession('a-token');
 
