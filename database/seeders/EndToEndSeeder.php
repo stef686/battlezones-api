@@ -259,6 +259,15 @@ class EndToEndSeeder extends Seeder
             ]);
         }
 
+        // Reset on every run: the browser test submits a list, which locks it,
+        // and a locked list would refuse the next run's submission.
+        $attendee->memberships()->where('user_id', $user->getKey())->update([
+            'army_list' => 'Legion Tactical Squad, 10 models.',
+            'army_list_submitted_at' => null,
+        ]);
+
+        $attendee->forceFill(['army_lists_revealed_at' => null])->save();
+
         return $attendee;
     }
 

@@ -29,6 +29,7 @@ class UpdateEventAttendeeController extends Controller
             'id' => 12,
             'name' => 'Ada Lovelace',
             'faction' => ['id' => 3, 'name' => 'Sons of Horus'],
+            'army_list_locked' => true,
             'army_list' => 'Legion Tactical Squad, 10 models...',
             'clubs' => [['id' => 2, 'name' => 'The Ordo Ludi']],
         ]],

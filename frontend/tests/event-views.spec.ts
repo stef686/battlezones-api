@@ -382,6 +382,120 @@ describe('the attendee detail', () => {
         expect(view.get('[data-testid="member-13"]').text()).toContain('Faction not chosen');
     });
 
+    it('shows a revealed army list, so an opponent can prepare against it', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: {
+                    data: {
+                        ...ATTENDEE.data,
+                        members: [
+                            { id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' }, army_list_locked: true, army_list: 'Legion Tactical Squad, 10 models' },
+                            { id: 13, name: 'Grace Hopper', faction: null, army_list_locked: true, army_list: null },
+                        ],
+                    },
+                },
+            },
+        });
+
+        const view = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '9' });
+        await flushPromises();
+
+        expect(view.get('[data-testid="army-list-12"]').text()).toContain('Legion Tactical Squad');
+
+        // Locked with nothing in it is a Player who submitted an empty list,
+        // not a list being withheld.
+        expect(view.get('[data-testid="army-list-13"]').text()).toContain('No list');
+    });
+
+    it('does not pretend an unrevealed list is missing, it says it is not out yet', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: {
+                    data: {
+                        ...ATTENDEE.data,
+                        members: [
+                            { id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' }, army_list_locked: true },
+                            { id: 13, name: 'Grace Hopper', faction: null, army_list_locked: false },
+                        ],
+                    },
+                },
+            },
+        });
+
+        const view = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '9' });
+        await flushPromises();
+
+        expect(view.get('[data-testid="lists-not-revealed"]').text()).toContain('not been revealed');
+        expect(view.find('[data-testid="army-list-12"]').exists()).toBe(false);
+
+        // Who is still holding the team up is not a secret, and is the only
+        // thing anyone can act on while the lists are closed.
+        expect(view.get('[data-testid="member-13"]').text()).toContain('List not submitted');
+    });
+
+    it('lets an organiser open a held-up team\'s lists and reopen one player\'s', async () => {
+        const ORGANISER = eventBody({
+            viewer: {
+                is_organiser: true,
+                is_lead_organiser: true,
+                is_attendee: false,
+                attendee_id: null,
+                permissions: { organise: true, register: false, manage_organisers: true },
+            },
+        });
+
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/army-lists/reveal`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}/attendees/9/members/12/army-list/unlock`]: { status: 200, body: { data: {} } },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: {
+                    data: {
+                        ...ATTENDEE.data,
+                        // Held up by a partner who never submitted, so nobody
+                        // sees the lists — the Organiser included.
+                        members: [
+                            { id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' }, army_list_locked: true },
+                            { id: 13, name: 'Grace Hopper', faction: null, army_list_locked: false },
+                        ],
+                    },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '9' });
+        await flushPromises();
+
+        await view.get('[data-testid="reveal-army-lists"]').trigger('click');
+        await flushPromises();
+
+        expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/attendees/9/army-lists/reveal'))).toBe(true);
+
+        // Only a locked list has anything to reopen.
+        expect(view.find('[data-testid="unlock-13"]').exists()).toBe(false);
+
+        await view.get('[data-testid="unlock-12"]').trigger('click');
+        await flushPromises();
+
+        expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/members/12/army-list/unlock'))).toBe(true);
+    });
+
+    it('offers no organiser controls to a reader who does not run the event', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '9' });
+        await flushPromises();
+
+        expect(view.find('[data-testid="reveal-army-lists"]').exists()).toBe(false);
+        expect(view.find('[data-testid="unlock-12"]').exists()).toBe(false);
+    });
+
     it('answers a team that is not there the same way as a missing event', async () => {
         stubApi({});
 

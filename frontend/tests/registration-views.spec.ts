@@ -392,6 +392,59 @@ describe('amending a team', () => {
         expect(view.get('[data-testid="team-allegiance-error"]').text()).toContain('once a round is live');
     });
 
+    it('submits this Player\'s own army list, saying that submitting locks it', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}/army-list`]: { status: 200, body: { data: { army_list: 'Locked in', submitted_at: '2026-09-10T18:30:00Z', is_locked: true } } },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(MyTeamView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="army-list-form"]').text()).toContain('locks');
+
+        await view.get('[data-testid="army-list"]').setValue('Legion Tactical Squad, 10 models');
+        await view.get('[data-testid="submit-army-list"]').trigger('click');
+        await flushPromises();
+
+        const submitted = fetch.mock.calls.find(([url]) => String(url).endsWith('/army-list'))!;
+        expect(submitted[1]?.method).toBe('PUT');
+        expect(JSON.parse(submitted[1]?.body as string)).toEqual({ army_list: 'Legion Tactical Squad, 10 models' });
+    });
+
+    it('says a locked list is in, and offers nothing to type into', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: {
+                    data: {
+                        ...ATTENDEE.data,
+                        members: [
+                            { id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' }, army_list_locked: true, army_list: 'Legion Tactical Squad' },
+                            { id: 13, name: 'Tarik Torgaddon', faction: null, army_list_locked: false, army_list: null },
+                        ],
+                    },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(MyTeamView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="army-list-locked"]').text()).toContain('organiser');
+        expect(view.get('[data-testid="army-list-mine"]').text()).toContain('Legion Tactical Squad');
+        expect(view.find('[data-testid="army-list"]').exists()).toBe(false);
+        expect(view.find('[data-testid="submit-army-list"]').exists()).toBe(false);
+
+        // The partner's list is the team's business, so its state is shown
+        // here rather than left as a thing to chase by message.
+        expect(view.get('[data-testid="team-mate-13"]').text()).toContain('List not submitted');
+    });
+
     it('sends a reader who has not entered to the entry form', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },

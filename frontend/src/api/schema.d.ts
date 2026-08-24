@@ -2990,6 +2990,7 @@ export interface operations {
                                     id?: number;
                                     name?: string;
                                 };
+                                army_list_locked?: boolean;
                                 army_list?: string;
                                 clubs?: {
                                     id?: number;
@@ -3161,6 +3162,7 @@ export interface operations {
                                     id?: number;
                                     name?: string;
                                 };
+                                army_list_locked?: boolean;
                                 army_list?: string;
                                 clubs?: {
                                     id?: number;
@@ -3291,6 +3293,7 @@ export interface operations {
                                             id?: number;
                                             name?: string;
                                         };
+                                        army_list_locked?: boolean;
                                     }[];
                                     scores?: {
                                         "match-points"?: number;
@@ -3360,6 +3363,7 @@ export interface operations {
                                             id?: number;
                                             name?: string;
                                         };
+                                        army_list_locked?: boolean;
                                     }[];
                                     scores?: {
                                         "match-points"?: number;
@@ -3422,6 +3426,7 @@ export interface operations {
                                         id?: number;
                                         name?: string;
                                     };
+                                    army_list_locked?: boolean;
                                     army_list?: string;
                                 }[];
                                 scores?: {
@@ -3471,6 +3476,7 @@ export interface operations {
                                         id?: number;
                                         name?: string;
                                     };
+                                    army_list_locked?: boolean;
                                     clubs?: {
                                         id?: number;
                                         name?: string;
@@ -4457,6 +4463,7 @@ export interface operations {
                                     id?: number;
                                     name?: string;
                                 };
+                                army_list_locked?: boolean;
                                 clubs?: {
                                     id?: number;
                                     name?: string;
@@ -4675,6 +4682,7 @@ export interface operations {
                                     id?: number;
                                     name?: string;
                                 };
+                                army_list_locked?: boolean;
                                 clubs?: {
                                     id?: number;
                                     name?: string;
@@ -4929,6 +4937,7 @@ export interface operations {
                                         id?: number;
                                         name?: string;
                                     };
+                                    army_list_locked?: boolean;
                                     army_list?: string;
                                 }[];
                                 scores?: {
@@ -5192,6 +5201,7 @@ export interface operations {
                                         id?: number;
                                         name?: string;
                                     };
+                                    army_list_locked?: boolean;
                                     army_list?: string;
                                 }[];
                                 scores?: {
@@ -5251,6 +5261,7 @@ export interface operations {
                                         id?: number;
                                         name?: string;
                                     };
+                                    army_list_locked?: boolean;
                                     army_list?: string;
                                 }[];
                                 scores?: {
@@ -5504,6 +5515,7 @@ export interface operations {
                                             id?: number;
                                             name?: string;
                                         };
+                                        army_list_locked?: boolean;
                                     }[];
                                     scores?: {
                                         "match-points"?: number;
@@ -5573,6 +5585,7 @@ export interface operations {
                                             id?: number;
                                             name?: string;
                                         };
+                                        army_list_locked?: boolean;
                                     }[];
                                     scores?: {
                                         "match-points"?: number;
@@ -5649,6 +5662,7 @@ export interface operations {
                                             id?: number;
                                             name?: string;
                                         };
+                                        army_list_locked?: boolean;
                                     }[];
                                     scores?: {
                                         "match-points"?: number;
@@ -5778,6 +5792,7 @@ export interface operations {
                                     id?: number;
                                     name?: string;
                                 };
+                                army_list_locked?: boolean;
                                 army_list?: string;
                                 clubs?: {
                                     id?: number;
@@ -5909,6 +5924,7 @@ export interface operations {
                                     id?: number;
                                     name?: string;
                                 };
+                                army_list_locked?: boolean;
                                 army_list?: string;
                                 clubs?: {
                                     id?: number;

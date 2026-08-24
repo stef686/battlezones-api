@@ -40,7 +40,7 @@ class SwapRoundPairingsController extends Controller
                 'id' => 9,
                 'name' => 'Ada and Grace',
                 'allegiance' => 'loyalist',
-                'members' => [['id' => 12, 'name' => 'Ada Lovelace', 'faction' => ['id' => 3, 'name' => 'Sons of Horus']]],
+                'members' => [['id' => 12, 'name' => 'Ada Lovelace', 'faction' => ['id' => 3, 'name' => 'Sons of Horus'], 'army_list_locked' => true]],
                 'scores' => ['match-points' => 3, 'victory-points' => 85],
             ]],
         ]],

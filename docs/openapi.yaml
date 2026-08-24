@@ -1339,6 +1339,8 @@ paths:
                                   type: integer
                                 name:
                                   type: string
+                            army_list_locked:
+                              type: boolean
                             army_list:
                               type: string
                             clubs:
@@ -1584,6 +1586,8 @@ paths:
                                   type: integer
                                 name:
                                   type: string
+                            army_list_locked:
+                              type: boolean
                             army_list:
                               type: string
                             clubs:
@@ -1786,7 +1790,7 @@ paths:
                                     type: array
                                     items:
                                       type: object
-                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } } }
+                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } }, army_list_locked: { type: boolean } }
                                   scores:
                                     type: object
                                     properties:
@@ -1872,7 +1876,7 @@ paths:
                                     type: array
                                     items:
                                       type: object
-                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } } }
+                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } }, army_list_locked: { type: boolean } }
                                   scores:
                                     type: object
                                     properties:
@@ -1971,6 +1975,8 @@ paths:
                                     properties:
                                       id: { type: integer }
                                       name: { type: string }
+                                  army_list_locked:
+                                    type: boolean
                                   army_list:
                                     type: string
                             scores:
@@ -2058,6 +2064,8 @@ paths:
                                     properties:
                                       id: { type: integer }
                                       name: { type: string }
+                                  army_list_locked:
+                                    type: boolean
                                   clubs:
                                     type: array
                                     items:
@@ -3285,6 +3293,8 @@ paths:
                                     type: integer
                                   name:
                                     type: string
+                              army_list_locked:
+                                type: boolean
                               clubs:
                                 type: array
                                 items:
@@ -3563,6 +3573,8 @@ paths:
                                   type: integer
                                 name:
                                   type: string
+                            army_list_locked:
+                              type: boolean
                             clubs:
                               type: array
                               items:
@@ -3896,6 +3908,7 @@ paths:
                                       id: { type: integer }
                                       name: { type: string }
                                       faction: { type: object, properties: { id: { type: integer }, name: { type: string } } }
+                                      army_list_locked: { type: boolean }
                                       army_list: { type: string }
                                 scores:
                                   type: object
@@ -4118,6 +4131,8 @@ paths:
                                     properties:
                                       id: { type: integer }
                                       name: { type: string }
+                                  army_list_locked:
+                                    type: boolean
                                   army_list:
                                     type: string
                             scores:
@@ -4206,6 +4221,8 @@ paths:
                                     properties:
                                       id: { type: integer }
                                       name: { type: string }
+                                  army_list_locked:
+                                    type: boolean
                                   army_list:
                                     type: string
                             scores:
@@ -4690,7 +4707,7 @@ paths:
                                     type: array
                                     items:
                                       type: object
-                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } } }
+                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } }, army_list_locked: { type: boolean } }
                                   scores:
                                     type: object
                                     properties:
@@ -4767,7 +4784,7 @@ paths:
                                     type: array
                                     items:
                                       type: object
-                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } } }
+                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } }, army_list_locked: { type: boolean } }
                                   scores:
                                     type: object
                                     properties:
@@ -4860,7 +4877,7 @@ paths:
                                     type: array
                                     items:
                                       type: object
-                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } } }
+                                      properties: { id: { type: integer }, name: { type: string }, faction: { type: object, properties: { id: { type: integer }, name: { type: string } } }, army_list_locked: { type: boolean } }
                                   scores:
                                     type: object
                                     properties:
@@ -5031,6 +5048,8 @@ paths:
                                   type: integer
                                 name:
                                   type: string
+                            army_list_locked:
+                              type: boolean
                             army_list:
                               type: string
                             clubs:
@@ -5208,6 +5227,8 @@ paths:
                                   type: integer
                                 name:
                                   type: string
+                            army_list_locked:
+                              type: boolean
                             army_list:
                               type: string
                             clubs:

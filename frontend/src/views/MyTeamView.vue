@@ -4,6 +4,7 @@ import { computed, ref, watch } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
 import { useApiClient } from '@/api';
+import { submitArmyList } from '@/api/army-lists';
 import { amendAttendee, fetchAttendee, fetchEvent, fetchFactions, recordMyFaction, type Allegiance } from '@/api/events';
 import { ApiError } from '@/api/errors';
 import { keys } from '@/api/keys';
@@ -59,6 +60,9 @@ watch(event, (loaded) => {
 const partyName = ref('');
 const allegiance = ref('');
 const myFactionId = ref('');
+const armyList = ref('');
+const submittingList = ref(false);
+const listProblem = ref<string | null>(null);
 
 const me = computed(() => attendee.value?.members.find((member) => member.id === session.viewer?.id) ?? null);
 const teamMates = computed(() => (attendee.value?.members ?? []).filter((member) => member.id !== session.viewer?.id));
@@ -73,7 +77,29 @@ watch(attendee, (loaded) => {
   partyName.value = loaded.name ?? '';
   allegiance.value = loaded.allegiance ?? '';
   myFactionId.value = me.value?.faction === null || me.value?.faction === undefined ? '' : String(me.value.faction.id);
+  armyList.value = me.value?.army_list ?? '';
 });
+
+/**
+ * Locked means submitted: the API refuses an edit and only an Organiser can
+ * reopen it, so the screen has to say which of the two states a Player is in
+ * rather than leaving them to guess from an empty box.
+ */
+const listLocked = computed(() => me.value?.army_list_locked === true);
+
+async function submitList(): Promise<void> {
+  submittingList.value = true;
+  listProblem.value = null;
+
+  try {
+    await submitArmyList(client, props.eventSlug, armyList.value);
+    await queryClient.invalidateQueries({ queryKey: ['events', props.eventSlug, 'attendees'] });
+  } catch (caught) {
+    listProblem.value = caught instanceof ApiError ? caught.message : 'That could not be sent.';
+  } finally {
+    submittingList.value = false;
+  }
+}
 
 const saving = ref(false);
 const saved = ref(false);
@@ -147,11 +173,70 @@ async function save(): Promise<void> {
           class="flex items-baseline justify-between gap-3"
         >
           <span class="text-ink">{{ mate.name }}</span>
-          <span class="text-sm text-ink-muted">{{ mate.faction?.name ?? 'Faction not chosen' }}</span>
+          <span class="flex flex-col items-end gap-0.5 text-sm">
+            <span class="text-ink-muted">{{ mate.faction?.name ?? 'Faction not chosen' }}</span>
+            <span :class="mate.army_list_locked ? 'text-success' : 'text-ink-faint'">
+              {{ mate.army_list_locked ? 'List in' : 'List not submitted' }}
+            </span>
+          </span>
         </div>
 
         <p class="text-sm text-ink-faint">
           They were sent their own invitation. They choose their own faction.
+        </p>
+      </section>
+
+      <section
+        data-testid="army-list-form"
+        class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+      >
+        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+          Your army list
+        </h2>
+
+        <template v-if="listLocked">
+          <p
+            data-testid="army-list-locked"
+            class="text-success"
+          >
+            Submitted and locked. Ask an organiser to reopen it if it needs correcting.
+          </p>
+          <p
+            data-testid="army-list-mine"
+            class="whitespace-pre-wrap text-sm text-ink"
+          >
+            {{ me?.army_list }}
+          </p>
+        </template>
+
+        <template v-else>
+          <textarea
+            v-model="armyList"
+            data-testid="army-list"
+            rows="8"
+            placeholder="Detachments, units, wargear…"
+            class="rounded-lg border border-border bg-surface-sunken px-3 py-2.5 text-ink outline-none focus:border-accent"
+          />
+          <p class="text-sm text-ink-muted">
+            Submitting locks the list. Only an organiser can reopen it.
+          </p>
+          <button
+            type="button"
+            data-testid="submit-army-list"
+            :disabled="submittingList"
+            class="rounded-xl bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+            @click="submitList"
+          >
+            {{ submittingList ? 'Sending…' : 'Submit list' }}
+          </button>
+        </template>
+
+        <p
+          v-if="listProblem"
+          data-testid="army-list-problem"
+          class="text-sm text-danger"
+        >
+          {{ listProblem }}
         </p>
       </section>
 

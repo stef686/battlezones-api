@@ -148,3 +148,40 @@ test('only an organiser may unlock or reveal', function () {
 
     expect($team->fresh()->armyListsAreVisible())->toBeFalse();
 });
+
+test('a team says which of its players have locked their list in', function () {
+    [$event, $team, $captain, $partner] = fieldOfTwoTeams();
+
+    $this->actingAs($captain)
+        ->putJson(route('events.army-list.update', ['event' => $event->slug]), ['army_list' => 'Locked in'])
+        ->assertSuccessful();
+
+    $members = collect($this->actingAs($captain)
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $team->id]))
+        ->assertSuccessful()
+        ->json('data.members'))
+        ->keyBy('id');
+
+    // A Player has to be able to tell, without guessing, whether what they
+    // typed counts as submitted — and an Organiser which list to reopen.
+    expect($members[$captain->id]['army_list_locked'])->toBeTrue()
+        ->and($members[$partner->id]['army_list_locked'])->toBeFalse();
+});
+
+test('a bearer token is enough to read revealed lists on the public attendee endpoint', function () {
+    [$event, $team, $captain, $partner, $rival] = fieldOfTwoTeams();
+
+    // Locked without signing anybody in, so nothing about this request's
+    // authentication is left over from setting the fixture up.
+    $team->memberships()->update(['army_list' => 'Locked in', 'army_list_submitted_at' => now()]);
+
+    // Signed in the way the SPA is: a token on a route that is otherwise
+    // public, where the session guard has nobody in it.
+    $token = $rival->createToken('their-phone')->plainTextToken;
+
+    $response = $this->withHeader('Authorization', "Bearer {$token}")
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $team->id]))
+        ->assertSuccessful();
+
+    expect($response->json('data.members.0.army_list'))->toBe('Locked in');
+});

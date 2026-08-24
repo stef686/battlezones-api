@@ -169,12 +169,16 @@ async function submit(): Promise<void> {
         <p class="text-sm text-ink-faint">
           You are playing
         </p>
-        <p
-          data-testid="opponent"
-          class="text-xl font-semibold text-ink"
+        <!-- Their team page is where a revealed army list is read, which is
+             the whole reason to look them up before the game. -->
+        <RouterLink
+          v-if="theirs"
+          :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: theirs.id } }"
+          data-testid="opponent-link"
+          class="text-xl font-semibold text-ink underline underline-offset-4"
         >
-          {{ theirs?.name }}
-        </p>
+          <span data-testid="opponent">{{ theirs.name }}</span>
+        </RouterLink>
       </section>
 
       <form

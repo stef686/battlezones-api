@@ -85,6 +85,13 @@ export interface AttendeeMember {
     id: number;
     name: string;
     faction: { id: number; name: string } | null;
+    /** Whether this Player's list is in. Says nothing about what it holds. */
+    army_list_locked?: boolean;
+    /**
+     * Absent where the reader may not see it — an unrevealed team's lists are
+     * not theirs — and null where the Player has not written one.
+     */
+    army_list?: string | null;
 }
 
 export interface Attendee {

@@ -345,6 +345,37 @@ describe('a Player with the bye', () => {
     });
 });
 
+describe('a Player looking up what they will face', () => {
+    it('links from their game to the opposing team, where revealed lists live', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/my-game`]: {
+                status: 200,
+                body: {
+                    data: {
+                        id: 18,
+                        table_number: 5,
+                        is_bye: false,
+                        round: { id: 4, number: 2, name: 'Round 2' },
+                        result: { submitted_at: null, edited_at: null, is_flagged: false },
+                        attendees: [
+                            { id: 9, name: 'Mine', members: [], scores: {} },
+                            { id: 10, name: 'Theirs', members: [], scores: {} },
+                        ],
+                    },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(MyGameView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="opponent-link"]').attributes('href'))
+            .toBe(`/events/${EVENT_SLUG}/attendees/10`);
+    });
+});
+
 describe('a Player who disagrees with the result', () => {
     function submittedGame(overrides: Record<string, unknown> = {}) {
         return {
