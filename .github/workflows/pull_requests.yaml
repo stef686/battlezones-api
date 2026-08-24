@@ -10,7 +10,49 @@ env:
   node-cache: npm
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      end-to-end: ${{ steps.filter.outputs.end-to-end }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'app/**'
+              - 'bootstrap/**'
+              - 'config/**'
+              - 'database/**'
+              - 'lang/**'
+              - 'resources/views/**'
+              - 'routes/**'
+              - 'tests/**'
+              - 'docs/openapi.yaml'
+              - 'composer.json'
+              - 'composer.lock'
+              - 'phpstan.neon*'
+              - 'pint.json'
+              - '.github/workflows/**'
+            frontend:
+              - 'frontend/**'
+              - 'docs/openapi.yaml'
+              - '.github/workflows/**'
+            end-to-end:
+              - 'frontend/**'
+              - 'app/**'
+              - 'routes/**'
+              - 'database/**'
+              - 'config/**'
+              - '.github/workflows/**'
+
   composer-audit:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,6 +81,8 @@ jobs:
         run: composer audit
 
   phpstan:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -67,6 +111,8 @@ jobs:
         run: composer analyse
 
   pest:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -110,21 +156,75 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.node-version }}
-          cache: ${{ env.node-cache }}
-
-      - name: Install Node dependencies
-        run: |
-          npm ci
-          npm run build
-
       - name: Run Pest tests
         run: composer test
 
+  openapi-spec:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: battlezones_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.php-version }}
+          coverage: none
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Setup .env
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Migrate
+        run: php artisan migrate --force
+        env:
+          DB_DATABASE: battlezones_test
+
+      # The SPA's types are generated from this spec, so a backend change that
+      # moves it must land the regenerated spec with it.
+      - name: Regenerate the OpenAPI spec
+        run: composer docs
+        env:
+          DB_DATABASE: battlezones_test
+
+      # Only the spec is checked: Scribe's .scribe/ intermediates carry
+      # factory-created ids and timestamps, so they differ on every run.
+      - name: Fail when the committed spec is out of date
+        run: git diff --exit-code -- docs/openapi.yaml
+
   pint:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -151,3 +251,125 @@ jobs:
 
       - name: Run Pint
         run: composer format
+
+  frontend:
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.node-version }}
+          cache: ${{ env.node-cache }}
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test
+
+      # Regenerating from the committed spec must not change the committed
+      # types: a client typed against a stale spec is worse than an untyped one.
+      - name: Fail when the generated types drift from the spec
+        run: npm run types:check
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_API_URL: https://api.battlezones.app
+
+      - name: Fail when the bundle carries a secret
+        run: npm run check:secrets
+
+  end-to-end:
+    needs: changes
+    if: needs.changes.outputs.end-to-end == 'true'
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: battlezones_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    env:
+      DB_DATABASE: battlezones_test
+      APP_URL: http://127.0.0.1:8000
+      FRONTEND_URL: http://localhost:4173
+      CORS_ALLOWED_ORIGINS: http://localhost:4173
+      VITE_API_URL: http://127.0.0.1:8000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.php-version }}
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Setup .env
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Migrate and seed the world the flow plays through
+        run: |
+          php artisan migrate --force
+          php artisan db:seed --class=EndToEndSeeder --no-interaction
+
+      - name: Serve the API
+        run: php artisan serve --host=127.0.0.1 --port=8000 &
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.node-version }}
+          cache: ${{ env.node-cache }}
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Install Playwright
+        working-directory: frontend
+        run: npm run test:e2e:install
+
+      - name: Build the SPA
+        working-directory: frontend
+        run: npm run build
+
+      - name: Run the browser flow
+        working-directory: frontend
+        run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: frontend/playwright-report
+          retention-days: 7

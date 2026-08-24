@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Services\Frontend;
 use Illuminate\Support\Facades\URL;
 
 test('a user can verify their email address', function () {
@@ -13,8 +14,7 @@ test('a user can verify their email address', function () {
     );
 
     $this->get($verificationUrl)
-        ->assertSuccessful()
-        ->assertJson(['message' => 'Email verified successfully!']);
+        ->assertRedirect(Frontend::resultUrl(Frontend::EMAIL_VERIFIED_PATH, 'verified'));
 
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
 });
@@ -29,8 +29,7 @@ test('a user cannot verify their email with an invalid hash', function () {
     );
 
     $this->get($verificationUrl)
-        ->assertForbidden()
-        ->assertJson(['message' => 'Invalid verification link.']);
+        ->assertRedirect(Frontend::resultUrl(Frontend::EMAIL_VERIFIED_PATH, 'invalid'));
 
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });

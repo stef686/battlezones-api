@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Events', 'APIs for Events')]
@@ -19,8 +20,15 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ShowEventPollResultsController extends Controller
 {
     #[Endpoint('Read Poll Tallies', 'Organisers only, permanently — not live, not after close, not to Players. Winners are announced in the venue, and the announcement is an Event update. Ties come back unresolved: which of two equal armies wins is a judgement, not a rule to invent in code.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('poll', 'integer', 'The id of the poll.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('poll_id', 'integer', 'The id of the poll.', example: 1)]
+    #[Response(['data' => [
+        'poll' => ['id' => 1, 'name' => 'Best Painted Army', 'type' => 'best_painted', 'is_open' => false],
+        'tallies' => [[
+            'attendee' => ['id' => 9, 'name' => 'Ada and Grace', 'display_number' => 4],
+            'votes' => 11,
+        ]],
+    ]])]
     public function __invoke(Event $event, EventPoll $poll): JsonResponse
     {
         Gate::authorize('organise', $event);

@@ -4,6 +4,7 @@ use App\Models\PendingEmailChange;
 use App\Models\User;
 use App\Notifications\Profile\EmailChangeRequestedNotification;
 use App\Notifications\Profile\VerifyNewEmailNotification;
+use App\Services\Frontend;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 
@@ -80,8 +81,7 @@ test('valid signed link updates email and sets email_verified_at and revokes tok
     ]);
 
     $this->get($url)
-        ->assertSuccessful()
-        ->assertJsonPath('message', 'Your email address has been updated.');
+        ->assertRedirect(Frontend::resultUrl(Frontend::EMAIL_CHANGED_PATH, 'changed'));
 
     $user->refresh();
     expect($user->email)->toBe('new@example.com')
@@ -104,7 +104,7 @@ test('invalid token returns 403', function () {
         'token' => 'wrong-token',
     ]);
 
-    $this->get($url)->assertForbidden();
+    $this->get($url)->assertRedirect(Frontend::resultUrl(Frontend::EMAIL_CHANGED_PATH, 'invalid'));
 });
 
 test('old email stays until verification is completed', function () {

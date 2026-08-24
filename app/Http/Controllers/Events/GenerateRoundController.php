@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Events', 'APIs for Events')]
@@ -17,7 +18,27 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class GenerateRoundController extends Controller
 {
     #[Endpoint('Generate the next Round', "Organisers only. Pairs the field into a new Draft Round. Rejected while the current Round is unpublished or has results outstanding, and once the Event's round count is reached.")]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[Response(['data' => [
+        'id' => 4,
+        'number' => 2,
+        'name' => 'Round 2',
+        'status' => 'live',
+        'games' => [[
+            'id' => 18,
+            'table_number' => 5,
+            'is_bye' => false,
+            'is_rematch' => false,
+            'result' => ['submitted_at' => null, 'is_flagged' => false],
+            'attendees' => [[
+                'id' => 9,
+                'name' => 'Ada and Grace',
+                'allegiance' => 'loyalist',
+                'members' => [['id' => 12, 'name' => 'Ada Lovelace', 'faction' => ['id' => 3, 'name' => 'Sons of Horus'], 'army_list_locked' => true]],
+                'scores' => ['match-points' => 3, 'victory-points' => 85],
+            ]],
+        ]],
+    ]])]
     public function __invoke(Event $event, GenerateRoundPairings $generatePairings): RoundDetailResource
     {
         Gate::authorize('organise', $event);
@@ -28,7 +49,7 @@ class GenerateRoundController extends Controller
             'games' => fn ($query) => $query->orderBy('table_number'),
             'games.attendees.memberships.user',
             'games.attendees.memberships.faction',
-            'games.scores.scoreType',
+            'games.scores.scoreType', 'games.openResultFlag',
         ]);
 
         return RoundDetailResource::make($round);

@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Events', 'APIs for Events')]
@@ -17,6 +18,8 @@ class SubmitFeedbackController extends Controller
 {
     #[Endpoint('Submit Feedback', 'Answers are stored against the Event and the question only — never against the Player. The link is spent afterwards, which is the sole reason the invitation records who it belonged to.')]
     #[UrlParam('token', 'string', 'The token from the feedback email.', example: 'aVeryLongRandomToken')]
+    #[Response(['data' => ['submitted' => true]])]
+    #[Response(['message' => 'Not Found.'], 404, 'The link is unknown, already used, or expired.')]
     public function __invoke(SubmitFeedbackRequest $request, string $token): JsonResponse
     {
         $invitation = FeedbackInvitation::findByToken($token);

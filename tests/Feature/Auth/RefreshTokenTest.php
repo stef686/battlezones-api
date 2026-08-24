@@ -108,3 +108,71 @@ test('login response includes expires_at', function () {
         ->assertSuccessful()
         ->assertJsonStructure(['token', 'expires_at']);
 });
+
+test('a normal claimed-account token refreshes to the standard lifetime', function () {
+    $this->travelTo(now()->startOfSecond());
+
+    $user = User::factory()->create();
+    $token = $user->createToken('test-device');
+
+    $expiresAt = $this->postJson(route('auth.refresh'), [], [
+        'Authorization' => 'Bearer '.$token->plainTextToken,
+    ])
+        ->assertSuccessful()
+        ->json('expires_at');
+
+    expect($expiresAt)->toBe(now()->addMinutes((int) config('sanctum.expiration'))->toJson());
+});
+
+test('a refreshed token never expires later than the token it replaced', function () {
+    $this->travelTo(now()->startOfSecond());
+
+    $user = User::factory()->create();
+    $ceiling = now()->addHour();
+    $token = $user->createToken('test-device', ['*'], $ceiling);
+
+    $response = $this->postJson(route('auth.refresh'), [], [
+        'Authorization' => 'Bearer '.$token->plainTextToken,
+    ])->assertSuccessful();
+
+    expect($response->json('expires_at'))->toBe($ceiling->toJson());
+
+    $newAccessToken = PersonalAccessToken::findToken($response->json('token'));
+    expect($newAccessToken->expires_at->toJson())->toBe($ceiling->toJson());
+});
+
+test('a token whose own expiry passed beyond the grace period cannot be refreshed', function () {
+    $user = User::factory()->create();
+    $token = $user->createToken('test-device', ['*'], now()->subMinutes(5));
+
+    $this->postJson(route('auth.refresh'), [], [
+        'Authorization' => 'Bearer '.$token->plainTextToken,
+    ])->assertUnauthorized();
+});
+
+test('a token whose own expiry passed within the grace period still refreshes, capped', function () {
+    $this->travelTo(now()->startOfSecond());
+
+    $user = User::factory()->create();
+    $ceiling = now()->subMinute();
+    $token = $user->createToken('test-device', ['*'], $ceiling);
+
+    $expiresAt = $this->postJson(route('auth.refresh'), [], [
+        'Authorization' => 'Bearer '.$token->plainTextToken,
+    ])
+        ->assertSuccessful()
+        ->json('expires_at');
+
+    expect($expiresAt)->toBe($ceiling->toJson());
+});
+
+test('a refreshed token carries the abilities of the token it replaced', function () {
+    $user = User::factory()->create();
+    $token = $user->createToken('test-device', ['read']);
+
+    $response = $this->postJson(route('auth.refresh'), [], [
+        'Authorization' => 'Bearer '.$token->plainTextToken,
+    ])->assertSuccessful();
+
+    expect(PersonalAccessToken::findToken($response->json('token'))->abilities)->toBe(['read']);
+});

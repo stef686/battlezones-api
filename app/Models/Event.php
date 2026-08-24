@@ -211,6 +211,25 @@ class Event extends Model
             && $this->registration_closes_at->isPast();
     }
 
+    /**
+     * Whether every place has been taken.
+     *
+     * Counts parties, not people: an Event of 32 doubles teams has 64 Players
+     * in the hall, and `max_attendees` is the number of parties it can pair.
+     * A null limit is no limit, never a limit of nothing.
+     *
+     * Reads a loaded `attendees_count` when the caller has one, so a screen
+     * that already counted does not count again.
+     */
+    public function isFull(): bool
+    {
+        if ($this->max_attendees === null) {
+            return false;
+        }
+
+        return ($this->attendees_count ?? $this->attendees()->count()) >= $this->max_attendees;
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

@@ -32,10 +32,43 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":180,"updated_at":"2026-04-24T20:33:53Z","public_name":"Ms. Elisabeth Okuneva","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":12,"updated_at":"2026-08-01T10:00:00Z","public_name":"Ada Lovelace","country":"GB","email":"ada@example.com","is_claimed":true,"email_verified":true,"unread_notifications_count":3,"game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":4,"following_count":7}}'
         headers: []
         description: ''
-    responseFields: []
+    responseFields:
+      data.is_claimed:
+        custom: []
+        name: data.is_claimed
+        description: 'Whether this account has been claimed with a password. An unclaimed account exists only because someone invited it, and the SPA restricts what it may do.'
+        required: true
+        example: null
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      data.email_verified:
+        custom: []
+        name: data.email_verified
+        description: 'Whether the email address on the account has been verified.'
+        required: true
+        example: null
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      data.unread_notifications_count:
+        custom: []
+        name: data.unread_notifications_count
+        description: 'How many in-app notifications are unread.'
+        required: true
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
     auth: []
     controller: null
     method: null
@@ -365,9 +398,15 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":181,"updated_at":"2026-04-24T20:33:53Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1398,"updated_at":"2026-08-24T09:15:56Z","public_name":"Ms. Audra Crooks II","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -429,6 +468,12 @@ endpoints:
         content: '{"message":"A verification link has been sent to your new email address."}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -490,6 +535,12 @@ endpoints:
         content: '{"message":"A confirmation link has been sent to your email address."}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -536,9 +587,150 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":182,"updated_at":"2026-04-24T20:33:53Z","public_name":"Ms. Audra Crooks II","country":"IL","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1399,"updated_at":"2026-08-24T09:15:56Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/notifications
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Notifications'
+      description: "The authenticated Player's in-app notifications, newest first, with the unread count alongside. Event notifications always arrive here, whatever the Player's channel preferences say."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":"9c1f0f4e-1d2a-4f3b-9a5c-2f6f3f9e1a11","data":{"type":"round_published","event_slug":"london-grand-tournament","round_id":4},"read_at":null,"created_at":"2026-09-12T12:00:00+00:00"}],"links":{"first":"https:\/\/api.battlezones.test\/api\/notifications?page=1","last":"https:\/\/api.battlezones.test\/api\/notifications?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"path":"https:\/\/api.battlezones.test\/api\/notifications","per_page":15,"to":1,"total":1,"unread_count":3}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/notifications/read
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Mark All Notifications Read'
+      description: 'Clears the unread count for the authenticated Player.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"unread_count":0}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/notifications/{notification}/read'
+    metadata:
+      custom: []
+      groupName: Users
+      groupDescription: 'APIs for Users'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Mark a Notification Read'
+      description: "Scoped to the authenticated Player: another Player's notification is not found rather than forbidden."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      notification:
+        custom: []
+        name: notification
+        description: 'The id of the notification.'
+        required: true
+        example: 9b1d4d0a-1f5f-4a8c-9c1e-2b6f2b3f0a11
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      notification: 9b1d4d0a-1f5f-4a8c-9c1e-2b6f2b3f0a11
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":"9c1f0f4e-1d2a-4f3b-9a5c-2f6f3f9e1a11","data":{"type":"round_published","event_slug":"london-grand-tournament","round_id":4},"read_at":"2026-09-12T12:01:00+00:00","created_at":"2026-09-12T12:00:00+00:00"}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
     responseFields: []
     auth: []
     controller: null
@@ -573,7 +765,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"primary_messages":{"label":"Primary Messages","channels":["email"]},"message_requests":{"label":"Message Requests","channels":["email"]},"event_messages":{"label":"Event Messages","channels":["email"]},"round_live":{"label":"Round Live","channels":["email"]}}}'
+        content: '{"data":{"primary_messages":{"label":"Primary Messages","channels":["email"],"always_in_app":false},"message_requests":{"label":"Message Requests","channels":["email"],"always_in_app":false},"event_messages":{"label":"Event Messages","channels":["email"],"always_in_app":false},"round_live":{"label":"Round Live","channels":["email"],"always_in_app":true},"result_activity":{"label":"Result Activity","channels":["email"],"always_in_app":true},"voting_open":{"label":"Voting Open","channels":["email"],"always_in_app":true}}}'
         headers: []
         description: ''
     responseFields: []
@@ -652,7 +844,35 @@ endpoints:
         description: ''
         required: false
         example:
+          - push
+        type: 'string[]'
+        enumValues:
           - email
+          - push
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      result_activity:
+        custom: []
+        name: result_activity
+        description: ''
+        required: false
+        example:
+          - email
+        type: 'string[]'
+        enumValues:
+          - email
+          - push
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      voting_open:
+        custom: []
+        name: voting_open
+        description: ''
+        required: false
+        example:
+          - push
         type: 'string[]'
         enumValues:
           - email
@@ -668,15 +888,25 @@ endpoints:
       event_messages:
         - push
       round_live:
+        - push
+      result_activity:
         - email
+      voting_open:
+        - push
     fileParameters: []
     responses:
       -
         custom: []
         status: 200
-        content: '{"data":{"primary_messages":{"label":"Primary Messages","channels":["email"]},"message_requests":{"label":"Message Requests","channels":["email"]},"event_messages":{"label":"Event Messages","channels":["email"]},"round_live":{"label":"Round Live","channels":["email"]}}}'
+        content: '{"data":{"primary_messages":{"label":"Primary Messages","channels":["email"],"always_in_app":false},"message_requests":{"label":"Message Requests","channels":["email"],"always_in_app":false},"event_messages":{"label":"Event Messages","channels":["email"],"always_in_app":false},"round_live":{"label":"Round Live","channels":["email"],"always_in_app":true},"result_activity":{"label":"Result Activity","channels":["email"],"always_in_app":true},"voting_open":{"label":"Voting Open","channels":["email"],"always_in_app":true}}}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -785,6 +1015,12 @@ endpoints:
         content: '{"data":{"messaging":{"value":"anyone","label":"Anyone"},"profile":{"value":"anyone","label":"Anyone"},"options":[{"value":"anyone","label":"Anyone"},{"value":"followers_only","label":"Followers Only"},{"value":"following_only","label":"Following Only"},{"value":"mutual_followers","label":"Mutual Followers"},{"value":"fellow_club_members","label":"Fellow Club Members"}]}}'
         headers: []
         description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -831,7 +1067,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":187,"public_name":"Ms. Audra Crooks II","username":"breitenberg.gilbert"},{"id":188,"public_name":"Miss Jazlyn Keebler III","username":"bauch.marcelo"}]}'
+        content: '{"data":[{"id":1404,"public_name":"Ms. Audra Crooks II","username":"breitenberg.gilbert"},{"id":1405,"public_name":"Miss Jazlyn Keebler III","username":"bauch.marcelo"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -880,7 +1116,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":189,"updated_at":"2026-04-24T20:33:53Z","public_name":"Mr. Mateo Huel","country":"MW","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1406,"updated_at":"2026-08-24T09:15:56Z","public_name":"Eulalia VonRueden","country":"MF","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -929,7 +1165,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":190,"updated_at":"2026-04-24T20:33:53Z","public_name":"Elda Frami","country":"WF","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1407,"updated_at":"2026-08-24T09:15:56Z","public_name":"Akeem Hettinger","country":"MR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -978,7 +1214,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":191,"public_name":"Ms. Billie Beer","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1408,"public_name":"Colt Balistreri","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1027,7 +1263,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":192,"public_name":"Myrl Kshlerin","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1409,"public_name":"Dr. Alan Green","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1076,7 +1312,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":193,"updated_at":"2026-04-24T20:33:53Z","public_name":"Prof. Elouise Schiller","country":"BY","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1410,"updated_at":"2026-08-24T09:15:56Z","public_name":"Fausto Conroy","country":"IN","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1125,7 +1361,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":194,"updated_at":"2026-04-24T20:33:53Z","public_name":"Kendra Rice","country":"BW","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1411,"updated_at":"2026-08-24T09:15:56Z","public_name":"Garett Runolfsson","country":"CD","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1162,7 +1398,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":195,"public_name":"Prof. Coralie Roob I","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1412,"public_name":"Noemy Klocko","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []

@@ -18,8 +18,13 @@ class UserProfileResource extends JsonResource
             'updated_at' => $this->updated_at->toIso8601ZuluString(),
             'public_name' => $this->public_name,
             'country' => $this->country,
-            $this->mergeWhen($request->user()?->is($this->resource), [
+            // Private to the reader: the SPA's restricted-mode guard reads
+            // `is_claimed` as a field rather than inferring it from an absence.
+            $this->mergeWhen($request->user()?->is($this->resource), fn (): array => [
                 'email' => $this->email,
+                'is_claimed' => $this->isClaimed(),
+                'email_verified' => $this->hasVerifiedEmail(),
+                'unread_notifications_count' => $this->unreadNotifications()->count(),
             ]),
             'game_systems' => [],
             'avatar' => '',

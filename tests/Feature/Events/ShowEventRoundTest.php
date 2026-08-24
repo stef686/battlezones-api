@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Allegiance;
 use App\Enums\EventOrganiserRole;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -94,4 +95,58 @@ test('it returns a draft round to organisers', function () {
         ->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
         ->assertSuccessful()
         ->assertJsonPath('data.status', 'draft');
+});
+
+test('a round tells an organiser which tables are still playing', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+
+    $done = Game::factory()->for($round)->create(['table_number' => 1, 'submitted_at' => now()]);
+    $outstanding = Game::factory()->for($round)->create(['table_number' => 2, 'submitted_at' => null]);
+
+    $response = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertOk();
+
+    $games = collect($response->json('data.games'))->keyBy('id');
+
+    expect($games[$done->id]['result']['submitted_at'])->not->toBeNull()
+        ->and($games[$outstanding->id]['result']['submitted_at'])->toBeNull()
+        ->and($games[$done->id]['result']['is_flagged'])->toBeFalse();
+});
+
+test('a round carries each attendee\'s allegiance, so a pairing can be seen to be opposed', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+    $game = Game::factory()->for($round)->create(['table_number' => 1]);
+
+    $loyalist = EventAttendee::factory()->for($event)->create(['allegiance' => Allegiance::Loyalist]);
+    $traitor = EventAttendee::factory()->for($event)->create(['allegiance' => Allegiance::Traitor]);
+    $game->attendees()->sync([$loyalist->id, $traitor->id]);
+
+    $response = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertOk();
+
+    expect(collect($response->json('data.games.0.attendees'))->pluck('allegiance')->sort()->values()->all())
+        ->toBe(['loyalist', 'traitor']);
+});
+
+test('a round lists each game\'s attendees in the order they were paired', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+    $game = Game::factory()->for($round)->create(['table_number' => 1]);
+
+    $second = EventAttendee::factory()->for($event)->create(['allegiance' => Allegiance::Traitor]);
+    $first = EventAttendee::factory()->for($event)->create(['allegiance' => Allegiance::Loyalist]);
+
+    // Attached second-then-first, so insertion order and id order disagree.
+    $game->attendees()->attach($second->id);
+    $game->attendees()->attach($first->id);
+
+    // The client previews a swap by exchanging the second Attendee, so the
+    // order it is shown has to be the order the swap acts on.
+    $response = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertOk();
+
+    expect(collect($response->json('data.games.0.attendees'))->pluck('id')->all())
+        ->toBe([$second->id, $first->id]);
 });

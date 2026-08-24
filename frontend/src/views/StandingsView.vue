@@ -1,0 +1,106 @@
+<script setup lang="ts">
+import { useQuery } from '@tanstack/vue-query';
+import { computed } from 'vue';
+
+import { useApiClient } from '@/api';
+import type { ApiError } from '@/api/errors';
+import { fetchEvent } from '@/api/events';
+import { keys } from '@/api/keys';
+import { fetchStandings, scoreOf, type Standing } from '@/api/standings';
+import { useEventPulse } from '@/composables/useEventPulse';
+
+const props = defineProps<{ eventSlug: string }>();
+
+const client = useApiClient();
+
+const { data: event } = useQuery({
+  queryKey: computed(() => keys.event(props.eventSlug)),
+  queryFn: () => fetchEvent(client, props.eventSlug),
+  retry: false,
+});
+
+// While the Event is being run, a result landing anywhere moves these.
+useEventPulse(() => props.eventSlug, computed(() => event.value?.status === 'active'));
+
+const { data, isPending, error } = useQuery({
+  queryKey: computed(() => keys.standings(props.eventSlug)),
+  queryFn: () => fetchStandings(client, props.eventSlug),
+});
+
+const standings = computed(() => data.value ?? []);
+
+function score(standing: Standing, slug: string): string {
+  return scoreOf(standing, slug);
+}
+</script>
+
+<template>
+  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 p-5">
+    <h1 class="text-xl font-semibold text-ink">
+      Standings
+    </h1>
+
+    <p
+      v-if="isPending"
+      class="text-ink-muted"
+    >
+      Loading standings…
+    </p>
+    <p
+      v-else-if="error"
+      class="text-danger"
+    >
+      {{ (error as ApiError).message }}
+    </p>
+
+    <table
+      v-else
+      data-testid="standings"
+      class="w-full border-collapse text-left"
+    >
+      <thead>
+        <tr class="text-xs uppercase tracking-widest text-ink-faint">
+          <th class="py-2 font-medium">
+            #
+          </th>
+          <th class="py-2 font-medium">
+            Attendee
+          </th>
+          <th class="py-2 text-right font-medium">
+            MP
+          </th>
+          <th class="py-2 text-right font-medium">
+            VP
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="standing in standings"
+          :key="standing.id"
+          class="border-t border-border"
+          :data-testid="`standing-${standing.attendee.id}`"
+        >
+          <td class="py-3 tabular-nums text-ink-muted">
+            {{ standing.position }}
+          </td>
+          <td class="py-3 text-ink">
+            {{ standing.attendee.name }}
+          </td>
+          <td
+            class="py-3 text-right tabular-nums text-ink"
+            data-testid="match-points"
+          >
+            {{ score(standing, 'match-points') }}
+          </td>
+          <td
+            class="py-3 text-right tabular-nums text-ink"
+            data-testid="victory-points"
+          >
+            {{ score(standing, 'victory-points') }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</template>

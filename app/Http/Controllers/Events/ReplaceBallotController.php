@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Events', 'APIs for Events')]
@@ -20,8 +21,10 @@ class ReplaceBallotController extends Controller
     public function __construct(private ReplaceBallot $replaceBallot) {}
 
     #[Endpoint('Replace your Ballot', 'Send the complete set of Attendees you are picking; an empty array clears your Ballot. In doubles both Players vote independently.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('poll', 'integer', 'The id of the poll.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('poll_id', 'integer', 'The id of the poll.', example: 1)]
+    #[Response(['data' => ['poll_id' => 1, 'attendee_ids' => [4, 9]]])]
+    #[Response(['message' => 'Voting is not open for you in this poll.'], 422, 'The Poll is closed, or this Player may not vote in it.')]
     public function __invoke(ReplaceBallotRequest $request, Event $event, EventPoll $poll): JsonResponse
     {
         $attendeeIds = $request->attendeeIds();

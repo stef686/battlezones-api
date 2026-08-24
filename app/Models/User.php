@@ -238,6 +238,16 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     }
 
     /**
+     * @return BelongsToMany<Event, $this>
+     */
+    public function organisedEvents(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'event_organisers')
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    /**
      * @return HasMany<EventAttendee, $this>
      */
     public function eventAttendees(): HasMany

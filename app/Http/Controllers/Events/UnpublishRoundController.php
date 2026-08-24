@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Events', 'APIs for Events')]
@@ -19,8 +20,28 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class UnpublishRoundController extends Controller
 {
     #[Endpoint('Unpublish a Round', 'Organisers only. Returns a Round to Draft so a broken pairing can be fixed out of sight. Rejected once any result exists.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
-    #[UrlParam('round', 'integer', 'The id of the round.', example: 1)]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('round_id', 'integer', 'The id of the round.', example: 1)]
+    #[Response(['data' => [
+        'id' => 4,
+        'number' => 2,
+        'name' => 'Round 2',
+        'status' => 'live',
+        'games' => [[
+            'id' => 18,
+            'table_number' => 5,
+            'is_bye' => false,
+            'is_rematch' => false,
+            'result' => ['submitted_at' => null, 'is_flagged' => false],
+            'attendees' => [[
+                'id' => 9,
+                'name' => 'Ada and Grace',
+                'allegiance' => 'loyalist',
+                'members' => [['id' => 12, 'name' => 'Ada Lovelace', 'faction' => ['id' => 3, 'name' => 'Sons of Horus'], 'army_list_locked' => true]],
+                'scores' => ['match-points' => 3, 'victory-points' => 85],
+            ]],
+        ]],
+    ]])]
     public function __invoke(Event $event, Round $round): RoundDetailResource
     {
         Gate::authorize('organise', $event);
@@ -31,7 +52,7 @@ class UnpublishRoundController extends Controller
 
         $round->update(['status' => RoundStatus::Draft]);
 
-        $round->load(['games' => fn ($query) => $query->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType']);
+        $round->load(['games' => fn ($query) => $query->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType', 'games.openResultFlag']);
 
         return RoundDetailResource::make($round);
     }

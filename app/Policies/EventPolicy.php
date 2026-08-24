@@ -30,7 +30,7 @@ class EventPolicy
             return true;
         }
 
-        if ($event->registrationHasClosed()) {
+        if ($event->registrationHasClosed() || $event->isFull()) {
             return false;
         }
 

@@ -1,11 +1,15 @@
 <?php
 
+use App\Actions\Events\EnrolPlayer;
+use App\Actions\Events\RegisterAttendee;
 use App\Actions\Events\SendEventInvite;
 use App\Enums\Allegiance;
 use App\Enums\EventInviteRole;
 use App\Enums\EventOrganiserRole;
 use App\Enums\RegistrationMode;
+use App\Exceptions\EventIsFull;
 use App\Models\Event;
+use App\Models\EventAttendee;
 use App\Models\Faction;
 use App\Models\User;
 use App\Notifications\Events\EventInviteNotification;
@@ -229,4 +233,115 @@ test('an event that opposes allegiances demands one at registration', function (
         ])
         ->assertUnprocessable()
         ->assertJsonValidationErrors('allegiance');
+});
+
+test('an event with every place taken refuses another team', function () {
+    [$event, $faction] = doublesEvent(['attendee_size' => 1, 'max_attendees' => 1]);
+    EventAttendee::factory()->for($event)->create();
+
+    $captain = User::factory()->create();
+
+    $this->actingAs($captain)
+        ->postJson(route('events.attendees.store', ['event' => $event->slug]), [
+            'allegiance' => 'loyalist',
+            'players' => [['email' => $captain->email, 'faction_id' => $faction->id]],
+        ])
+        ->assertForbidden();
+
+    expect($event->attendees()->count())->toBe(1);
+});
+
+test('the registration transaction refuses a place that went while it was in flight', function () {
+    [$event, $faction] = doublesEvent(['attendee_size' => 1, 'max_attendees' => 1]);
+    EventAttendee::factory()->for($event)->create();
+
+    // Straight at the action: the policy already said yes on an Event that
+    // had a place, and this guard is what stands between that answer and an
+    // over-full Event that cannot be paired.
+    $register = fn () => app(RegisterAttendee::class)->handle(
+        event: $event,
+        players: [['email' => 'late@example.com', 'faction_id' => $faction->id]],
+        registeredBy: User::factory()->create(),
+    );
+
+    expect($register)->toThrow(EventIsFull::class);
+    expect($event->attendees()->count())->toBe(1);
+});
+
+test('a place lost mid-registration is reported as a conflict', function () {
+    [$event, $faction] = doublesEvent(['attendee_size' => 1, 'max_attendees' => 2]);
+    $captain = User::factory()->create();
+
+    $this->instance(RegisterAttendee::class, new class (app(EnrolPlayer::class)) extends RegisterAttendee
+    {
+        public function handle(Event $event, array $players, User $registeredBy, ?string $name = null, ?Allegiance $allegiance = null): EventAttendee
+        {
+            throw EventIsFull::for($event);
+        }
+    });
+
+    $this->actingAs($captain)
+        ->postJson(route('events.attendees.store', ['event' => $event->slug]), [
+            'allegiance' => 'loyalist',
+            'players' => [['email' => $captain->email, 'faction_id' => $faction->id]],
+        ])
+        ->assertStatus(409)
+        ->assertJsonPath('message', "{$event->name} is full. Ask an organiser whether there is a waiting list.");
+});
+
+test('an organiser is never shut out of a full event', function () {
+    [$event, $faction] = doublesEvent(['attendee_size' => 1, 'max_attendees' => 1]);
+    EventAttendee::factory()->for($event)->create();
+
+    $organiser = User::factory()->create();
+    $event->organisers()->attach($organiser, ['role' => EventOrganiserRole::Lead->value]);
+
+    $this->actingAs($organiser)
+        ->postJson(route('events.attendees.store', ['event' => $event->slug]), [
+            'allegiance' => 'loyalist',
+            'players' => [['email' => 'straggler@example.com', 'faction_id' => $faction->id]],
+        ])
+        ->assertCreated();
+
+    expect($event->attendees()->count())->toBe(2);
+});
+
+test('an event with no limit is never full', function () {
+    [$event, $faction] = doublesEvent(['attendee_size' => 1, 'max_attendees' => null]);
+    EventAttendee::factory()->count(5)->for($event)->create();
+
+    $captain = User::factory()->create();
+
+    $this->actingAs($captain)
+        ->postJson(route('events.attendees.store', ['event' => $event->slug]), [
+            'allegiance' => 'loyalist',
+            'players' => [['email' => $captain->email, 'faction_id' => $faction->id]],
+        ])
+        ->assertCreated();
+});
+
+test('the event says how full it is, so a captain knows before they start', function () {
+    [$event] = doublesEvent(['attendee_size' => 1, 'max_attendees' => 2]);
+    EventAttendee::factory()->for($event)->create();
+
+    $this->getJson(route('events.show', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonPath('data.attendees_count', 1)
+        ->assertJsonPath('data.max_attendees', 2)
+        ->assertJsonPath('data.is_full', false);
+
+    EventAttendee::factory()->for($event)->create();
+
+    $this->getJson(route('events.show', ['event' => $event->slug]))
+        ->assertJsonPath('data.is_full', true);
+});
+
+test('a captain looking at a full event is told they may not register', function () {
+    [$event] = doublesEvent(['attendee_size' => 1, 'max_attendees' => 1]);
+    EventAttendee::factory()->for($event)->create();
+
+    $this->actingAs(User::factory()->create())
+        ->getJson(route('events.show', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonPath('data.viewer.permissions.register', false);
 });

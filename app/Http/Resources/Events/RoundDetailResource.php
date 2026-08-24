@@ -41,9 +41,19 @@ class RoundDetailResource extends JsonResource
                     'table_number' => $game->table_number,
                     'is_bye' => $game->is_bye,
                     'is_rematch' => isset($rematches[$game->id]),
+                    // Which tables are still playing is what holds up the next
+                    // Round, so an Organiser reviewing a Round can see it here
+                    // rather than opening every Game in turn.
+                    'result' => [
+                        'submitted_at' => $game->submitted_at?->toIso8601ZuluString(),
+                        'is_flagged' => $game->openResultFlag !== null,
+                    ],
                     'attendees' => $game->attendees->map(fn (EventAttendee $attendee): array => [
                         'id' => $attendee->id,
                         'name' => $attendee->displayName(),
+                        // The review screen has to be able to see at a glance
+                        // that every Game is opposed.
+                        'allegiance' => $attendee->allegiance?->value,
                         'members' => $this->serialiseMembers($attendee),
                         'scores' => $scoresByAttendee->get($attendee->id, collect())->toArray(),
                     ])->all(),

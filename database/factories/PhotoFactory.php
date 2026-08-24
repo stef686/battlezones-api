@@ -21,9 +21,21 @@ class PhotoFactory extends Factory
         return [
             'user_id' => User::factory(),
             'name' => fake()->sentence(3),
-            'description' => fake()->optional()->paragraph(),
+            'description' => fake()->paragraph(),
             'path' => 'photos/'.fake()->uuid().'.jpg',
             'thumbnail_path' => 'photos/thumbs/'.fake()->uuid().'.jpg',
         ];
+    }
+
+    /**
+     * A Photo uploaded without a description.
+     *
+     * The default carries one so the shape stays fixed: the API documentation
+     * infers its schema from a factory model, and a field that is sometimes
+     * null moves `nullable` in and out of the committed spec.
+     */
+    public function withoutDescription(): static
+    {
+        return $this->state(['description' => null]);
     }
 }

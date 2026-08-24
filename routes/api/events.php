@@ -9,6 +9,7 @@ use App\Http\Controllers\Events\ExportEventFeedbackController;
 use App\Http\Controllers\Events\FlagGameResultController;
 use App\Http\Controllers\Events\GenerateRoundController;
 use App\Http\Controllers\Events\ListEventAttendeesController;
+use App\Http\Controllers\Events\ListEventFactionsController;
 use App\Http\Controllers\Events\ListEventFlaggedResultsController;
 use App\Http\Controllers\Events\ListEventGalleryController;
 use App\Http\Controllers\Events\ListEventOrganisersController;
@@ -31,6 +32,7 @@ use App\Http\Controllers\Events\ShowEventController;
 use App\Http\Controllers\Events\ShowEventFeedbackController;
 use App\Http\Controllers\Events\ShowEventGameController;
 use App\Http\Controllers\Events\ShowEventPollResultsController;
+use App\Http\Controllers\Events\ShowEventPulseController;
 use App\Http\Controllers\Events\ShowEventRoundController;
 use App\Http\Controllers\Events\ShowFeedbackFormController;
 use App\Http\Controllers\Events\ShowInviteController;
@@ -51,12 +53,14 @@ use App\Http\Controllers\Events\UpdateArmyListController;
 use App\Http\Controllers\Events\UpdateEventAttendeeController;
 use App\Http\Controllers\Events\UpdateEventScheduleBlockController;
 use App\Http\Controllers\Events\UpdateGameResultController;
+use App\Http\Controllers\Events\UpdateMyFactionController;
 use App\Http\Controllers\Events\UpdatePaintingEntryController;
 
 Route::get('events', ListEventsController::class)->name('events.index');
 Route::get('events/{event:slug}', ShowEventController::class)->name('events.show');
 Route::get('events/{event:slug}/updates', ListEventUpdatesController::class)->name('events.updates.index');
 Route::get('events/{event:slug}/attendees', ListEventAttendeesController::class)->name('events.attendees.index');
+Route::get('events/{event:slug}/factions', ListEventFactionsController::class)->name('events.factions.index');
 Route::scopeBindings()->get('events/{event:slug}/attendees/{attendee}', ShowEventAttendeeController::class)
     ->name('events.attendees.show');
 Route::get('events/{event:slug}/rounds', ListEventRoundsController::class)->name('events.rounds.index');
@@ -64,20 +68,25 @@ Route::scopeBindings()->get('events/{event:slug}/rounds/{round}', ShowEventRound
     ->name('events.rounds.show');
 Route::get('events/{event:slug}/games/{game}', ShowEventGameController::class)->name('events.games.show');
 Route::get('events/{event:slug}/standings', ListEventStandingsController::class)->name('events.standings.index');
+
+// Polled every few seconds during a live Event, so it must stay cheap.
+Route::get('events/{event:slug}/pulse', ShowEventPulseController::class)->name('events.pulse');
 Route::get('events/{event:slug}/gallery', ListEventGalleryController::class)->name('events.gallery.index');
 Route::get('events/{event:slug}/schedule', ListEventScheduleController::class)->name('events.schedule.index');
 
+// Budgeted per token rather than per address: a hall full of Players sharing
+// one venue IP must not share one budget. See AppServiceProvider.
 Route::get('feedback/{token}', ShowFeedbackFormController::class)->name('feedback.show')
-    ->middleware('throttle:30,1');
+    ->middleware('throttle:token-read');
 Route::post('feedback/{token}', SubmitFeedbackController::class)->name('feedback.store')
-    ->middleware('throttle:10,1');
+    ->middleware('throttle:token-write');
 
 Route::get('invites/{token}', ShowInviteController::class)->name('invites.show')
-    ->middleware('throttle:30,1');
+    ->middleware('throttle:token-read');
 Route::post('invites/{token}/session', StoreInviteSessionController::class)->name('invites.session')
-    ->middleware('throttle:auth');
+    ->middleware('throttle:token-write');
 Route::post('invites/{token}/claim', ClaimInviteController::class)->name('invites.claim')
-    ->middleware('throttle:auth');
+    ->middleware('throttle:token-write');
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('events/{event:slug}/organisers', ListEventOrganisersController::class)
@@ -127,6 +136,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::get('events/{event:slug}/my-game', ShowMyGameController::class)
         ->name('events.my-game.show');
+    Route::patch('events/{event:slug}/my-faction', UpdateMyFactionController::class)
+        ->name('events.my-faction.update');
 
     Route::post('events/{event:slug}/games/{game}/result', StoreGameResultController::class)
         ->name('events.games.result.store');

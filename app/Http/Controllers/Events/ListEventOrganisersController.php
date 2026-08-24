@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Events', 'APIs for Events')]
@@ -18,7 +19,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class ListEventOrganisersController extends Controller
 {
     #[Endpoint('List Event Organisers', 'The Players trusted to run this event. Organisers only.')]
-    #[UrlParam('event', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
+    #[Response(['data' => [['id' => 12, 'name' => 'Ada Lovelace', 'role' => 'lead']]])]
     public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
         Gate::authorize('organise', $event);

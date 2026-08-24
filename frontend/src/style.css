@@ -1,0 +1,49 @@
+@import 'tailwindcss';
+
+/*
+ * Provisional visual direction.
+ *
+ * The palette and type scale are settled in #99. Everything here is a token
+ * and nothing outside this file names a colour, so that work is a change to
+ * these values rather than a sweep through the components. Dark-only, which
+ * is the stated direction: there is no light theme to keep in step.
+ */
+@theme {
+    --color-surface: oklch(0.17 0.01 260);
+    --color-surface-raised: oklch(0.22 0.012 260);
+    --color-surface-sunken: oklch(0.13 0.01 260);
+    --color-border: oklch(0.32 0.014 260);
+    --color-ink: oklch(0.95 0.005 260);
+    --color-ink-muted: oklch(0.72 0.012 260);
+    --color-ink-faint: oklch(0.58 0.012 260);
+    --color-accent: oklch(0.72 0.15 55);
+    --color-accent-ink: oklch(0.17 0.01 260);
+    --color-danger: oklch(0.65 0.19 25);
+
+    /*
+     * Allegiance is read across a dim hall, so the two sides are far apart in
+     * hue and in lightness — a Player squinting at a table list should not
+     * have to read the word to know which side a team is on.
+     */
+    --color-loyalist: oklch(0.74 0.13 240);
+    --color-loyalist-ink: oklch(0.17 0.01 260);
+    --color-traitor: oklch(0.68 0.17 30);
+    --color-traitor-ink: oklch(0.17 0.01 260);
+    --color-success: oklch(0.72 0.15 150);
+
+    /* The table number is read across a hall, so it gets its own step. */
+    --text-hall: 6rem;
+    --text-hall--line-height: 1;
+}
+
+html,
+body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    min-height: 100%;
+}
+
+body {
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
