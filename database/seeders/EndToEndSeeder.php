@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Actions\Events\StoreGameScores;
 use App\Casts\EventSettings;
 use App\Enums\Allegiance;
 use App\Enums\EventInviteRole;
@@ -58,6 +59,9 @@ class EndToEndSeeder extends Seeder
     /** The table the unpublished second Round puts the Player on. */
     public const NEXT_TABLE_NUMBER = 12;
 
+    /** The second table of the unpublished Round, so a swap has two Games. */
+    public const NEXT_OTHER_TABLE_NUMBER = 13;
+
     /**
      * A fixed token so the browser test can follow the link an Organiser's
      * invitation email would carry. Only ever stored hashed, as in production.
@@ -73,11 +77,19 @@ class EndToEndSeeder extends Seeder
         $mine = $this->attendee($event, self::PLAYER_EMAIL, 'Ada Lovelace', Allegiance::Loyalist);
         $theirs = $this->attendee($event, self::OPPONENT_EMAIL, 'Grace Hopper', Allegiance::Traitor);
 
+        // A second pair, so the Draft Round has two Games to swap between, and
+        // a fifth party who takes the Bye an odd field produces.
+        $otherLoyalist = $this->attendee($event, 'sanguinius@battlezones.test', 'Sanguinius', Allegiance::Loyalist);
+        $otherTraitor = $this->attendee($event, 'curze@battlezones.test', 'Konrad Curze', Allegiance::Traitor);
+        $unpaired = $this->attendee($event, 'ferrus@battlezones.test', 'Ferrus Manus', Allegiance::Loyalist);
+
         $round = $this->game($event, $mine, $theirs);
+
+        $this->bye($round, $unpaired);
 
         $this->schedule($event, $round);
 
-        $this->nextRound($event, $mine, $theirs);
+        $this->nextRound($event, $mine, $theirs, $otherLoyalist, $otherTraitor);
 
         $this->organiser($event);
 
@@ -257,17 +269,58 @@ class EndToEndSeeder extends Seeder
      * screen follow, so it has to start every run unpublished and pointing at
      * a different table from the first.
      */
-    private function nextRound(Event $event, EventAttendee $mine, EventAttendee $theirs): void
-    {
+    private function nextRound(
+        Event $event,
+        EventAttendee $mine,
+        EventAttendee $theirs,
+        EventAttendee $otherLoyalist,
+        EventAttendee $otherTraitor,
+    ): void {
         $round = Round::query()->updateOrCreate(
             ['event_id' => $event->getKey(), 'number' => 2],
             ['name' => 'Round 2', 'status' => RoundStatus::Draft],
         );
 
-        $game = Game::query()->updateOrCreate(
-            ['round_id' => $round->getKey(), 'table_number' => self::NEXT_TABLE_NUMBER],
+        $pairs = [
+            self::NEXT_TABLE_NUMBER => [$mine, $theirs],
+            self::NEXT_OTHER_TABLE_NUMBER => [$otherLoyalist, $otherTraitor],
+        ];
+
+        foreach ($pairs as $table => [$loyalist, $traitor]) {
+            $game = Game::query()->updateOrCreate(
+                ['round_id' => $round->getKey(), 'table_number' => $table],
+                [
+                    'is_bye' => false,
+                    'submitted_at' => null,
+                    'submitted_by_user_id' => null,
+                    'edited_at' => null,
+                    'edited_by_user_id' => null,
+                ],
+            );
+
+            $game->scores()->delete();
+            // Detached first so pairing order is rewritten every run: a swap
+            // exchanges the second Attendee, and the browser test asserts on
+            // which one that is.
+            $game->attendees()->detach();
+            $game->attendees()->attach($loyalist->getKey());
+            $game->attendees()->attach($traitor->getKey());
+        }
+    }
+
+    /**
+     * The Bye an odd field produces, in the Round being played.
+     *
+     * The win is awarded here exactly as `GenerateRoundPairings` awards it, so
+     * the fixture matches what real pairing produces: match points from the
+     * moment the Round is paired, victory points waiting on an Organiser.
+     */
+    private function bye(Round $round, EventAttendee $unpaired): void
+    {
+        $bye = Game::query()->updateOrCreate(
+            ['round_id' => $round->getKey(), 'table_number' => null],
             [
-                'is_bye' => false,
+                'is_bye' => true,
                 'submitted_at' => null,
                 'submitted_by_user_id' => null,
                 'edited_at' => null,
@@ -275,8 +328,10 @@ class EndToEndSeeder extends Seeder
             ],
         );
 
-        $game->scores()->delete();
-        $game->attendees()->sync([$mine->getKey(), $theirs->getKey()]);
+        $bye->scores()->delete();
+        $bye->attendees()->sync([$unpaired->getKey()]);
+
+        app(StoreGameScores::class)->awardByeWin($bye->fresh(['round']));
     }
 
     private function organiser(Event $event): void

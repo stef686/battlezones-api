@@ -58,6 +58,32 @@ export function publishRound(client: ApiClient, slug: string, roundId: number): 
         .then((response) => response.data);
 }
 
+/**
+ * Recombine two Games of a Draft Round.
+ *
+ * The exchange itself is not a choice — the API performs the only legal one —
+ * so this sends the two Games and nothing else.
+ */
+export function swapPairings(client: ApiClient, slug: string, roundId: number, gameIds: [number, number]): Promise<RoundDetail> {
+    return client.post<{ data: RoundDetail }>(`${eventPath(slug)}/rounds/${roundId}/swap`, { game_ids: gameIds })
+        .then((response) => response.data);
+}
+
+/**
+ * Enter the scores an Organiser has to enter themselves.
+ *
+ * A Bye has no opponent to agree a result with, so its Victory Points come
+ * from an Organiser. Its win is already awarded when the Round is paired.
+ */
+export function correctGameResult(
+    client: ApiClient,
+    slug: string,
+    gameId: number,
+    scores: Record<number, Record<string, number>>,
+): Promise<unknown> {
+    return client.put(`${eventPath(slug)}/games/${gameId}/result`, { scores });
+}
+
 /** Refused once any result is in: by then the Round has been played on. */
 export function unpublishRound(client: ApiClient, slug: string, roundId: number): Promise<RoundDetail> {
     return client.delete<{ data: RoundDetail }>(`${eventPath(slug)}/rounds/${roundId}/publish`)

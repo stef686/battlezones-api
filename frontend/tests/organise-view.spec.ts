@@ -373,3 +373,195 @@ describe('pairing the next round', () => {
         expect(view.get('[data-testid="organise-problem"]').text()).toContain('already has results');
     });
 });
+
+describe('swapping two pairings', () => {
+    function twoTables() {
+        const games = [
+            pairing({
+                id: 18,
+                table_number: 1,
+                attendees: [
+                    { id: 9, name: 'Loyal One', allegiance: 'loyalist', members: [], scores: {} },
+                    { id: 10, name: 'Traitor One', allegiance: 'traitor', members: [], scores: {} },
+                ],
+            }),
+            pairing({
+                id: 19,
+                table_number: 2,
+                attendees: [
+                    { id: 11, name: 'Loyal Two', allegiance: 'loyalist', members: [], scores: {} },
+                    { id: 12, name: 'Traitor Two', allegiance: 'traitor', members: [], scores: {} },
+                ],
+            }),
+        ];
+
+        return {
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: {
+                status: 200,
+                body: { data: { id: 4, number: 2, name: null, status: 'draft', games } },
+            },
+            [`/api/events/${EVENT_SLUG}/rounds`]: {
+                status: 200,
+                body: { data: [{ id: 4, number: 2, name: null, status: 'draft' }] },
+            },
+            [`/api/events/${EVENT_SLUG}/standings`]: { status: 200, body: STANDINGS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: { data: { current_round: null, rounds: 'a', standings: null, polls: null } } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        };
+    }
+
+    it('shows what the swap would produce before it is committed', async () => {
+        stubApi(twoTables());
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="swap-18"]').trigger('click');
+        expect(view.get('[data-testid="swap-prompt"]').text()).toContain('choose the game');
+
+        await view.get('[data-testid="swap-19"]').trigger('click');
+        await flushPromises();
+
+        const preview = view.get('[data-testid="swap-preview"]');
+
+        // Each table keeps the team already sitting at it; only the opponent
+        // changes, and both games stay opposed.
+        expect(preview.get('[data-testid="preview-18"]').text()).toContain('Loyal One');
+        expect(preview.get('[data-testid="preview-18"]').text()).toContain('Traitor Two');
+        expect(view.find('[data-testid="swap-unopposed"]').exists()).toBe(false);
+    });
+
+    it('sends both games and nothing else, because the exchange is not a choice', async () => {
+        const fetch = stubApi({
+            ...twoTables(),
+            [`/api/events/${EVENT_SLUG}/rounds/4/swap`]: {
+                status: 200,
+                body: { data: { id: 4, number: 2, name: null, status: 'draft', games: [] } },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="swap-18"]').trigger('click');
+        await view.get('[data-testid="swap-19"]').trigger('click');
+        await view.get('[data-testid="confirm-swap"]').trigger('click');
+        await flushPromises();
+
+        const swap = fetch.mock.calls.find(([url]) => String(url).endsWith('/rounds/4/swap'))!;
+        expect(JSON.parse(swap[1]?.body as string)).toEqual({ game_ids: [18, 19] });
+    });
+
+    it('repeats the API\'s refusal, which knows things one round cannot show', async () => {
+        stubApi(twoTables());
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="swap-18"]').trigger('click');
+        await view.get('[data-testid="swap-19"]').trigger('click');
+
+        stubApi({
+            ...twoTables(),
+            [`/api/events/${EVENT_SLUG}/rounds/4/swap`]: {
+                status: 422,
+                body: { message: 'A Bye has to stay with the Allegiance that has more Attendees, or the Round cannot be paired.' },
+            },
+        });
+
+        await view.get('[data-testid="confirm-swap"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="organise-problem"]').text()).toContain('more Attendees');
+    });
+
+    it('lets the organiser back out without swapping anything', async () => {
+        stubApi(twoTables());
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="swap-18"]').trigger('click');
+        await view.get('[data-testid="swap-19"]').trigger('click');
+        await view.get('[data-testid="cancel-swap"]').trigger('click');
+        await flushPromises();
+
+        expect(view.find('[data-testid="swap-preview"]').exists()).toBe(false);
+    });
+});
+
+describe('scoring a bye', () => {
+    function withBye() {
+        const games = [
+            pairing({ id: 18, table_number: 1, result: { submitted_at: '2026-09-12T12:00:00Z', is_flagged: false } }),
+            pairing({
+                id: 21,
+                table_number: null,
+                is_bye: true,
+                attendees: [{ id: 11, name: 'Odd One Out', allegiance: 'loyalist', members: [], scores: {} }],
+            }),
+        ];
+
+        return {
+            [`/api/events/${EVENT_SLUG}/rounds/3`]: {
+                status: 200,
+                body: { data: { id: 3, number: 1, name: 'Round 1', status: 'live', games } },
+            },
+            [`/api/events/${EVENT_SLUG}/rounds`]: {
+                status: 200,
+                body: { data: [{ id: 3, number: 1, name: 'Round 1', status: 'live' }] },
+            },
+            [`/api/events/${EVENT_SLUG}/standings`]: { status: 200, body: STANDINGS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: { data: { current_round: { id: 3, number: 1 }, rounds: 'a', standings: null, polls: null } } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        };
+    }
+
+    it('offers the bye its own points entry, saying the win is already counted', async () => {
+        stubApi(withBye());
+
+        const view = mountView();
+        await flushPromises();
+
+        const bye = view.get('[data-testid="bye-21"]');
+
+        expect(bye.text()).toContain('Odd One Out');
+        expect(bye.text()).toContain('win');
+    });
+
+    it('sends the points for the bye Attendee alone', async () => {
+        const fetch = stubApi({
+            ...withBye(),
+            [`/api/events/${EVENT_SLUG}/games/21/result`]: { status: 200, body: { data: {} } },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="bye-score-21"]').setValue('60');
+        await view.get('[data-testid="save-bye-21"]').trigger('click');
+        await flushPromises();
+
+        const saved = fetch.mock.calls.find(([url]) => String(url).endsWith('/games/21/result'))!;
+        expect(saved[1]?.method).toBe('PUT');
+        expect(JSON.parse(saved[1]?.body as string)).toEqual({ scores: { 11: { 'victory-points': 60 } } });
+    });
+
+    it('says the points were saved, so an Organiser knows before leaving the screen', async () => {
+        stubApi({
+            ...withBye(),
+            [`/api/events/${EVENT_SLUG}/games/21/result`]: { status: 200, body: { data: {} } },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="bye-saved-21"]').exists()).toBe(false);
+
+        await view.get('[data-testid="bye-score-21"]').setValue('60');
+        await view.get('[data-testid="save-bye-21"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="bye-saved-21"]').text()).toContain('Saved');
+    });
+});

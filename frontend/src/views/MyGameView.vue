@@ -37,6 +37,13 @@ const mine = computed(() => game.value?.attendees[0] ?? null);
 const theirs = computed(() => game.value?.attendees[1] ?? null);
 const submitted = computed(() => game.value?.result.submitted_at !== null);
 
+/**
+ * A Bye has no opponent, so there is nothing for a Player to agree and
+ * nothing to submit. The API refuses a result for one; offering the form
+ * would be inviting them to fail.
+ */
+const isBye = computed(() => game.value?.is_bye === true);
+
 const myScore = ref<number | null>(null);
 const theirScore = ref<number | null>(null);
 const submitting = ref(false);
@@ -109,17 +116,33 @@ async function submit(): Promise<void> {
            so it is the screen rather than a line on it. -->
       <section class="rounded-2xl bg-surface-raised px-6 py-8 text-center">
         <p class="text-sm uppercase tracking-widest text-ink-faint">
-          {{ game.round.name ?? `Round ${game.round.number}` }} · Table
+          {{ game.round.name ?? `Round ${game.round.number}` }} · {{ isBye ? 'No table' : 'Table' }}
         </p>
         <p
           data-testid="table-number"
           class="mt-2 text-hall font-bold tabular-nums text-accent"
         >
-          {{ game.table_number }}
+          {{ isBye ? '—' : game.table_number }}
         </p>
       </section>
 
-      <section class="flex flex-col gap-1">
+      <section
+        v-if="isBye"
+        data-testid="bye-notice"
+        class="flex flex-col gap-1 rounded-2xl bg-surface-raised p-5"
+      >
+        <p class="text-lg text-ink">
+          You have the bye this round.
+        </p>
+        <p class="text-sm text-ink-muted">
+          It counts as a win. An organiser enters the victory points, so there is nothing for you to submit.
+        </p>
+      </section>
+
+      <section
+        v-else
+        class="flex flex-col gap-1"
+      >
         <p class="text-sm text-ink-faint">
           You are playing
         </p>
@@ -132,7 +155,7 @@ async function submit(): Promise<void> {
       </section>
 
       <form
-        v-if="!submitted"
+        v-if="!submitted && !isBye"
         class="flex flex-col gap-4 rounded-2xl bg-surface-raised p-5"
         novalidate
         @submit.prevent="submit"
@@ -174,7 +197,7 @@ async function submit(): Promise<void> {
       </form>
 
       <p
-        v-else
+        v-else-if="!isBye"
         data-testid="result-submitted"
         class="rounded-2xl bg-surface-raised p-5 text-success"
       >

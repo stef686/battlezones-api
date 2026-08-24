@@ -129,3 +129,24 @@ test('a round carries each attendee\'s allegiance, so a pairing can be seen to b
     expect(collect($response->json('data.games.0.attendees'))->pluck('allegiance')->sort()->values()->all())
         ->toBe(['loyalist', 'traitor']);
 });
+
+test('a round lists each game\'s attendees in the order they were paired', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+    $game = Game::factory()->for($round)->create(['table_number' => 1]);
+
+    $second = EventAttendee::factory()->for($event)->create(['allegiance' => Allegiance::Traitor]);
+    $first = EventAttendee::factory()->for($event)->create(['allegiance' => Allegiance::Loyalist]);
+
+    // Attached second-then-first, so insertion order and id order disagree.
+    $game->attendees()->attach($second->id);
+    $game->attendees()->attach($first->id);
+
+    // The client previews a swap by exchanging the second Attendee, so the
+    // order it is shown has to be the order the swap acts on.
+    $response = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertOk();
+
+    expect(collect($response->json('data.games.0.attendees'))->pluck('id')->all())
+        ->toBe([$second->id, $first->id]);
+});

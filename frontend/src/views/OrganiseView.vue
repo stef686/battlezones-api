@@ -7,11 +7,21 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
-import { fetchRound, fetchRounds, generateRound, publishRound, unpublishRound, type Pairing } from '@/api/rounds';
+import {
+  correctGameResult,
+  fetchRound,
+  fetchRounds,
+  generateRound,
+  publishRound,
+  swapPairings,
+  unpublishRound,
+  type Pairing,
+} from '@/api/rounds';
 import { fetchStandings, positionsByAttendee } from '@/api/standings';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
+import { isOpposed, previewSwap } from '@/lib/pairing';
 
 const props = defineProps<{ eventSlug: string }>();
 
@@ -99,20 +109,117 @@ function title(round: { number: number; name: string | null }): string {
   return round.name ?? `Round ${round.number}`;
 }
 
-/** Every Game in an opposed Event must have two different sides at the table. */
-function isOpposed(pairing: Pairing): boolean {
-  if (pairing.is_bye || pairing.attendees.length < 2) {
-    return true;
-  }
-
-  const [first, second] = pairing.attendees;
-
-  return first?.allegiance !== null && first?.allegiance !== second?.allegiance;
-}
-
 const unopposed = computed(() => event.value?.requires_allegiance !== true
   ? []
   : pairings.value.filter((pairing) => !isOpposed(pairing)));
+
+const opposes = computed(() => event.value?.requires_allegiance === true);
+
+/** The Game waiting for something to swap with. */
+const chosen = ref<number | null>(null);
+const swapping = ref(false);
+
+const chosenPairing = computed(() => pairings.value.find((pairing) => pairing.id === chosen.value) ?? null);
+
+const preview = computed(() => {
+  const first = chosenPairing.value;
+  const second = pairings.value.find((pairing) => pairing.id === partner.value) ?? null;
+
+  if (first === null || second === null) {
+    return null;
+  }
+
+  return previewSwap(first, second, opposes.value);
+});
+
+const partner = ref<number | null>(null);
+
+function choose(pairingId: number): void {
+  problem.value = null;
+
+  if (chosen.value === null) {
+    chosen.value = pairingId;
+
+    return;
+  }
+
+  if (chosen.value === pairingId) {
+    chosen.value = null;
+    partner.value = null;
+
+    return;
+  }
+
+  partner.value = pairingId;
+}
+
+function cancelSwap(): void {
+  chosen.value = null;
+  partner.value = null;
+}
+
+async function confirmSwap(): Promise<void> {
+  if (draft.value === null || chosen.value === null || partner.value === null) {
+    return;
+  }
+
+  swapping.value = true;
+  problem.value = null;
+
+  try {
+    await swapPairings(client, props.eventSlug, draft.value.id, [chosen.value, partner.value]);
+    await queryClient.invalidateQueries({ queryKey: keys.rounds(props.eventSlug) });
+    cancelSwap();
+  } catch (caught) {
+    // The API knows things one Round cannot show — that a Bye has to stay
+    // with the larger Allegiance, for one — so its refusal is the answer.
+    problem.value = caught instanceof ApiError ? caught.message : 'Those games could not be swapped.';
+  } finally {
+    swapping.value = false;
+  }
+}
+
+/** Victory points for a Bye, which has no opponent to agree them with. */
+const byeScores = ref<Record<number, string>>({});
+const scoringBye = ref<number | null>(null);
+
+/**
+ * The Byes whose points have been written.
+ *
+ * Entering a Bye's points changes nothing else on the screen — the win was
+ * counted when the Round was paired — so without saying so the save leaves no
+ * trace, and an Organiser walks away not knowing whether it took.
+ */
+const savedByes = ref<number[]>([]);
+
+async function scoreBye(pairing: Pairing): Promise<void> {
+  const attendee = pairing.attendees[0];
+
+  if (attendee === undefined) {
+    return;
+  }
+
+  scoringBye.value = pairing.id;
+  problem.value = null;
+  savedByes.value = savedByes.value.filter((id) => id !== pairing.id);
+
+  try {
+    await correctGameResult(client, props.eventSlug, pairing.id, {
+      [attendee.id]: { 'victory-points': Number(byeScores.value[pairing.id] ?? 0) },
+    });
+
+    await queryClient.invalidateQueries({ queryKey: keys.rounds(props.eventSlug) });
+    await queryClient.invalidateQueries({ queryKey: keys.standings(props.eventSlug) });
+    savedByes.value = [...savedByes.value, pairing.id];
+  } catch (caught) {
+    problem.value = caught instanceof ApiError ? caught.message : 'Those points could not be saved.';
+  } finally {
+    scoringBye.value = null;
+  }
+}
+
+/** Byes in the Round being played, which are what an Organiser has to score. */
+const byes = computed(() => (liveDetail.value?.games ?? []).filter((game) => game.is_bye));
 
 async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
   working.value = what;
@@ -212,6 +319,49 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
         </template>
       </section>
 
+      <!-- A Bye has nobody to agree a result with, so its Victory Points are
+           entered here. The win itself was awarded when the Round was paired. -->
+      <section
+        v-for="bye in byes"
+        :key="bye.id"
+        :data-testid="`bye-${bye.id}`"
+        class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+      >
+        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+          Bye · {{ bye.attendees[0]?.name }}
+        </h2>
+        <p class="text-sm text-ink-muted">
+          Counted as a win already. Enter the victory points they are credited with.
+        </p>
+
+        <div class="flex items-center gap-3">
+          <input
+            v-model="byeScores[bye.id]"
+            type="number"
+            inputmode="numeric"
+            :data-testid="`bye-score-${bye.id}`"
+            class="w-24 rounded-lg border border-border bg-surface-sunken px-3 py-2.5 text-right text-lg tabular-nums text-ink outline-none focus:border-accent"
+          >
+          <button
+            type="button"
+            :data-testid="`save-bye-${bye.id}`"
+            :disabled="scoringBye === bye.id"
+            class="flex-1 rounded-xl bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+            @click="scoreBye(bye)"
+          >
+            {{ scoringBye === bye.id ? 'Saving…' : 'Save points' }}
+          </button>
+        </div>
+
+        <p
+          v-if="savedByes.includes(bye.id)"
+          :data-testid="`bye-saved-${bye.id}`"
+          class="text-sm text-success"
+        >
+          Saved. They are counted in the standings.
+        </p>
+      </section>
+
       <section class="flex flex-col gap-3">
         <h2 class="text-sm uppercase tracking-widest text-ink-faint">
           {{ draft ? 'Ready to publish' : 'Next round' }}
@@ -281,8 +431,96 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
                 class="text-sm text-danger"
               >Rematch</span>
             </span>
+
+            <button
+              type="button"
+              :data-testid="`swap-${pairing.id}`"
+              class="shrink-0 self-center rounded-lg border px-3 py-2 text-sm"
+              :class="chosen === pairing.id ? 'border-accent text-accent' : 'border-border text-ink-muted'"
+              @click="choose(pairing.id)"
+            >
+              {{ chosen === pairing.id ? 'Chosen' : 'Swap' }}
+            </button>
           </li>
         </ul>
+
+        <p
+          v-if="chosen !== null && partner === null"
+          data-testid="swap-prompt"
+          class="text-sm text-ink-muted"
+        >
+          Now choose the game to swap it with.
+        </p>
+
+        <!-- What the swap would produce, before it is committed. -->
+        <section
+          v-if="preview"
+          data-testid="swap-preview"
+          class="flex flex-col gap-3 rounded-2xl border border-accent p-4"
+        >
+          <h3 class="text-sm uppercase tracking-widest text-ink-faint">
+            After the swap
+          </h3>
+
+          <p
+            v-if="!preview.ok"
+            data-testid="swap-impossible"
+            class="text-sm text-danger"
+          >
+            {{ preview.reason }}
+          </p>
+
+          <template v-else>
+            <div
+              v-for="game in preview.games"
+              :key="game.id"
+              :data-testid="`preview-${game.id}`"
+              class="flex items-start gap-3"
+            >
+              <span class="w-8 shrink-0 text-center text-lg font-bold tabular-nums text-accent">
+                {{ game.is_bye ? '—' : game.table_number }}
+              </span>
+              <span class="flex min-w-0 flex-1 flex-col gap-1">
+                <span
+                  v-for="attendee in game.attendees"
+                  :key="attendee.id"
+                  class="flex items-center justify-between gap-2"
+                >
+                  <span class="truncate text-ink">{{ attendee.name }}</span>
+                  <AllegianceBadge :allegiance="attendee.allegiance" />
+                </span>
+              </span>
+            </div>
+
+            <p
+              v-if="opposes && !preview.opposed"
+              data-testid="swap-unopposed"
+              class="text-sm text-danger"
+            >
+              This swap leaves a game that is not between opposed allegiances.
+            </p>
+          </template>
+
+          <div class="flex gap-3">
+            <button
+              type="button"
+              data-testid="confirm-swap"
+              :disabled="swapping || !preview.ok"
+              class="flex-1 rounded-xl bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+              @click="confirmSwap"
+            >
+              {{ swapping ? 'Swapping…' : 'Swap them' }}
+            </button>
+            <button
+              type="button"
+              data-testid="cancel-swap"
+              class="rounded-xl border border-border px-4 py-3 text-ink"
+              @click="cancelSwap"
+            >
+              Cancel
+            </button>
+          </div>
+        </section>
       </section>
 
       <p

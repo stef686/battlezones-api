@@ -85,3 +85,52 @@ test('a Player has no organiser screen to find', async ({ page }) => {
     await expect(page.getByTestId('generate-round')).toHaveCount(0);
     await expect(page.getByTestId('publish-round')).toHaveCount(0);
 });
+
+test('an Organiser swaps two pairings, seeing the result before committing', async ({ page }) => {
+    await logIn(page, ORGANISER);
+    await page.goto(`/events/${EVENT_SLUG}/organise`);
+
+    const before = page.locator('[data-testid^="review-"]').first();
+    await expect(before).toContainText('Ada Lovelace and partner');
+    await expect(before).toContainText('Grace Hopper and partner');
+
+    await page.locator('[data-testid^="swap-"]').first().click();
+    await expect(page.getByTestId('swap-prompt')).toBeVisible();
+
+    await page.locator('[data-testid^="swap-"]').nth(1).click();
+
+    // The consequence is shown before it is committed: table 12 keeps Ada and
+    // faces the other Traitor instead.
+    const preview = page.getByTestId('swap-preview');
+    await expect(preview).toContainText('Ada Lovelace and partner');
+    await expect(preview).toContainText('Konrad Curze and partner');
+    await expect(page.getByTestId('swap-unopposed')).toHaveCount(0);
+
+    await page.getByTestId('confirm-swap').click();
+    await expect(page.getByTestId('swap-preview')).toHaveCount(0);
+
+    // And the Round now says what the preview said it would.
+    const after = page.locator('[data-testid^="review-"]').first();
+    await expect(after).toContainText('Ada Lovelace and partner');
+    await expect(after).toContainText('Konrad Curze and partner');
+});
+
+test('an Organiser enters the victory points for a Bye', async ({ page }) => {
+    await logIn(page, ORGANISER);
+    await page.goto(`/events/${EVENT_SLUG}/organise`);
+
+    const bye = page.locator('[data-testid^="bye-"]').first();
+    await expect(bye).toContainText('Ferrus Manus and partner');
+    await expect(bye).toContainText('win');
+
+    await page.locator('[data-testid^="bye-score-"]').first().fill('60');
+    await page.locator('[data-testid^="save-bye-"]').first().click();
+    await expect(page.locator('[data-testid^="bye-saved-"]').first()).toBeVisible();
+
+    // A Bye counts as a win, so its holder carries match points in the
+    // standings whether or not anyone has entered its victory points.
+    await page.goto(`/events/${EVENT_SLUG}/standings`);
+    const row = page.locator('[data-testid^="standing-"]', { hasText: 'Ferrus Manus and partner' });
+    await expect(row.getByTestId('match-points')).toHaveText('3');
+    await expect(row.getByTestId('victory-points')).toHaveText('60');
+});

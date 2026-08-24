@@ -10,6 +10,7 @@ import { keys } from '@/api/keys';
 import { InMemoryTokenStorage } from '@/api/token-storage';
 import { useEventPulse } from '@/composables/useEventPulse';
 import { createAppRouter } from '@/router';
+import MyGameView from '@/views/MyGameView.vue';
 import RoundsView from '@/views/RoundsView.vue';
 import RoundView from '@/views/RoundView.vue';
 
@@ -302,5 +303,44 @@ describe('the pulse', () => {
 
         expect(view.get('[data-testid="polling"]').text()).toBe('true');
         expect(fetch).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('a Player with the bye', () => {
+    it('is told it counts as a win, and is offered nothing to submit', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/my-game`]: {
+                status: 200,
+                body: {
+                    data: {
+                        id: 21,
+                        table_number: null,
+                        is_bye: true,
+                        round: { id: 4, number: 2, name: 'Round 2' },
+                        result: { submitted_at: null, edited_at: null, is_flagged: false },
+                        attendees: [{ id: 9, name: 'Odd One Out', members: [], scores: {} }],
+                    },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mount(MyGameView as never, ({
+            props: { eventSlug: EVENT_SLUG },
+            global: { plugins: plugins() },
+        }) as never);
+        await flushPromises();
+
+        expect(view.get('[data-testid="bye-notice"]').text()).toContain('win');
+
+        // The API refuses a result for a Bye, so offering the form would be
+        // inviting the Player to fail.
+        expect(view.find('[data-testid="submit-result"]').exists()).toBe(false);
+        expect(view.find('[data-testid="my-score"]').exists()).toBe(false);
+        expect(view.find('[data-testid="opponent"]').exists()).toBe(false);
+
+        // No table to cross the hall to.
+        expect(view.get('[data-testid="table-number"]').text()).toBe('—');
     });
 });

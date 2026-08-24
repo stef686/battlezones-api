@@ -158,12 +158,20 @@ class Game extends Model
     }
 
     /**
+     * The Attendees at this table, in the order they were paired.
+     *
+     * Ordered rather than left to the database: pairing keeps each Game's
+     * first Attendee and exchanges the second (see SwapRoundPairings), so
+     * "first" and "second" have to mean the same thing to the action that
+     * swaps them and to the client previewing the swap.
+     *
      * @return BelongsToMany<EventAttendee, $this, GameAttendeePivot>
      */
     public function attendees(): BelongsToMany
     {
         return $this->belongsToMany(EventAttendee::class, 'game_attendee')
             ->using(GameAttendeePivot::class)
+            ->orderBy('game_attendee.id')
             ->withTimestamps();
     }
 }
