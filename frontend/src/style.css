@@ -1,34 +1,35 @@
 @import 'tailwindcss';
 
+/* Preline supplies the plugin variants (hs-*), the semantic token scale and
+   the utilities its markup is written against. The theme file below fills that
+   scale with our palette, so Preline blocks drop in unchanged. */
+@import 'preline/variants.css';
+@import 'preline/theme.css';
+@import './styles/themes/battlezones.css';
+
+/* Preline's plugin JS writes classes into the DOM that no source file names,
+   so Tailwind has to scan the shipped bundle to keep them. */
+@source '../node_modules/preline/dist/*.js';
+
 /*
- * Provisional visual direction.
+ * Dark is a class, not a media query. The app is dark-only — index.html hard
+ * codes `class="dark"` — but the variant has to exist for Preline's markup,
+ * which is written light-first with `dark:` overrides throughout.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Domain colour, which is ours rather than Preline's.
  *
- * The palette and type scale are settled in #99. Everything here is a token
- * and nothing outside this file names a colour, so that work is a change to
- * these values rather than a sweep through the components. Dark-only, which
- * is the stated direction: there is no light theme to keep in step.
+ * Allegiance is read across a dim hall, so the two sides are far apart in
+ * hue and in lightness — a Player squinting at a table list should not
+ * have to read the word to know which side a team is on.
  */
 @theme {
-    --color-surface: oklch(0.17 0.01 260);
-    --color-surface-raised: oklch(0.22 0.012 260);
-    --color-surface-sunken: oklch(0.13 0.01 260);
-    --color-border: oklch(0.32 0.014 260);
-    --color-ink: oklch(0.95 0.005 260);
-    --color-ink-muted: oklch(0.72 0.012 260);
-    --color-ink-faint: oklch(0.58 0.012 260);
-    --color-accent: oklch(0.72 0.15 55);
-    --color-accent-ink: oklch(0.17 0.01 260);
-    --color-danger: oklch(0.65 0.19 25);
-
-    /*
-     * Allegiance is read across a dim hall, so the two sides are far apart in
-     * hue and in lightness — a Player squinting at a table list should not
-     * have to read the word to know which side a team is on.
-     */
     --color-loyalist: oklch(0.74 0.13 240);
-    --color-loyalist-ink: oklch(0.17 0.01 260);
+    --color-loyalist-foreground: oklch(0.17 0.01 260);
     --color-traitor: oklch(0.68 0.17 30);
-    --color-traitor-ink: oklch(0.17 0.01 260);
+    --color-traitor-foreground: oklch(0.17 0.01 260);
     --color-success: oklch(0.72 0.15 150);
 
     /* The table number is read across a hall, so it gets its own step. */
@@ -38,8 +39,8 @@
 
 html,
 body {
-    background-color: var(--color-surface);
-    color: var(--color-ink);
+    background-color: var(--color-background-2);
+    color: var(--color-foreground);
     min-height: 100%;
 }
 

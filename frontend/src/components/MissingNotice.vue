@@ -14,12 +14,12 @@ withDefaults(defineProps<{ thing?: string }>(), { thing: 'page' });
 <template>
   <section
     data-testid="missing"
-    class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-6"
+    class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-6 shadow-2xs"
   >
-    <h1 class="text-xl font-semibold tracking-tight text-ink">
+    <h1 class="text-xl font-semibold tracking-tight text-foreground">
       Not found
     </h1>
-    <p class="text-ink-muted">
+    <p class="text-muted-foreground-1">
       We could not find that {{ thing }}. Check the link, or ask whoever sent it to you.
     </p>
   </section>

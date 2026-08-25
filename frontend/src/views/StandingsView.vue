@@ -35,72 +35,93 @@ function score(standing: Standing, slug: string): string {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 p-5">
-    <h1 class="text-xl font-semibold text-ink">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
+    <h1 class="text-xl font-semibold tracking-tight text-foreground">
       Standings
     </h1>
 
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading standings…
     </p>
     <p
       v-else-if="error"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
 
-    <table
+    <!-- The table scrolls inside its own card rather than the page: a long
+         Attendee name on a narrow phone must not push the whole screen
+         sideways. -->
+    <div
       v-else
-      data-testid="standings"
-      class="w-full border-collapse text-left"
+      class="overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs"
     >
-      <thead>
-        <tr class="text-xs uppercase tracking-widest text-ink-faint">
-          <th class="py-2 font-medium">
-            #
-          </th>
-          <th class="py-2 font-medium">
-            Attendee
-          </th>
-          <th class="py-2 text-right font-medium">
-            MP
-          </th>
-          <th class="py-2 text-right font-medium">
-            VP
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="standing in standings"
-          :key="standing.id"
-          class="border-t border-border"
-          :data-testid="`standing-${standing.attendee.id}`"
+      <div class="overflow-x-auto">
+        <table
+          data-testid="standings"
+          class="min-w-full divide-y divide-card-divider"
         >
-          <td class="py-3 tabular-nums text-ink-muted">
-            {{ standing.position }}
-          </td>
-          <td class="py-3 text-ink">
-            {{ standing.attendee.name }}
-          </td>
-          <td
-            class="py-3 text-right tabular-nums text-ink"
-            data-testid="match-points"
-          >
-            {{ score(standing, 'match-points') }}
-          </td>
-          <td
-            class="py-3 text-right tabular-nums text-ink"
-            data-testid="victory-points"
-          >
-            {{ score(standing, 'victory-points') }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <thead class="bg-card-header">
+            <tr class="text-start text-xs uppercase tracking-widest text-muted-foreground">
+              <th
+                scope="col"
+                class="px-4 py-3 text-start font-medium"
+              >
+                #
+              </th>
+              <th
+                scope="col"
+                class="px-4 py-3 text-start font-medium"
+              >
+                Attendee
+              </th>
+              <th
+                scope="col"
+                class="px-4 py-3 text-end font-medium"
+              >
+                MP
+              </th>
+              <th
+                scope="col"
+                class="px-4 py-3 text-end font-medium"
+              >
+                VP
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-card-divider">
+            <tr
+              v-for="standing in standings"
+              :key="standing.id"
+              :data-testid="`standing-${standing.attendee.id}`"
+            >
+              <td class="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-muted-foreground-1">
+                {{ standing.position }}
+              </td>
+              <td class="px-4 py-3 text-sm font-medium text-foreground">
+                {{ standing.attendee.name }}
+              </td>
+              <td
+                class="whitespace-nowrap px-4 py-3 text-end text-sm tabular-nums text-foreground"
+                data-testid="match-points"
+              >
+                {{ score(standing, 'match-points') }}
+              </td>
+              <td
+                class="whitespace-nowrap px-4 py-3 text-end text-sm tabular-nums text-foreground"
+                data-testid="victory-points"
+              >
+                {{ score(standing, 'victory-points') }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </main>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ChevronRightIcon } from '@heroicons/vue/24/outline';
 import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -40,22 +41,14 @@ function title(round: { number: number; name: string | null }): string {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 p-5">
-    <RouterLink
-      :to="{ name: 'event', params: { eventSlug: props.eventSlug } }"
-      data-testid="back-to-event"
-      class="text-sm text-ink-muted underline underline-offset-4"
-    >
-      Back to the event
-    </RouterLink>
-
-    <h1 class="text-2xl font-semibold tracking-tight text-ink">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
+    <h1 class="text-2xl font-bold tracking-tight text-foreground">
       Rounds
     </h1>
 
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading the rounds…
     </p>
@@ -68,7 +61,8 @@ function title(round: { number: number; name: string | null }): string {
     <p
       v-else-if="error"
       data-testid="rounds-error"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
@@ -76,14 +70,14 @@ function title(round: { number: number; name: string | null }): string {
     <p
       v-else-if="empty"
       data-testid="rounds-empty"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       No rounds yet. Pairings appear here the moment the first round is published.
     </p>
 
     <ul
       v-else
-      class="flex flex-col gap-2"
+      class="divide-y divide-card-divider overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs"
     >
       <li
         v-for="round in rounds"
@@ -92,15 +86,15 @@ function title(round: { number: number; name: string | null }): string {
         <RouterLink
           :to="{ name: 'round', params: { eventSlug: props.eventSlug, roundId: round.id } }"
           :data-testid="`round-${round.id}`"
-          class="flex items-center justify-between gap-3 rounded-2xl bg-surface-raised px-4 py-3.5"
-          :class="round.id === currentRound?.id ? 'ring-1 ring-accent' : ''"
+          class="flex items-center justify-between gap-3 px-4 py-3.5 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
+          :class="round.id === currentRound?.id ? 'bg-primary/10' : ''"
         >
-          <span class="text-lg font-semibold text-ink">{{ title(round) }}</span>
+          <span class="text-lg font-semibold text-foreground">{{ title(round) }}</span>
 
           <span
             v-if="round.id === currentRound?.id"
             data-testid="now-playing"
-            class="rounded-md bg-accent px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-accent-ink"
+            class="inline-flex items-center rounded-full bg-primary px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-primary-foreground"
           >
             Now
           </span>
@@ -109,10 +103,14 @@ function title(round: { number: number; name: string | null }): string {
           <span
             v-else-if="round.status === 'draft'"
             data-testid="draft-badge"
-            class="rounded-md border border-border px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-ink-faint"
+            class="inline-flex items-center rounded-full border border-border px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-muted-foreground-1"
           >
             Draft
           </span>
+          <ChevronRightIcon
+            v-else
+            class="size-4 shrink-0 text-muted-foreground"
+          />
         </RouterLink>
       </li>
     </ul>

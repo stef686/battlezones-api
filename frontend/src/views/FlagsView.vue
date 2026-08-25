@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -9,6 +10,8 @@ import { fetchEvent } from '@/api/events';
 import { fetchFlags, resolveFlag, type ResultFlag } from '@/api/flags';
 import { keys } from '@/api/keys';
 import { correctGameResult, type Scores } from '@/api/results';
+import AppAlert from '@/components/AppAlert.vue';
+import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -128,10 +131,10 @@ function title(flag: ResultFlag): string {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 p-5">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
     <p
       v-if="eventPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading…
     </p>
@@ -145,45 +148,47 @@ function title(flag: ResultFlag): string {
       <RouterLink
         :to="{ name: 'organise', params: { eventSlug: props.eventSlug } }"
         data-testid="back-to-organise"
-        class="text-sm text-ink-muted underline underline-offset-4"
+        class="inline-flex items-center gap-x-1 self-start text-sm font-medium text-muted-foreground-1 hover:text-foreground focus:text-foreground focus:outline-hidden"
       >
+        <ChevronLeftIcon
+          class="size-4 shrink-0"
+        />
         Back to running the event
       </RouterLink>
 
-      <header class="flex flex-col gap-1">
-        <p class="text-sm uppercase tracking-widest text-ink-faint">
+      <header>
+        <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ event.name }}
         </p>
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-foreground">
           Disputed results
         </h1>
       </header>
 
-      <p
+      <AppAlert
         v-if="queue.length === 0"
         data-testid="no-flags"
-        class="rounded-2xl bg-surface-raised p-5 text-ink-muted"
       >
         Nothing is disputed. Flagged results turn up here.
-      </p>
+      </AppAlert>
 
       <section
         v-for="queued in queue"
         :key="queued.id"
         :data-testid="`flag-${queued.id}`"
-        class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+        class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
       >
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ title(queued) }} · Table {{ queued.game?.table_number }}
         </h2>
 
         <p
           v-if="queued.reason"
-          class="text-ink"
+          class="text-sm text-foreground"
         >
           “{{ queued.reason }}”
         </p>
-        <p class="text-sm text-ink-muted">
+        <p class="text-sm text-muted-foreground-1">
           Flagged by {{ queued.flagged_by.name }}
         </p>
 
@@ -192,46 +197,45 @@ function title(flag: ResultFlag): string {
           :key="side.id"
           class="flex items-center justify-between gap-4"
         >
-          <span class="min-w-0 flex-1 truncate text-ink">{{ side.name }}</span>
+          <span class="min-w-0 flex-1 truncate text-sm text-foreground">{{ side.name }}</span>
           <input
             v-model="corrections[side.id]"
             type="number"
             inputmode="numeric"
             :data-testid="`flag-score-${side.id}`"
-            class="w-24 rounded-lg border border-border bg-surface-sunken px-3 py-2.5 text-right text-lg tabular-nums text-ink outline-none focus:border-accent"
+            class="w-24 shrink-0 rounded-lg border border-border bg-background-2 px-3 py-2.5 text-right text-lg tabular-nums text-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden"
           >
         </label>
 
-        <button
-          type="button"
+        <AppButton
           :data-testid="`correct-flag-${queued.id}`"
           :disabled="working === queued.id"
-          class="rounded-xl bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+          block
           @click="correct(queued)"
         >
           {{ working === queued.id ? 'Saving…' : 'Correct and resolve' }}
-        </button>
+        </AppButton>
 
         <!-- A flag can be right about there being a dispute and wrong about
              the score, so clearing one is not the same as changing it. -->
-        <button
-          type="button"
+        <AppButton
           :data-testid="`dismiss-flag-${queued.id}`"
+          variant="secondary"
           :disabled="working === queued.id"
-          class="rounded-xl border border-border px-4 py-3 text-ink disabled:opacity-60"
+          block
           @click="dismiss(queued)"
         >
           The result was right
-        </button>
+        </AppButton>
       </section>
 
-      <p
+      <AppAlert
         v-if="problem"
         data-testid="flags-problem"
-        class="text-danger"
+        tone="error"
       >
         {{ problem }}
-      </p>
+      </AppAlert>
     </template>
   </main>
 </template>

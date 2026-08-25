@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 import { DEVICE_NAME, useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { enterWithInvite, fetchInvite } from '@/api/invites';
+import AppButton from '@/components/AppButton.vue';
+import AuthCard from '@/components/AuthCard.vue';
 import { formatDateRange } from '@/lib/dates';
 import { useSessionStore } from '@/stores/session';
 
@@ -82,110 +84,117 @@ function claim(): void {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center gap-8 p-6">
-    <p
-      v-if="isPending"
-      class="text-ink-muted"
-    >
+  <AuthCard
+    v-if="isPending"
+    title="Battlezones"
+  >
+    <p class="text-center text-sm text-muted-foreground-1">
       Opening your invitation…
     </p>
+  </AuthCard>
 
-    <template v-else-if="dead">
-      <header class="flex flex-col gap-2">
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
-          This invitation has run out
-        </h1>
-        <p
-          data-testid="invite-dead"
-          class="text-ink-muted"
-        >
-          {{ dead }}
-        </p>
-      </header>
-
-      <RouterLink
-        :to="{ name: 'login' }"
-        data-testid="invite-login-link"
-        class="rounded-lg bg-accent px-4 py-3 text-center font-semibold text-accent-ink"
-      >
-        Log in
-      </RouterLink>
-    </template>
-
+  <AuthCard
+    v-else-if="dead"
+    title="This invitation has run out"
+  >
     <p
-      v-else-if="error"
+      data-testid="invite-dead"
+      class="text-sm text-muted-foreground-1"
+    >
+      {{ dead }}
+    </p>
+
+    <AppButton
+      :to="{ name: 'login' }"
+      data-testid="invite-login-link"
+      block
+      class="mt-6"
+    >
+      Log in
+    </AppButton>
+  </AuthCard>
+
+  <AuthCard
+    v-else-if="error"
+    title="Battlezones"
+  >
+    <p
       data-testid="invite-error"
-      class="text-danger"
+      role="alert"
+      class="text-sm text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
+  </AuthCard>
 
-    <template v-else-if="invite">
-      <header class="flex flex-col gap-2">
-        <p class="text-sm uppercase tracking-widest text-ink-faint">
-          You are invited to
-        </p>
-        <h1
-          data-testid="invite-event"
-          class="text-2xl font-semibold tracking-tight text-ink"
-        >
-          {{ invite.event.name }}
-        </h1>
-        <p
-          v-if="dates"
-          data-testid="invite-dates"
-          class="text-ink-muted"
-        >
-          {{ dates }}
-        </p>
-      </header>
-
-      <section class="flex flex-col gap-1 rounded-2xl bg-surface-raised p-5">
-        <p class="text-sm text-ink-faint">
-          Invitation sent to
-        </p>
-        <p
-          data-testid="invite-email"
-          class="text-ink"
-        >
-          {{ invite.email }}
-        </p>
-        <p
-          data-testid="invite-role"
-          class="mt-2 text-sm text-ink-muted"
-        >
-          You are joining as {{ invite.role }}.
-        </p>
-      </section>
-
-      <div class="flex flex-col gap-3">
-        <button
-          type="button"
-          data-testid="enter-with-invite"
-          :disabled="entering"
-          class="rounded-lg bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
-          @click="enter"
-        >
-          {{ entering ? 'Entering…' : 'Enter the event' }}
-        </button>
-
-        <button
-          type="button"
-          data-testid="claim-from-invite"
-          class="text-ink-muted underline underline-offset-4"
-          @click="claim"
-        >
-          Set a password now
-        </button>
-      </div>
-
+  <AuthCard
+    v-else-if="invite"
+    title="You are invited"
+  >
+    <!-- Whose Event it is, and which address it was sent to, before anything
+         is asked of the reader: somebody handed a link needs to recognise it
+         before they will type a password into it. -->
+    <div class="mb-4 text-center">
       <p
-        v-if="problem"
-        data-testid="invite-problem"
-        class="text-danger"
+        data-testid="invite-event"
+        class="text-lg font-semibold text-foreground"
       >
-        {{ problem }}
+        {{ invite.event.name }}
       </p>
-    </template>
-  </main>
+      <p
+        v-if="dates"
+        data-testid="invite-dates"
+        class="mt-1 text-sm text-muted-foreground-1"
+      >
+        {{ dates }}
+      </p>
+    </div>
+
+    <div class="rounded-lg border border-border p-4">
+      <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+        Invitation sent to
+      </p>
+      <p
+        data-testid="invite-email"
+        class="mt-1 text-sm text-foreground"
+      >
+        {{ invite.email }}
+      </p>
+      <p
+        data-testid="invite-role"
+        class="mt-2 text-sm text-muted-foreground-1"
+      >
+        You are joining as {{ invite.role }}.
+      </p>
+    </div>
+
+    <div class="mt-6 grid gap-3">
+      <AppButton
+        data-testid="enter-with-invite"
+        :disabled="entering"
+        block
+        @click="enter"
+      >
+        {{ entering ? 'Entering…' : 'Enter the event' }}
+      </AppButton>
+
+      <AppButton
+        data-testid="claim-from-invite"
+        variant="ghost"
+        block
+        @click="claim"
+      >
+        Set a password now
+      </AppButton>
+    </div>
+
+    <p
+      v-if="problem"
+      data-testid="invite-problem"
+      role="alert"
+      class="mt-4 text-sm text-destructive"
+    >
+      {{ problem }}
+    </p>
+  </AuthCard>
 </template>

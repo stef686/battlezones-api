@@ -8,6 +8,7 @@ import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import { closePoll, fetchPolls, fetchResults, openPoll, type Poll, type PollResults } from '@/api/polls';
+import AppButton from '@/components/AppButton.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -105,22 +106,14 @@ function isOver(poll: Poll): boolean {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 p-5">
-    <RouterLink
-      :to="{ name: 'event', params: { eventSlug: props.eventSlug } }"
-      data-testid="back-to-event"
-      class="text-sm text-ink-muted underline underline-offset-4"
-    >
-      Back to the event
-    </RouterLink>
-
-    <h1 class="text-2xl font-semibold tracking-tight text-ink">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
+    <h1 class="text-2xl font-bold tracking-tight text-foreground">
       Votes
     </h1>
 
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading the votes…
     </p>
@@ -128,7 +121,8 @@ function isOver(poll: Poll): boolean {
     <p
       v-else-if="error"
       data-testid="polls-error"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
@@ -136,7 +130,7 @@ function isOver(poll: Poll): boolean {
     <p
       v-else-if="list.length === 0"
       data-testid="polls-empty"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       This event is not running any votes.
     </p>
@@ -148,79 +142,86 @@ function isOver(poll: Poll): boolean {
       <li
         v-for="entry in list"
         :key="entry.id"
+        class="overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs"
       >
+        <!-- A Poll nobody may vote in is still worth reading, so the row is
+             only a link when there is somewhere for it to go. -->
         <component
           :is="mayVote(entry) ? RouterLink : 'div'"
           v-bind="mayVote(entry) ? { to: { name: 'poll', params: { eventSlug: props.eventSlug, pollId: entry.id } } } : {}"
           :data-testid="`poll-${entry.id}`"
-          class="flex items-center justify-between gap-3 rounded-2xl bg-surface-raised px-4 py-3.5"
+          class="flex items-center justify-between gap-3 px-4 py-3.5"
+          :class="mayVote(entry) ? 'hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden' : ''"
         >
           <span class="flex min-w-0 flex-col gap-0.5">
-            <span class="truncate text-lg font-semibold text-ink">{{ entry.name }}</span>
-            <span class="text-sm text-ink-faint">{{ entry.votes_per_player }} pick{{ entry.votes_per_player === 1 ? '' : 's' }}</span>
+            <span class="truncate text-base font-semibold text-foreground">{{ entry.name }}</span>
+            <span class="text-sm text-muted-foreground">{{ entry.votes_per_player }} pick{{ entry.votes_per_player === 1 ? '' : 's' }}</span>
           </span>
           <span
-            class="shrink-0 text-sm"
-            :class="mayVote(entry) ? 'text-accent' : 'text-ink-faint'"
+            class="shrink-0 text-sm font-medium"
+            :class="mayVote(entry) ? 'text-primary' : 'text-muted-foreground'"
           >{{ state(entry) }}</span>
         </component>
 
         <div
           v-if="mayOrganise"
-          class="mt-2 flex flex-col gap-2"
+          class="flex flex-col gap-2 border-t border-card-divider bg-card-footer px-4 py-3"
         >
-          <button
+          <AppButton
             v-if="!entry.is_open"
-            type="button"
             :data-testid="`open-poll-${entry.id}`"
+            variant="secondary"
+            size="sm"
             :disabled="working === entry.id"
-            class="self-start rounded-lg border border-border px-3 py-2 text-sm text-ink disabled:opacity-60"
+            class="self-start"
             @click="toggleOpen(entry)"
           >
             Open voting
-          </button>
-          <button
+          </AppButton>
+          <AppButton
             v-else
-            type="button"
             :data-testid="`close-poll-${entry.id}`"
+            variant="secondary"
+            size="sm"
             :disabled="working === entry.id"
-            class="self-start rounded-lg border border-border px-3 py-2 text-sm text-ink disabled:opacity-60"
+            class="self-start"
             @click="toggleOpen(entry)"
           >
             Close voting
-          </button>
+          </AppButton>
 
-          <button
+          <AppButton
             v-if="isOver(entry) && results[entry.id] === undefined"
-            type="button"
             :data-testid="`show-results-${entry.id}`"
+            variant="secondary"
+            size="sm"
             :disabled="working === entry.id"
-            class="self-start rounded-lg border border-border px-3 py-2 text-sm text-ink disabled:opacity-60"
+            class="self-start"
             @click="showResults(entry)"
           >
             Read the tallies
-          </button>
+          </AppButton>
 
           <!-- Ties come back unresolved, and are left that way: which of two
                equal armies wins is a judgement made in the room. -->
           <ol
             v-if="results[entry.id]"
             :data-testid="`results-${entry.id}`"
-            class="flex flex-col gap-1 rounded-xl bg-surface-sunken p-4"
+            class="flex flex-col gap-1 rounded-lg bg-background-2 p-4"
           >
             <li
               v-for="tally in results[entry.id]?.tallies ?? []"
               :key="tally.attendee.id"
               class="flex items-baseline justify-between gap-3 text-sm"
             >
-              <span class="min-w-0 truncate text-ink">
+              <span class="min-w-0 truncate text-foreground">
                 {{ tally.attendee.display_number ? `${tally.attendee.display_number}. ` : '' }}{{ tally.attendee.name }}
               </span>
-              <span class="tabular-nums text-ink-muted">{{ tally.votes }}</span>
+              <span class="tabular-nums text-muted-foreground-1">{{ tally.votes }}</span>
             </li>
             <li
               v-if="(results[entry.id]?.tallies ?? []).length === 0"
-              class="text-sm text-ink-faint"
+              class="text-sm text-muted-foreground"
             >
               Nobody voted.
             </li>
@@ -232,7 +233,8 @@ function isOver(poll: Poll): boolean {
     <p
       v-if="problem"
       data-testid="polls-problem"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ problem }}
     </p>

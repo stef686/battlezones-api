@@ -5,6 +5,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | Applies to | Rule file |
 | --- | --- |
 | app/** | .ai/rules/app.md |
+| frontend/src/components/** | .ai/rules/components.md |
 | frontend/src/composables/** | .ai/rules/composables.md |
 | app/Http/Controllers/** | .ai/rules/controllers.md |
 | app/Http/Controllers/Events/** | .ai/rules/events.md |
@@ -13,4 +14,5 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Policies/** | .ai/rules/policies.md |
 | app/Queries/** | .ai/rules/queries.md |
 | frontend/src/router/** | .ai/rules/router.md |
+| frontend/src/** | .ai/rules/src.md |
 | frontend/src/views/** | .ai/rules/views.md |

@@ -179,7 +179,7 @@ describe('casting a ballot', () => {
 
         // What they last sent, back on the screen: revising is the same act
         // as voting, so it cannot start from blank.
-        expect(view.get('[data-testid="pick-22"]').classes().join(' ')).toContain('border-accent');
+        expect(view.get('[data-testid="pick-22"]').classes().join(' ')).toContain('border-primary');
 
         await view.get('[data-testid="pick-21"]').trigger('click');
         await view.get('[data-testid="save-ballot"]').trigger('click');
@@ -201,7 +201,7 @@ describe('casting a ballot', () => {
         await view.get('[data-testid="pick-23"]').trigger('click');
         await flushPromises();
 
-        expect(view.get('[data-testid="pick-23"]').classes().join(' ')).not.toContain('border-accent');
+        expect(view.get('[data-testid="pick-23"]').classes().join(' ')).not.toContain('border-primary');
         expect(view.get('[data-testid="picks-left"]').text()).toContain('0');
     });
 

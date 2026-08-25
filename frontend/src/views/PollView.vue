@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -9,6 +10,8 @@ import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import { fetchCandidates, fetchPolls, replaceBallot } from '@/api/polls';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
+import AppAlert from '@/components/AppAlert.vue';
+import AppButton from '@/components/AppButton.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 
 const props = defineProps<{ eventSlug: string; pollId: string }>();
@@ -110,31 +113,34 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 p-5">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
     <RouterLink
       :to="{ name: 'polls', params: { eventSlug: props.eventSlug } }"
       data-testid="back-to-polls"
-      class="text-sm text-ink-muted underline underline-offset-4"
+      class="inline-flex items-center gap-x-1 self-start text-sm font-medium text-muted-foreground-1 hover:text-foreground focus:text-foreground focus:outline-hidden"
     >
+      <ChevronLeftIcon
+        class="size-4 shrink-0"
+      />
       Back to the votes
     </RouterLink>
 
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading the vote…
     </p>
 
     <template v-else-if="poll">
-      <header class="flex flex-col gap-1">
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
+      <header>
+        <h1 class="text-2xl font-bold tracking-tight text-foreground">
           {{ poll.name }}
         </h1>
         <p
           v-if="open"
           data-testid="picks-left"
-          class="text-sm text-ink-muted"
+          class="mt-1 text-sm text-muted-foreground-1"
         >
           {{ left }} of {{ limit }} pick{{ limit === 1 ? '' : 's' }} left.
         </p>
@@ -142,13 +148,12 @@ async function save(): Promise<void> {
 
       <!-- Shut is said plainly, and with which kind of shut it is: a Poll
            that has not opened yet is not the same news as one that is over. -->
-      <p
+      <AppAlert
         v-if="!open"
         data-testid="poll-shut"
-        class="rounded-2xl bg-surface-raised p-5 text-ink-muted"
       >
         {{ poll.closes_at ? 'Voting is closed. The winners are announced in the room.' : 'Voting is not open to you yet.' }}
-      </p>
+      </AppAlert>
 
       <template v-else>
         <ul class="flex flex-col gap-3">
@@ -159,13 +164,14 @@ async function save(): Promise<void> {
             <button
               type="button"
               :data-testid="`pick-${candidate.id}`"
-              class="flex w-full items-center justify-between gap-3 rounded-2xl border bg-surface-raised px-4 py-3.5 text-left"
-              :class="picked(candidate.id) ? 'border-accent' : 'border-transparent'"
+              :aria-pressed="picked(candidate.id)"
+              class="flex w-full items-center justify-between gap-3 rounded-xl border bg-card px-4 py-3.5 text-left shadow-2xs hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
+              :class="picked(candidate.id) ? 'border-primary' : 'border-card-line'"
               @click="toggle(candidate.id)"
             >
               <span class="flex min-w-0 flex-col gap-0.5">
-                <span class="truncate text-lg text-ink">{{ candidate.name }}</span>
-                <span class="truncate text-sm text-ink-faint">
+                <span class="truncate text-base font-semibold text-foreground">{{ candidate.name }}</span>
+                <span class="truncate text-sm text-muted-foreground">
                   {{ candidate.members.map((member) => member.faction?.name).filter(Boolean).join(' · ') }}
                 </span>
               </span>
@@ -177,36 +183,35 @@ async function save(): Promise<void> {
         <p
           v-if="(candidates ?? []).length === 0"
           data-testid="no-candidates"
-          class="text-ink-muted"
+          class="text-muted-foreground-1"
         >
           There is nobody to pick yet.
         </p>
 
-        <button
-          type="button"
+        <AppButton
           data-testid="save-ballot"
           :disabled="saving"
-          class="rounded-xl bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+          block
           @click="save"
         >
           {{ saving ? 'Sending…' : 'Save my votes' }}
-        </button>
+        </AppButton>
 
-        <p
+        <AppAlert
           v-if="saved"
           data-testid="ballot-saved"
-          class="text-success"
+          tone="success"
         >
           Saved. You can change them while voting is open.
-        </p>
+        </AppAlert>
 
-        <p
+        <AppAlert
           v-if="problem"
           data-testid="ballot-problem"
-          class="text-danger"
+          tone="error"
         >
           {{ problem }}
-        </p>
+        </AppAlert>
       </template>
     </template>
   </main>

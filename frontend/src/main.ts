@@ -4,10 +4,20 @@ import { createApp } from 'vue';
 
 import { createApiClient } from '@/api';
 import App from '@/App.vue';
+import { usePrelineInit } from '@/composables/usePrelineInit';
 import { createAppRouter } from '@/router';
 import { useSessionStore } from '@/stores/session';
 
 import './style.css';
+
+// Side-effect imports: each bundle publishes its plugin onto `window` and
+// scans the document once. Every navigation after that is `usePrelineInit`'s
+// job, and the list there has to stay in step with the list here.
+import 'preline/plugins/collapse';
+import 'preline/plugins/dropdown';
+import 'preline/plugins/overlay';
+import 'preline/plugins/tabs';
+import 'preline/plugins/tooltip';
 
 const app = createApp(App);
 const router = createAppRouter();
@@ -15,6 +25,9 @@ const pinia = createPinia();
 
 app.use(pinia);
 app.use(router);
+
+usePrelineInit(router);
+
 app.use(VueQueryPlugin, {
     queryClientConfig: {
         defaultOptions: {

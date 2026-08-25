@@ -53,7 +53,7 @@ test('a vote is opened, cast in, closed, and counted', async ({ page, browser })
 
     // Their ballot comes back with them, because revising it is the same act.
     await page.reload();
-    await expect(page.locator('[data-testid^="pick-"]').first()).toHaveClass(/border-accent/);
+    await expect(page.locator('[data-testid^="pick-"]').first()).toHaveClass(/border-primary/);
 
     // A Player enters their own army so it can be voted for in turn.
     await page.goto(`/events/${EVENT_SLUG}/my-team`);

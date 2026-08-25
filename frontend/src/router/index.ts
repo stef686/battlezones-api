@@ -8,6 +8,12 @@ declare module 'vue-router' {
         /** Readable without a session at all. */
         public?: boolean;
         /**
+         * Drawn inside the app shell. Off for the screens that are reached
+         * with a credential in the URL rather than from inside an Event:
+         * there is no Event to head, and a session to name only afterwards.
+         */
+        chrome?: boolean;
+        /**
          * Reachable by an unclaimed session wherever it is, because it is part
          * of getting a password onto the account rather than a place to roam.
          */
@@ -31,13 +37,13 @@ const routes: RouteRecordRaw[] = [
         path: '/login',
         name: 'login',
         component: () => import('@/views/LoginView.vue'),
-        meta: { public: true, unclaimed: true },
+        meta: { public: true, unclaimed: true, chrome: false },
     },
     {
         path: '/forgot-password',
         name: 'forgot-password',
         component: () => import('@/views/ForgotPasswordView.vue'),
-        meta: { public: true, unclaimed: true },
+        meta: { public: true, unclaimed: true, chrome: false },
     },
     {
         // The API mails this one with `?token=&email=`, so the path carries no
@@ -45,7 +51,7 @@ const routes: RouteRecordRaw[] = [
         path: '/reset-password',
         name: 'reset-password',
         component: () => import('@/views/ResetPasswordView.vue'),
-        meta: { public: true, unclaimed: true },
+        meta: { public: true, unclaimed: true, chrome: false },
     },
     {
         // Top-level and stable: an Invite link has to survive being emailed,
@@ -55,7 +61,7 @@ const routes: RouteRecordRaw[] = [
         name: 'invite',
         component: () => import('@/views/InviteView.vue'),
         props: true,
-        meta: { public: true, unclaimed: true },
+        meta: { public: true, unclaimed: true, chrome: false },
     },
     {
         // Emailed after the Event, opened on a device that may never have
@@ -65,13 +71,13 @@ const routes: RouteRecordRaw[] = [
         name: 'feedback',
         component: () => import('@/views/FeedbackView.vue'),
         props: true,
-        meta: { public: true, unclaimed: true },
+        meta: { public: true, unclaimed: true, chrome: false },
     },
     {
         path: '/claim',
         name: 'claim',
         component: () => import('@/views/ClaimView.vue'),
-        meta: { public: true, unclaimed: true },
+        meta: { public: true, unclaimed: true, chrome: false },
     },
     {
         path: '/events/:eventSlug',

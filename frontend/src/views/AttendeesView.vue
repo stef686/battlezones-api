@@ -9,6 +9,7 @@ import { fetchAttendees } from '@/api/events';
 import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
+import AppButton from '@/components/AppButton.vue';
 import TextField from '@/components/TextField.vue';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -40,23 +41,15 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 p-5">
-    <RouterLink
-      :to="{ name: 'event', params: { eventSlug: props.eventSlug } }"
-      data-testid="back-to-event"
-      class="text-sm text-ink-muted underline underline-offset-4"
-    >
-      Back to the event
-    </RouterLink>
-
-    <header class="flex flex-col gap-1">
-      <h1 class="text-2xl font-semibold tracking-tight text-ink">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
+    <header>
+      <h1 class="text-2xl font-bold tracking-tight text-foreground">
         Who is here
       </h1>
       <p
         v-if="meta"
         data-testid="attendee-total"
-        class="text-sm text-ink-muted"
+        class="mt-1 text-sm text-muted-foreground-1"
       >
         {{ meta.total }} {{ meta.total === 1 ? 'team' : 'teams' }}
       </p>
@@ -77,7 +70,7 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
 
       <p
         v-if="isPending"
-        class="text-ink-muted"
+        class="text-muted-foreground-1"
       >
         Loading…
       </p>
@@ -85,7 +78,8 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
       <p
         v-else-if="error"
         data-testid="attendees-error"
-        class="text-danger"
+        role="alert"
+        class="text-destructive"
       >
         {{ (error as ApiError).message }}
       </p>
@@ -93,14 +87,14 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
       <p
         v-else-if="empty"
         data-testid="attendees-empty"
-        class="text-ink-muted"
+        class="text-muted-foreground-1"
       >
         Nobody matches that.
       </p>
 
       <ul
         v-else
-        class="flex flex-col gap-2"
+        class="divide-y divide-card-divider overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs"
       >
         <li
           v-for="attendee in attendees"
@@ -109,11 +103,11 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
           <RouterLink
             :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: attendee.id } }"
             :data-testid="`attendee-${attendee.id}`"
-            class="flex items-center justify-between gap-3 rounded-2xl bg-surface-raised px-4 py-3.5"
+            class="flex items-center justify-between gap-3 px-4 py-3.5 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
           >
             <span class="flex min-w-0 flex-col">
-              <span class="truncate text-lg font-semibold text-ink">{{ attendee.name }}</span>
-              <span class="truncate text-sm text-ink-faint">
+              <span class="truncate text-base font-semibold text-foreground">{{ attendee.name }}</span>
+              <span class="truncate text-sm text-muted-foreground">
                 {{ attendee.members.map((member) => member.name).join(' & ') }}
               </span>
             </span>
@@ -126,33 +120,34 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
       <nav
         v-if="meta && meta.last_page > 1"
         class="flex items-center justify-between gap-3"
+        aria-label="Pagination"
       >
-        <button
-          type="button"
+        <AppButton
           data-testid="previous-page"
+          variant="secondary"
+          size="sm"
           :disabled="meta.current_page <= 1"
-          class="rounded-lg border border-border px-4 py-2.5 text-ink disabled:opacity-40"
           @click="page = Math.max(1, page - 1)"
         >
           Previous
-        </button>
+        </AppButton>
 
         <span
           data-testid="page-position"
-          class="text-sm text-ink-muted"
+          class="text-sm text-muted-foreground-1"
         >
           Page {{ meta.current_page }} of {{ meta.last_page }}
         </span>
 
-        <button
-          type="button"
+        <AppButton
           data-testid="next-page"
+          variant="secondary"
+          size="sm"
           :disabled="meta.current_page >= meta.last_page"
-          class="rounded-lg border border-border px-4 py-2.5 text-ink disabled:opacity-40"
           @click="page = page + 1"
         >
           Next
-        </button>
+        </AppButton>
       </nav>
     </template>
   </main>

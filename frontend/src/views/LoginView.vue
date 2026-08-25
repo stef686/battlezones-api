@@ -4,6 +4,9 @@ import { RouterLink, useRoute, useRouter } from 'vue-router';
 
 import { DEVICE_NAME, useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
+import AppAlert from '@/components/AppAlert.vue';
+import AppButton from '@/components/AppButton.vue';
+import AuthCard from '@/components/AuthCard.vue';
 import TextField from '@/components/TextField.vue';
 import { LANDING_EVENT_SLUG } from '@/router';
 import { useSessionStore } from '@/stores/session';
@@ -49,26 +52,21 @@ async function submit(): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center gap-8 p-6">
-    <header>
-      <h1 class="text-2xl font-semibold tracking-tight text-ink">
-        Battlezones
-      </h1>
-      <p class="mt-1 text-sm text-ink-muted">
-        Log in to see your game.
-      </p>
-    </header>
-
-    <p
+  <AuthCard
+    title="Battlezones"
+    subtitle="Log in to see your game."
+  >
+    <AppAlert
       v-if="afterReset"
       data-testid="password-was-reset"
-      class="rounded-2xl bg-surface-raised p-5 text-success"
+      tone="success"
+      class="mb-4"
     >
       Your password has been reset. Log in with it to carry on.
-    </p>
+    </AppAlert>
 
     <form
-      class="flex flex-col gap-4"
+      class="grid gap-4"
       novalidate
       @submit.prevent="submit"
     >
@@ -94,27 +92,31 @@ async function submit(): Promise<void> {
       <p
         v-if="error && error.kind !== 'validation'"
         data-testid="login-error"
-        class="text-sm text-danger"
+        role="alert"
+        class="text-sm text-destructive"
       >
         {{ error.message }}
       </p>
 
-      <button
+      <AppButton
         type="submit"
         data-testid="submit-login"
         :disabled="submitting"
-        class="mt-2 rounded-lg bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+        block
+        class="mt-2"
       >
         {{ submitting ? 'Logging in…' : 'Log in' }}
-      </button>
+      </AppButton>
     </form>
 
-    <RouterLink
-      :to="{ name: 'forgot-password' }"
-      data-testid="forgot-password-link"
-      class="text-center text-ink-muted underline underline-offset-4"
-    >
-      I have forgotten my password
-    </RouterLink>
-  </main>
+    <template #footer>
+      <RouterLink
+        :to="{ name: 'forgot-password' }"
+        data-testid="forgot-password-link"
+        class="text-sm font-medium text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
+      >
+        I have forgotten my password
+      </RouterLink>
+    </template>
+  </AuthCard>
 </template>

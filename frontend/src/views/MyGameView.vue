@@ -9,6 +9,8 @@ import { fetchEvent } from '@/api/events';
 import { flagResult } from '@/api/flags';
 import { keys } from '@/api/keys';
 import { submitResult, type Game, type Scores } from '@/api/results';
+import AppAlert from '@/components/AppAlert.vue';
+import AppButton from '@/components/AppButton.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 import { useSessionStore } from '@/stores/session';
 
@@ -110,10 +112,10 @@ async function submit(): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 p-5">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-6 p-5">
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading your game…
     </p>
@@ -121,7 +123,8 @@ async function submit(): Promise<void> {
     <p
       v-else-if="error"
       data-testid="my-game-error"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
@@ -129,7 +132,7 @@ async function submit(): Promise<void> {
     <p
       v-else-if="game === null"
       data-testid="no-game"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       No game yet. The next round has not been published.
     </p>
@@ -137,13 +140,13 @@ async function submit(): Promise<void> {
     <template v-else>
       <!-- The table number is what a Player is looking for across a hall,
            so it is the screen rather than a line on it. -->
-      <section class="rounded-2xl bg-surface-raised px-6 py-8 text-center">
-        <p class="text-sm uppercase tracking-widest text-ink-faint">
+      <section class="rounded-xl border border-card-line bg-card px-6 py-8 text-center shadow-2xs">
+        <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ game.round.name ?? `Round ${game.round.number}` }} · {{ isBye ? 'No table' : 'Table' }}
         </p>
         <p
           data-testid="table-number"
-          class="mt-2 text-hall font-bold tabular-nums text-accent"
+          class="mt-2 text-hall font-bold tabular-nums text-primary"
         >
           {{ isBye ? '—' : game.table_number }}
         </p>
@@ -152,21 +155,18 @@ async function submit(): Promise<void> {
       <section
         v-if="isBye"
         data-testid="bye-notice"
-        class="flex flex-col gap-1 rounded-2xl bg-surface-raised p-5"
+        class="rounded-xl border border-card-line bg-card p-5 shadow-2xs"
       >
-        <p class="text-lg text-ink">
+        <p class="text-base font-semibold text-foreground">
           You have the bye this round.
         </p>
-        <p class="text-sm text-ink-muted">
+        <p class="mt-1 text-sm text-muted-foreground-1">
           It counts as a win. An organiser enters the victory points, so there is nothing for you to submit.
         </p>
       </section>
 
-      <section
-        v-else
-        class="flex flex-col gap-1"
-      >
-        <p class="text-sm text-ink-faint">
+      <section v-else>
+        <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           You are playing
         </p>
         <!-- Their team page is where a revealed army list is read, which is
@@ -175,7 +175,7 @@ async function submit(): Promise<void> {
           v-if="theirs"
           :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: theirs.id } }"
           data-testid="opponent-link"
-          class="text-xl font-semibold text-ink underline underline-offset-4"
+          class="mt-1 inline-block text-xl font-semibold text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
         >
           <span data-testid="opponent">{{ theirs.name }}</span>
         </RouterLink>
@@ -183,78 +183,76 @@ async function submit(): Promise<void> {
 
       <form
         v-if="!submitted && !isBye"
-        class="flex flex-col gap-4 rounded-2xl bg-surface-raised p-5"
+        class="flex flex-col gap-4 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
         novalidate
         @submit.prevent="submit"
       >
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           Victory points
         </h2>
 
         <label class="flex items-center justify-between gap-4">
-          <span class="text-ink">{{ mine?.name }}</span>
+          <span class="min-w-0 truncate text-sm text-foreground">{{ mine?.name }}</span>
           <input
             v-model.number="myScore"
             type="number"
             inputmode="numeric"
             data-testid="my-score"
-            class="w-24 rounded-lg border border-border bg-surface-sunken px-3 py-2 text-right text-lg tabular-nums text-ink outline-none focus:border-accent"
+            class="w-24 shrink-0 rounded-lg border border-border bg-background-2 px-3 py-2 text-right text-lg tabular-nums text-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden"
           >
         </label>
 
         <label class="flex items-center justify-between gap-4">
-          <span class="text-ink">{{ theirs?.name }}</span>
+          <span class="min-w-0 truncate text-sm text-foreground">{{ theirs?.name }}</span>
           <input
             v-model.number="theirScore"
             type="number"
             inputmode="numeric"
             data-testid="their-score"
-            class="w-24 rounded-lg border border-border bg-surface-sunken px-3 py-2 text-right text-lg tabular-nums text-ink outline-none focus:border-accent"
+            class="w-24 shrink-0 rounded-lg border border-border bg-background-2 px-3 py-2 text-right text-lg tabular-nums text-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden"
           >
         </label>
 
-        <button
+        <AppButton
           type="submit"
           data-testid="submit-result"
           :disabled="submitting"
-          class="rounded-lg bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+          block
         >
           {{ submitting ? 'Sending…' : 'Submit result' }}
-        </button>
+        </AppButton>
       </form>
 
       <template v-else-if="!isBye">
-        <p
+        <AppAlert
           data-testid="result-submitted"
-          class="rounded-2xl bg-surface-raised p-5 text-success"
+          tone="success"
         >
           Result recorded.
-        </p>
+        </AppAlert>
 
-        <p
+        <AppAlert
           v-if="game.result.edited_by"
           data-testid="result-corrected"
-          class="rounded-2xl bg-surface-raised p-5 text-ink"
         >
           Corrected by {{ game.result.edited_by.name }}.
-        </p>
+        </AppAlert>
 
-        <p
+        <AppAlert
           v-if="game.result.is_flagged"
           data-testid="result-flagged"
-          class="rounded-2xl bg-surface-raised p-5 text-ink"
         >
           An organiser is looking at this result. They will correct it if it is wrong.
-        </p>
+        </AppAlert>
 
         <!-- A result cannot be resubmitted, so disagreeing means asking an
              Organiser to look at it. -->
         <section
           v-else
           data-testid="flag-form"
-          class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+          class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
         >
-          <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+          <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Something wrong with it?
           </h2>
           <textarea
@@ -262,31 +260,33 @@ async function submit(): Promise<void> {
             data-testid="flag-reason"
             rows="3"
             placeholder="What should it have been?"
-            class="rounded-lg border border-border bg-surface-sunken px-3 py-2.5 text-ink outline-none focus:border-accent"
+            class="block w-full rounded-lg border border-border bg-background-2 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden"
           />
-          <button
-            type="button"
+          <AppButton
             data-testid="flag-result"
+            variant="secondary"
             :disabled="flagging"
-            class="rounded-xl border border-border px-4 py-3 font-semibold text-ink disabled:opacity-60"
+            block
             @click="flag"
           >
             {{ flagging ? 'Sending…' : 'Flag for an organiser' }}
-          </button>
+          </AppButton>
         </section>
       </template>
 
       <p
         v-if="notice"
         data-testid="notice"
-        class="text-success"
+        role="status"
+        class="text-sm text-success"
       >
         {{ notice }}
       </p>
       <p
         v-if="problem"
         data-testid="problem"
-        class="text-danger"
+        role="alert"
+        class="text-sm text-destructive"
       >
         {{ problem }}
       </p>
@@ -294,7 +294,7 @@ async function submit(): Promise<void> {
       <RouterLink
         :to="{ name: 'standings', params: { eventSlug: props.eventSlug } }"
         data-testid="standings-link"
-        class="mt-2 text-center text-ink-muted underline underline-offset-4"
+        class="mt-2 text-center text-sm font-medium text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
       >
         See the standings
       </RouterLink>

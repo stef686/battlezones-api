@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 import { DEVICE_NAME, useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { claimInvite } from '@/api/invites';
+import AppButton from '@/components/AppButton.vue';
+import AuthCard from '@/components/AuthCard.vue';
 import TextField from '@/components/TextField.vue';
 import { useSessionStore } from '@/stores/session';
 
@@ -60,80 +62,74 @@ async function submit(): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center gap-8 p-6">
-    <template v-if="invite === null">
-      <header class="flex flex-col gap-2">
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
-          Open your invitation again
-        </h1>
-        <p
-          data-testid="claim-needs-invite"
-          class="text-ink-muted"
-        >
-          Setting a password needs the link from your invitation email. Open it again, or log in if you already have a password.
-        </p>
-      </header>
+  <AuthCard
+    v-if="invite === null"
+    title="Open your invitation again"
+  >
+    <p
+      data-testid="claim-needs-invite"
+      class="text-sm text-muted-foreground-1"
+    >
+      Setting a password needs the link from your invitation email. Open it again, or log in if you already have a password.
+    </p>
 
-      <RouterLink
-        :to="{ name: 'login' }"
-        data-testid="claim-login-link"
-        class="rounded-lg bg-accent px-4 py-3 text-center font-semibold text-accent-ink"
+    <AppButton
+      :to="{ name: 'login' }"
+      data-testid="claim-login-link"
+      block
+      class="mt-6"
+    >
+      Log in
+    </AppButton>
+  </AuthCard>
+
+  <AuthCard
+    v-else
+    title="Set a password"
+    subtitle="This keeps your account after the event, and lets you back in on another device."
+  >
+    <form
+      class="grid gap-4"
+      novalidate
+      @submit.prevent="submit"
+    >
+      <TextField
+        v-model="password"
+        label="Password"
+        type="password"
+        autocomplete="new-password"
+        testid="claim-password"
+        hint="At least 8 characters."
+        :errors="fieldErrors('password')"
+      />
+
+      <TextField
+        v-model="passwordConfirmation"
+        label="Confirm password"
+        type="password"
+        autocomplete="new-password"
+        testid="claim-password-confirmation"
+        :errors="fieldErrors('password_confirmation')"
+      />
+
+      <p
+        v-if="error && error.kind !== 'validation'"
+        data-testid="claim-error"
+        role="alert"
+        class="text-sm text-destructive"
       >
-        Log in
-      </RouterLink>
-    </template>
+        {{ error.message }}
+      </p>
 
-    <template v-else>
-      <header class="flex flex-col gap-2">
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
-          Set a password
-        </h1>
-        <p class="text-sm text-ink-muted">
-          This keeps your account after the event, and lets you back in on another device.
-        </p>
-      </header>
-
-      <form
-        class="flex flex-col gap-4"
-        novalidate
-        @submit.prevent="submit"
+      <AppButton
+        type="submit"
+        data-testid="submit-claim"
+        :disabled="submitting"
+        block
+        class="mt-2"
       >
-        <TextField
-          v-model="password"
-          label="Password"
-          type="password"
-          autocomplete="new-password"
-          testid="claim-password"
-          hint="At least 8 characters."
-          :errors="fieldErrors('password')"
-        />
-
-        <TextField
-          v-model="passwordConfirmation"
-          label="Confirm password"
-          type="password"
-          autocomplete="new-password"
-          testid="claim-password-confirmation"
-          :errors="fieldErrors('password_confirmation')"
-        />
-
-        <p
-          v-if="error && error.kind !== 'validation'"
-          data-testid="claim-error"
-          class="text-sm text-danger"
-        >
-          {{ error.message }}
-        </p>
-
-        <button
-          type="submit"
-          data-testid="submit-claim"
-          :disabled="submitting"
-          class="mt-2 rounded-lg bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
-        >
-          {{ submitting ? 'Saving…' : 'Save password' }}
-        </button>
-      </form>
-    </template>
-  </main>
+        {{ submitting ? 'Saving…' : 'Save password' }}
+      </AppButton>
+    </form>
+  </AuthCard>
 </template>

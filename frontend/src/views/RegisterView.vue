@@ -7,6 +7,8 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent, fetchFactions, registerAttendee, type Allegiance, type PlayerEntry } from '@/api/events';
 import { keys } from '@/api/keys';
+import AppAlert from '@/components/AppAlert.vue';
+import AppButton from '@/components/AppButton.vue';
 import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
 import { useSessionStore } from '@/stores/session';
@@ -128,10 +130,10 @@ async function submit(): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 p-5">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-6 p-5">
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading the event…
     </p>
@@ -139,40 +141,39 @@ async function submit(): Promise<void> {
     <p
       v-else-if="error"
       data-testid="register-load-error"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
 
     <template v-else-if="event">
-      <header class="flex flex-col gap-1">
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
+      <header>
+        <h1 class="text-2xl font-bold tracking-tight text-foreground">
           Enter {{ event.name }}
         </h1>
         <p
           v-if="placesTaken"
           data-testid="places-taken"
-          class="text-sm text-ink-muted"
+          class="mt-1 text-sm text-muted-foreground-1"
         >
           {{ placesTaken }}
         </p>
       </header>
 
-      <p
+      <AppAlert
         v-if="full"
         data-testid="event-full"
-        class="rounded-2xl bg-surface-raised p-5 text-ink-muted"
       >
         This event is full. Ask an organiser whether there is a waiting list.
-      </p>
+      </AppAlert>
 
-      <p
+      <AppAlert
         v-else-if="!mayRegister"
         data-testid="registration-closed"
-        class="rounded-2xl bg-surface-raised p-5 text-ink-muted"
       >
         Entries are not open to you for this event.
-      </p>
+      </AppAlert>
 
       <form
         v-else
@@ -204,17 +205,17 @@ async function submit(): Promise<void> {
         <section
           v-for="(player, index) in players"
           :key="index"
-          class="flex flex-col gap-4 rounded-2xl bg-surface-raised p-5"
+          class="flex flex-col gap-4 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
           :data-testid="`player-${index}`"
         >
-          <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+          <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
             {{ index === 0 ? 'You' : `Player ${index + 1}` }}
           </h2>
 
           <template v-if="index === 0">
             <p
               data-testid="my-email"
-              class="text-ink"
+              class="text-sm text-foreground"
             >
               {{ player.email }}
             </p>
@@ -253,7 +254,8 @@ async function submit(): Promise<void> {
           v-for="message in fieldErrors('players')"
           :key="message"
           data-testid="players-error"
-          class="text-sm text-danger"
+          role="alert"
+          class="text-sm text-destructive"
         >
           {{ message }}
         </p>
@@ -261,19 +263,20 @@ async function submit(): Promise<void> {
         <p
           v-if="problem"
           data-testid="register-problem"
-          class="text-sm text-danger"
+          role="alert"
+          class="text-sm text-destructive"
         >
           {{ problem }}
         </p>
 
-        <button
+        <AppButton
           type="submit"
           data-testid="submit-registration"
           :disabled="submitting"
-          class="rounded-lg bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+          block
         >
           {{ submitting ? 'Entering…' : 'Enter the event' }}
-        </button>
+        </AppButton>
       </form>
     </template>
   </main>

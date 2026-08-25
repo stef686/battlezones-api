@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
-import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
@@ -25,22 +24,14 @@ const empty = computed(() => days.value !== undefined && days.value.length === 0
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 p-5">
-    <RouterLink
-      :to="{ name: 'event', params: { eventSlug: props.eventSlug } }"
-      data-testid="back-to-event"
-      class="text-sm text-ink-muted underline underline-offset-4"
-    >
-      Back to the event
-    </RouterLink>
-
-    <h1 class="text-2xl font-semibold tracking-tight text-ink">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-6 p-5">
+    <h1 class="text-2xl font-bold tracking-tight text-foreground">
       Schedule
     </h1>
 
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading the schedule…
     </p>
@@ -53,7 +44,8 @@ const empty = computed(() => days.value !== undefined && days.value.length === 0
     <p
       v-else-if="error"
       data-testid="schedule-error"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
@@ -61,7 +53,7 @@ const empty = computed(() => days.value !== undefined && days.value.length === 0
     <p
       v-else-if="empty"
       data-testid="schedule-empty"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Nothing scheduled yet.
     </p>
@@ -74,46 +66,49 @@ const empty = computed(() => days.value !== undefined && days.value.length === 0
         v-for="day in days"
         :key="day.date"
         :data-testid="`day-${day.date}`"
-        class="flex flex-col gap-3"
       >
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ formatDay(day.date) }}
         </h2>
 
-        <article
-          v-for="block in day.blocks"
-          :key="block.id"
-          :data-testid="`block-${block.id}`"
-          class="flex items-baseline gap-4 rounded-2xl bg-surface-raised px-4 py-3"
-          :class="block.is_target_live ? 'ring-1 ring-accent' : ''"
-        >
-          <!-- The time as the hall reads it, tabular so the column lines up
-               down the page rather than jittering with the digits. -->
-          <time
-            :datetime="block.starts_at"
-            data-testid="block-time"
-            class="w-14 shrink-0 text-lg font-semibold tabular-nums text-ink"
+        <!-- One card per day, blocks divided inside it: a schedule reads as a
+             column, not as a stack of separate things. -->
+        <div class="divide-y divide-card-divider overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs">
+          <article
+            v-for="block in day.blocks"
+            :key="block.id"
+            :data-testid="`block-${block.id}`"
+            class="flex items-baseline gap-4 px-4 py-3.5"
+            :class="block.is_target_live ? 'bg-primary/10' : ''"
           >
-            {{ wallClockTime(block.starts_at) }}
-          </time>
+            <!-- The time as the hall reads it, tabular so the column lines up
+                 down the page rather than jittering with the digits. -->
+            <time
+              :datetime="block.starts_at"
+              data-testid="block-time"
+              class="w-14 shrink-0 text-lg font-semibold tabular-nums text-foreground"
+            >
+              {{ wallClockTime(block.starts_at) }}
+            </time>
 
-          <div class="flex min-w-0 flex-col">
-            <p class="truncate text-ink">
-              {{ block.label }}
-            </p>
-            <p class="text-sm text-ink-faint">
-              until {{ wallClockTime(block.ends_at) }}
-            </p>
-          </div>
+            <div class="flex min-w-0 flex-col">
+              <p class="truncate text-sm font-medium text-foreground">
+                {{ block.label }}
+              </p>
+              <p class="text-sm text-muted-foreground">
+                until {{ wallClockTime(block.ends_at) }}
+              </p>
+            </div>
 
-          <span
-            v-if="block.is_target_live"
-            data-testid="block-live"
-            class="ml-auto shrink-0 rounded-md bg-accent px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-accent-ink"
-          >
-            Now
-          </span>
-        </article>
+            <span
+              v-if="block.is_target_live"
+              data-testid="block-live"
+              class="ms-auto inline-flex shrink-0 items-center rounded-full bg-primary px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-primary-foreground"
+            >
+              Now
+            </span>
+          </article>
+        </div>
       </section>
     </div>
   </main>

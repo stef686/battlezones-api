@@ -1,0 +1,21 @@
+---
+paths:
+  - 'frontend/src/components/**'
+---
+
+# Components
+
+## Reuse the shared Preline components rather than retyping their classes
+Preline's class strings are a dozen utilities long, which is how a codebase grows four slightly different primary buttons. Before writing markup, reach for these:
+
+- `AppButton` — every button and every link-styled-as-a-button. Variants `primary|secondary|ghost|danger`, sizes `sm|md`, plus `block`. Passing `to` renders a real RouterLink anchor instead of a `<button>`, so it stays middle-clickable.
+- `AppAlert` — short outcomes. `tone="error"` announces with `role="alert"`; `success` and `info` stay polite with `role="status"`.
+- `AuthCard` — the centred card for every screen reached without a session (login, claim, reset, forgot, invite). `title`, optional `subtitle`, default slot, optional `#footer`.
+- `TextField` / `SelectField` — labelled inputs. They own `useId()` label association and wire hint + errors through `aria-describedby`; do not hand-roll a labelled input.
+
+A raw `<button>` is right only for a selection toggle that carries `aria-pressed` and its own selected styling (rating pickers, poll picks, pairing swap). Chrome (the tab bar) is `AppShell` + `AppTabBar` and is applied in `App.vue` from `meta.chrome`, never by a view.
+
+## Two navs, and only the fixed-slot one keeps a constant shape
+Chrome is two bars with different jobs. `AppTabBar` is the global bottom bar — Home, Events, Messages, avatar — app-level destinations, fixed four slots. Its "destinations are the same for everybody" rule applies to it and only it: dropping a slot there reflows the others under a Player's thumb mid-round, so a tap lands on the wrong thing. Home/Events/Messages ship visibly inert (`aria-disabled`, not focusable) until those screens exist; the avatar slot is live from day one and carries sign-in, because no other chrome routes to `/login`.
+
+The Event nav is the pinned horizontal scroller under the Event header — Rounds, Standings, Attendees, Schedule, My team. Its chips are variable-width, so it MAY omit a trailing chip that would dead-end: My team appears only when `viewer.is_attendee`. This is a deliberate narrowing of the tab bar's rule, not a violation of it. Do not make the tab bar viewer-dependent, and do not make the Event nav rigid.

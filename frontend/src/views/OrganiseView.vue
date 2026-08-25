@@ -20,6 +20,8 @@ import {
 import { correctGameResult } from '@/api/results';
 import { fetchStandings, positionsByAttendee } from '@/api/standings';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
+import AppAlert from '@/components/AppAlert.vue';
+import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 import { isOpposed, previewSwap } from '@/lib/pairing';
@@ -263,10 +265,10 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 p-5">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
     <p
       v-if="eventPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading…
     </p>
@@ -277,19 +279,11 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
     />
 
     <template v-else>
-      <RouterLink
-        :to="{ name: 'event', params: { eventSlug: props.eventSlug } }"
-        data-testid="back-to-event"
-        class="text-sm text-ink-muted underline underline-offset-4"
-      >
-        Back to the event
-      </RouterLink>
-
-      <header class="flex flex-col gap-1">
-        <p class="text-sm uppercase tracking-widest text-ink-faint">
+      <header>
+        <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ event.name }}
         </p>
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-foreground">
           Run the event
         </h1>
       </header>
@@ -297,12 +291,12 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
       <RouterLink
         :to="{ name: 'flags', params: { eventSlug: props.eventSlug } }"
         data-testid="flags-link"
-        class="flex items-center justify-between gap-3 rounded-2xl bg-surface-raised p-5 text-ink"
+        class="flex items-center justify-between gap-3 rounded-xl border border-card-line bg-card p-5 text-sm font-medium text-foreground shadow-2xs hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
       >
         <span>Disputed results</span>
         <span
-          class="text-sm tabular-nums"
-          :class="disputed > 0 ? 'text-danger' : 'text-ink-muted'"
+          class="tabular-nums"
+          :class="disputed > 0 ? 'text-destructive' : 'text-muted-foreground-1'"
         >{{ disputed > 0 ? `${disputed} waiting` : 'None' }}</span>
       </RouterLink>
 
@@ -311,16 +305,16 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
       <section
         v-if="live"
         data-testid="outstanding"
-        class="flex flex-col gap-2 rounded-2xl bg-surface-raised p-5"
+        class="flex flex-col gap-2 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
       >
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ title(live) }} · still playing
         </h2>
 
         <p
           v-if="outstanding.length === 0"
           data-testid="all-reported"
-          class="text-success"
+          class="text-sm font-medium text-success"
         >
           Every table has reported.
         </p>
@@ -328,7 +322,7 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
         <template v-else>
           <p
             data-testid="outstanding-count"
-            class="text-lg text-ink"
+            class="text-lg font-semibold text-foreground"
           >
             {{ outstanding.length }} {{ outstanding.length === 1 ? 'table' : 'tables' }} to go
           </p>
@@ -337,7 +331,7 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
               v-for="game in outstanding"
               :key="game.id"
               :data-testid="`outstanding-${game.id}`"
-              class="rounded-lg border border-border px-3 py-1.5 text-lg font-semibold tabular-nums text-ink"
+              class="rounded-lg border border-border px-3 py-1.5 text-lg font-semibold tabular-nums text-foreground"
             >
               {{ game.table_number }}
             </li>
@@ -351,12 +345,12 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
         v-for="bye in byes"
         :key="bye.id"
         :data-testid="`bye-${bye.id}`"
-        class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+        class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
       >
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           Bye · {{ bye.attendees[0]?.name }}
         </h2>
-        <p class="text-sm text-ink-muted">
+        <p class="text-sm text-muted-foreground-1">
           Counted as a win already. Enter the victory points they are credited with.
         </p>
 
@@ -366,22 +360,22 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
             type="number"
             inputmode="numeric"
             :data-testid="`bye-score-${bye.id}`"
-            class="w-24 rounded-lg border border-border bg-surface-sunken px-3 py-2.5 text-right text-lg tabular-nums text-ink outline-none focus:border-accent"
+            class="w-24 shrink-0 rounded-lg border border-border bg-background-2 px-3 py-2.5 text-right text-lg tabular-nums text-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden"
           >
-          <button
-            type="button"
+          <AppButton
             :data-testid="`save-bye-${bye.id}`"
             :disabled="scoringBye === bye.id"
-            class="flex-1 rounded-xl bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+            class="flex-1"
             @click="scoreBye(bye)"
           >
             {{ scoringBye === bye.id ? 'Saving…' : 'Save points' }}
-          </button>
+          </AppButton>
         </div>
 
         <p
           v-if="savedByes.includes(bye.id)"
           :data-testid="`bye-saved-${bye.id}`"
+          role="status"
           class="text-sm text-success"
         >
           Saved. They are counted in the standings.
@@ -389,41 +383,41 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
       </section>
 
       <section class="flex flex-col gap-3">
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ draft ? 'Ready to publish' : 'Next round' }}
         </h2>
 
         <p
           v-if="!draft"
           data-testid="no-draft"
-          class="text-ink-muted"
+          class="text-muted-foreground-1"
         >
           Pair the next round when every table has reported. Nothing is shown to players until you publish it.
         </p>
 
-        <p
+        <AppAlert
           v-else-if="unopposed.length > 0"
           data-testid="unopposed-warning"
-          class="rounded-xl border border-danger px-4 py-3 text-sm text-danger"
+          tone="error"
         >
           {{ unopposed.length }} {{ unopposed.length === 1 ? 'game is' : 'games are' }} not between opposed
           allegiances. Check before publishing.
-        </p>
+        </AppAlert>
 
         <!-- The review: every pairing, both sides, and where each team stands. -->
         <ul
           v-if="draft && draftDetail"
-          class="flex flex-col gap-2"
+          class="divide-y divide-card-divider overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs"
         >
           <li
             v-for="pairing in pairings"
             :key="pairing.id"
             :data-testid="`review-${pairing.id}`"
-            class="flex items-start gap-3 rounded-2xl bg-surface-raised px-4 py-3"
+            class="flex items-start gap-3 px-4 py-3"
           >
             <span
               data-testid="review-table"
-              class="w-8 shrink-0 pt-0.5 text-center text-xl font-bold tabular-nums text-accent"
+              class="w-8 shrink-0 pt-0.5 text-center text-xl font-bold tabular-nums text-primary"
             >
               {{ pairing.is_bye ? '—' : pairing.table_number }}
             </span>
@@ -438,9 +432,9 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
                   <span
                     v-if="positions.get(attendee.id)"
                     data-testid="review-position"
-                    class="shrink-0 text-sm tabular-nums text-ink-faint"
+                    class="shrink-0 text-sm tabular-nums text-muted-foreground"
                   >#{{ positions.get(attendee.id) }}</span>
-                  <span class="truncate text-ink">{{ attendee.name }}</span>
+                  <span class="truncate text-sm text-foreground">{{ attendee.name }}</span>
                 </span>
 
                 <AllegianceBadge :allegiance="attendee.allegiance" />
@@ -449,20 +443,23 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
               <span
                 v-if="pairing.is_bye"
                 data-testid="review-bye"
-                class="text-sm text-ink-faint"
+                class="text-sm text-muted-foreground"
               >Bye</span>
               <span
                 v-else-if="pairing.is_rematch"
                 data-testid="review-rematch"
-                class="text-sm text-danger"
+                class="text-sm text-destructive"
               >Rematch</span>
             </span>
 
             <button
               type="button"
               :data-testid="`swap-${pairing.id}`"
-              class="shrink-0 self-center rounded-lg border px-3 py-2 text-sm"
-              :class="chosen === pairing.id ? 'border-accent text-accent' : 'border-border text-ink-muted'"
+              :aria-pressed="chosen === pairing.id"
+              class="shrink-0 self-center rounded-lg border px-3 py-2 text-sm font-medium focus:outline-hidden"
+              :class="chosen === pairing.id
+                ? 'border-primary text-primary'
+                : 'border-border text-muted-foreground-1 hover:bg-muted-hover focus:bg-muted-hover'"
               @click="choose(pairing.id)"
             >
               {{ chosen === pairing.id ? 'Chosen' : 'Swap' }}
@@ -473,7 +470,7 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
         <p
           v-if="chosen !== null && partner === null"
           data-testid="swap-prompt"
-          class="text-sm text-ink-muted"
+          class="text-sm text-muted-foreground-1"
         >
           Now choose the game to swap it with.
         </p>
@@ -482,16 +479,17 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
         <section
           v-if="preview"
           data-testid="swap-preview"
-          class="flex flex-col gap-3 rounded-2xl border border-accent p-4"
+          class="flex flex-col gap-3 rounded-xl border border-primary p-4"
         >
-          <h3 class="text-sm uppercase tracking-widest text-ink-faint">
+          <h3 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
             After the swap
           </h3>
 
           <p
             v-if="!preview.ok"
             data-testid="swap-impossible"
-            class="text-sm text-danger"
+            role="alert"
+            class="text-sm text-destructive"
           >
             {{ preview.reason }}
           </p>
@@ -503,7 +501,7 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
               :data-testid="`preview-${game.id}`"
               class="flex items-start gap-3"
             >
-              <span class="w-8 shrink-0 text-center text-lg font-bold tabular-nums text-accent">
+              <span class="w-8 shrink-0 text-center text-lg font-bold tabular-nums text-primary">
                 {{ game.is_bye ? '—' : game.table_number }}
               </span>
               <span class="flex min-w-0 flex-1 flex-col gap-1">
@@ -512,7 +510,7 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
                   :key="attendee.id"
                   class="flex items-center justify-between gap-2"
                 >
-                  <span class="truncate text-ink">{{ attendee.name }}</span>
+                  <span class="truncate text-sm text-foreground">{{ attendee.name }}</span>
                   <AllegianceBadge :allegiance="attendee.allegiance" />
                 </span>
               </span>
@@ -521,83 +519,83 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
             <p
               v-if="opposes && !preview.opposed"
               data-testid="swap-unopposed"
-              class="text-sm text-danger"
+              role="alert"
+              class="text-sm text-destructive"
             >
               This swap leaves a game that is not between opposed allegiances.
             </p>
           </template>
 
           <div class="flex gap-3">
-            <button
-              type="button"
+            <AppButton
               data-testid="confirm-swap"
               :disabled="swapping || !preview.ok"
-              class="flex-1 rounded-xl bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+              class="flex-1"
               @click="confirmSwap"
             >
               {{ swapping ? 'Swapping…' : 'Swap them' }}
-            </button>
-            <button
-              type="button"
+            </AppButton>
+            <AppButton
               data-testid="cancel-swap"
-              class="rounded-xl border border-border px-4 py-3 text-ink"
+              variant="secondary"
               @click="cancelSwap"
             >
               Cancel
-            </button>
+            </AppButton>
           </div>
         </section>
       </section>
 
-      <p
+      <AppAlert
         v-if="problem"
         data-testid="organise-problem"
-        class="rounded-xl border border-danger px-4 py-3 text-sm text-danger"
+        tone="error"
       >
         {{ problem }}
-      </p>
+      </AppAlert>
 
       <!-- Full-width, thumb-height, one under another: this is operated with
            one hand while standing up in a hall. -->
       <div class="flex flex-col gap-3">
-        <button
+        <AppButton
           v-if="draft"
-          type="button"
           data-testid="publish-round"
           :disabled="working !== null"
-          class="rounded-xl bg-accent px-4 py-4 text-lg font-semibold text-accent-ink disabled:opacity-60"
+          block
+          class="py-4 text-base"
           @click="run('publish')"
         >
           {{ working === 'publish' ? 'Publishing…' : `Publish ${title(draft)}` }}
-        </button>
+        </AppButton>
 
-        <button
+        <AppButton
           v-else
-          type="button"
           data-testid="generate-round"
           :disabled="working !== null"
-          class="rounded-xl bg-accent px-4 py-4 text-lg font-semibold text-accent-ink disabled:opacity-60"
+          block
+          class="py-4 text-base"
           @click="run('generate')"
         >
           {{ working === 'generate' ? 'Pairing…' : 'Pair the next round' }}
-        </button>
+        </AppButton>
 
-        <button
+        <AppButton
           v-if="live && !draft"
-          type="button"
           data-testid="unpublish-round"
+          variant="secondary"
           :disabled="working !== null"
-          class="rounded-xl border border-border px-4 py-4 text-lg text-ink disabled:opacity-60"
+          block
+          class="py-4 text-base"
           @click="run('unpublish')"
         >
           {{ working === 'unpublish' ? 'Withdrawing…' : `Withdraw ${title(live)}` }}
-        </button>
+        </AppButton>
       </div>
 
       <RouterLink
         :to="{ name: 'rounds', params: { eventSlug: props.eventSlug } }"
         data-testid="rounds-link"
-        class="text-center text-ink-muted underline underline-offset-4"
+        class="text-center text-sm font-medium text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
       >
         All rounds
       </RouterLink>

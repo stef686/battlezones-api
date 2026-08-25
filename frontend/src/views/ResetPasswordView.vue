@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import { DEVICE_NAME, useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
+import AppButton from '@/components/AppButton.vue';
+import AuthCard from '@/components/AuthCard.vue';
 import TextField from '@/components/TextField.vue';
 import { useSessionStore } from '@/stores/session';
 
@@ -76,93 +78,91 @@ async function submit(): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center gap-8 p-6">
-    <template v-if="token === null || email === null">
-      <header class="flex flex-col gap-2">
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
-          This link is incomplete
-        </h1>
-        <p
-          data-testid="reset-link-broken"
-          class="text-ink-muted"
-        >
-          Open the link from the email again, in full. Some mail apps cut long links short.
-        </p>
-      </header>
+  <AuthCard
+    v-if="token === null || email === null"
+    title="This link is incomplete"
+  >
+    <p
+      data-testid="reset-link-broken"
+      class="text-sm text-muted-foreground-1"
+    >
+      Open the link from the email again, in full. Some mail apps cut long links short.
+    </p>
 
-      <RouterLink
-        :to="{ name: 'forgot-password' }"
-        data-testid="request-new-reset"
-        class="rounded-lg bg-accent px-4 py-3 text-center font-semibold text-accent-ink"
+    <AppButton
+      :to="{ name: 'forgot-password' }"
+      data-testid="request-new-reset"
+      block
+      class="mt-6"
+    >
+      Send a new link
+    </AppButton>
+  </AuthCard>
+
+  <AuthCard
+    v-else
+    title="Set a new password"
+  >
+    <p
+      data-testid="reset-email"
+      class="-mt-4 mb-6 text-center text-sm text-muted-foreground-1"
+    >
+      For {{ email }}.
+    </p>
+
+    <form
+      class="grid gap-4"
+      novalidate
+      @submit.prevent="submit"
+    >
+      <TextField
+        v-model="password"
+        label="New password"
+        type="password"
+        autocomplete="new-password"
+        testid="reset-password"
+        hint="At least 8 characters."
+        :errors="fieldErrors('password')"
+      />
+
+      <TextField
+        v-model="passwordConfirmation"
+        label="Confirm password"
+        type="password"
+        autocomplete="new-password"
+        testid="reset-password-confirmation"
+        :errors="fieldErrors('password_confirmation')"
+      />
+
+      <!-- The API reports a spent or wrong token against the address. -->
+      <p
+        v-for="message in fieldErrors('email')"
+        :key="message"
+        data-testid="reset-token-error"
+        role="alert"
+        class="text-sm text-destructive"
       >
-        Send a new link
-      </RouterLink>
-    </template>
+        {{ message }}
+      </p>
 
-    <template v-else>
-      <header class="flex flex-col gap-2">
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
-          Set a new password
-        </h1>
-        <p
-          data-testid="reset-email"
-          class="text-sm text-ink-muted"
-        >
-          For {{ email }}.
-        </p>
-      </header>
-
-      <form
-        class="flex flex-col gap-4"
-        novalidate
-        @submit.prevent="submit"
+      <p
+        v-if="error && error.kind !== 'validation'"
+        data-testid="reset-error"
+        role="alert"
+        class="text-sm text-destructive"
       >
-        <TextField
-          v-model="password"
-          label="New password"
-          type="password"
-          autocomplete="new-password"
-          testid="reset-password"
-          hint="At least 8 characters."
-          :errors="fieldErrors('password')"
-        />
+        {{ error.message }}
+      </p>
 
-        <TextField
-          v-model="passwordConfirmation"
-          label="Confirm password"
-          type="password"
-          autocomplete="new-password"
-          testid="reset-password-confirmation"
-          :errors="fieldErrors('password_confirmation')"
-        />
-
-        <!-- The API reports a spent or wrong token against the address. -->
-        <p
-          v-for="message in fieldErrors('email')"
-          :key="message"
-          data-testid="reset-token-error"
-          class="text-sm text-danger"
-        >
-          {{ message }}
-        </p>
-
-        <p
-          v-if="error && error.kind !== 'validation'"
-          data-testid="reset-error"
-          class="text-sm text-danger"
-        >
-          {{ error.message }}
-        </p>
-
-        <button
-          type="submit"
-          data-testid="submit-reset"
-          :disabled="submitting"
-          class="mt-2 rounded-lg bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
-        >
-          {{ submitting ? 'Saving…' : 'Save password' }}
-        </button>
-      </form>
-    </template>
-  </main>
+      <AppButton
+        type="submit"
+        data-testid="submit-reset"
+        :disabled="submitting"
+        block
+        class="mt-2"
+      >
+        {{ submitting ? 'Saving…' : 'Save password' }}
+      </AppButton>
+    </form>
+  </AuthCard>
 </template>

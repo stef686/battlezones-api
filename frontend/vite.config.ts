@@ -6,7 +6,7 @@ import { defineConfig } from 'vitest/config';
 import { VitePWA } from 'vite-plugin-pwa';
 
 /** The dark surface the app paints, so the shell matches before Vue boots. */
-const THEME_COLOUR = '#0d1014';
+const THEME_COLOUR = '#0a0909';
 
 export default defineConfig({
     plugins: [

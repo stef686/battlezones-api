@@ -11,6 +11,7 @@ _Avoid_: Tournament, comp
 **Attendee**:
 The competing unit within an Event. An Attendee is a party of one or more Players — one for a singles event, two for a doubles event — and is what gets paired, scored, and ranked.
 _Avoid_: Team, entrant, participant, competitor
+_Except_: Player-facing copy calls a Player's own Attendee "my team" (the nav chip, `MyTeamView`, the `my-team` route), because that is the word Players use at a venue. Attendee remains the term everywhere else — API, models, resources, docs — and no code should be renamed to match the copy.
 
 **Player**:
 A person taking part in an Event, as a member of exactly one Attendee. Factions and army lists belong to the Player, not the Attendee.
@@ -71,6 +72,10 @@ _Avoid_: Award, competition, survey
 **Ballot**:
 The complete set of Attendees one Player has picked in one Poll. A Player replaces their whole Ballot rather than casting votes one at a time, and cannot pick the same Attendee twice.
 _Avoid_: Vote (a Ballot may hold several), selection
+
+**Banner**:
+The single wide image an Organiser sets to give an Event its own face, shown behind the heading at the top of every Event screen. Not a Photo — it is not in the Gallery, is not attributed to a Player, and cannot be reacted to.
+_Avoid_: Header image, cover, hero, photo
 
 **Faction**:
 The army or force a Player brings, drawn from the Event's Game System.

@@ -4,6 +4,9 @@ import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
+import AppAlert from '@/components/AppAlert.vue';
+import AppButton from '@/components/AppButton.vue';
+import AuthCard from '@/components/AuthCard.vue';
 import TextField from '@/components/TextField.vue';
 
 const client = useApiClient();
@@ -38,27 +41,24 @@ async function submit(): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center gap-8 p-6">
-    <header class="flex flex-col gap-2">
-      <h1 class="text-2xl font-semibold tracking-tight text-ink">
-        Forgotten password
-      </h1>
-      <p class="text-sm text-ink-muted">
-        We will email you a link to set a new one.
-      </p>
-    </header>
-
-    <p
+  <AuthCard
+    title="Forgotten password"
+    subtitle="We will email you a link to set a new one."
+  >
+    <!-- The API answers the same way whether or not the address is on an
+         account, so the screen states its own message rather than a fact
+         about the address. -->
+    <AppAlert
       v-if="sent"
       data-testid="reset-link-sent"
-      class="rounded-2xl bg-surface-raised p-5 text-success"
+      tone="success"
     >
       {{ sent }}
-    </p>
+    </AppAlert>
 
     <form
       v-else
-      class="flex flex-col gap-4"
+      class="grid gap-4"
       novalidate
       @submit.prevent="submit"
     >
@@ -75,27 +75,31 @@ async function submit(): Promise<void> {
       <p
         v-if="error && error.kind !== 'validation'"
         data-testid="forgot-error"
-        class="text-sm text-danger"
+        role="alert"
+        class="text-sm text-destructive"
       >
         {{ error.message }}
       </p>
 
-      <button
+      <AppButton
         type="submit"
         data-testid="submit-forgot"
         :disabled="submitting"
-        class="mt-2 rounded-lg bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+        block
+        class="mt-2"
       >
         {{ submitting ? 'Sending…' : 'Send the link' }}
-      </button>
+      </AppButton>
     </form>
 
-    <RouterLink
-      :to="{ name: 'login' }"
-      data-testid="back-to-login"
-      class="text-center text-ink-muted underline underline-offset-4"
-    >
-      Back to log in
-    </RouterLink>
-  </main>
+    <template #footer>
+      <RouterLink
+        :to="{ name: 'login' }"
+        data-testid="back-to-login"
+        class="text-sm font-medium text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
+      >
+        Back to log in
+      </RouterLink>
+    </template>
+  </AuthCard>
 </template>

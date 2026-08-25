@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -54,18 +55,21 @@ function names(pairing: Pairing): string[] {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 p-5">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
     <RouterLink
       :to="{ name: 'rounds', params: { eventSlug: props.eventSlug } }"
       data-testid="back-to-rounds"
-      class="text-sm text-ink-muted underline underline-offset-4"
+      class="inline-flex items-center gap-x-1 self-start text-sm font-medium text-muted-foreground-1 hover:text-foreground focus:text-foreground focus:outline-hidden"
     >
+      <ChevronLeftIcon
+        class="size-4 shrink-0"
+      />
       Back to the rounds
     </RouterLink>
 
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading the pairings…
     </p>
@@ -78,7 +82,8 @@ function names(pairing: Pairing): string[] {
     <p
       v-else-if="error"
       data-testid="round-error"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
@@ -87,14 +92,14 @@ function names(pairing: Pairing): string[] {
       <header class="flex items-baseline justify-between gap-3">
         <h1
           data-testid="round-name"
-          class="text-2xl font-semibold tracking-tight text-ink"
+          class="text-2xl font-bold tracking-tight text-foreground"
         >
           {{ title }}
         </h1>
         <span
           v-if="round.status === 'draft'"
           data-testid="draft-badge"
-          class="rounded-md border border-border px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-ink-faint"
+          class="inline-flex shrink-0 items-center rounded-full border border-border px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-muted-foreground-1"
         >
           Draft
         </span>
@@ -103,26 +108,26 @@ function names(pairing: Pairing): string[] {
       <p
         v-if="pairings.length === 0"
         data-testid="pairings-empty"
-        class="text-ink-muted"
+        class="text-muted-foreground-1"
       >
         No pairings in this round.
       </p>
 
       <ul
         v-else
-        class="flex flex-col gap-2"
+        class="divide-y divide-card-divider overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs"
       >
         <li
           v-for="pairing in pairings"
           :key="pairing.id"
           :data-testid="`pairing-${pairing.id}`"
-          class="flex items-center gap-4 rounded-2xl bg-surface-raised px-4 py-3.5"
+          class="flex items-center gap-4 px-4 py-3.5"
         >
           <!-- The table number is what someone crossing the hall is looking
                for, so it leads the row and is read at a distance. -->
           <span
             data-testid="pairing-table"
-            class="w-10 shrink-0 text-center text-2xl font-bold tabular-nums text-accent"
+            class="w-10 shrink-0 text-center text-2xl font-bold tabular-nums text-primary"
           >
             {{ pairing.is_bye ? '—' : pairing.table_number }}
           </span>
@@ -131,18 +136,18 @@ function names(pairing: Pairing): string[] {
             <span
               v-for="name in names(pairing)"
               :key="name"
-              class="truncate text-ink"
+              class="truncate text-sm text-foreground"
             >{{ name }}</span>
 
             <span
               v-if="pairing.is_bye"
               data-testid="pairing-bye"
-              class="text-sm text-ink-faint"
+              class="text-sm text-muted-foreground"
             >Bye</span>
             <span
               v-else-if="pairing.is_rematch"
               data-testid="pairing-rematch"
-              class="text-sm text-ink-faint"
+              class="text-sm text-muted-foreground"
             >Rematch</span>
           </span>
         </li>

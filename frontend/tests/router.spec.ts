@@ -212,3 +212,30 @@ describe('the landing route', () => {
         expect(router.currentRoute.value.params.eventSlug).toBe(LANDING_EVENT_SLUG);
     });
 });
+
+describe('which screens are drawn inside the app shell', () => {
+    it.each([
+        ['/login'],
+        ['/forgot-password'],
+        ['/reset-password?token=abc&email=ada%40example.com'],
+        ['/invites/plain-token'],
+        ['/feedback/plain-token'],
+        ['/claim'],
+    ])('leaves the chrome off %s, which is reached with a credential rather than from an Event', async (path) => {
+        const { router } = routerWithSession('a-token');
+
+        await router.push(path);
+        await router.isReady();
+
+        expect(router.currentRoute.value.meta.chrome).toBe(false);
+    });
+
+    it('draws an Event screen inside the chrome, which is the default', async () => {
+        const { router } = routerWithSession('a-token');
+
+        await router.push(`/events/${LANDING_EVENT_SLUG}/standings`);
+        await router.isReady();
+
+        expect(router.currentRoute.value.meta.chrome).not.toBe(false);
+    });
+});

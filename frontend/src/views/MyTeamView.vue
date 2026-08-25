@@ -9,6 +9,7 @@ import { amendAttendee, fetchAttendee, fetchEvent, fetchFactions, recordMyFactio
 import { ApiError } from '@/api/errors';
 import { keys } from '@/api/keys';
 import { enterPainting, fetchPolls } from '@/api/polls';
+import AppButton from '@/components/AppButton.vue';
 import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
 import { useSessionStore } from '@/stores/session';
@@ -170,22 +171,22 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 p-5">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-6 p-5">
     <p
       v-if="eventPending || attendeePending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading your team…
     </p>
 
     <template v-else-if="attendee && event">
-      <header class="flex flex-col gap-1">
-        <p class="text-sm uppercase tracking-widest text-ink-faint">
+      <header>
+        <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ event.name }}
         </p>
         <h1
           data-testid="team-name"
-          class="text-2xl font-semibold tracking-tight text-ink"
+          class="mt-1 text-2xl font-bold tracking-tight text-foreground"
         >
           {{ attendee.name }}
         </h1>
@@ -193,9 +194,9 @@ async function save(): Promise<void> {
 
       <section
         v-if="teamMates.length > 0"
-        class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+        class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
       >
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           Playing with you
         </h2>
 
@@ -205,16 +206,16 @@ async function save(): Promise<void> {
           :data-testid="`team-mate-${mate.id}`"
           class="flex items-baseline justify-between gap-3"
         >
-          <span class="text-ink">{{ mate.name }}</span>
-          <span class="flex flex-col items-end gap-0.5 text-sm">
-            <span class="text-ink-muted">{{ mate.faction?.name ?? 'Faction not chosen' }}</span>
-            <span :class="mate.army_list_locked ? 'text-success' : 'text-ink-faint'">
+          <span class="min-w-0 truncate text-sm font-medium text-foreground">{{ mate.name }}</span>
+          <span class="flex shrink-0 flex-col items-end gap-0.5 text-sm">
+            <span class="text-muted-foreground-1">{{ mate.faction?.name ?? 'Faction not chosen' }}</span>
+            <span :class="mate.army_list_locked ? 'text-success' : 'text-muted-foreground'">
               {{ mate.army_list_locked ? 'List in' : 'List not submitted' }}
             </span>
           </span>
         </div>
 
-        <p class="text-sm text-ink-faint">
+        <p class="text-sm text-muted-foreground">
           They were sent their own invitation. They choose their own faction.
         </p>
       </section>
@@ -222,55 +223,56 @@ async function save(): Promise<void> {
       <section
         v-if="paintingPoll"
         data-testid="painting-entry"
-        class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+        class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
       >
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ paintingPoll.name }}
         </h2>
 
         <p
           v-if="paintingEntered"
           data-testid="painting-entered"
-          class="text-success"
+          class="text-sm font-medium text-success"
         >
           Your army is on the display table{{ attendee.display_number ? ` under number ${attendee.display_number}` : '' }}.
         </p>
         <p
           v-else
-          class="text-sm text-ink-muted"
+          class="text-sm text-muted-foreground-1"
         >
           Put your army on the display table and enter it here, so people can vote for it.
         </p>
 
-        <button
-          type="button"
+        <AppButton
           data-testid="enter-painting"
+          variant="secondary"
+          size="sm"
           :disabled="enteringPainting"
-          class="self-start rounded-lg border border-border px-3 py-2 text-sm text-ink disabled:opacity-60"
+          class="self-start"
           @click="togglePainting"
         >
           {{ paintingEntered ? 'Take it out of the vote' : 'Enter my army' }}
-        </button>
+        </AppButton>
       </section>
 
       <section
         data-testid="army-list-form"
-        class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+        class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
       >
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           Your army list
         </h2>
 
         <template v-if="listLocked">
           <p
             data-testid="army-list-locked"
-            class="text-success"
+            class="text-sm font-medium text-success"
           >
             Submitted and locked. Ask an organiser to reopen it if it needs correcting.
           </p>
           <p
             data-testid="army-list-mine"
-            class="whitespace-pre-wrap text-sm text-ink"
+            class="whitespace-pre-wrap text-sm text-foreground"
           >
             {{ me?.army_list }}
           </p>
@@ -282,26 +284,26 @@ async function save(): Promise<void> {
             data-testid="army-list"
             rows="8"
             placeholder="Detachments, units, wargear…"
-            class="rounded-lg border border-border bg-surface-sunken px-3 py-2.5 text-ink outline-none focus:border-accent"
+            class="block w-full rounded-lg border border-border bg-background-2 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden"
           />
-          <p class="text-sm text-ink-muted">
+          <p class="text-sm text-muted-foreground-1">
             Submitting locks the list. Only an organiser can reopen it.
           </p>
-          <button
-            type="button"
+          <AppButton
             data-testid="submit-army-list"
             :disabled="submittingList"
-            class="rounded-xl bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+            block
             @click="submitList"
           >
             {{ submittingList ? 'Sending…' : 'Submit list' }}
-          </button>
+          </AppButton>
         </template>
 
         <p
           v-if="listProblem"
           data-testid="army-list-problem"
-          class="text-sm text-danger"
+          role="alert"
+          class="text-sm text-destructive"
         >
           {{ listProblem }}
         </p>
@@ -342,7 +344,8 @@ async function save(): Promise<void> {
         <p
           v-if="failure && failure.kind !== 'validation'"
           data-testid="team-error"
-          class="text-sm text-danger"
+          role="alert"
+          class="text-sm text-destructive"
         >
           {{ failure.message }}
         </p>
@@ -350,25 +353,27 @@ async function save(): Promise<void> {
         <p
           v-if="saved"
           data-testid="team-saved"
+          role="status"
           class="text-sm text-success"
         >
           Saved.
         </p>
 
-        <button
+        <AppButton
           type="submit"
           data-testid="save-team"
           :disabled="saving"
-          class="mt-2 rounded-lg bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+          block
+          class="mt-2"
         >
           {{ saving ? 'Saving…' : 'Save' }}
-        </button>
+        </AppButton>
       </form>
 
       <RouterLink
         :to="{ name: 'my-game', params: { eventSlug: props.eventSlug } }"
         data-testid="my-game-link"
-        class="text-center text-ink-muted underline underline-offset-4"
+        class="text-center text-sm font-medium text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
       >
         See your game
       </RouterLink>

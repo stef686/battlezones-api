@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -9,6 +10,7 @@ import { ApiError } from '@/api/errors';
 import { fetchAttendee, fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
+import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 
 const props = defineProps<{ eventSlug: string; attendeeId: string }>();
@@ -73,18 +75,21 @@ async function run(action: () => Promise<unknown>): Promise<void> {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 p-5">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-6 p-5">
     <RouterLink
       :to="{ name: 'attendees', params: { eventSlug: props.eventSlug } }"
       data-testid="back-to-attendees"
-      class="text-sm text-ink-muted underline underline-offset-4"
+      class="inline-flex items-center gap-x-1 self-start text-sm font-medium text-muted-foreground-1 hover:text-foreground focus:text-foreground focus:outline-hidden"
     >
+      <ChevronLeftIcon
+        class="size-4 shrink-0"
+      />
       Back to who is here
     </RouterLink>
 
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading the team…
     </p>
@@ -97,7 +102,8 @@ async function run(action: () => Promise<unknown>): Promise<void> {
     <p
       v-else-if="error"
       data-testid="attendee-error"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
@@ -106,7 +112,7 @@ async function run(action: () => Promise<unknown>): Promise<void> {
       <header class="flex flex-col items-start gap-3">
         <h1
           data-testid="attendee-name"
-          class="text-2xl font-semibold tracking-tight text-ink"
+          class="text-2xl font-bold tracking-tight text-foreground"
         >
           {{ attendee.name }}
         </h1>
@@ -114,7 +120,7 @@ async function run(action: () => Promise<unknown>): Promise<void> {
       </header>
 
       <section class="flex flex-col gap-3">
-        <h2 class="text-sm uppercase tracking-widest text-ink-faint">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ attendee.members.length === 1 ? 'Player' : 'Players' }}
         </h2>
 
@@ -122,15 +128,15 @@ async function run(action: () => Promise<unknown>): Promise<void> {
           v-for="member in attendee.members"
           :key="member.id"
           :data-testid="`member-${member.id}`"
-          class="flex flex-col gap-0.5 rounded-2xl bg-surface-raised px-4 py-3.5"
+          class="flex flex-col gap-0.5 rounded-xl border border-card-line bg-card px-4 py-3.5 shadow-2xs"
         >
-          <p class="text-lg text-ink">
+          <p class="text-base font-semibold text-foreground">
             {{ member.name }}
           </p>
           <p
             data-testid="member-faction"
             class="text-sm"
-            :class="member.faction ? 'text-ink-muted' : 'text-ink-faint'"
+            :class="member.faction ? 'text-muted-foreground-1' : 'text-muted-foreground'"
           >
             {{ member.faction?.name ?? 'Faction not chosen' }}
           </p>
@@ -138,7 +144,7 @@ async function run(action: () => Promise<unknown>): Promise<void> {
           <p
             v-if="!listsRevealed"
             class="text-sm"
-            :class="member.army_list_locked ? 'text-success' : 'text-ink-faint'"
+            :class="member.army_list_locked ? 'text-success' : 'text-muted-foreground'"
           >
             {{ member.army_list_locked ? 'List in' : 'List not submitted' }}
           </p>
@@ -147,23 +153,24 @@ async function run(action: () => Promise<unknown>): Promise<void> {
             v-else
             :data-testid="`army-list-${member.id}`"
             class="mt-2 whitespace-pre-wrap text-sm"
-            :class="member.army_list ? 'text-ink' : 'text-ink-faint'"
+            :class="member.army_list ? 'text-foreground' : 'text-muted-foreground'"
           >
             {{ member.army_list || 'No list was written.' }}
           </p>
 
           <!-- Locking has no other way out, and a wrong list matters to every
                opponent who prepares against it. -->
-          <button
+          <AppButton
             v-if="mayOrganise && member.army_list_locked"
-            type="button"
             :data-testid="`unlock-${member.id}`"
+            variant="secondary"
+            size="sm"
             :disabled="working"
-            class="mt-2 self-start rounded-lg border border-border px-3 py-2 text-sm text-ink disabled:opacity-60"
+            class="mt-2 self-start"
             @click="unlock(member.id)"
           >
             Reopen this list
-          </button>
+          </AppButton>
         </article>
 
         <!-- Closed lists are said to be closed. A blank where a list would be
@@ -171,26 +178,28 @@ async function run(action: () => Promise<unknown>): Promise<void> {
         <p
           v-if="!listsRevealed"
           data-testid="lists-not-revealed"
-          class="text-sm text-ink-faint"
+          class="text-sm text-muted-foreground"
         >
           Army lists have not been revealed. They open once every player on the team has submitted.
         </p>
 
-        <button
+        <AppButton
           v-if="mayOrganise && !listsRevealed"
-          type="button"
           data-testid="reveal-army-lists"
+          variant="secondary"
+          size="sm"
           :disabled="working"
-          class="self-start rounded-lg border border-border px-3 py-2 text-sm text-ink disabled:opacity-60"
+          class="self-start"
           @click="reveal"
         >
           Reveal these lists anyway
-        </button>
+        </AppButton>
 
         <p
           v-if="problem"
           data-testid="attendee-problem"
-          class="text-sm text-danger"
+          role="alert"
+          class="text-sm text-destructive"
         >
           {{ problem }}
         </p>

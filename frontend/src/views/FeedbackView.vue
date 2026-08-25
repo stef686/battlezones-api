@@ -5,6 +5,7 @@ import { computed, reactive, ref } from 'vue';
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchFeedbackForm, submitFeedback, type FeedbackAnswer, type FeedbackQuestion } from '@/api/feedback';
+import AppButton from '@/components/AppButton.vue';
 
 const props = defineProps<{ token: string }>();
 
@@ -78,20 +79,23 @@ async function submit(): Promise<void> {
   <main class="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 p-5">
     <p
       v-if="isPending"
-      class="text-ink-muted"
+      class="text-muted-foreground-1"
     >
       Loading the form…
     </p>
 
+    <!-- Deliberately not MissingNotice: that wording exists so a screen cannot
+         leak whether an Event is hidden, and "we could not find that page" is
+         useless to somebody holding a spent feedback link. -->
     <section
       v-else-if="unusable"
       data-testid="feedback-unusable"
-      class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-6"
+      class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-6 shadow-2xs"
     >
-      <h1 class="text-xl font-semibold tracking-tight text-ink">
+      <h1 class="text-xl font-semibold tracking-tight text-foreground">
         This link no longer works
       </h1>
-      <p class="text-ink-muted">
+      <p class="text-sm text-muted-foreground-1">
         A feedback link works once, and expires a month after it is sent. This one has already been used or has
         expired. If you still want to say something, the organisers can send you a new one.
       </p>
@@ -100,17 +104,18 @@ async function submit(): Promise<void> {
     <p
       v-else-if="error"
       data-testid="feedback-error"
-      class="text-danger"
+      role="alert"
+      class="text-destructive"
     >
       {{ (error as ApiError).message }}
     </p>
 
     <template v-else-if="form">
-      <header class="flex flex-col gap-1">
-        <p class="text-sm uppercase tracking-widest text-ink-faint">
+      <header>
+        <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {{ form.event.name }}
         </p>
-        <h1 class="text-2xl font-semibold tracking-tight text-ink">
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-foreground">
           How was it?
         </h1>
       </header>
@@ -118,12 +123,12 @@ async function submit(): Promise<void> {
       <section
         v-if="done"
         data-testid="feedback-thanks"
-        class="flex flex-col gap-2 rounded-2xl bg-surface-raised p-6"
+        class="flex flex-col gap-2 rounded-xl border border-card-line bg-card p-6 shadow-2xs"
       >
-        <p class="text-lg text-success">
+        <p class="text-lg font-semibold text-success">
           Thank you.
         </p>
-        <p class="text-ink-muted">
+        <p class="text-sm text-muted-foreground-1">
           Your answers went to the organisers without your name on them.
         </p>
       </section>
@@ -133,9 +138,9 @@ async function submit(): Promise<void> {
           v-for="question in form.questions"
           :key="question.id"
           :data-testid="`question-${question.id}`"
-          class="flex flex-col gap-3 rounded-2xl bg-surface-raised p-5"
+          class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
         >
-          <p class="text-ink">
+          <p class="text-sm font-medium text-foreground">
             {{ question.prompt }}
           </p>
 
@@ -150,10 +155,11 @@ async function submit(): Promise<void> {
               :key="rating"
               type="button"
               :data-testid="`rating-${question.id}-${rating}`"
-              class="min-h-11 flex-1 rounded-lg border py-2.5 text-lg tabular-nums"
+              :aria-pressed="ratings[question.id] === rating"
+              class="min-h-11 flex-1 rounded-lg border py-2.5 text-lg font-medium tabular-nums focus:outline-hidden"
               :class="ratings[question.id] === rating
-                ? 'border-accent bg-accent text-accent-ink'
-                : 'border-border text-ink'"
+                ? 'border-primary bg-primary text-primary-foreground'
+                : 'border-border text-foreground hover:bg-muted-hover focus:bg-muted-hover'"
               @click="rate(question, rating)"
             >
               {{ rating }}
@@ -165,28 +171,28 @@ async function submit(): Promise<void> {
             v-model="answers[question.id]"
             :data-testid="`answer-${question.id}`"
             rows="4"
-            class="rounded-lg border border-border bg-surface-sunken px-3 py-2.5 text-ink outline-none focus:border-accent"
+            class="block w-full rounded-lg border border-border bg-background-2 px-4 py-2.5 text-sm text-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden"
           />
         </section>
 
-        <button
-          type="button"
+        <AppButton
           data-testid="submit-feedback"
           :disabled="submitting"
-          class="rounded-xl bg-accent px-4 py-3 font-semibold text-accent-ink disabled:opacity-60"
+          block
           @click="submit"
         >
           {{ submitting ? 'Sending…' : 'Send my feedback' }}
-        </button>
+        </AppButton>
 
-        <p class="text-center text-sm text-ink-faint">
+        <p class="text-center text-sm text-muted-foreground">
           Answers are stored without your name. The link works once.
         </p>
 
         <p
           v-if="problem"
           data-testid="feedback-problem"
-          class="text-danger"
+          role="alert"
+          class="text-destructive"
         >
           {{ problem }}
         </p>
