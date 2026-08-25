@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
-import { createAppRouter } from '@/router';
+import { createAppRouter, LANDING_EVENT_SLUG } from '@/router';
 import { useSessionStore } from '@/stores/session';
 
 function routerWithSession(token: string | null) {
@@ -198,5 +198,17 @@ describe('invitation routes', () => {
 
         expect(router.currentRoute.value.name).toBe('reset-password');
         expect(router.currentRoute.value.query.email).toBe('ada@example.com');
+    });
+});
+
+describe('the landing route', () => {
+    it('sends the root path to the Event that is currently the hub', async () => {
+        const { router } = routerWithSession('a-token');
+
+        await router.push('/');
+        await router.isReady();
+
+        expect(router.currentRoute.value.name).toBe('event');
+        expect(router.currentRoute.value.params.eventSlug).toBe(LANDING_EVENT_SLUG);
     });
 });

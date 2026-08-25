@@ -5,6 +5,7 @@ import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { DEVICE_NAME, useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import TextField from '@/components/TextField.vue';
+import { LANDING_EVENT_SLUG } from '@/router';
 import { useSessionStore } from '@/stores/session';
 
 const client = useApiClient();
@@ -38,7 +39,7 @@ async function submit(): Promise<void> {
 
     const redirect = route.query.redirect;
 
-    await router.replace(typeof redirect === 'string' && redirect !== '' ? redirect : { name: 'my-game', params: { eventSlug: 'end-to-end-open' } });
+    await router.replace(typeof redirect === 'string' && redirect !== '' ? redirect : { name: 'my-game', params: { eventSlug: LANDING_EVENT_SLUG } });
   } catch (caught) {
     error.value = caught instanceof ApiError ? caught : null;
   } finally {
