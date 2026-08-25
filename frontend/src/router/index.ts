@@ -15,12 +15,17 @@ declare module 'vue-router' {
     }
 }
 
+/**
+ * Placeholder until there is a home screen: the Event page is the hub
+ * everything else hangs off, so it is the least wrong landing. Signing in
+ * lands on the same Event, so the slug is shared rather than repeated.
+ */
+export const LANDING_EVENT_SLUG = 'gftw-christmas-doubles-2026';
+
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
-        // Placeholder until there is a home screen: the Event page is the hub
-        // everything else hangs off, so it is the least wrong landing.
-        redirect: { name: 'event', params: { eventSlug: 'end-to-end-open' } },
+        redirect: { name: 'event', params: { eventSlug: LANDING_EVENT_SLUG } },
     },
     {
         path: '/login',
