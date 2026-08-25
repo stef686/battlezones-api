@@ -32,6 +32,14 @@
     --color-traitor-foreground: oklch(0.17 0.01 260);
     --color-success: oklch(0.72 0.15 150);
 
+    /*
+     * The Event header's type sits over a scrim rather than over a surface,
+     * so it keeps its own colours: they have to hold whether the header is
+     * flat or carries a Banner behind them.
+     */
+    --color-event-header-foreground: oklch(0.99 0 0);
+    --color-event-header-foreground-muted: oklch(0.88 0.01 260);
+
     /* The table number is read across a hall, so it gets its own step. */
     --text-hall: 6rem;
     --text-hall--line-height: 1;
@@ -47,4 +55,25 @@ body {
 body {
     font-family: ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * The Event header's scrims.
+ *
+ * Both are present whether or not there is a Banner behind them, which is
+ * what lets the overlay text have exactly one colour rule. The bottom one is
+ * strong enough to carry type over a pale image; the top one only has to keep
+ * light status-bar text readable.
+ */
+@utility event-header-scrim-top {
+    background-image: linear-gradient(to bottom, oklch(0 0 0 / 0.55), oklch(0 0 0 / 0));
+}
+
+@utility event-header-scrim-bottom {
+    background-image: linear-gradient(
+        to top,
+        oklch(0 0 0 / 0.85),
+        oklch(0 0 0 / 0.55) 45%,
+        oklch(0 0 0 / 0)
+    );
 }
