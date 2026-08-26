@@ -36,7 +36,9 @@ function score(standing: Standing, slug: string): string {
 
 <template>
   <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
-    <h1 class="text-xl font-semibold tracking-tight text-foreground">
+    <!-- The nav names this screen, so the heading is for a screen reader
+         landing here from a deep link and costs no space. -->
+    <h1 class="sr-only">
       Standings
     </h1>
 

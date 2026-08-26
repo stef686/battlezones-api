@@ -43,7 +43,9 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
 <template>
   <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
     <header>
-      <h1 class="text-2xl font-bold tracking-tight text-foreground">
+      <!-- The nav names this screen, so the heading is for a screen reader
+           landing here from a deep link and costs no space. -->
+      <h1 class="sr-only">
         Who is here
       </h1>
       <p

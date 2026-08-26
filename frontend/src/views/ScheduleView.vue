@@ -25,7 +25,9 @@ const empty = computed(() => days.value !== undefined && days.value.length === 0
 
 <template>
   <main class="mx-auto flex w-full max-w-md flex-col gap-6 p-5">
-    <h1 class="text-2xl font-bold tracking-tight text-foreground">
+    <!-- The nav names this screen, so the heading is for a screen reader
+         landing here from a deep link and costs no space. -->
+    <h1 class="sr-only">
       Schedule
     </h1>
 

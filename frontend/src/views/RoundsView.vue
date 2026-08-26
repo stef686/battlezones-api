@@ -42,7 +42,9 @@ function title(round: { number: number; name: string | null }): string {
 
 <template>
   <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
-    <h1 class="text-2xl font-bold tracking-tight text-foreground">
+    <!-- The nav names this screen, so the heading is for a screen reader
+         landing here from a deep link and costs no space. -->
+    <h1 class="sr-only">
       Rounds
     </h1>
 

@@ -15,7 +15,12 @@ FeedbackView deliberately does not render `MissingNotice` for its 404. The not-f
 
 It still leaks nothing: unknown, already used and expired all answer 404 in the API and are stated together on the screen as one outcome. Do not split them apart — which of the three it is only matters to somebody holding a token they were never sent.
 
+## A nav-reachable screen keeps its title for screen readers only
+Rounds, Standings, Attendees and Schedule wear their name in the Event nav pinned above them, so a visible `<h1>` repeating it spends a line of a phone viewport saying what the lit tab already says. Those four keep the heading as `class="sr-only"` — a deep link still lands on a named screen for a screen reader — and no screen the nav reaches should get a visible title back.
+
+This applies only to a fixed section name. A screen titled with content — a Round's name, an Attendee's, a Poll's, the viewer's own team — keeps its visible heading, since the nav cannot say which one you opened.
+
 ## Back links only where the Event nav cannot reach
-The Attendee and Round detail screens carry no back link: the Attendees and Rounds chips are pinned one tap away and lead to the same place. The Poll screen and the organiser flags screen keep theirs, because the nav reaches neither the Votes list nor the organiser area. Do not add a back link to a screen whose parent is a nav chip.
+The Attendee and Round detail screens carry no back link: the Attendees and Rounds tabs are pinned one tap away and lead to the same place. The Poll screen and the organiser flags screen keep theirs, because the nav reaches neither the Votes list nor the organiser area. Do not add a back link to a screen whose parent is a nav tab.
 
 The Event screen lists no destinations either — the nav owns Rounds, Standings, Attendees and Schedule. What it carries instead is the conditional calls-to-action the nav deliberately does not: the open vote, and My game, which is read only for a viewer who has entered (`viewer.is_attendee`) and shown only while `/my-game` returns a Game. One consequence to know: with the list group gone, the Votes list is reachable only through the "Voting is open" call-to-action.

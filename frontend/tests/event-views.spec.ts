@@ -312,6 +312,15 @@ describe('the schedule', () => {
         expect(view.find('[data-testid="schedule-empty"]').exists()).toBe(true);
     });
 
+    it('leaves its title to the nav, keeping it for screen readers only', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE } });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.get('h1').classes()).toContain('sr-only');
+    });
+
     it('gives a schedule for a missing event the same answer as the event page', async () => {
         stubApi({});
 
@@ -392,6 +401,15 @@ describe('the attendee list', () => {
         await flushPromises();
 
         expect(view.find('[data-testid="attendees-empty"]').exists()).toBe(true);
+    });
+
+    it('leaves its title to the nav, keeping it for screen readers only', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}/attendees`]: { status: 200, body: ATTENDEES } });
+
+        const view = mountView(AttendeesView);
+        await flushPromises();
+
+        expect(view.get('h1').classes()).toContain('sr-only');
     });
 });
 
