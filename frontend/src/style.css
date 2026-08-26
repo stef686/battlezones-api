@@ -77,3 +77,14 @@ body {
         oklch(0 0 0 / 0)
     );
 }
+
+/*
+ * The Event nav's trailing fade.
+ *
+ * The strip holds more chips than a phone viewport fits, and a hard edge
+ * looks like the end of the list rather than the edge of the window.
+ */
+@utility event-nav-fade {
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);
+    mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);
+}

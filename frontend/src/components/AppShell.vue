@@ -2,8 +2,8 @@
 /**
  * The chrome every screen is drawn inside.
  *
- * One job, and it is not navigation policy: put the Event header and the tab
- * bar on the screens that belong to an Event. Which routes an unclaimed or
+ * One job, and it is not navigation policy: put the Event header, the Event
+ * nav and the tab bar on the screens that belong to an Event. Which routes an unclaimed or
  * signed-out viewer may reach is settled once in the router guard, and this
  * component does not second-guess it — it only reflects the route it has been
  * given.
@@ -17,6 +17,7 @@ import { useRoute } from 'vue-router';
 
 import AppTabBar from '@/components/AppTabBar.vue';
 import EventHeader from '@/components/EventHeader.vue';
+import EventNav from '@/components/EventNav.vue';
 
 const route = useRoute();
 
@@ -30,6 +31,11 @@ const eventSlug = computed(() => {
 <template>
   <div class="flex min-h-screen flex-col bg-background-2">
     <EventHeader
+      v-if="eventSlug"
+      :event-slug="eventSlug"
+    />
+
+    <EventNav
       v-if="eventSlug"
       :event-slug="eventSlug"
     />

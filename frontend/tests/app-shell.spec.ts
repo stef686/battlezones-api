@@ -116,6 +116,45 @@ describe('the app shell', () => {
     });
 });
 
+describe('the event nav', () => {
+    it('sits under the header on a screen that belongs to an event', async () => {
+        stubEvent();
+        await router.push(`/events/${EVENT_SLUG}/standings`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        const html = view.html();
+
+        expect(view.find('[data-testid="event-nav"]').exists()).toBe(true);
+        expect(html.indexOf('event-header')).toBeLessThan(html.indexOf('event-nav'));
+    });
+
+    it('stays off a screen that belongs to no event', async () => {
+        stubEvent();
+        await router.push('/login');
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        expect(view.find('[data-testid="event-nav"]').exists()).toBe(false);
+    });
+
+    it('pins to the top while the header scrolls away behind it', async () => {
+        stubEvent();
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        expect(view.get('[data-testid="event-nav"]').classes()).toContain('sticky');
+        expect(view.get('[data-testid="event-header"]').classes()).not.toContain('sticky');
+    });
+});
+
 describe('the event header', () => {
     it('names the event on a screen that belongs to one', async () => {
         stubEvent();

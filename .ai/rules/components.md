@@ -26,3 +26,10 @@ The Event nav is the pinned horizontal scroller under the Event header — Round
 The safe-area inset is on the header, not on `AppShell`'s wrapper: the surface runs under the status bar and only the type clears it, which makes the element taller than the 160px of visible content on a notched device.
 
 Overlay text sits on two scrims (`event-header-scrim-top` / `event-header-scrim-bottom`, both declared in `style.css`) that are present whether or not a Banner is behind them, so `text-event-header-foreground(-muted)` is the single colour rule in every state. Do not swap the overlay's colour based on whether there is an image, and do not pin the header — it scrolls away with the page; only the Event nav pins.
+
+## The Event nav lights a chip from a route-name map, never from the URL
+`EventNav` decides its active chip from `chipOfRoute`, a route-name → chip map kept beside the chip list. A Round's detail screen lights Rounds and an Attendee's lights Attendees; Poll and My game light nothing. Do not swap this for RouterLink's inclusive active matching — that lights Rounds on every screen under the Event path.
+
+The lit chip is scrolled into view on mount and on every route change, because five chips overflow a phone and a deep link would otherwise land on a nav with nothing visibly selected.
+
+The strip scrolls natively (`overflow-x-auto`, no scroll-snap, no drag handler) and its trailing fade is the `event-nav-fade` utility in `style.css`. It hides only when the Event query errors — it stays through the load, since the four fixed sections do not depend on the Event.
