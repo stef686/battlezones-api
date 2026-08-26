@@ -206,14 +206,19 @@ export class ApiClient {
     }
 
     private send(method: string, path: string, token: string | null, body: unknown): Promise<Response> {
+        // A FormData body is handed over untouched: the browser writes the
+        // multipart boundary into the Content-Type itself, and a header set
+        // here would name a boundary the body does not use.
+        const multipart = body instanceof FormData;
+
         return fetch(`${this.baseUrl}${path}`, {
             method,
             headers: {
                 Accept: 'application/json',
-                ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
+                ...(body === undefined || multipart ? {} : { 'Content-Type': 'application/json' }),
                 ...(token === null ? {} : { Authorization: `Bearer ${token}` }),
             },
-            body: body === undefined ? undefined : JSON.stringify(body),
+            body: body === undefined || multipart ? (body as FormData | undefined) : JSON.stringify(body),
         });
     }
 }

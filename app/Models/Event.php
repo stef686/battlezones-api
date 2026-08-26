@@ -27,6 +27,8 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string $slug
  * @property string|null $description
+ * @property string|null $banner_path
+ * @property string|null $banner_small_path
  * @property EventStatus $status
  * @property PairingFormat $pairing_format
  * @property Carbon $starts_at
@@ -73,6 +75,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Event publiclyVisible()
  * @method static Builder<static>|Event query()
  * @method static Builder<static>|Event whereAttendeeSize($value)
+ * @method static Builder<static>|Event whereBannerPath($value)
+ * @method static Builder<static>|Event whereBannerSmallPath($value)
  * @method static Builder<static>|Event whereClubId($value)
  * @method static Builder<static>|Event whereCreatedAt($value)
  * @method static Builder<static>|Event whereDescription($value)
@@ -121,6 +125,8 @@ class Event extends Model
         'name',
         'slug',
         'description',
+        'banner_path',
+        'banner_small_path',
         'status',
         'pairing_format',
         'starts_at',

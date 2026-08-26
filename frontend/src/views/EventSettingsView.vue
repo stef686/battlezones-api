@@ -16,7 +16,14 @@ import { computed, ref, watch } from 'vue';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { fetchEvent, updateEvent, type EventChanges, type EventSummary } from '@/api/events';
+import {
+  fetchEvent,
+  removeBanner,
+  updateEvent,
+  uploadBanner,
+  type EventChanges,
+  type EventSummary,
+} from '@/api/events';
 import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -154,6 +161,53 @@ async function save(): Promise<void> {
   }
 }
 
+const banner = computed(() => event.value?.banner ?? null);
+const bannerBusy = ref(false);
+
+/**
+ * The Banner is uploaded on choosing a file rather than on saving the form.
+ * It is a separate multipart route — a PATCH body carries no files — and
+ * pretending otherwise would mean one Save button that sometimes made two
+ * requests and could half-succeed.
+ */
+async function chooseBanner(payload: Event): Promise<void> {
+  const input = payload.target as HTMLInputElement;
+  const file = input.files?.[0];
+
+  if (file === undefined || bannerBusy.value) {
+    return;
+  }
+
+  await withBanner(() => uploadBanner(client, props.eventSlug, file));
+
+  // Cleared so choosing the same file twice still fires a change.
+  input.value = '';
+}
+
+async function dropBanner(): Promise<void> {
+  if (!bannerBusy.value) {
+    await withBanner(() => removeBanner(client, props.eventSlug));
+  }
+}
+
+async function withBanner(change: () => Promise<EventSummary>): Promise<void> {
+  bannerBusy.value = true;
+  problem.value = null;
+  errors.value = {};
+
+  try {
+    queryClient.setQueryData(keys.event(props.eventSlug), await change());
+  } catch (caught) {
+    if (caught instanceof ApiError && caught.kind === 'validation') {
+      errors.value = caught.fields;
+    } else {
+      problem.value = caught instanceof ApiError ? caught.message : 'That image could not be used.';
+    }
+  } finally {
+    bannerBusy.value = false;
+  }
+}
+
 /**
  * The API keeps these in UTC and a datetime-local input has no zone of its
  * own, so the stored moment is shown exactly as stored and handed back the
@@ -203,6 +257,54 @@ function localMoment(iso: string | null): string {
       >
         Saved.
       </AppAlert>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-medium text-foreground">
+          Banner
+        </h2>
+
+        <img
+          v-if="banner"
+          :src="banner.large"
+          alt=""
+          data-testid="settings-banner-preview"
+          class="aspect-[3/1] w-full rounded-lg object-cover"
+        >
+
+        <p class="text-xs text-muted-foreground">
+          At least 1200 by 400, up to 8MB. JPEG, PNG or WebP. It is cropped to a wide strip from
+          the top, and the original is not kept — re-framing means uploading again.
+        </p>
+
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          data-testid="settings-banner"
+          :disabled="bannerBusy"
+          class="block w-full text-sm text-muted-foreground-1 file:me-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground"
+          @change="chooseBanner"
+        >
+
+        <p
+          v-if="errors.banner"
+          data-testid="settings-banner-error"
+          role="alert"
+          class="text-sm text-destructive"
+        >
+          {{ errors.banner.join(' ') }}
+        </p>
+
+        <AppButton
+          v-if="banner"
+          type="button"
+          variant="secondary"
+          data-testid="settings-banner-remove"
+          :disabled="bannerBusy"
+          @click="dropBanner"
+        >
+          Remove banner
+        </AppButton>
+      </section>
 
       <form
         data-testid="settings-save"

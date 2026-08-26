@@ -235,3 +235,23 @@ describe('error normalisation', () => {
         expect(error.body).toMatchObject({ data: { id: 18 } });
     });
 });
+
+describe('uploads', () => {
+    it('hands a file to the browser to encode rather than serialising it as JSON', async () => {
+        const fetch = stubFetch({ status: 200, body: { data: null } });
+        const { client } = clientWith('a-token');
+
+        const form = new FormData();
+        form.set('banner', new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' }));
+
+        await client.post('/api/events/london/banner', form);
+
+        const [, init] = fetch.mock.calls[0] as [string, RequestInit];
+
+        expect(init.body).toBe(form);
+
+        // Set by the browser, boundary and all: setting it by hand produces a
+        // multipart body the server cannot parse.
+        expect((init.headers as Record<string, string>)['Content-Type']).toBeUndefined();
+    });
+});

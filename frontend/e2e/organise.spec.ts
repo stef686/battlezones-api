@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 import { resetWorld } from './reset';
+import { wideImage } from './wide-image';
 
 const EVENT_SLUG = 'end-to-end-open';
 const ORGANISER = { email: 'organiser@battlezones.test', password: 'end-to-end-password' };
@@ -133,4 +134,29 @@ test('an Organiser enters the victory points for a Bye', async ({ page }) => {
     const row = page.locator('[data-testid^="standing-"]', { hasText: 'Ferrus Manus and partner' });
     await expect(row.getByTestId('match-points')).toHaveText('3');
     await expect(row.getByTestId('victory-points')).toHaveText('60');
+});
+
+test('an Organiser puts a banner on the event and sees it behind the name', async ({ page }) => {
+    await logIn(page, ORGANISER);
+    await page.goto(`/events/${EVENT_SLUG}/organise/settings`);
+
+    await expect(page.getByTestId('event-header-banner')).toHaveCount(0);
+
+    await page.getByTestId('settings-banner').setInputFiles({
+        name: 'hall.png',
+        mimeType: 'image/png',
+        buffer: wideImage(),
+    });
+
+    await expect(page.getByTestId('settings-banner-preview')).toBeVisible();
+
+    // The header is chrome, so the Banner follows the Organiser onto every
+    // Event screen rather than living on the one that uploaded it.
+    await page.goto(`/events/${EVENT_SLUG}/standings`);
+    await expect(page.getByTestId('event-header-banner')).toBeVisible();
+
+    await page.goto(`/events/${EVENT_SLUG}/organise/settings`);
+    await page.getByTestId('settings-banner-remove').click();
+
+    await expect(page.getByTestId('event-header-banner')).toHaveCount(0);
 });

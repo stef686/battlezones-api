@@ -46,6 +46,18 @@ const dates = computed(() => formatDateRange(event.value?.starts_at ?? null, eve
     data-testid="event-header"
     class="relative isolate w-full bg-navbar pt-[env(safe-area-inset-top)]"
   >
+    <!-- Decorative: the Event's name is already in the heading below it, so
+         an alt text here would read the same thing twice. -->
+    <img
+      v-if="event.banner"
+      :src="event.banner.large"
+      :srcset="`${event.banner.small} 800w, ${event.banner.large} 1600w`"
+      sizes="100vw"
+      alt=""
+      data-testid="event-header-banner"
+      class="absolute inset-0 -z-10 size-full object-cover"
+    >
+
     <!-- Light status-bar text reads over the top of the header whatever is
          behind it, so the scrim is here before there is ever an image. -->
     <div

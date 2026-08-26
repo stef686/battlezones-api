@@ -29,6 +29,7 @@ function eventBody(organise = true, overrides: Record<string, unknown> = {}) {
             is_full: false,
             game_system: null,
             venue: { name: 'The Hall', address: '1 Example Street', city: 'London', country: 'GB' },
+            banner: null,
             documents: [],
             viewer: {
                 is_organiser: organise,
@@ -156,6 +157,80 @@ describe('the event settings screen', () => {
 
         expect(view.get('[data-testid="settings-max-attendees-error"]').text())
             .toContain('There are already 18 parties entered.');
+    });
+
+    it('uploads a banner as multipart, because a patch body carries no files', async () => {
+        const bannered = eventBody(true, { banner: { large: 'https://cdn.test/l.webp', small: 'https://cdn.test/s.webp' } });
+
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`POST /api/events/${EVENT_SLUG}/banner`]: { status: 200, body: bannered },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        const input = view.get<HTMLInputElement>('[data-testid="settings-banner"]');
+        const file = new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' });
+
+        Object.defineProperty(input.element, 'files', { value: [file] });
+        await input.trigger('change');
+        await flushPromises();
+
+        const upload = fetch.mock.calls.find(([url]) => String(url).endsWith('/banner'));
+
+        expect(upload).toBeDefined();
+        expect((upload?.[1] as RequestInit).body).toBeInstanceOf(FormData);
+        expect(view.get<HTMLImageElement>('[data-testid="settings-banner-preview"]').element.src)
+            .toBe('https://cdn.test/l.webp');
+    });
+
+    it('says why a rejected upload was rejected, against the field that carried it', async () => {
+        stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`POST /api/events/${EVENT_SLUG}/banner`]: {
+                status: 422,
+                body: { message: 'Invalid.', errors: { banner: ['The banner must be at least 1200 pixels wide.'] } },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        const input = view.get<HTMLInputElement>('[data-testid="settings-banner"]');
+        Object.defineProperty(input.element, 'files', { value: [new File(['bytes'], 'logo.png', { type: 'image/png' })] });
+        await input.trigger('change');
+        await flushPromises();
+
+        expect(view.get('[data-testid="settings-banner-error"]').text())
+            .toContain('at least 1200 pixels wide');
+    });
+
+    it('removes a banner, returning the header to its flat state', async () => {
+        const bannered = eventBody(true, { banner: { large: 'https://cdn.test/l.webp', small: 'https://cdn.test/s.webp' } });
+
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: bannered },
+            [`DELETE /api/events/${EVENT_SLUG}/banner`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="settings-banner-remove"]').trigger('click');
+        await flushPromises();
+
+        expect(fetch.mock.calls.some(([, init]) => (init as RequestInit | undefined)?.method === 'DELETE')).toBe(true);
+        expect(view.find('[data-testid="settings-banner-preview"]').exists()).toBe(false);
+    });
+
+    it('offers nothing to remove when there is no banner', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="settings-banner-remove"]').exists()).toBe(false);
     });
 
     it('tells a reader who does not run this event that the page is not there', async () => {

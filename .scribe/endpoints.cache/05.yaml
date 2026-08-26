@@ -73,7 +73,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":665,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-14T13:38:34Z","ends_at":"2027-02-16T13:38:34Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-26T00:08:40Z","updated_at":"2026-08-26T00:08:40Z"}}'
+        content: '{"data":{"id":680,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-14T14:10:16Z","ends_at":"2027-02-16T14:10:16Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -303,7 +303,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":60,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-07T21:39:54Z","author":{"id":1481,"name":"Cordia Cummings"},"created_at":"2026-08-26T00:08:40Z","updated_at":"2026-08-26T00:08:40Z"}}'
+        content: '{"data":{"id":61,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-07T22:11:37Z","author":{"id":1512,"name":"Cordia Cummings"},"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -364,7 +364,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":191,"name":"","allegiance":null,"members":[]}}'
+        content: '{"data":{"id":199,"name":"","allegiance":null,"members":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -474,7 +474,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":192,"name":"","allegiance":null,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":200,"name":"","allegiance":null,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -523,7 +523,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":99,"number":1,"name":null,"status":"draft"},{"id":100,"number":3,"name":null,"status":"draft"}]}'
+        content: '{"data":[{"id":101,"number":1,"name":null,"status":"draft"},{"id":102,"number":3,"name":null,"status":"draft"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -860,7 +860,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":314,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-26T00:08:40Z","updated_at":"2026-08-26T00:08:40Z"}}'
+        content: '{"data":{"id":320,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -1787,7 +1787,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":227,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":228,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
+        content: '{"data":[{"id":232,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":233,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
         headers: []
         description: ''
       -
@@ -1878,7 +1878,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":229,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":234,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -1951,7 +1951,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":230,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":235,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2152,7 +2152,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":231,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":236,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2569,7 +2569,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":676,"name":"Quos velit et fugiat","slug":"quos-velit-et-fugiat-76344","description":"Modi deserunt aut ab provident perspiciatis. Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","starts_at":"2026-09-11T19:27:56Z","ends_at":"2026-09-13T19:27:56Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"created_at":"2026-08-26T00:08:40Z","updated_at":"2026-08-26T00:08:40Z"}}'
+        content: '{"data":{"id":691,"name":"Quos velit et fugiat","slug":"quos-velit-et-fugiat-76344","description":"Modi deserunt aut ab provident perspiciatis. Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","starts_at":"2026-09-11T19:59:39Z","ends_at":"2026-09-13T19:59:39Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
         headers: []
         description: ''
       -
@@ -2584,6 +2584,134 @@ endpoints:
         content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
         headers: []
         description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/banner'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Upload an Event Banner'
+      description: 'Organisers only. A multipart route of its own rather than a field on the Event PATCH, because PHP does not populate uploaded files for PATCH bodies. The upload is scaled and cropped to 1600x534 and 800x267 WebP and the original is discarded, so re-framing later means uploading again.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      banner:
+        custom: []
+        name: banner
+        description: 'A wide image, at least 1200x400, at most 8MB. JPEG, PNG or WebP.'
+        required: true
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters:
+      banner: null
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":692,"name":"Nihil accusantium harum","slug":"nihil-accusantium-harum-31583","description":"Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure. Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.","status":"draft","pairing_format":"swiss","starts_at":"2026-12-25T03:21:40Z","ends_at":"2026-12-27T03:21:40Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Leffler-Glover Hall","address":"723 Wisoky Passage","city":"Micaelatown","country":"BO"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/events/{event_slug}/banner'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove an Event Banner'
+      description: 'Organisers only. Deletes both stored variants and returns the header to its flat surface.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":693,"name":"Odit quia officia est","slug":"odit-quia-officia-est-71680","description":"Veritatis excepturi doloribus delectus fugit. Repudiandae laboriosam est alias tenetur ratione. Voluptate accusamus ut et recusandae. Rerum ex repellendus assumenda et.","status":"draft","pairing_format":"swiss","starts_at":"2026-11-20T05:48:27Z","ends_at":"2026-11-22T05:48:27Z","max_attendees":65,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Cassin Inc Hall","address":"71854 Rosario Terrace Suite 298","city":"Walkerside","country":"VE"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
     responseFields: []
     auth: []
     controller: null
@@ -2702,7 +2830,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":88,"label":"Awards","type":"info","starts_at":"2026-09-02T23:02:37+00:00","ends_at":"2026-09-03T00:02:37+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":90,"label":"Awards","type":"info","starts_at":"2026-09-02T23:34:20+00:00","ends_at":"2026-09-03T00:34:20+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -2926,7 +3054,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":89,"label":"Awards","type":"info","starts_at":"2026-09-02T23:02:37+00:00","ends_at":"2026-09-03T00:02:37+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":91,"label":"Awards","type":"info","starts_at":"2026-09-02T23:34:20+00:00","ends_at":"2026-09-03T00:34:20+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Events\ClaimInviteController;
 use App\Http\Controllers\Events\CloseEventPollController;
 use App\Http\Controllers\Events\DeleteAttendeeMemberController;
+use App\Http\Controllers\Events\DeleteEventBannerController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
 use App\Http\Controllers\Events\DeleteEventScheduleBlockController;
 use App\Http\Controllers\Events\ExportEventFeedbackController;
@@ -39,6 +40,7 @@ use App\Http\Controllers\Events\ShowInviteController;
 use App\Http\Controllers\Events\ShowMyGameController;
 use App\Http\Controllers\Events\StoreAttendeeMemberController;
 use App\Http\Controllers\Events\StoreEventAttendeeController;
+use App\Http\Controllers\Events\StoreEventBannerController;
 use App\Http\Controllers\Events\StoreEventInviteController;
 use App\Http\Controllers\Events\StoreEventOrganiserController;
 use App\Http\Controllers\Events\StoreEventPollController;
@@ -127,6 +129,13 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.painting.update');
 
     Route::patch('events/{event:slug}', UpdateEventController::class)->name('events.update');
+
+    // Multipart, and so a route of its own: PHP does not populate uploaded
+    // files for a PATCH body. See docs/adr/0003.
+    Route::post('events/{event:slug}/banner', StoreEventBannerController::class)
+        ->name('events.banner.store');
+    Route::delete('events/{event:slug}/banner', DeleteEventBannerController::class)
+        ->name('events.banner.destroy');
 
     Route::post('events/{event:slug}/schedule', StoreEventScheduleBlockController::class)
         ->name('events.schedule.store');

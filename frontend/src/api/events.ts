@@ -28,6 +28,8 @@ export interface EventSummary {
     attendees_count?: number;
     is_full: boolean;
     game_system: { id: number; name: string; slug: string } | null;
+    /** Both normalised variants, or null while the header is flat. */
+    banner: { large: string; small: string } | null;
     venue: {
         name: string | null;
         address: string | null;
@@ -143,6 +145,25 @@ export interface EventChanges {
 
 export function updateEvent(client: ApiClient, slug: string, changes: EventChanges): Promise<EventSummary> {
     return client.patch<{ data: EventSummary }>(eventPath(slug), changes).then((response) => response.data);
+}
+
+/**
+ * Upload a Banner.
+ *
+ * Multipart and a route of its own rather than a field on the Event PATCH,
+ * because PHP does not populate uploaded files for a PATCH body. The image is
+ * normalised and the original discarded, so re-framing means uploading again.
+ */
+export function uploadBanner(client: ApiClient, slug: string, file: File): Promise<EventSummary> {
+    const form = new FormData();
+    form.set('banner', file);
+
+    return client.post<{ data: EventSummary }>(`${eventPath(slug)}/banner`, form).then((response) => response.data);
+}
+
+/** Take the Banner off, returning the header to its flat surface. */
+export function removeBanner(client: ApiClient, slug: string): Promise<EventSummary> {
+    return client.delete<{ data: EventSummary }>(`${eventPath(slug)}/banner`).then((response) => response.data);
 }
 
 export function fetchEvent(client: ApiClient, slug: string): Promise<EventSummary> {

@@ -1129,6 +1129,33 @@ export interface paths {
         patch: operations["markAPaintingEntry"];
         trace?: never;
     };
+    "/api/events/{event_slug}/banner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload an Event Banner
+         * @description Organisers only. A multipart route of its own rather than a field on the Event PATCH, because PHP does not populate uploaded files for PATCH bodies. The upload is scaled and cropped to 1600x534 and 800x267 WebP and the original is discarded, so re-framing later means uploading again.
+         */
+        post: operations["uploadAnEventBanner"];
+        /**
+         * Remove an Event Banner
+         * @description Organisers only. Deletes both stored variants and returns the header to its flat surface.
+         */
+        delete: operations["removeAnEventBanner"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events/{event_slug}/schedule/reorder": {
         parameters: {
             query?: never;
@@ -2793,6 +2820,7 @@ export interface operations {
                                 city?: string;
                                 country?: string;
                             };
+                            banner?: string | null;
                             created_at?: string;
                             updated_at?: string;
                         };
@@ -2944,6 +2972,7 @@ export interface operations {
                                 city?: string;
                                 country?: string;
                             };
+                            banner?: string | null;
                             created_at?: string;
                             updated_at?: string;
                         };
@@ -4824,6 +4853,146 @@ export interface operations {
                         errors?: {
                             field_name?: string[];
                         };
+                    };
+                };
+            };
+        };
+    };
+    uploadAnEventBanner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description A wide image, at least 1200x400, at most 8MB. JPEG, PNG or WebP.
+                     */
+                    banner: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            slug?: string;
+                            description?: string;
+                            status?: string;
+                            pairing_format?: string;
+                            starts_at?: string;
+                            ends_at?: string;
+                            max_attendees?: number;
+                            attendee_size?: number;
+                            requires_allegiance?: boolean;
+                            registration_closes_at?: string | null;
+                            is_full?: boolean;
+                            venue?: {
+                                name?: string;
+                                address?: string;
+                                city?: string;
+                                country?: string;
+                            };
+                            banner?: string | null;
+                            created_at?: string;
+                            updated_at?: string;
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The submitted data failed validation. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            field_name?: string[];
+                        };
+                    };
+                };
+            };
+        };
+    };
+    removeAnEventBanner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            slug?: string;
+                            description?: string;
+                            status?: string;
+                            pairing_format?: string;
+                            starts_at?: string;
+                            ends_at?: string;
+                            max_attendees?: number;
+                            attendee_size?: number;
+                            requires_allegiance?: boolean;
+                            registration_closes_at?: string | null;
+                            is_full?: boolean;
+                            venue?: {
+                                name?: string;
+                                address?: string;
+                                city?: string;
+                                country?: string;
+                            };
+                            banner?: string | null;
+                            created_at?: string;
+                            updated_at?: string;
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
                     };
                 };
             };

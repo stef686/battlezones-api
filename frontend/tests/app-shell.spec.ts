@@ -28,6 +28,7 @@ function eventBody(overrides: Record<string, unknown> = {}) {
             registration_closes_at: null,
             attendees_count: 18,
             is_full: false,
+            banner: null,
             game_system: { id: 1, name: 'The Horus Heresy', slug: 'horus-heresy' },
             venue: { name: 'The Hall', address: null, city: null, country: null },
             documents: [],
@@ -293,6 +294,33 @@ describe('the event header', () => {
         await flushPromises();
 
         expect(view.find('[data-testid="event-header"]').exists()).toBe(false);
+    });
+
+    it('hangs the banner behind the type, without changing what colour the type is', async () => {
+        stubEvent(eventBody({ banner: { large: 'https://cdn.test/large.webp', small: 'https://cdn.test/small.webp' } }));
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        const banner = view.get('[data-testid="event-header-banner"]');
+
+        expect(banner.attributes('src')).toBe('https://cdn.test/large.webp');
+        expect(banner.attributes('alt')).toBe('');
+        expect(view.get('[data-testid="event-header-name"]').classes()).toContain('text-event-header-foreground');
+    });
+
+    it('stays flat for an event with no banner, which is what it was built for', async () => {
+        stubEvent();
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        expect(view.find('[data-testid="event-header-banner"]').exists()).toBe(false);
+        expect(view.find('.event-header-scrim-bottom').exists()).toBe(true);
     });
 
     it('runs under the status bar, clearing it with the type rather than the background', async () => {

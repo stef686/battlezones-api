@@ -27,7 +27,9 @@ use App\Models\Game;
 use App\Models\GameSystem;
 use App\Models\Round;
 use App\Models\User;
+use App\Services\EventBannerService;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -41,6 +43,9 @@ use Illuminate\Support\Facades\Hash;
 class EndToEndSeeder extends Seeder
 {
     public const EVENT_SLUG = 'end-to-end-open';
+
+    /** The Event that already carries a Banner, so both header states exist. */
+    public const BANNERED_EVENT_SLUG = 'end-to-end-invitational';
 
     public const PLAYER_EMAIL = 'player@battlezones.test';
 
@@ -111,6 +116,56 @@ class EndToEndSeeder extends Seeder
         $this->unregisteredCaptain($event);
 
         $this->feedback($event, $mine);
+
+        $this->banneredEvent();
+    }
+
+    /**
+     * A second Event that already carries a Banner.
+     *
+     * The main Event deliberately has none — it is the flat header the browser
+     * test uploads onto — so the seeded world holds one of each, and a reader
+     * can see both states without running the upload first.
+     */
+    private function banneredEvent(): Event
+    {
+        $event = Event::query()->updateOrCreate(
+            ['slug' => self::BANNERED_EVENT_SLUG],
+            [
+                'game_system_id' => GameSystem::query()->where('slug', 'horus-heresy')->value('id'),
+                'name' => 'End To End Invitational',
+                'description' => 'The fixed Event that already has a Banner.',
+                'status' => EventStatus::Published,
+                'pairing_format' => PairingFormat::Swiss,
+                'starts_at' => now()->addWeek()->startOfDay(),
+                'ends_at' => now()->addWeek()->addDay()->endOfDay(),
+                'attendee_size' => 2,
+                'venue_name' => 'The Test Hall',
+                'venue_city' => 'London',
+                'timezone' => 'Europe/London',
+                'settings' => new EventSettings(requiresOpposedAllegiance: true, roundCount: 3, standingsVisible: true),
+            ],
+        );
+
+        if ($event->banner_path === null) {
+            app(EventBannerService::class)->replace($event, $this->bannerUpload());
+        }
+
+        return $event;
+    }
+
+    /**
+     * A generated source image, so the repository carries no binary fixture.
+     */
+    private function bannerUpload(): UploadedFile
+    {
+        $image = imagecreatetruecolor(2000, 800);
+        imagefilledrectangle($image, 0, 0, 2000, 800, imagecolorallocate($image, 32, 46, 68));
+
+        $path = tempnam(sys_get_temp_dir(), 'seed-banner').'.png';
+        imagepng($image, $path);
+
+        return new UploadedFile($path, 'banner.png', 'image/png', null, true);
     }
 
     /**
