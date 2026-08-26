@@ -10,7 +10,6 @@ import { keys } from '@/api/keys';
 import { fetchPolls } from '@/api/polls';
 import type { Game } from '@/api/results';
 import MissingNotice from '@/components/MissingNotice.vue';
-import { formatDateRange } from '@/lib/dates';
 
 const props = defineProps<{ eventSlug: string }>();
 
@@ -41,8 +40,6 @@ const { data: polls } = useQuery({
 });
 
 const openToMe = computed(() => (polls.value ?? []).find((poll) => poll.is_open_for_me === true) ?? null);
-
-const dates = computed(() => formatDateRange(event.value?.starts_at ?? null, event.value?.ends_at ?? null));
 
 const venue = computed(() => {
   const place = event.value?.venue;
@@ -108,34 +105,17 @@ const liveGame = computed(() => myGame.value?.data ?? null);
     </p>
 
     <template v-else-if="event">
-      <header class="flex flex-col gap-2">
-        <p
-          v-if="event.game_system"
-          class="text-xs font-medium uppercase tracking-widest text-muted-foreground"
-        >
-          {{ event.game_system.name }}
-        </p>
-        <h1
-          data-testid="event-name"
-          class="text-2xl font-bold tracking-tight text-foreground"
-        >
-          {{ event.name }}
-        </h1>
-        <p
-          v-if="dates"
-          data-testid="event-dates"
-          class="text-sm text-muted-foreground-1"
-        >
-          {{ dates }}
-        </p>
-        <p
-          v-if="places"
-          data-testid="event-places"
-          class="text-sm text-muted-foreground"
-        >
-          {{ places }}
-        </p>
-      </header>
+      <!-- The game system, the name and the dates are the Event header's,
+           drawn above every screen of the Event: repeating them here read as
+           the same three lines twice. What is left is what the header does
+           not carry. -->
+      <p
+        v-if="places"
+        data-testid="event-places"
+        class="text-sm text-muted-foreground"
+      >
+        {{ places }}
+      </p>
 
       <p
         v-if="event.description"
@@ -169,16 +149,13 @@ const liveGame = computed(() => myGame.value?.data ?? null);
         Your game{{ liveGame.table_number === null ? '' : `: table ${liveGame.table_number}` }}
       </RouterLink>
 
+      <!-- My team is a nav chip for a viewer who has entered, so it needs no
+           call-to-action here; entering does, since nothing else routes to
+           it. The permission alone is not the test: an Organiser who has
+           entered keeps it, because they may still register other parties
+           from the Organise screen. -->
       <RouterLink
-        v-if="viewer?.is_attendee"
-        :to="{ name: 'my-team', params: { eventSlug: props.eventSlug } }"
-        data-testid="my-team-link"
-        class="inline-flex items-center justify-center gap-x-2 rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
-      >
-        Your team
-      </RouterLink>
-      <RouterLink
-        v-else-if="viewer?.permissions.register"
+        v-if="viewer?.is_attendee === false && viewer.permissions.register"
         :to="{ name: 'register', params: { eventSlug: props.eventSlug } }"
         data-testid="register-link"
         class="inline-flex items-center justify-center gap-x-2 rounded-lg border border-transparent bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover focus:bg-primary-focus focus:outline-hidden"

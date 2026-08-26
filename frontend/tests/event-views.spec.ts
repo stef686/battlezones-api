@@ -165,10 +165,13 @@ describe('the event page', () => {
         const view = mountView(EventView);
         await flushPromises();
 
-        expect(view.get('[data-testid="event-name"]').text()).toBe('London Grand Tournament');
         expect(view.get('[data-testid="event-description"]').text()).toContain('doubles event');
-        expect(view.get('[data-testid="event-dates"]').text()).not.toBe('');
         expect(view.get('[data-testid="event-places"]').text()).toBe('18 of 32 places taken');
+
+        // The name, the game system and the dates belong to the event header,
+        // which draws them above every screen of the event.
+        expect(view.find('[data-testid="event-name"]').exists()).toBe(false);
+        expect(view.find('[data-testid="event-dates"]').exists()).toBe(false);
 
         expect(view.findAll('[data-testid="venue-line"]').map((line) => line.text()))
             .toEqual(['The Hall', '1 Example Street', 'London', 'GB']);
@@ -225,7 +228,7 @@ describe('the event page', () => {
         expect(organiser.find('[data-testid="organiser-controls"]').exists()).toBe(true);
     });
 
-    it('offers entry to a reader who may enter, and their team to one who has', async () => {
+    it('leaves my team to the nav, and offers entry only to a reader who may enter', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}`]: {
                 status: 200,
@@ -235,7 +238,9 @@ describe('the event page', () => {
                         is_lead_organiser: false,
                         is_attendee: true,
                         attendee_id: 9,
-                        permissions: { organise: false, register: false, manage_organisers: false },
+                        // An organiser who has entered keeps the permission,
+                        // since they may still register other parties.
+                        permissions: { organise: false, register: true, manage_organisers: false },
                     },
                 }),
             },
@@ -244,8 +249,30 @@ describe('the event page', () => {
         const view = mountView(EventView);
         await flushPromises();
 
-        expect(view.find('[data-testid="my-team-link"]').exists()).toBe(true);
+        expect(view.find('[data-testid="my-team-link"]').exists()).toBe(false);
         expect(view.find('[data-testid="register-link"]').exists()).toBe(false);
+
+        stubApi({
+            [`/api/events/${EVENT_SLUG}`]: {
+                status: 200,
+                body: eventBody({
+                    viewer: {
+                        is_organiser: false,
+                        is_lead_organiser: false,
+                        is_attendee: false,
+                        attendee_id: null,
+                        permissions: { organise: false, register: true, manage_organisers: false },
+                    },
+                }),
+            },
+        });
+
+        pinia = createPinia();
+        setActivePinia(pinia);
+        const outsider = mountView(EventView);
+        await flushPromises();
+
+        expect(outsider.find('[data-testid="register-link"]').exists()).toBe(true);
     });
 });
 
