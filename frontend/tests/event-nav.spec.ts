@@ -101,7 +101,7 @@ describe('the event nav', () => {
         await flushPromises();
 
         expect(view.findAll('[data-testid^="event-nav-"]').map((chip) => chip.text()))
-            .toEqual(['Rounds', 'Standings', 'Attendees', 'Schedule']);
+            .toEqual(['Home', 'Rounds', 'Standings', 'Attendees', 'Schedule']);
     });
 
     it('offers my team to a viewer who has entered, last of the chips', async () => {
@@ -113,7 +113,7 @@ describe('the event nav', () => {
         await flushPromises();
 
         expect(view.findAll('[data-testid^="event-nav-"]').map((chip) => chip.text()))
-            .toEqual(['Rounds', 'Standings', 'Attendees', 'Schedule', 'My team']);
+            .toEqual(['Home', 'Rounds', 'Standings', 'Attendees', 'Schedule', 'My team']);
         expect(view.get('[data-testid="event-nav-my-team"]').attributes('href'))
             .toBe(`/events/${EVENT_SLUG}/my-team`);
     });
@@ -129,6 +129,18 @@ describe('the event nav', () => {
         expect(view.find('[data-testid="event-nav-my-team"]').exists()).toBe(false);
     });
 
+    it('lights home on the event screen itself', async () => {
+        stubEvent(eventBody());
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountNav();
+        await flushPromises();
+
+        expect(view.get('[data-testid="event-nav-event"]').attributes('href')).toBe(`/events/${EVENT_SLUG}`);
+        expect(view.get('[data-testid="event-nav-event"]').attributes('aria-current')).toBe('page');
+    });
+
     it('lights the section a detail screen belongs to', async () => {
         stubEvent(eventBody());
         await router.push(`/events/${EVENT_SLUG}/rounds/4`);
@@ -138,6 +150,7 @@ describe('the event nav', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="event-nav-rounds"]').attributes('aria-current')).toBe('page');
+        expect(view.get('[data-testid="event-nav-event"]').attributes('aria-current')).toBeUndefined();
         expect(view.get('[data-testid="event-nav-standings"]').attributes('aria-current')).toBeUndefined();
     });
 

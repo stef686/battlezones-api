@@ -2,10 +2,11 @@
 /**
  * The Event's own sections, pinned under the header.
  *
- * A Player mid-round moves between Rounds, Standings, Attendees and Schedule
- * constantly, and returning to the Event screen between each is a tap they
- * should not have to make. The strip pins as the header scrolls away so those
- * four are reachable from anywhere inside the Event.
+ * A Player mid-round moves between Home, Rounds, Standings, Attendees and
+ * Schedule constantly, and hunting for the browser's back button between each
+ * is a tap they should not have to make. The strip pins as the header scrolls
+ * away so those five are reachable from anywhere inside the Event — Home
+ * first, because a Player who has lost their place wants the Event screen.
  *
  * Five chips do not fit a phone viewport, so the strip scrolls horizontally —
  * natively, because a custom drag handler on a bar this small fights the
@@ -37,6 +38,7 @@ const { data: event, error } = useQuery({
  * Kept beside the chip list so the whole relationship reads in one place.
  */
 const chipOfRoute: Record<string, string> = {
+  event: 'event',
   rounds: 'rounds',
   round: 'rounds',
   standings: 'standings',
@@ -47,6 +49,7 @@ const chipOfRoute: Record<string, string> = {
 };
 
 const sections = [
+  { name: 'event', label: 'Home' },
   { name: 'rounds', label: 'Rounds' },
   { name: 'standings', label: 'Standings' },
   { name: 'attendees', label: 'Attendees' },
@@ -55,8 +58,8 @@ const sections = [
 
 /**
  * An Event nobody may see answers 404, and a nav offering its sections above
- * that screen's own "not found" would be four dead ends. It stays through the
- * load, though: the four sections it lists do not depend on the Event.
+ * that screen's own "not found" would be five dead ends. It stays through the
+ * load, though: the five sections it lists do not depend on the Event.
  */
 const readable = computed(() => error.value === null);
 
@@ -84,7 +87,7 @@ const active = computed(() => chipOfRoute[String(route.name)] ?? null);
 /**
  * My team is the one chip allowed to be absent, and it is last for exactly
  * that reason: a viewer who has not entered has no team, and a trailing chip
- * can go without moving the four in front of it.
+ * can go without moving the five in front of it.
  */
 const chips = computed(() => event.value?.viewer?.is_attendee === true
   ? [...sections, { name: 'my-team', label: 'My team' }]
