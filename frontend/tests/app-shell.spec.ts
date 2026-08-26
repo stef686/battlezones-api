@@ -166,6 +166,19 @@ describe('the app shell', () => {
         expect(account.text()).toContain('Ada Lovelace');
     });
 
+    it('shows the slots as icons alone, keeping their labels for screen readers', async () => {
+        stubEvent();
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        for (const slot of ['home', 'events', 'messages', 'account']) {
+            expect(view.get(`[data-testid="tab-${slot}"] span`).classes()).toContain('sr-only');
+        }
+    });
+
     it('draws an icon in every slot', async () => {
         stubEvent();
         await router.push(`/events/${EVENT_SLUG}`);

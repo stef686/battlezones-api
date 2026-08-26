@@ -14,6 +14,11 @@
  * The avatar is the load-bearing slot: with the old top bar gone, it is the
  * only chrome that routes to signing in. A signed-out viewer would otherwise
  * have to hit a guarded route and be bounced to find the login screen.
+ *
+ * The slots are icons alone. Their labels stay in the markup as `sr-only`,
+ * because an icon with no accessible name is a mystery to a screen reader —
+ * and because the account slot's name is the viewer's own, which no icon can
+ * say. Do not delete the labels to save the markup.
  */
 import {
   CalendarDaysIcon,
@@ -45,12 +50,12 @@ const coming: Slot[] = [
 const viewer = computed(() => session.viewer);
 
 /**
- * The signed-in viewer's own name, cut to what fits under an icon. There is
- * no account screen yet, so the slot names them rather than leading anywhere.
+ * The signed-in viewer's own name. There is no account screen yet, so the
+ * slot names them rather than leading anywhere.
  */
 const accountLabel = computed(() => viewer.value?.public_name ?? 'Sign in');
 
-const SLOT_CLASSES = 'flex flex-col items-center gap-1 px-1 py-2.5 text-[11px] font-medium';
+const SLOT_CLASSES = 'flex flex-col items-center px-1 py-3.5';
 </script>
 
 <template>
@@ -75,9 +80,9 @@ const SLOT_CLASSES = 'flex flex-col items-center gap-1 px-1 py-2.5 text-[11px] f
         >
           <component
             :is="slot.icon"
-            class="size-5 shrink-0"
+            class="size-6 shrink-0"
           />
-          {{ slot.label }}
+          <span class="sr-only">{{ slot.label }}</span>
         </span>
       </li>
 
@@ -88,8 +93,8 @@ const SLOT_CLASSES = 'flex flex-col items-center gap-1 px-1 py-2.5 text-[11px] f
           data-testid="tab-account"
           :class="[SLOT_CLASSES, 'text-muted-foreground-1 hover:text-navbar-nav-foreground focus:text-navbar-nav-foreground focus:outline-hidden']"
         >
-          <UserCircleIcon class="size-5 shrink-0" />
-          Sign in
+          <UserCircleIcon class="size-6 shrink-0" />
+          <span class="sr-only">Sign in</span>
         </RouterLink>
 
         <span
@@ -97,8 +102,8 @@ const SLOT_CLASSES = 'flex flex-col items-center gap-1 px-1 py-2.5 text-[11px] f
           data-testid="tab-account"
           :class="[SLOT_CLASSES, 'text-navbar-nav-foreground']"
         >
-          <UserCircleIcon class="size-5 shrink-0" />
-          <span class="max-w-full truncate">{{ accountLabel }}</span>
+          <UserCircleIcon class="size-6 shrink-0" />
+          <span class="sr-only">{{ accountLabel }}</span>
         </span>
       </li>
     </ul>
