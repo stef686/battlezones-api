@@ -418,14 +418,66 @@ describe('a vote that has opened', () => {
         await flushPromises();
 
         expect(view.find('[data-testid="voting-open"]').exists()).toBe(false);
+    });
 
-        // The way in is still there, because a Poll they may read about is
-        // not the same as one they may vote in.
-        expect(view.find('[data-testid="polls-link"]').exists()).toBe(true);
+    it('leaves the sections to the event nav rather than listing them again', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView(EventView);
+        await flushPromises();
+
+        for (const link of ['schedule-link', 'rounds-link', 'attendees-link', 'polls-link', 'standings-link']) {
+            expect(view.find(`[data-testid="${link}"]`).exists()).toBe(false);
+        }
+    });
+
+    it('puts a player one tap from the table they are playing on', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+            [`/api/events/${EVENT_SLUG}/polls`]: { status: 200, body: { data: [] } },
+            [`/api/events/${EVENT_SLUG}/my-game`]: { status: 200, body: { data: { id: 18, table_number: 5, is_bye: false, round: { id: 4, number: 2, name: 'Round 2' }, result: { submitted_at: null, edited_at: null, is_flagged: false }, attendees: [] } } },
+        });
+
+        const view = mountView(EventView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="my-game-link"]').attributes('href')).toBe(`/events/${EVENT_SLUG}/my-game`);
+    });
+
+    it('says nothing about a game that is not being played', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+            [`/api/events/${EVENT_SLUG}/polls`]: { status: 200, body: { data: [] } },
+            [`/api/events/${EVENT_SLUG}/my-game`]: { status: 200, body: { data: null } },
+        });
+
+        const view = mountView(EventView);
+        await flushPromises();
+
+        expect(view.find('[data-testid="my-game-link"]').exists()).toBe(false);
+    });
+
+    it('does not go looking for a game on behalf of a reader who has not entered', async () => {
+        const fetch = stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView(EventView);
+        await flushPromises();
+
+        expect(view.find('[data-testid="my-game-link"]').exists()).toBe(false);
+        expect(fetch.mock.calls.some(([url]) => String(url).includes('/my-game'))).toBe(false);
     });
 });
 
 describe('the attendee detail', () => {
+    it('carries no back link, because the attendees chip is pinned a tap away', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE } });
+
+        const view = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '9' });
+        await flushPromises();
+
+        expect(view.find('[data-testid="back-to-attendees"]').exists()).toBe(false);
+    });
+
     it('shows the players and the faction each of them brings', async () => {
         stubApi({ [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE } });
 

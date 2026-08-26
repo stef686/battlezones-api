@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
-import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { revealArmyLists, unlockArmyList } from '@/api/army-lists';
@@ -76,17 +74,6 @@ async function run(action: () => Promise<unknown>): Promise<void> {
 
 <template>
   <main class="mx-auto flex w-full max-w-md flex-col gap-6 p-5">
-    <RouterLink
-      :to="{ name: 'attendees', params: { eventSlug: props.eventSlug } }"
-      data-testid="back-to-attendees"
-      class="inline-flex items-center gap-x-1 self-start text-sm font-medium text-muted-foreground-1 hover:text-foreground focus:text-foreground focus:outline-hidden"
-    >
-      <ChevronLeftIcon
-        class="size-4 shrink-0"
-      />
-      Back to who is here
-    </RouterLink>
-
     <p
       v-if="isPending"
       class="text-muted-foreground-1"

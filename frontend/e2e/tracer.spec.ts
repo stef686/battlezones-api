@@ -44,7 +44,7 @@ test('a Player logs in, finds their table, submits a result, and sees the standi
 
     await expect(page.getByTestId('result-submitted')).toBeVisible();
 
-    await page.getByTestId('standings-link').click();
+    await page.getByTestId('event-nav-standings').click();
     await expect(page).toHaveURL(new RegExp(`/events/${EVENT_SLUG}/standings`));
 
     const winner = page.locator('[data-testid^="standing-"]').first();

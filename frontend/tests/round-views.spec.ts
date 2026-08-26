@@ -213,6 +213,19 @@ describe('the round detail', () => {
         await router.push(`/events/${EVENT_SLUG}/rounds/4`);
     });
 
+    it('carries no back link, because the rounds chip is pinned a tap away', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        expect(view.find('[data-testid="back-to-rounds"]').exists()).toBe(false);
+    });
+
     it('shows every pairing with its table number, tables first and in order', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },

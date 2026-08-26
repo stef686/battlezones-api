@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ChevronRightIcon } from '@heroicons/vue/24/outline';
 import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -9,6 +8,7 @@ import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import { fetchPolls } from '@/api/polls';
+import type { Game } from '@/api/results';
 import MissingNotice from '@/components/MissingNotice.vue';
 import { formatDateRange } from '@/lib/dates';
 
@@ -67,17 +67,21 @@ const places = computed(() => {
 const viewer = computed(() => event.value?.viewer ?? null);
 
 /**
- * The five screens every reader can reach, in the order they matter during an
- * Event. Listed rather than written out five times so the list group's first
- * and last rows can be rounded without hand-counting them.
+ * The table this Player is on right now.
+ *
+ * My game is not a nav chip — it only means anything while a Round is live —
+ * so it is a call-to-action here instead, in the same idiom as the open vote.
+ * Read only for a viewer who has entered, exactly as the Polls query is
+ * gated on there being a viewer at all: nobody else has a game to be on.
  */
-const destinations = [
-  { name: 'schedule', label: 'Schedule', testid: 'schedule-link' },
-  { name: 'rounds', label: 'Rounds and pairings', testid: 'rounds-link' },
-  { name: 'attendees', label: 'Who is here', testid: 'attendees-link' },
-  { name: 'polls', label: 'Votes', testid: 'polls-link' },
-  { name: 'standings', label: 'Standings', testid: 'standings-link' },
-];
+const { data: myGame } = useQuery({
+  queryKey: computed(() => keys.myGame(props.eventSlug)),
+  queryFn: () => client.get<{ data: Game | null }>(`/api/events/${props.eventSlug}/my-game`),
+  enabled: computed(() => event.value?.viewer?.is_attendee === true),
+  retry: false,
+});
+
+const liveGame = computed(() => myGame.value?.data ?? null);
 </script>
 
 <template>
@@ -153,27 +157,17 @@ const destinations = [
         Voting is open: {{ openToMe.name }}
       </RouterLink>
 
-      <!-- Preline's list group: one card, rows divided rather than spaced, so
-           the five destinations read as one block instead of five buttons. -->
-      <nav class="flex flex-col rounded-xl border border-card-line bg-card shadow-2xs">
-        <RouterLink
-          v-for="(destination, index) in destinations"
-          :key="destination.name"
-          :to="{ name: destination.name, params: { eventSlug: props.eventSlug } }"
-          :data-testid="destination.testid"
-          class="flex items-center gap-x-3 border-card-divider px-4 py-3.5 text-sm font-medium text-foreground hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
-          :class="[
-            index > 0 ? 'border-t' : '',
-            index === 0 ? 'rounded-t-xl' : '',
-            index === destinations.length - 1 ? 'rounded-b-xl' : '',
-          ]"
-        >
-          <span class="flex-1">{{ destination.label }}</span>
-          <ChevronRightIcon
-            class="size-4 shrink-0 text-muted-foreground"
-          />
-        </RouterLink>
-      </nav>
+      <!-- Mid-round, the table and the opponent are what a Player is looking
+           for, so this sits with the other conditional call-to-action rather
+           than in the nav: there is nothing to link to between Rounds. -->
+      <RouterLink
+        v-if="liveGame"
+        :to="{ name: 'my-game', params: { eventSlug: props.eventSlug } }"
+        data-testid="my-game-link"
+        class="inline-flex items-center justify-center gap-x-2 rounded-lg border border-transparent bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover focus:bg-primary-focus focus:outline-hidden"
+      >
+        Your game{{ liveGame.table_number === null ? '' : `: table ${liveGame.table_number}` }}
+      </RouterLink>
 
       <RouterLink
         v-if="viewer?.is_attendee"

@@ -14,7 +14,7 @@ test('anyone can read the event, its schedule, and who is in the room', async ({
     await expect(page.getByTestId('event-name')).toHaveText('End To End Open');
     await expect(page.getByTestId('venue-line').first()).toHaveText('The Test Hall');
 
-    await page.getByTestId('schedule-link').click();
+    await page.getByTestId('event-nav-schedule').click();
     await expect(page).toHaveURL(new RegExp(`/events/${EVENT_SLUG}/schedule`));
 
     // Written to the database out of order, rendered in time order.

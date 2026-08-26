@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
-import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
@@ -56,17 +54,6 @@ function names(pairing: Pairing): string[] {
 
 <template>
   <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
-    <RouterLink
-      :to="{ name: 'rounds', params: { eventSlug: props.eventSlug } }"
-      data-testid="back-to-rounds"
-      class="inline-flex items-center gap-x-1 self-start text-sm font-medium text-muted-foreground-1 hover:text-foreground focus:text-foreground focus:outline-hidden"
-    >
-      <ChevronLeftIcon
-        class="size-4 shrink-0"
-      />
-      Back to the rounds
-    </RouterLink>
-
     <p
       v-if="isPending"
       class="text-muted-foreground-1"
