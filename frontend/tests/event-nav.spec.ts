@@ -177,6 +177,21 @@ describe('the event nav', () => {
             .toHaveLength(0);
     });
 
+    it('marks the section it is on with an underline, not a filled pill', async () => {
+        stubEvent(eventBody());
+        await router.push(`/events/${EVENT_SLUG}/standings`);
+        await router.isReady();
+
+        const view = mountNav();
+        await flushPromises();
+
+        const lit = view.get('[data-testid="event-nav-standings"]').classes();
+
+        expect(lit).toContain('border-primary');
+        expect(lit).not.toContain('bg-primary');
+        expect(view.get('[data-testid="event-nav-rounds"]').classes()).toContain('border-transparent');
+    });
+
     it('scrolls natively, and fades its trailing edge to say there is more', async () => {
         stubEvent(eventBody());
         await router.push(`/events/${EVENT_SLUG}`);

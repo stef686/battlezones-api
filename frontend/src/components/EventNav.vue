@@ -8,7 +8,11 @@
  * away so those five are reachable from anywhere inside the Event — Home
  * first, because a Player who has lost their place wants the Event screen.
  *
- * Five chips do not fit a phone viewport, so the strip scrolls horizontally —
+ * The lit section is marked with an underline rather than a filled pill: six
+ * pills read as six buttons competing with the screen's own calls to action,
+ * where a tab strip reads as where you are.
+ *
+ * Six tabs do not fit a phone viewport, so the strip scrolls horizontally —
  * natively, because a custom drag handler on a bar this small fights the
  * browser's own momentum and gets it wrong.
  */
@@ -67,7 +71,7 @@ const list = ref<HTMLElement | null>(null);
 
 /**
  * The lit chip is scrolled into view rather than left wherever the strip
- * happens to sit: five chips do not fit a phone, so a Player arriving on
+ * happens to sit: the tabs do not fit a phone, so a Player arriving on
  * Standings from a deep link would otherwise see a nav with nothing selected.
  */
 async function showActiveChip(): Promise<void> {
@@ -103,7 +107,7 @@ const chips = computed(() => event.value?.viewer?.is_attendee === true
   >
     <ul
       ref="list"
-      class="mx-auto flex w-full max-w-md gap-1 overflow-x-auto px-4 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      class="mx-auto flex w-full max-w-md gap-2 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
       <li
         v-for="chip in chips"
@@ -115,10 +119,10 @@ const chips = computed(() => event.value?.viewer?.is_attendee === true
           :data-testid="`event-nav-${chip.name}`"
           :aria-current="active === chip.name ? 'page' : undefined"
           :class="[
-            'block rounded-full px-3 py-1.5 text-sm font-medium whitespace-nowrap focus:outline-hidden',
+            'block border-b-2 px-2 py-3 text-sm font-medium whitespace-nowrap focus:outline-hidden',
             active === chip.name
-              ? 'bg-primary text-primary-foreground'
-              : 'text-muted-foreground-1 hover:text-navbar-nav-foreground focus:text-navbar-nav-foreground',
+              ? 'border-primary text-navbar-nav-foreground'
+              : 'border-transparent text-muted-foreground-1 hover:text-navbar-nav-foreground focus:text-navbar-nav-foreground',
           ]"
         >
           {{ chip.label }}
