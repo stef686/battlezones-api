@@ -8,6 +8,7 @@ import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
 import AppShell from '@/components/AppShell.vue';
 import { createAppRouter } from '@/router';
+import { useSessionStore } from '@/stores/session';
 
 const EVENT_SLUG = 'london-grand-tournament';
 
@@ -85,34 +86,103 @@ describe('the app shell', () => {
         expect(mountShell().get('[data-testid="screen"]').text()).toBe('a screen');
     });
 
-    it('carries the tab bar on the screens that belong to an event', async () => {
+    it('carries the tab bar on an event screen and on one with no event at all', async () => {
+        stubEvent();
         await router.push(`/events/${EVENT_SLUG}/standings`);
         await router.isReady();
 
-        const view = mountShell();
+        expect(mountShell().find('[data-testid="tab-bar"]').exists()).toBe(true);
 
-        expect(view.find('[data-testid="tab-bar"]').exists()).toBe(true);
-        expect(view.get('[data-testid="tab-standings"]').attributes('href')).toBe(`/events/${EVENT_SLUG}/standings`);
+        await router.push('/login');
+        await flushPromises();
+
+        expect(mountShell().find('[data-testid="tab-bar"]').exists()).toBe(true);
     });
 
-    it('draws an icon beside every tab label', async () => {
+    it('keeps all four slots whoever is looking', async () => {
+        stubEvent();
         await router.push(`/events/${EVENT_SLUG}`);
         await router.isReady();
 
         const view = mountShell();
+        await flushPromises();
 
-        for (const tab of ['event', 'schedule', 'my-game', 'standings']) {
-            const icon = view.get(`[data-testid="tab-${tab}"] svg`);
+        expect(view.findAll('[data-testid^="tab-"]').map((slot) => slot.attributes('data-testid')))
+            .toEqual(['tab-bar', 'tab-home', 'tab-events', 'tab-messages', 'tab-account']);
+    });
 
-            expect(icon.attributes('aria-hidden')).toBe('true');
+    it('telegraphs the screens that do not exist yet rather than pretending they work', async () => {
+        stubEvent();
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        for (const slot of ['home', 'events', 'messages']) {
+            const inert = view.get(`[data-testid="tab-${slot}"]`);
+
+            expect(inert.attributes('aria-disabled')).toBe('true');
+            expect(inert.attributes('href')).toBeUndefined();
+            expect(inert.attributes('tabindex')).toBe('-1');
         }
     });
 
-    it('leaves the tab bar off a screen with no event to navigate', async () => {
+    it('routes a signed-out viewer to sign in from the avatar', async () => {
+        stubEvent();
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        const account = view.get('[data-testid="tab-account"]');
+
+        expect(account.attributes('href')).toBe('/login');
+        expect(account.text()).toContain('Sign in');
+    });
+
+    it('names the signed-in viewer on the avatar', async () => {
+        stubEvent();
+        useSessionStore().viewer = {
+            id: 4,
+            public_name: 'Ada Lovelace',
+            email: 'ada@example.test',
+            is_claimed: true,
+            email_verified: true,
+            unread_notifications_count: 0,
+        };
+
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        const account = view.get('[data-testid="tab-account"]');
+
+        expect(account.attributes('href')).toBeUndefined();
+        expect(account.text()).toContain('Ada Lovelace');
+    });
+
+    it('draws an icon in every slot', async () => {
+        stubEvent();
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        for (const slot of ['home', 'events', 'messages', 'account']) {
+            expect(view.get(`[data-testid="tab-${slot}"] svg`).attributes('aria-hidden')).toBe('true');
+        }
+    });
+
+    it('is absent from a screen that opts out of chrome, because the shell is never drawn there', async () => {
         await router.push('/login');
         await router.isReady();
 
-        expect(mountShell().find('[data-testid="tab-bar"]').exists()).toBe(false);
+        expect(router.currentRoute.value.meta.chrome).toBe(false);
     });
 });
 

@@ -2,8 +2,9 @@
 /**
  * The chrome every screen is drawn inside.
  *
- * One job, and it is not navigation policy: put the Event header, the Event
- * nav and the tab bar on the screens that belong to an Event. Which routes an unclaimed or
+ * One job, and it is not navigation policy: put the Event header and the
+ * Event nav on the screens that belong to an Event. The tab bar is the app's
+ * global nav and shows on every screen the shell is drawn around. Which routes an unclaimed or
  * signed-out viewer may reach is settled once in the router guard, and this
  * component does not second-guess it — it only reflects the route it has been
  * given.
@@ -42,13 +43,10 @@ const eventSlug = computed(() => {
 
     <!-- The tab bar is fixed, so the last card on a long screen needs room to
          clear it rather than sitting underneath. -->
-    <div :class="['flex-1', eventSlug ? 'pb-20 md:pb-0' : '']">
+    <div class="flex-1 pb-20 md:pb-0">
       <slot />
     </div>
 
-    <AppTabBar
-      v-if="eventSlug"
-      :event-slug="eventSlug"
-    />
+    <AppTabBar />
   </div>
 </template>

@@ -20,8 +20,7 @@ test('anyone can read the event, its schedule, and who is in the room', async ({
     // Written to the database out of order, rendered in time order.
     await expect(page.getByTestId('block-time')).toHaveText(['08:30', '09:30']);
 
-    await page.getByTestId('tab-event').click();
-    await page.getByTestId('attendees-link').click();
+    await page.getByTestId('event-nav-attendees').click();
     await expect(page).toHaveURL(new RegExp(`/events/${EVENT_SLUG}/attendees`));
 
     const loyalist = page.locator('[data-testid^="attendee-"]', { hasText: 'Ada Lovelace' });
