@@ -120,6 +120,31 @@ export interface RegistrationDetails {
     players: PlayerEntry[];
 }
 
+/**
+ * The Event fields an Organiser may change.
+ *
+ * Deliberately narrower than the Event itself: the slug is in Invite emails
+ * already sent, the party size is the shape every registration was built at,
+ * and status and pairing format drive Round generation rather than
+ * presentation. See docs/adr/0002-general-event-patch-endpoint.md.
+ */
+export interface EventChanges {
+    name?: string;
+    description?: string | null;
+    venue_name?: string | null;
+    venue_address?: string | null;
+    venue_city?: string | null;
+    venue_country?: string | null;
+    starts_at?: string | null;
+    ends_at?: string | null;
+    registration_closes_at?: string | null;
+    max_attendees?: number | null;
+}
+
+export function updateEvent(client: ApiClient, slug: string, changes: EventChanges): Promise<EventSummary> {
+    return client.patch<{ data: EventSummary }>(eventPath(slug), changes).then((response) => response.data);
+}
+
 export function fetchEvent(client: ApiClient, slug: string): Promise<EventSummary> {
     return client.get<{ data: EventSummary }>(eventPath(slug)).then((response) => response.data);
 }

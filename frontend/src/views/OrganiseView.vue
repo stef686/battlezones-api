@@ -288,6 +288,18 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
         </h1>
       </header>
 
+      <!-- Settings are touched once before an Event and pairings every ten
+           minutes during it, so they are linked from here rather than run
+           from here. -->
+      <RouterLink
+        :to="{ name: 'event-settings', params: { eventSlug: props.eventSlug } }"
+        data-testid="settings-link"
+        class="flex items-center justify-between gap-3 rounded-xl border border-card-line bg-card p-5 text-sm font-medium text-foreground shadow-2xs hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
+      >
+        <span>Event settings</span>
+        <span class="text-muted-foreground-1">Name, dates, venue, places</span>
+      </RouterLink>
+
       <RouterLink
         :to="{ name: 'flags', params: { eventSlug: props.eventSlug } }"
         data-testid="flags-link"

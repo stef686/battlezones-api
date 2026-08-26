@@ -51,6 +51,7 @@ use App\Http\Controllers\Events\UnlockArmyListController;
 use App\Http\Controllers\Events\UnpublishRoundController;
 use App\Http\Controllers\Events\UpdateArmyListController;
 use App\Http\Controllers\Events\UpdateEventAttendeeController;
+use App\Http\Controllers\Events\UpdateEventController;
 use App\Http\Controllers\Events\UpdateEventScheduleBlockController;
 use App\Http\Controllers\Events\UpdateGameResultController;
 use App\Http\Controllers\Events\UpdateMyFactionController;
@@ -124,6 +125,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}/painting', UpdatePaintingEntryController::class)
         ->name('events.attendees.painting.update');
+
+    Route::patch('events/{event:slug}', UpdateEventController::class)->name('events.update');
 
     Route::post('events/{event:slug}/schedule', StoreEventScheduleBlockController::class)
         ->name('events.schedule.store');

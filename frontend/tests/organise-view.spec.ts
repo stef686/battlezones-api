@@ -118,6 +118,16 @@ afterEach(() => {
 });
 
 describe('who may run an event', () => {
+    it('points at the event settings without putting them on the round-running screen', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="settings-link"]').attributes('href'))
+            .toBe(`/events/${EVENT_SLUG}/organise/settings`);
+    });
+
     it('is not there at all for a reader without the permission', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(false) },

@@ -430,7 +430,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /**
+         * Edit an Event
+         * @description Organisers only. Moving the dates leaves every Schedule block where it is: blocks store absolute times, and a venue change usually affects one day rather than all of them.
+         */
+        patch: operations["editAnEvent"];
         trace?: never;
     };
     "/api/events/{event_slug}/updates": {
@@ -2867,6 +2871,106 @@ export interface operations {
                                     manage_organisers: boolean;
                                 };
                             } | null;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    editAnEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    /** @description What the Event is called. */
+                    name?: string;
+                    /** @description The blurb Players read on the Event screen. */
+                    description?: string;
+                    /** @description The venue. */
+                    venue_name?: string;
+                    /** @description Street address of the venue. */
+                    venue_address?: string;
+                    /** @description Town or city of the venue. */
+                    venue_city?: string;
+                    /** @description Two-letter country code of the venue. */
+                    venue_country?: string;
+                    /** @description When the Event starts, as an ISO 8601 timestamp. */
+                    starts_at?: string;
+                    /** @description When the Event ends, as an ISO 8601 timestamp. */
+                    ends_at?: string;
+                    /** @description When entry closes, as an ISO 8601 timestamp. */
+                    registration_closes_at?: string;
+                    /** @description How many parties may enter. Null for no limit, and never fewer than have already entered. */
+                    max_attendees?: number;
+                    slug?: string;
+                    attendee_size?: string;
+                    status?: string;
+                    pairing_format?: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            slug?: string;
+                            description?: string;
+                            status?: string;
+                            pairing_format?: string;
+                            starts_at?: string;
+                            ends_at?: string;
+                            max_attendees?: number;
+                            attendee_size?: number;
+                            requires_allegiance?: boolean;
+                            registration_closes_at?: string | null;
+                            is_full?: boolean;
+                            venue?: {
+                                name?: string;
+                                address?: string;
+                                city?: string;
+                                country?: string;
+                            };
+                            created_at?: string;
+                            updated_at?: string;
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The submitted data failed validation. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            field_name?: string[];
                         };
                     };
                 };

@@ -71,7 +71,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":638,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-12T22:45:50Z","ends_at":"2027-02-14T22:45:50Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-24T09:15:56Z","updated_at":"2026-08-24T09:15:56Z"}}'
+        content: '{"data":{"id":665,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-14T13:38:34Z","ends_at":"2027-02-16T13:38:34Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"created_at":"2026-08-26T00:08:40Z","updated_at":"2026-08-26T00:08:40Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -301,7 +301,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":58,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-06T06:47:10Z","author":{"id":1421,"name":"Cordia Cummings"},"created_at":"2026-08-24T09:15:56Z","updated_at":"2026-08-24T09:15:56Z"}}'
+        content: '{"data":{"id":60,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-07T21:39:54Z","author":{"id":1481,"name":"Cordia Cummings"},"created_at":"2026-08-26T00:08:40Z","updated_at":"2026-08-26T00:08:40Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -362,7 +362,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":177,"name":"","allegiance":null,"members":[]}}'
+        content: '{"data":{"id":191,"name":"","allegiance":null,"members":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -472,7 +472,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":178,"name":"","allegiance":null,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":192,"name":"","allegiance":null,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -521,7 +521,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":95,"number":1,"name":null,"status":"draft"},{"id":96,"number":3,"name":null,"status":"draft"}]}'
+        content: '{"data":[{"id":99,"number":1,"name":null,"status":"draft"},{"id":100,"number":3,"name":null,"status":"draft"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -858,7 +858,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":302,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-24T09:15:56Z","updated_at":"2026-08-24T09:15:56Z"}}'
+        content: '{"data":{"id":314,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-26T00:08:40Z","updated_at":"2026-08-26T00:08:40Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -1785,7 +1785,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":217,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":218,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
+        content: '{"data":[{"id":227,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":228,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
         headers: []
         description: ''
       -
@@ -1876,7 +1876,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":219,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":229,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -1949,7 +1949,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":220,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":230,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2150,7 +2150,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":221,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":231,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2353,6 +2353,243 @@ endpoints:
   -
     custom: []
     httpMethods:
+      - PATCH
+    uri: 'api/events/{slug}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Edit an Event'
+      description: 'Organisers only. Moving the dates leaves every Schedule block where it is: blocks store absolute times, and a venue change usually affects one day rather than all of them.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      slug:
+        custom: []
+        name: slug
+        description: 'The slug of the event.'
+        required: true
+        example: summer-showdown-2026
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      slug: summer-showdown-2026
+      event_slug: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'What the Event is called.'
+        required: false
+        example: 'London Grand Tournament'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'The blurb Players read on the Event screen.'
+        required: false
+        example: 'A two-day Horus Heresy doubles event.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      venue_name:
+        custom: []
+        name: venue_name
+        description: 'The venue.'
+        required: false
+        example: 'The Hall'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      venue_address:
+        custom: []
+        name: venue_address
+        description: 'Street address of the venue.'
+        required: false
+        example: '1 Example Street'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      venue_city:
+        custom: []
+        name: venue_city
+        description: 'Town or city of the venue.'
+        required: false
+        example: London
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      venue_country:
+        custom: []
+        name: venue_country
+        description: 'Two-letter country code of the venue.'
+        required: false
+        example: GB
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      starts_at:
+        custom: []
+        name: starts_at
+        description: 'When the Event starts, as an ISO 8601 timestamp.'
+        required: false
+        example: '2026-09-12T09:00:00+01:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      ends_at:
+        custom: []
+        name: ends_at
+        description: 'When the Event ends, as an ISO 8601 timestamp.'
+        required: false
+        example: '2026-09-13T18:00:00+01:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      registration_closes_at:
+        custom: []
+        name: registration_closes_at
+        description: 'When entry closes, as an ISO 8601 timestamp.'
+        required: false
+        example: '2026-09-05T23:59:00+01:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      max_attendees:
+        custom: []
+        name: max_attendees
+        description: 'How many parties may enter. Null for no limit, and never fewer than have already entered.'
+        required: false
+        example: 32
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      slug:
+        custom: []
+        name: slug
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_size:
+        custom: []
+        name: attendee_size
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      status:
+        custom: []
+        name: status
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      pairing_format:
+        custom: []
+        name: pairing_format
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'London Grand Tournament'
+      description: 'A two-day Horus Heresy doubles event.'
+      venue_name: 'The Hall'
+      venue_address: '1 Example Street'
+      venue_city: London
+      venue_country: GB
+      starts_at: '2026-09-12T09:00:00+01:00'
+      ends_at: '2026-09-13T18:00:00+01:00'
+      registration_closes_at: '2026-09-05T23:59:00+01:00'
+      max_attendees: 32
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":676,"name":"Quos velit et fugiat","slug":"quos-velit-et-fugiat-76344","description":"Modi deserunt aut ab provident perspiciatis. Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","starts_at":"2026-09-11T19:27:56Z","ends_at":"2026-09-13T19:27:56Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"created_at":"2026-08-26T00:08:40Z","updated_at":"2026-08-26T00:08:40Z"}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
       - POST
     uri: 'api/events/{event_slug}/schedule'
     metadata:
@@ -2463,7 +2700,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":84,"label":"Awards","type":"info","starts_at":"2026-09-01T08:09:53+00:00","ends_at":"2026-09-01T09:09:53+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":88,"label":"Awards","type":"info","starts_at":"2026-09-02T23:02:37+00:00","ends_at":"2026-09-03T00:02:37+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -2687,7 +2924,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":85,"label":"Awards","type":"info","starts_at":"2026-09-01T08:09:53+00:00","ends_at":"2026-09-01T09:09:53+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":89,"label":"Awards","type":"info","starts_at":"2026-09-02T23:02:37+00:00","ends_at":"2026-09-03T00:02:37+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
