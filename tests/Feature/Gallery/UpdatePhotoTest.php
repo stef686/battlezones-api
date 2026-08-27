@@ -2,11 +2,12 @@
 
 use App\Models\Photo;
 use App\Models\User;
+use App\Services\UploadStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 test('it updates photo fields', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
     $user = User::factory()->create();
     $photo = Photo::factory()->for($user)->create();
 
@@ -21,13 +22,13 @@ test('it updates photo fields', function () {
 });
 
 test('it replaces file and thumbnail when new photo uploaded', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
     $user = User::factory()->create();
 
     $oldFile = UploadedFile::fake()->image('old.jpg', 800, 600);
-    $oldPath = $oldFile->store("photos/{$user->id}", 'public');
+    $oldPath = $oldFile->store("photos/{$user->id}", UploadStorage::name());
     $oldThumbPath = "photos/{$user->id}/thumbs/old-thumb.jpg";
-    Storage::disk('public')->put($oldThumbPath, 'thumb');
+    UploadStorage::disk()->put($oldThumbPath, 'thumb');
 
     $photo = Photo::factory()->for($user)->create([
         'path' => $oldPath,
@@ -46,10 +47,10 @@ test('it replaces file and thumbnail when new photo uploaded', function () {
     expect($photo->path)->not->toBe($oldPath);
     expect($photo->thumbnail_path)->not->toBe($oldThumbPath);
 
-    Storage::disk('public')->assertMissing($oldPath);
-    Storage::disk('public')->assertMissing($oldThumbPath);
-    Storage::disk('public')->assertExists($photo->path);
-    Storage::disk('public')->assertExists($photo->thumbnail_path);
+    UploadStorage::disk()->assertMissing($oldPath);
+    UploadStorage::disk()->assertMissing($oldThumbPath);
+    UploadStorage::disk()->assertExists($photo->path);
+    UploadStorage::disk()->assertExists($photo->thumbnail_path);
 });
 
 test('it returns 403 for another user photo', function () {

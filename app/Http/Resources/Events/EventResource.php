@@ -3,9 +3,9 @@
 namespace App\Http\Resources\Events;
 
 use App\Models\Event;
+use App\Services\UploadStorage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin Event
@@ -60,8 +60,8 @@ class EventResource extends JsonResource
             // Null until an Organiser uploads one, which is what returns the
             // header to the flat surface it is built to sit on.
             'banner' => $this->banner_path === null ? null : [
-                'large' => Storage::disk('public')->url($this->banner_path),
-                'small' => Storage::disk('public')->url($this->banner_small_path ?? $this->banner_path),
+                'large' => UploadStorage::url($this->banner_path),
+                'small' => UploadStorage::url($this->banner_small_path ?? $this->banner_path),
             ],
             'game_system' => GameSystemResource::make($this->whenLoaded('gameSystem')),
             'documents' => EventDocumentResource::collection($this->whenLoaded('documents')),

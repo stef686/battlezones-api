@@ -2,11 +2,12 @@
 
 use App\Models\Event;
 use App\Models\User;
+use App\Services\UploadStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 test('an organiser uploads a banner and it comes back on the event, normalised to one shape', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
 
     $event = Event::factory()->published()->create();
     $organiser = organiserOf($event);
@@ -23,7 +24,7 @@ test('an organiser uploads a banner and it comes back on the event, normalised t
 
     expect($banner)->toHaveKeys(['large', 'small']);
 
-    $stored = Storage::disk('public')->path(
+    $stored = UploadStorage::disk()->path(
         (string) $event->refresh()->banner_path,
     );
 
@@ -33,7 +34,7 @@ test('an organiser uploads a banner and it comes back on the event, normalised t
 });
 
 test('both variants are stored, and the small one is the small one', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
 
     $event = Event::factory()->published()->create();
 
@@ -45,14 +46,14 @@ test('both variants are stored, and the small one is the small one', function ()
 
     $event->refresh();
 
-    expect(getimagesize(Storage::disk('public')->path((string) $event->banner_path)))
+    expect(getimagesize(UploadStorage::disk()->path((string) $event->banner_path)))
         ->toMatchArray([0 => 1600, 1 => 534])
-        ->and(getimagesize(Storage::disk('public')->path((string) $event->banner_small_path)))
+        ->and(getimagesize(UploadStorage::disk()->path((string) $event->banner_small_path)))
         ->toMatchArray([0 => 800, 1 => 267]);
 });
 
 test('the crop keeps the top of the image, where nothing is overlaid', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
 
     $event = Event::factory()->published()->create();
 
@@ -63,7 +64,7 @@ test('the crop keeps the top of the image, where nothing is overlaid', function 
         ->assertSuccessful();
 
     $stored = imagecreatefromwebp(
-        Storage::disk('public')->path((string) $event->refresh()->banner_path),
+        UploadStorage::disk()->path((string) $event->refresh()->banner_path),
     );
 
     // A square source cropped to 3:1 keeps only the first third. Centred, the
@@ -75,7 +76,7 @@ test('the crop keeps the top of the image, where nothing is overlaid', function 
 });
 
 test('replacing a banner takes the old files off the disk first', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
 
     $event = Event::factory()->published()->create();
     $organiser = organiserOf($event);
@@ -98,12 +99,12 @@ test('replacing a banner takes the old files off the disk first', function () {
 
     expect($event->banner_path)->not->toBe($first[0]);
 
-    Storage::disk('public')->assertMissing($first);
-    Storage::disk('public')->assertExists([$event->banner_path, $event->banner_small_path]);
+    UploadStorage::disk()->assertMissing($first);
+    UploadStorage::disk()->assertExists([$event->banner_path, $event->banner_small_path]);
 });
 
 test('removing a banner clears the record and the disk, returning the header to its flat state', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
 
     $event = Event::factory()->published()->create();
     $organiser = organiserOf($event);
@@ -126,7 +127,7 @@ test('removing a banner clears the record and the disk, returning the header to 
     expect($event->banner_path)->toBeNull()
         ->and($event->banner_small_path)->toBeNull();
 
-    Storage::disk('public')->assertMissing($stored);
+    UploadStorage::disk()->assertMissing($stored);
 });
 
 test('an event with no banner says so rather than guessing', function () {
@@ -138,7 +139,7 @@ test('an event with no banner says so rather than guessing', function () {
 });
 
 test('a scriptable document, a moving image, and a file that is neither are all refused', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
 
     $event = Event::factory()->published()->create();
     $organiser = organiserOf($event);
@@ -159,7 +160,7 @@ test('a scriptable document, a moving image, and a file that is neither are all 
 });
 
 test('an upload too large for venue wifi, or too small to fill the header, is refused', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
 
     $event = Event::factory()->published()->create();
     $organiser = organiserOf($event);
@@ -181,7 +182,7 @@ test('an upload too large for venue wifi, or too small to fill the header, is re
 });
 
 test('only an organiser of this event may put a banner on it or take one off', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
 
     $event = Event::factory()->published()->create();
     $stranger = User::factory()->create();

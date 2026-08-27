@@ -5,14 +5,13 @@ namespace App\Services;
 use App\Models\Event;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Image;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
  * An Event's Banner: normalised on the way in, original discarded.
  *
  * Borrows the shape of PhotoStorageService — delete-then-store on replace,
- * UUID filenames, the public disk — but not its code: a Banner is not a Photo.
+ * UUID filenames, the uploads disk — but not its code: a Banner is not a Photo.
  * It is not in the Gallery, not attributed to a Player and not reactable.
  *
  * See docs/adr/0003-banners-are-normalised-on-upload.md. The crop is biased
@@ -48,7 +47,7 @@ class EventBannerService
      */
     public function delete(Event $event): void
     {
-        Storage::disk('public')->delete(
+        UploadStorage::disk()->delete(
             array_filter([$event->banner_path, $event->banner_small_path]),
         );
 
@@ -82,7 +81,7 @@ class EventBannerService
 
         $path = "{$directory}/".Str::uuid().'.webp';
 
-        Storage::disk('public')->put($path, $image->toBytes());
+        UploadStorage::disk()->put($path, $image->toBytes());
 
         return $path;
     }
