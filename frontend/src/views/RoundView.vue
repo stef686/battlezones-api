@@ -357,14 +357,6 @@ function scoreOf(attendee: PairedAttendee, column: string): string {
               </tr>
             </tbody>
           </table>
-
-          <p
-            v-if="pairing.is_bye"
-            data-testid="pairing-bye"
-            class="border-t border-card-divider px-3 py-2 text-xs text-muted-foreground"
-          >
-            No opponent this round. A bye counts as a win.
-          </p>
         </li>
       </ul>
     </template>

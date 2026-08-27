@@ -260,7 +260,8 @@ describe('the round detail', () => {
         expect(tables).toEqual(['Table 1', 'Table 5', 'Bye']);
 
         expect(view.get('[data-testid="pairing-19"]').text()).toContain('Sons of Terra');
-        expect(view.get('[data-testid="pairing-21"]').find('[data-testid="pairing-bye"]').exists()).toBe(true);
+        // The header already says Bye, so the card does not say it twice.
+        expect(view.get('[data-testid="pairing-21"]').find('[data-testid="pairing-bye"]').exists()).toBe(false);
     });
 
     it('says nothing about a rematch to a reader the API did not tell', async () => {
