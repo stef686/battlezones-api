@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Photo;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PhotoStorageService
@@ -23,7 +22,7 @@ class PhotoStorageService
         $path = $file->storeAs(
             "photos/{$userId}",
             Str::uuid().".{$extension}",
-            'public',
+            UploadStorage::name(),
         );
 
         return [
@@ -49,7 +48,7 @@ class PhotoStorageService
      */
     public function delete(Photo $photo): void
     {
-        Storage::disk('public')->delete(
+        UploadStorage::disk()->delete(
             array_filter([$photo->path, $photo->thumbnail_path]),
         );
     }

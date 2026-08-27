@@ -1,11 +1,12 @@
 <?php
 
 use App\Models\User;
+use App\Services\UploadStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 test('it stores a photo with file and thumbnail on disk', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)
@@ -24,8 +25,8 @@ test('it stores a photo with file and thumbnail on disk', function () {
         ->and($data['thumbnail_url'])->not->toBeNull();
 
     $photo = $user->photos()->first();
-    Storage::disk('public')->assertExists($photo->path);
-    Storage::disk('public')->assertExists($photo->thumbnail_path);
+    UploadStorage::disk()->assertExists($photo->path);
+    UploadStorage::disk()->assertExists($photo->thumbnail_path);
 });
 
 test('it validates required fields', function () {
@@ -38,7 +39,7 @@ test('it validates required fields', function () {
 });
 
 test('it rejects invalid file types', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -51,7 +52,7 @@ test('it rejects invalid file types', function () {
 });
 
 test('it rejects files exceeding max size', function () {
-    Storage::fake('public');
+    Storage::fake(UploadStorage::name());
     $user = User::factory()->create();
 
     $this->actingAs($user)

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Events\RelationManagers;
 
+use App\Services\UploadStorage;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -35,7 +36,8 @@ class DocumentsRelationManager extends RelationManager
                         FileUpload::make('path')
                             ->required()
                             ->directory('events/documents')
-                            ->disk('public'),
+                            ->disk(UploadStorage::name())
+                            ->visibility('private'),
                     ]),
             ])
             ->recordActions([
