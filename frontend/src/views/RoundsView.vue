@@ -1,30 +1,29 @@
 <script setup lang="ts">
-import { ChevronRightIcon } from '@heroicons/vue/24/outline';
+/**
+ * The Rounds tab, which is not a list of Rounds.
+ *
+ * A Player taps Rounds to see the pairings being played right now — the list
+ * was a menu standing between them and the only Round most readers ever want.
+ * So this resolves which Round that is and hands over to the Round screen,
+ * where the chevrons reach the rest.
+ *
+ * It replaces rather than pushes: the list is not a place to go back to, and
+ * leaving it in the history would make the phone's back button bounce off it.
+ */
 import { useQuery } from '@tanstack/vue-query';
-import { computed } from 'vue';
-import { RouterLink } from 'vue-router';
+import { computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
-import { fetchRounds } from '@/api/rounds';
+import { fetchRounds, latestPlayable, type RoundSummary } from '@/api/rounds';
 import MissingNotice from '@/components/MissingNotice.vue';
-import { useEventPulse } from '@/composables/useEventPulse';
 
 const props = defineProps<{ eventSlug: string }>();
 
 const client = useApiClient();
-
-const { data: event } = useQuery({
-  queryKey: computed(() => keys.event(props.eventSlug)),
-  queryFn: () => fetchEvent(client, props.eventSlug),
-  retry: false,
-});
-
-const inProgress = computed(() => event.value?.status === 'active');
-
-const { currentRound } = useEventPulse(() => props.eventSlug, inProgress);
+const router = useRouter();
 
 const { data: rounds, isPending, error } = useQuery({
   queryKey: computed(() => keys.rounds(props.eventSlug)),
@@ -35,9 +34,15 @@ const { data: rounds, isPending, error } = useQuery({
 const missing = computed(() => error.value instanceof ApiError && error.value.kind === 'not_found');
 const empty = computed(() => rounds.value !== undefined && rounds.value.length === 0);
 
-function title(round: { number: number; name: string | null }): string {
-  return round.name ?? `Round ${round.number}`;
-}
+const destination = computed<RoundSummary | null>(() => latestPlayable(rounds.value ?? []));
+
+watch(destination, (round) => {
+  if (round === null) {
+    return;
+  }
+
+  void router.replace({ name: 'round', params: { eventSlug: props.eventSlug, roundId: round.id } });
+}, { immediate: true });
 </script>
 
 <template>
@@ -48,15 +53,8 @@ function title(round: { number: number; name: string | null }): string {
       Rounds
     </h1>
 
-    <p
-      v-if="isPending"
-      class="text-muted-foreground-1"
-    >
-      Loading the rounds…
-    </p>
-
     <MissingNotice
-      v-else-if="missing"
+      v-if="missing"
       thing="event"
     />
 
@@ -77,44 +75,13 @@ function title(round: { number: number; name: string | null }): string {
       No rounds yet. Pairings appear here the moment the first round is published.
     </p>
 
-    <ul
-      v-else
-      class="divide-y divide-card-divider overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs"
+    <!-- Still showing while the redirect lands, which is why it is last: a
+         resolved Round leaves this screen before the message is read. -->
+    <p
+      v-else-if="isPending || destination"
+      class="text-muted-foreground-1"
     >
-      <li
-        v-for="round in rounds"
-        :key="round.id"
-      >
-        <RouterLink
-          :to="{ name: 'round', params: { eventSlug: props.eventSlug, roundId: round.id } }"
-          :data-testid="`round-${round.id}`"
-          class="flex items-center justify-between gap-3 px-4 py-3.5 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
-          :class="round.id === currentRound?.id ? 'bg-primary/10' : ''"
-        >
-          <span class="text-lg font-semibold text-foreground">{{ title(round) }}</span>
-
-          <span
-            v-if="round.id === currentRound?.id"
-            data-testid="now-playing"
-            class="inline-flex items-center rounded-full bg-primary px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-primary-foreground"
-          >
-            Now
-          </span>
-          <!-- Only an Organiser is ever sent a Draft, so this label is not a
-               Player's screen hiding something: they never received it. -->
-          <span
-            v-else-if="round.status === 'draft'"
-            data-testid="draft-badge"
-            class="inline-flex items-center rounded-full border border-border px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-muted-foreground-1"
-          >
-            Draft
-          </span>
-          <ChevronRightIcon
-            v-else
-            class="size-4 shrink-0 text-muted-foreground"
-          />
-        </RouterLink>
-      </li>
-    </ul>
+      Loading the rounds…
+    </p>
   </main>
 </template>

@@ -11,7 +11,7 @@ Preline's class strings are a dozen utilities long, which is how a codebase grow
 - `AppButton` — every button and every link-styled-as-a-button. Variants `primary|secondary|ghost|danger`, sizes `sm|md`, plus `block`. Passing `to` renders a real RouterLink anchor instead of a `<button>`, so it stays middle-clickable.
 - `AppAlert` — short outcomes. `tone="error"` announces with `role="alert"`; `success` and `info` stay polite with `role="status"`.
 - `AuthCard` — the centred card for every screen reached without a session (login, claim, reset, forgot, invite). `title`, optional `subtitle`, default slot, optional `#footer`.
-- `TextField` / `SelectField` — labelled inputs. They own `useId()` label association and wire hint + errors through `aria-describedby`; do not hand-roll a labelled input.
+- `TextField` / `SelectField` — labelled inputs. They own `useId()` label association and wire hint + errors through `aria-describedby`; do not hand-roll a labelled input. Where a single field's placeholder already says what it is — the Round screen's team search — pass `label-hidden` and a `placeholder` rather than dropping the label: it goes `sr-only`, never out of the markup, because an input with no accessible name says nothing to a screen reader and a placeholder is not a label.
 
 A raw `<button>` is right only for a selection toggle that carries `aria-pressed` and its own selected styling (rating pickers, poll picks, pairing swap). Chrome (the tab bar) is `AppShell` + `AppTabBar` and is applied in `App.vue` from `meta.chrome`, never by a view.
 

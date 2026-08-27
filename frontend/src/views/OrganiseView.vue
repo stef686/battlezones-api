@@ -609,7 +609,7 @@ async function run(what: 'generate' | 'publish' | 'unpublish'): Promise<void> {
         data-testid="rounds-link"
         class="text-center text-sm font-medium text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
       >
-        All rounds
+        See the pairings
       </RouterLink>
     </template>
   </main>
