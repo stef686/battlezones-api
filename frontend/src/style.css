@@ -43,6 +43,19 @@
     /* The table number is read across a hall, so it gets its own step. */
     --text-hall: 6rem;
     --text-hall--line-height: 1;
+
+    /*
+     * Corners, one step tighter than Tailwind's defaults.
+     *
+     * The app is a dense stack of cards and strips on a phone, and at that
+     * size a 12px corner reads as a bubble rather than as a panel. Set here
+     * rather than by rewriting `rounded-xl` to `rounded-lg` across sixty
+     * call sites: the app's corner is one decision, and it should have one
+     * place to be changed. `rounded-full` is untouched — a pill or an avatar
+     * is round because it is round, not because of the scale.
+     */
+    --radius-lg: 0.25rem;
+    --radius-xl: 0.3125rem;
 }
 
 html,
