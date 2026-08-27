@@ -163,25 +163,6 @@ const liveGame = computed(() => myGame.value?.data ?? null);
         Enter this event
       </RouterLink>
 
-      <!-- Organiser controls exist only where the viewer context grants them,
-           never hidden by CSS: an unauthorised reader is not sent them. -->
-      <section
-        v-if="viewer?.permissions.organise"
-        data-testid="organiser-controls"
-        class="flex flex-col gap-3 rounded-xl border border-border p-4"
-      >
-        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          Organiser
-        </h2>
-        <RouterLink
-          :to="{ name: 'organise', params: { eventSlug: props.eventSlug } }"
-          data-testid="organise-link"
-          class="inline-flex items-center justify-center gap-x-2 rounded-lg border border-transparent bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover focus:bg-primary-focus focus:outline-hidden"
-        >
-          Run the event
-        </RouterLink>
-      </section>
-
       <section
         v-if="venue.length > 0"
         class="rounded-xl border border-card-line bg-card p-5 shadow-2xs"

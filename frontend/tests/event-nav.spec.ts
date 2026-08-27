@@ -60,6 +60,29 @@ function stubEvent(body: unknown) {
     );
 }
 
+/**
+ * The same stub, plus a claimed profile: the guard reads /api/profile before
+ * it will let anyone onto a screen that is not public, and an account it
+ * cannot read as claimed is confined to the claim flow.
+ */
+function stubSignedIn(body: unknown) {
+    vi.stubGlobal(
+        'fetch',
+        vi.fn((input: RequestInfo | URL) =>
+            Promise.resolve({
+                ok: true,
+                status: 200,
+                headers: new Headers(),
+                json: () => Promise.resolve(
+                    String(input).includes('/api/profile')
+                        ? { data: { id: 1, name: 'An Organiser', is_claimed: true } }
+                        : body,
+                ),
+            }),
+        ),
+    );
+}
+
 /** jsdom has no layout, so it ships no scrollIntoView to spy on. */
 let scrollIntoView: ReturnType<typeof vi.fn>;
 
@@ -116,6 +139,50 @@ describe('the event nav', () => {
             .toEqual(['Home', 'Rounds', 'Standings', 'Attendees', 'Schedule', 'My team']);
         expect(view.get('[data-testid="event-nav-my-team"]').attributes('href'))
             .toBe(`/events/${EVENT_SLUG}/my-team`);
+    });
+
+    it('offers organisers to an organiser, after every other chip', async () => {
+        stubEvent(eventBody(entrant({ permissions: { organise: true, register: false, manage_organisers: false } })));
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountNav();
+        await flushPromises();
+
+        expect(view.findAll('[data-testid^="event-nav-"]').map((chip) => chip.text()))
+            .toEqual(['Home', 'Rounds', 'Standings', 'Attendees', 'Schedule', 'My team', 'Organisers']);
+        expect(view.get('[data-testid="event-nav-organise"]').attributes('href'))
+            .toBe(`/events/${EVENT_SLUG}/organise`);
+    });
+
+    it('leaves organisers out for a viewer who does not run the event', async () => {
+        stubEvent(eventBody(entrant()));
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountNav();
+        await flushPromises();
+
+        expect(view.find('[data-testid="event-nav-organise"]').exists()).toBe(false);
+    });
+
+    it('lights organisers from the organiser screens beneath it', async () => {
+        // The organiser screens sit behind the auth guard, which sends a reader
+        // with no token to login — and one whose profile does not read as
+        // claimed to the claim flow — before the nav ever renders.
+        stubSignedIn(eventBody(entrant({ permissions: { organise: true, register: false, manage_organisers: false } })));
+
+        const storage = new InMemoryTokenStorage();
+        storage.write('a-token');
+        createApiClient(router, { baseUrl: 'https://api.test', storage });
+
+        await router.push(`/events/${EVENT_SLUG}/organise/flags`);
+        await router.isReady();
+
+        const view = mountNav();
+        await flushPromises();
+
+        expect(view.get('[data-testid="event-nav-organise"]').attributes('aria-current')).toBe('page');
     });
 
     it('leaves my team out for a viewer who has not entered', async () => {

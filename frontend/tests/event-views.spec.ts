@@ -197,14 +197,7 @@ describe('the event page', () => {
         expect(notice).not.toContain('published');
     });
 
-    it('offers organiser controls only where the viewer context grants them', async () => {
-        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
-
-        const anonymous = mountView(EventView);
-        await flushPromises();
-
-        expect(anonymous.find('[data-testid="organiser-controls"]').exists()).toBe(false);
-
+    it('leaves running the event to the nav, even for an organiser', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}`]: {
                 status: 200,
@@ -220,12 +213,11 @@ describe('the event page', () => {
             },
         });
 
-        pinia = createPinia();
-        setActivePinia(pinia);
         const organiser = mountView(EventView);
         await flushPromises();
 
-        expect(organiser.find('[data-testid="organiser-controls"]').exists()).toBe(true);
+        expect(organiser.find('[data-testid="organiser-controls"]').exists()).toBe(false);
+        expect(organiser.find('[data-testid="organise-link"]').exists()).toBe(false);
     });
 
     it('leaves my team to the nav, and offers entry only to a reader who may enter', async () => {
