@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
+import { ChevronLeft } from 'lucide-vue-next';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -150,7 +150,7 @@ function title(flag: ResultFlag): string {
         data-testid="back-to-organise"
         class="inline-flex items-center gap-x-1 self-start text-sm font-medium text-muted-foreground-1 hover:text-foreground focus:text-foreground focus:outline-hidden"
       >
-        <ChevronLeftIcon
+        <ChevronLeft
           class="size-4 shrink-0"
         />
         Back to running the event

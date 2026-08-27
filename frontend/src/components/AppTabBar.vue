@@ -20,13 +20,7 @@
  * and because the account slot's name is the viewer's own, which no icon can
  * say. Do not delete the labels to save the markup.
  */
-import {
-  CalendarDaysIcon,
-  ChatBubbleLeftRightIcon,
-  HomeIcon,
-  UserCircleIcon,
-} from '@heroicons/vue/24/outline';
-import type { FunctionalComponent } from 'vue';
+import { CalendarDays, CircleUser, House, MessagesSquare, type LucideIcon } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -35,16 +29,16 @@ import { useSessionStore } from '@/stores/session';
 interface Slot {
   key: string;
   label: string;
-  icon: FunctionalComponent;
+  icon: LucideIcon;
 }
 
 const session = useSessionStore();
 
 /** The three destinations with no screen behind them yet. */
 const coming: Slot[] = [
-  { key: 'home', label: 'Home', icon: HomeIcon },
-  { key: 'events', label: 'Events', icon: CalendarDaysIcon },
-  { key: 'messages', label: 'Messages', icon: ChatBubbleLeftRightIcon },
+  { key: 'home', label: 'Home', icon: House },
+  { key: 'events', label: 'Events', icon: CalendarDays },
+  { key: 'messages', label: 'Messages', icon: MessagesSquare },
 ];
 
 const viewer = computed(() => session.viewer);
@@ -93,7 +87,7 @@ const SLOT_CLASSES = 'flex flex-col items-center px-1 py-3.5';
           data-testid="tab-account"
           :class="[SLOT_CLASSES, 'text-muted-foreground-1 hover:text-navbar-nav-foreground focus:text-navbar-nav-foreground focus:outline-hidden']"
         >
-          <UserCircleIcon class="size-6 shrink-0" />
+          <CircleUser class="size-6 shrink-0" />
           <span class="sr-only">Sign in</span>
         </RouterLink>
 
@@ -102,7 +96,7 @@ const SLOT_CLASSES = 'flex flex-col items-center px-1 py-3.5';
           data-testid="tab-account"
           :class="[SLOT_CLASSES, 'text-navbar-nav-foreground']"
         >
-          <UserCircleIcon class="size-6 shrink-0" />
+          <CircleUser class="size-6 shrink-0" />
           <span class="sr-only">{{ accountLabel }}</span>
         </span>
       </li>

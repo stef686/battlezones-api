@@ -11,8 +11,7 @@
  * it. A Round is at most a few dozen Games, they are already in hand, and a
  * hall's wifi is the wrong place to spend a request per keystroke.
  */
-import { ArrowPathRoundedSquareIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
-import { CheckCircleIcon } from '@heroicons/vue/24/solid';
+import { ChevronLeft, ChevronRight, CircleCheck, Repeat } from 'lucide-vue-next';
 import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -155,7 +154,7 @@ function scoreOf(attendee: PairedAttendee, column: string): string {
           :aria-label="`Go to ${roundTitle(previous)}`"
           class="rounded-lg p-2 text-primary hover:text-primary-hover focus:text-primary-hover focus:outline-hidden"
         >
-          <ChevronLeftIcon class="size-6 shrink-0" />
+          <ChevronLeft class="size-6 shrink-0" />
         </RouterLink>
         <span
           v-else
@@ -163,7 +162,7 @@ function scoreOf(attendee: PairedAttendee, column: string): string {
           aria-hidden="true"
           class="rounded-lg p-2 text-muted-foreground"
         >
-          <ChevronLeftIcon class="size-6 shrink-0" />
+          <ChevronLeft class="size-6 shrink-0" />
         </span>
 
         <span class="flex min-w-0 flex-col items-center gap-1">
@@ -189,7 +188,7 @@ function scoreOf(attendee: PairedAttendee, column: string): string {
           :aria-label="`Go to ${roundTitle(next)}`"
           class="rounded-lg p-2 text-primary hover:text-primary-hover focus:text-primary-hover focus:outline-hidden"
         >
-          <ChevronRightIcon class="size-6 shrink-0" />
+          <ChevronRight class="size-6 shrink-0" />
         </RouterLink>
         <span
           v-else
@@ -197,7 +196,7 @@ function scoreOf(attendee: PairedAttendee, column: string): string {
           aria-hidden="true"
           class="rounded-lg p-2 text-muted-foreground"
         >
-          <ChevronRightIcon class="size-6 shrink-0" />
+          <ChevronRight class="size-6 shrink-0" />
         </span>
       </header>
 
@@ -270,7 +269,7 @@ function scoreOf(attendee: PairedAttendee, column: string): string {
                 data-testid="pairing-rematch"
                 class="inline-flex shrink-0 items-center text-muted-foreground"
               >
-                <ArrowPathRoundedSquareIcon class="size-3.5 shrink-0" />
+                <Repeat class="size-3.5 shrink-0" />
                 <!-- The icon carries no name of its own, and "these two have
                      already met" is not a thing to leave to a glyph. -->
                 <span class="sr-only">Rematch</span>
@@ -341,7 +340,7 @@ function scoreOf(attendee: PairedAttendee, column: string): string {
                       :data-testid="`winner-${attendee.id}`"
                       class="inline-flex shrink-0 items-center text-success"
                     >
-                      <CheckCircleIcon class="size-4 shrink-0" />
+                      <CircleCheck class="size-4 shrink-0" />
                       <span class="sr-only">Won</span>
                     </span>
                   </span>
