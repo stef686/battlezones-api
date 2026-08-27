@@ -4,7 +4,8 @@ import type { Pairing } from '@/api/rounds';
 import { isOpposed, previewSwap } from '@/lib/pairing';
 
 function attendee(id: number, name: string, allegiance: string | null) {
-    return { id, name, allegiance, members: [], scores: {} };
+    // Nothing here is played, so nobody has won anything.
+    return { id, name, allegiance, is_winner: false, members: [], scores: {} };
 }
 
 function game(id: number, table: number | null, attendees: ReturnType<typeof attendee>[], isBye = false): Pairing {

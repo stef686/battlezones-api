@@ -33,6 +33,7 @@ class ShowEventRoundController extends Controller
             'attendees' => [[
                 'id' => 9,
                 'name' => 'Ada and Grace',
+                'is_winner' => true,
                 'allegiance' => 'loyalist',
                 'members' => [['id' => 12, 'name' => 'Ada Lovelace', 'faction' => ['id' => 3, 'name' => 'Sons of Horus'], 'army_list_locked' => true]],
                 'scores' => ['match-points' => 3, 'victory-points' => 85],

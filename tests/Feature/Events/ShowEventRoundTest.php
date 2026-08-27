@@ -198,3 +198,66 @@ test('it tells an organiser a game repeats a pairing, and tells a player nothing
     expect($this->actingAs($organiser)->getJson($url)->assertSuccessful()->json('data.games.0.is_rematch'))
         ->toBeTrue();
 });
+
+test('it names the winner of a game by the same ranking the standings use', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+
+    $mp = EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create(['display_order' => 1]);
+    $vp = EventScoreType::factory()->victoryPoints()->rankedAt(2)->for($event)->create(['display_order' => 2]);
+
+    $won = EventAttendee::factory()->for($event)->withMember()->create();
+    $lost = EventAttendee::factory()->for($event)->withMember()->create();
+
+    $game = Game::factory()->for($round)->create(['table_number' => 1]);
+    $game->attendees()->attach([$won->id, $lost->id]);
+
+    // Level on Match Points, so the tiebreaker decides it.
+    foreach ([[$won, 3, 85], [$lost, 3, 70]] as [$attendee, $matchPoints, $victoryPoints]) {
+        GameScore::factory()->create(['game_id' => $game->id, 'event_attendee_id' => $attendee->id, 'event_score_type_id' => $mp->id, 'value' => $matchPoints]);
+        GameScore::factory()->create(['game_id' => $game->id, 'event_attendee_id' => $attendee->id, 'event_score_type_id' => $vp->id, 'value' => $victoryPoints]);
+    }
+
+    $attendees = collect($this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertSuccessful()
+        ->json('data.games.0.attendees'))
+        ->keyBy('id');
+
+    expect($attendees[$won->id]['is_winner'])->toBeTrue()
+        ->and($attendees[$lost->id]['is_winner'])->toBeFalse();
+});
+
+test('it calls a game nobody has played a draw rather than picking a winner', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+
+    EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create();
+
+    $game = Game::factory()->for($round)->create(['table_number' => 1]);
+    $game->attendees()->attach([
+        EventAttendee::factory()->for($event)->withMember()->create()->id,
+        EventAttendee::factory()->for($event)->withMember()->create()->id,
+    ]);
+
+    $attendees = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertSuccessful()
+        ->json('data.games.0.attendees');
+
+    expect(array_column($attendees, 'is_winner'))->toBe([false, false]);
+});
+
+test('it counts a bye as a win from the moment it is paired', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+
+    EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create();
+
+    $game = Game::factory()->for($round)->create(['table_number' => null, 'is_bye' => true]);
+    $game->attendees()->attach(EventAttendee::factory()->for($event)->withMember()->create());
+
+    $attendees = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertSuccessful()
+        ->json('data.games.0.attendees');
+
+    expect($attendees[0]['is_winner'])->toBeTrue();
+});

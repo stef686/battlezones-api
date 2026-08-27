@@ -12,6 +12,7 @@
  * hall's wifi is the wrong place to spend a request per keystroke.
  */
 import { ArrowPathRoundedSquareIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
+import { CheckCircleIcon } from '@heroicons/vue/24/solid';
 import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -323,11 +324,27 @@ function scoreOf(attendee: PairedAttendee, column: string): string {
                 :key="attendee.id"
                 :data-testid="`pairing-team-${attendee.id}`"
               >
+                <!-- The winner is both weighted and ticked, rather than
+                     either alone: weight alone is a difference a reader has to
+                     notice by comparing the two rows, and a tick alone carries
+                     no meaning at a glance across a hall of cards. -->
                 <th
                   scope="row"
-                  class="max-w-0 truncate px-3 py-2 text-start text-xs font-normal text-foreground"
+                  class="max-w-0 px-3 py-2 text-start text-xs text-foreground"
+                  :class="attendee.is_winner ? 'font-semibold' : 'font-normal'"
                 >
-                  {{ attendee.name }}
+                  <span class="flex min-w-0 items-center gap-1.5">
+                    <span class="truncate">{{ attendee.name }}</span>
+
+                    <span
+                      v-if="attendee.is_winner"
+                      :data-testid="`winner-${attendee.id}`"
+                      class="inline-flex shrink-0 items-center text-success"
+                    >
+                      <CheckCircleIcon class="size-4 shrink-0" />
+                      <span class="sr-only">Won</span>
+                    </span>
+                  </span>
                 </th>
                 <td
                   v-for="column in columns"

@@ -10,6 +10,12 @@ export interface RoundSummary {
 export interface PairedAttendee {
     id: number;
     name: string;
+    /**
+     * Decided by the API, which knows each Score Type's ranking order and
+     * sort direction. A drawn Game — and one nobody has played, where every
+     * score is equally absent — has no winner at all.
+     */
+    is_winner: boolean;
     allegiance: string | null;
     members: { id: number; name: string; faction: { id: number; name: string } | null }[];
     scores: Record<string, number | string>;

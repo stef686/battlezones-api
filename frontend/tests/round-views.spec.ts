@@ -62,7 +62,7 @@ const ROUND = {
                 table_number: null,
                 is_bye: true,
                 result: { submitted_at: null, is_flagged: false },
-                attendees: [{ id: 11, name: 'Odd One Out', members: [], scores: {} }],
+                attendees: [{ id: 11, name: 'Odd One Out', is_winner: true, members: [], scores: {} }],
             },
             {
                 id: 19,
@@ -70,8 +70,8 @@ const ROUND = {
                 is_bye: false,
                 result: { submitted_at: null, is_flagged: false },
                 attendees: [
-                    { id: 9, name: 'Sons of Terra', members: [], scores: {} },
-                    { id: 10, name: 'The Warmaster\'s Own', members: [], scores: {} },
+                    { id: 9, name: 'Sons of Terra', is_winner: false, members: [], scores: {} },
+                    { id: 10, name: 'The Warmaster\'s Own', is_winner: false, members: [], scores: {} },
                 ],
             },
             {
@@ -80,8 +80,8 @@ const ROUND = {
                 is_bye: false,
                 result: { submitted_at: '2026-09-12T14:05:00Z', is_flagged: false },
                 attendees: [
-                    { id: 12, name: 'First Table', members: [], scores: { 'match-points': 3, 'victory-points': 85 } },
-                    { id: 13, name: 'Also First Table', members: [], scores: { 'match-points': 0, 'victory-points': 70 } },
+                    { id: 12, name: 'First Table', is_winner: true, members: [], scores: { 'match-points': 3, 'victory-points': 85 } },
+                    { id: 13, name: 'Also First Table', is_winner: false, members: [], scores: { 'match-points': 0, 'victory-points': 70 } },
                 ],
             },
         ],
@@ -326,6 +326,33 @@ describe('the round detail', () => {
 
         // Once per card, not once per team.
         expect(view.get('[data-testid="pairing-18"]').findAll('[data-testid="pairing-columns"]')).toHaveLength(1);
+    });
+
+    it('marks the winning team, and leaves a game nobody won unmarked', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        const won = view.get('[data-testid="pairing-team-12"]');
+        const lost = view.get('[data-testid="pairing-team-13"]');
+
+        // Weighted and ticked, with the tick named for a screen reader.
+        expect(won.get('th').classes()).toContain('font-semibold');
+        expect(won.get('[data-testid="winner-12"]').find('svg').exists()).toBe(true);
+        expect(won.get('[data-testid="winner-12"] .sr-only').text()).toBe('Won');
+
+        expect(lost.get('th').classes()).toContain('font-normal');
+        expect(lost.find('[data-testid="winner-13"]').exists()).toBe(false);
+
+        // Still being played, so neither side is ahead of the other yet.
+        expect(view.find('[data-testid="winner-9"]').exists()).toBe(false);
+        expect(view.find('[data-testid="winner-10"]').exists()).toBe(false);
     });
 
     it('says a game is finished once its result is in', async () => {

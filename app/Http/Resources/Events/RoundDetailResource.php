@@ -32,6 +32,8 @@ class RoundDetailResource extends JsonResource
         $isOrganiser = $this->event->isOrganisedBy($request->user('sanctum'));
         $rematches = $isOrganiser ? $this->rematchGameIds() : [];
 
+        $scoreTypes = $this->event->scoreTypes->sortBy('display_order')->values();
+
         return [
             'id' => $this->id,
             'number' => $this->number,
@@ -41,19 +43,18 @@ class RoundDetailResource extends JsonResource
             // not a result has landed yet. Sent with the Round rather than
             // inferred from the scores, so an unplayed Game still knows how
             // many numbers it is waiting for.
-            'score_types' => $this->event->scoreTypes
-                ->sortBy('display_order')
-                ->values()
-                ->map(fn (EventScoreType $type): array => [
-                    'slug' => $type->slug,
-                    'name' => $type->name,
-                ])->all(),
-            'games' => $this->games->map(function (Game $game) use ($isOrganiser, $rematches): array {
+            'score_types' => $scoreTypes->map(fn (EventScoreType $type): array => [
+                'slug' => $type->slug,
+                'name' => $type->name,
+            ])->all(),
+            'games' => $this->games->map(function (Game $game) use ($isOrganiser, $rematches, $scoreTypes): array {
                 $scoresByAttendee = $game->scores
                     ->groupBy('event_attendee_id')
                     ->map(fn ($scores) => $scores->mapWithKeys(
                         fn (GameScore $score) => [$score->scoreType->slug => $score->value]
                     ));
+
+                $winner = $game->winningAttendeeId($scoreTypes);
 
                 return [
                     'id' => $game->id,
@@ -70,6 +71,10 @@ class RoundDetailResource extends JsonResource
                     'attendees' => $game->attendees->map(fn (EventAttendee $attendee): array => [
                         'id' => $attendee->id,
                         'name' => $attendee->displayName(),
+                        // Decided here rather than left to the client, which
+                        // would have to be told each Score Type's ranking
+                        // order and sort direction to work out the same thing.
+                        'is_winner' => $attendee->id === $winner,
                         // The review screen has to be able to see at a glance
                         // that every Game is opposed.
                         'allegiance' => $attendee->allegiance?->value,
