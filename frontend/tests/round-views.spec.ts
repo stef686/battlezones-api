@@ -80,8 +80,8 @@ const ROUND = {
                 is_bye: false,
                 result: { submitted_at: '2026-09-12T14:05:00Z', is_flagged: false },
                 attendees: [
-                    { id: 12, name: 'First Table', is_winner: true, members: [], scores: { 'match-points': 3, 'victory-points': 85 } },
-                    { id: 13, name: 'Also First Table', is_winner: false, members: [], scores: { 'match-points': 0, 'victory-points': 70 } },
+                    { id: 12, name: 'First Table', is_winner: true, members: [], scores: { 'match-points': '3.00', 'victory-points': '85.50' } },
+                    { id: 13, name: 'Also First Table', is_winner: false, members: [], scores: { 'match-points': '0.00', 'victory-points': '70.00' } },
                 ],
             },
         ],
@@ -385,8 +385,10 @@ describe('the round detail', () => {
         const played = view.get('[data-testid="pairing-18"]');
 
         expect(played.get('[data-testid="pairing-team-12"]').text()).toContain('First Table');
+        // The column holds two decimal places so half points survive; a card
+        // read at a glance shows 3, not 3.00 — and 85.5 rather than 85.50.
         expect(played.get('[data-testid="pairing-team-12"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
-            .toEqual(['3', '85']);
+            .toEqual(['3', '85.5']);
         expect(played.get('[data-testid="pairing-team-13"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
             .toEqual(['0', '70']);
 

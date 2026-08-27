@@ -24,6 +24,7 @@ import { byNumber, columnLabel, fetchRound, fetchRounds, roundTitle, type Paired
 import MissingNotice from '@/components/MissingNotice.vue';
 import TextField from '@/components/TextField.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
+import { formatScore } from '@/lib/scores';
 
 const props = defineProps<{ eventSlug: string; roundId: string }>();
 
@@ -108,7 +109,7 @@ const columns = computed(() => round.value?.score_types ?? []);
 
 /** A team's score in one column, which is zero until somebody says otherwise. */
 function scoreOf(attendee: PairedAttendee, column: string): string {
-  return String(attendee.scores[column] ?? 0);
+  return formatScore(attendee.scores[column] ?? 0);
 }
 </script>
 

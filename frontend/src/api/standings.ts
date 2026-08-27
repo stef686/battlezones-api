@@ -1,3 +1,5 @@
+import { formatScore } from '@/lib/scores';
+
 import type { ApiClient } from './client';
 
 export interface Standing {
@@ -16,7 +18,7 @@ export function fetchStandings(client: ApiClient, slug: string): Promise<Standin
 export function scoreOf(standing: Standing, slug: string): string {
     const found = standing.scores.find((entry) => entry.score_type.slug === slug);
 
-    return found === undefined ? '—' : String(Number(found.value));
+    return found === undefined ? '—' : formatScore(found.value);
 }
 
 /** Position by Attendee id, for screens that show standings beside something else. */

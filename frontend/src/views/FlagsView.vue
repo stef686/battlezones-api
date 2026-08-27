@@ -9,6 +9,7 @@ import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { fetchFlags, resolveFlag, type ResultFlag } from '@/api/flags';
 import { keys } from '@/api/keys';
+import { formatScore } from '@/lib/scores';
 import { correctGameResult, type Scores } from '@/api/results';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -52,7 +53,7 @@ const corrections = reactive<Record<number, string>>({});
 
 function editable(flag: ResultFlag): { id: number; name: string; value: string }[] {
   return (flag.game?.attendees ?? []).map((attendee) => {
-    corrections[attendee.id] ??= String(Number(attendee.scores['victory-points'] ?? 0));
+    corrections[attendee.id] ??= formatScore(attendee.scores['victory-points'] ?? 0);
 
     return { id: attendee.id, name: attendee.name, value: corrections[attendee.id] ?? '' };
   });
