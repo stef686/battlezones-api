@@ -20,7 +20,7 @@
  * and because the account slot's name is the viewer's own, which no icon can
  * say. Do not delete the labels to save the markup.
  */
-import { CalendarDays, CircleUser, House, MessagesSquare, type LucideIcon } from 'lucide-vue-next';
+import { CalendarDays, CircleUser, House, Send, type LucideIcon } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -38,7 +38,7 @@ const session = useSessionStore();
 const coming: Slot[] = [
   { key: 'home', label: 'Home', icon: House },
   { key: 'events', label: 'Events', icon: CalendarDays },
-  { key: 'messages', label: 'Messages', icon: MessagesSquare },
+  { key: 'messages', label: 'Messages', icon: Send },
 ];
 
 const viewer = computed(() => session.viewer);
