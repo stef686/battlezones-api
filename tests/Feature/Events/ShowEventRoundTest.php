@@ -150,3 +150,51 @@ test('a round lists each game\'s attendees in the order they were paired', funct
     expect(collect($response->json('data.games.0.attendees'))->pluck('id')->all())
         ->toBe([$second->id, $first->id]);
 });
+
+test('it names the score columns a round is played on, whether or not results are in', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+
+    // Declared out of display order, to prove the payload sorts them.
+    EventScoreType::factory()->victoryPoints()->for($event)->create(['display_order' => 2]);
+    EventScoreType::factory()->matchPoints()->for($event)->create(['display_order' => 1]);
+
+    $game = Game::factory()->for($round)->create(['table_number' => 1]);
+    $game->attendees()->attach(EventAttendee::factory()->for($event)->withMember()->create());
+
+    $response = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertSuccessful();
+
+    expect(array_column($response->json('data.score_types'), 'slug'))
+        ->toBe(['match-points', 'victory-points'])
+        // Nothing has been scored, and the columns are sent all the same: the
+        // screen shows a Game waiting on two numbers, not a Game with none.
+        ->and($response->json('data.games.0.attendees.0.scores'))->toBe([]);
+});
+
+test('it tells an organiser a game repeats a pairing, and tells a player nothing', function () {
+    $event = Event::factory()->active()->create();
+    $first = Round::factory()->for($event)->live()->create(['number' => 1]);
+    $second = Round::factory()->for($event)->live()->create(['number' => 2]);
+
+    $home = EventAttendee::factory()->for($event)->withMember()->create();
+    $away = EventAttendee::factory()->for($event)->withMember()->create();
+
+    foreach ([$first, $second] as $round) {
+        $game = Game::factory()->for($round)->create(['table_number' => 1]);
+        $game->attendees()->attach([$home->id, $away->id]);
+    }
+
+    $url = route('events.rounds.show', ['event' => $event->slug, 'round' => $second->id]);
+
+    // Not sent the key at all, rather than sent a false: how the field was
+    // paired is not a Player's to read.
+    expect($this->getJson($url)->assertSuccessful()->json('data.games.0'))
+        ->not->toHaveKey('is_rematch');
+
+    $organiser = User::factory()->create();
+    $event->organisers()->attach($organiser, ['role' => EventOrganiserRole::Lead->value]);
+
+    expect($this->actingAs($organiser)->getJson($url)->assertSuccessful()->json('data.games.0.is_rematch'))
+        ->toBeTrue();
+});

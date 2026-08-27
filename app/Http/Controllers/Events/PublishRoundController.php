@@ -50,7 +50,7 @@ class PublishRoundController extends Controller
 
         NotifyRoundIsLive::dispatch($round);
 
-        $round->load(['games' => fn ($query) => $query->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType', 'games.openResultFlag']);
+        $round->load(['event.scoreTypes', 'games' => fn ($query) => $query->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType', 'games.openResultFlag']);
 
         return RoundDetailResource::make($round);
     }
