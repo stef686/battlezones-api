@@ -11,7 +11,7 @@
  * it. A Round is at most a few dozen Games, they are already in hand, and a
  * hall's wifi is the wrong place to spend a request per keystroke.
  */
-import { ChevronLeft, ChevronRight, CircleCheck, Repeat } from 'lucide-vue-next';
+import { ChevronLeft, ChevronRight, Repeat } from 'lucide-vue-next';
 import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -20,11 +20,11 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
-import { byNumber, columnLabel, fetchRound, fetchRounds, roundTitle, type PairedAttendee, type Pairing, type RoundSummary } from '@/api/rounds';
+import { byNumber, fetchRound, fetchRounds, roundTitle, type Pairing, type RoundSummary } from '@/api/rounds';
+import GameScoreTable from '@/components/GameScoreTable.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import TextField from '@/components/TextField.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
-import { formatScore } from '@/lib/scores';
 
 const props = defineProps<{ eventSlug: string; roundId: string }>();
 
@@ -106,11 +106,6 @@ function names(pairing: Pairing): string[] {
  * was entered would leave it blank instead of showing what it is waiting for.
  */
 const columns = computed(() => round.value?.score_types ?? []);
-
-/** A team's score in one column, which is zero until somebody says otherwise. */
-function scoreOf(attendee: PairedAttendee, column: string): string {
-  return formatScore(attendee.scores[column] ?? 0);
-}
 </script>
 
 <template>
@@ -246,117 +241,58 @@ function scoreOf(attendee: PairedAttendee, column: string): string {
           v-for="pairing in pairings"
           :key="pairing.id"
           :data-testid="`pairing-${pairing.id}`"
-          class="overflow-hidden rounded-xl border border-card-line shadow-2xs"
         >
-          <!-- The table number leads, because it is what somebody crossing a
-               hall is looking for. What state the Game is in sits opposite it,
-               where a reader scanning down the cards finds it in one column. -->
-          <header class="flex items-baseline justify-between gap-3 border-b border-card-line bg-card px-3 py-2">
-            <span class="flex min-w-0 items-center gap-1.5">
-              <span
-                data-testid="pairing-table"
-                class="text-xs font-semibold text-foreground"
-              >
-                {{ pairing.is_bye ? 'Bye' : `Table ${pairing.table_number}` }}
+          <!-- The whole card is the target rather than a link tucked inside
+               it: a Player looking for what their opponent brought is aiming
+               at a card across a hall, not at a word on one. -->
+          <RouterLink
+            :to="{ name: 'game', params: { eventSlug: props.eventSlug, gameId: pairing.id } }"
+            :data-testid="`open-game-${pairing.id}`"
+            class="block overflow-hidden rounded-xl border border-card-line shadow-2xs focus:outline-hidden focus:border-primary"
+          >
+            <!-- The table number leads, because it is what somebody crossing a
+                 hall is looking for. What state the Game is in sits opposite it,
+                 where a reader scanning down the cards finds it in one column. -->
+            <header class="flex items-baseline justify-between gap-3 border-b border-card-line bg-card px-3 py-2">
+              <span class="flex min-w-0 items-center gap-1.5">
+                <span
+                  data-testid="pairing-table"
+                  class="text-xs font-semibold text-foreground"
+                >
+                  {{ pairing.is_bye ? 'Bye' : `Table ${pairing.table_number}` }}
+                </span>
+
+                <!-- Beside the table, because it qualifies the pairing rather
+                     than reporting on it: an Organiser scanning a Draft reads
+                     "table 5, and these two have met" in one go. Rendered on the
+                     key being present, which the API sends to nobody else — it
+                     is not a Player's screen hiding something. -->
+                <span
+                  v-if="pairing.is_rematch"
+                  data-testid="pairing-rematch"
+                  class="inline-flex shrink-0 items-center text-muted-foreground"
+                >
+                  <Repeat class="size-3.5 shrink-0" />
+                  <!-- The icon carries no name of its own, and "these two have
+                       already met" is not a thing to leave to a glyph. -->
+                  <span class="sr-only">Rematch</span>
+                </span>
               </span>
 
-              <!-- Beside the table, because it qualifies the pairing rather
-                   than reporting on it: an Organiser scanning a Draft reads
-                   "table 5, and these two have met" in one go. Rendered on the
-                   key being present, which the API sends to nobody else — it
-                   is not a Player's screen hiding something. -->
               <span
-                v-if="pairing.is_rematch"
-                data-testid="pairing-rematch"
-                class="inline-flex shrink-0 items-center text-muted-foreground"
+                v-if="pairing.result.submitted_at"
+                data-testid="pairing-finished"
+                class="shrink-0 text-xs text-muted-foreground-1"
               >
-                <Repeat class="size-3.5 shrink-0" />
-                <!-- The icon carries no name of its own, and "these two have
-                     already met" is not a thing to leave to a glyph. -->
-                <span class="sr-only">Rematch</span>
+                Finished
               </span>
-            </span>
+            </header>
 
-            <span
-              v-if="pairing.result.submitted_at"
-              data-testid="pairing-finished"
-              class="shrink-0 text-xs text-muted-foreground-1"
-            >
-              Finished
-            </span>
-          </header>
-
-          <!-- A real table, because that is what this is: two teams read
-               across, one Score Type read down. Letting the browser size the
-               columns keeps the headings centred over their numbers however
-               wide the label or the score turns out to be, which hand-set
-               widths only manage until the first three-digit score. -->
-          <table class="w-full">
-            <thead>
-              <tr
-                data-testid="pairing-columns"
-                class="text-xs uppercase tracking-widest text-muted-foreground"
-              >
-                <!-- The names below need no heading, and the empty cell takes
-                     the width the two score columns do not. -->
-                <th
-                  scope="col"
-                  class="w-full px-3 py-2 text-start font-medium"
-                >
-                  <span class="sr-only">Team</span>
-                </th>
-                <th
-                  v-for="column in columns"
-                  :key="column.slug"
-                  :data-testid="`column-${column.slug}`"
-                  scope="col"
-                  class="px-3 py-2 text-center font-bold whitespace-nowrap"
-                >
-                  {{ columnLabel(column) }}
-                  <span class="sr-only">{{ column.name }}</span>
-                </th>
-              </tr>
-            </thead>
-
-            <tbody class="divide-y divide-card-divider border-t border-card-divider">
-              <tr
-                v-for="attendee in pairing.attendees"
-                :key="attendee.id"
-                :data-testid="`pairing-team-${attendee.id}`"
-              >
-                <!-- The winner is both weighted and ticked, rather than
-                     either alone: weight alone is a difference a reader has to
-                     notice by comparing the two rows, and a tick alone carries
-                     no meaning at a glance across a hall of cards. -->
-                <th
-                  scope="row"
-                  class="max-w-0 px-3 py-2 text-start text-xs text-foreground"
-                  :class="attendee.is_winner ? 'font-semibold' : 'font-normal'"
-                >
-                  <span class="flex min-w-0 items-center gap-1.5">
-                    <span class="truncate">{{ attendee.name }}</span>
-
-                    <span
-                      v-if="attendee.is_winner"
-                      :data-testid="`winner-${attendee.id}`"
-                      class="inline-flex shrink-0 items-center text-success"
-                    >
-                      <CircleCheck class="size-4 shrink-0" />
-                      <span class="sr-only">Won</span>
-                    </span>
-                  </span>
-                </th>
-                <td
-                  v-for="column in columns"
-                  :key="column.slug"
-                  :data-testid="`score-${column.slug}`"
-                  class="px-3 py-2 text-center text-xs font-medium tabular-nums whitespace-nowrap text-foreground"
-                >
-                  {{ scoreOf(attendee, column.slug) }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <GameScoreTable
+              :attendees="pairing.attendees"
+              :columns="columns"
+            />
+          </RouterLink>
         </li>
       </ul>
     </template>

@@ -221,6 +221,17 @@ describe('the event nav', () => {
         expect(view.get('[data-testid="event-nav-standings"]').attributes('aria-current')).toBeUndefined();
     });
 
+    it('lights rounds from a single game, which sits under a round', async () => {
+        stubEvent(eventBody());
+        await router.push(`/events/${EVENT_SLUG}/games/18`);
+        await router.isReady();
+
+        const view = mountNav();
+        await flushPromises();
+
+        expect(view.get('[data-testid="event-nav-rounds"]').attributes('aria-current')).toBe('page');
+    });
+
     it('lights attendees from an attendee of that event', async () => {
         stubEvent(eventBody());
         await router.push(`/events/${EVENT_SLUG}/attendees/7`);

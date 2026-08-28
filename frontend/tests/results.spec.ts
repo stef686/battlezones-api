@@ -12,6 +12,7 @@ function game(submittedById: number | null): Game {
         table_number: 7,
         is_bye: false,
         round: { id: 4, number: 1, name: 'Round 1' },
+        score_types: [{ slug: 'victory-points', name: 'Victory Points' }, { slug: 'match-points', name: 'Match Points' }],
         result: {
             submitted_at: '2026-09-12T14:05:00+00:00',
             submitted_by: submittedById === null ? null : { id: submittedById, name: 'Ada Lovelace' },
@@ -19,8 +20,8 @@ function game(submittedById: number | null): Game {
             is_flagged: false,
         },
         attendees: [
-            { id: 9, name: 'Ada and partner', members: [], scores: { 'victory-points': 85, 'match-points': 3 } },
-            { id: 11, name: 'Grace and partner', members: [], scores: { 'victory-points': 70, 'match-points': 0 } },
+            { id: 9, name: 'Ada and partner', is_winner: true, members: [], scores: { 'victory-points': 85, 'match-points': 3 } },
+            { id: 11, name: 'Grace and partner', is_winner: false, members: [], scores: { 'victory-points': 70, 'match-points': 0 } },
         ],
     };
 }

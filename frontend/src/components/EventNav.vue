@@ -41,14 +41,16 @@ const { data: event, error } = useQuery({
 
 /**
  * Which chip a screen belongs to, by route name rather than by matching the
- * URL: a Round's detail screen belongs to Rounds and an Attendee's to
- * Attendees, while the Poll and My game screens belong to no chip at all.
+ * URL: a Round's detail screen belongs to Rounds — as does a single Game
+ * beneath it — and an Attendee's to Attendees, while the Poll and My game
+ * screens belong to no chip at all.
  * Kept beside the chip list so the whole relationship reads in one place.
  */
 const chipOfRoute: Record<string, string> = {
   event: 'event',
   rounds: 'rounds',
   round: 'rounds',
+  game: 'rounds',
   standings: 'standings',
   attendees: 'attendees',
   attendee: 'attendees',

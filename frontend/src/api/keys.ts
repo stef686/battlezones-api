@@ -17,6 +17,7 @@ export const keys = {
     attendee: (slug: string, attendeeId: number) => ['events', slug, 'attendees', attendeeId] as const,
     rounds: (slug: string) => ['events', slug, 'rounds'] as const,
     round: (slug: string, roundId: number) => ['events', slug, 'rounds', roundId] as const,
+    game: (slug: string, gameId: number) => ['events', slug, 'games', gameId] as const,
     standings: (slug: string) => ['events', slug, 'standings'] as const,
     myGame: (slug: string) => ['events', slug, 'my-game'] as const,
     flags: (slug: string) => ['events', slug, 'flags'] as const,

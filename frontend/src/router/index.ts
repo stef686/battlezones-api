@@ -122,6 +122,16 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true },
     },
     {
+        // Hung off the Event rather than off the Round, exactly as the API
+        // is: a Game carries the Round it belongs to, so nesting it under one
+        // would put a number in the URL that nothing reads.
+        path: '/events/:eventSlug/games/:gameId',
+        name: 'game',
+        component: () => import('@/views/GameView.vue'),
+        props: true,
+        meta: { public: true },
+    },
+    {
         path: '/events/:eventSlug/organise',
         name: 'organise',
         component: () => import('@/views/OrganiseView.vue'),

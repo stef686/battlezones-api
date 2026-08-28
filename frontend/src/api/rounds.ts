@@ -7,7 +7,14 @@ export interface RoundSummary {
     status: string;
 }
 
-export interface PairedAttendee {
+/**
+ * A team as a score table needs it: a name, a verdict and a row of numbers.
+ *
+ * The Round's pairings and a single Game's detail both carry more than this,
+ * and both are read by the same table, so what the table needs is named once
+ * here rather than described again beside each of them.
+ */
+export interface ScoredAttendee {
     id: number;
     name: string;
     /**
@@ -16,9 +23,12 @@ export interface PairedAttendee {
      * score is equally absent — has no winner at all.
      */
     is_winner: boolean;
+    scores: Record<string, number | string>;
+}
+
+export interface PairedAttendee extends ScoredAttendee {
     allegiance: string | null;
     members: { id: number; name: string; faction: { id: number; name: string } | null }[];
-    scores: Record<string, number | string>;
 }
 
 export interface Pairing {
