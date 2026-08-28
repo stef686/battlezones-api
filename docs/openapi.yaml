@@ -1985,6 +1985,15 @@ paths:
                         type: string
                       status:
                         type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
                       games:
                         type: array
                         items:
@@ -2015,6 +2024,8 @@ paths:
                                     type: integer
                                   name:
                                     type: string
+                                  is_winner:
+                                    type: boolean
                                   allegiance:
                                     type: string
                                   members:
@@ -2077,6 +2088,15 @@ paths:
                             type: integer
                           name:
                             type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
                       result:
                         type: object
                         properties:
@@ -2106,6 +2126,8 @@ paths:
                               type: integer
                             name:
                               type: string
+                            is_winner:
+                              type: boolean
                             members:
                               type: array
                               items:
@@ -4206,6 +4228,15 @@ paths:
                                 type: integer
                               name:
                                 type: string
+                          score_types:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                slug:
+                                  type: string
+                                name:
+                                  type: string
                           result:
                             type: object
                             properties:
@@ -4235,6 +4266,8 @@ paths:
                                   type: integer
                                 name:
                                   type: string
+                                is_winner:
+                                  type: boolean
                                 members:
                                   type: array
                                   items:
@@ -4423,6 +4456,15 @@ paths:
                             type: integer
                           name:
                             type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
                       result:
                         type: object
                         properties:
@@ -4452,6 +4494,8 @@ paths:
                               type: integer
                             name:
                               type: string
+                            is_winner:
+                              type: boolean
                             members:
                               type: array
                               items:
@@ -4513,6 +4557,15 @@ paths:
                             type: integer
                           name:
                             type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
                       result:
                         type: object
                         properties:
@@ -4542,6 +4595,8 @@ paths:
                               type: integer
                             name:
                               type: string
+                            is_winner:
+                              type: boolean
                             members:
                               type: array
                               items:
@@ -4629,6 +4684,15 @@ paths:
                             type: integer
                           name:
                             type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
                       result:
                         type: object
                         properties:
@@ -4658,6 +4722,8 @@ paths:
                               type: integer
                             name:
                               type: string
+                            is_winner:
+                              type: boolean
                             members:
                               type: array
                               items:

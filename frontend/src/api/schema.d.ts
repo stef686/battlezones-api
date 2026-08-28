@@ -3478,6 +3478,10 @@ export interface operations {
                             number?: number;
                             name?: string;
                             status?: string;
+                            score_types?: {
+                                slug?: string;
+                                name?: string;
+                            }[];
                             games?: {
                                 id?: number;
                                 table_number?: number;
@@ -3490,6 +3494,7 @@ export interface operations {
                                 attendees?: {
                                     id?: number;
                                     name?: string;
+                                    is_winner?: boolean;
                                     allegiance?: string;
                                     members?: {
                                         id?: number;
@@ -3541,6 +3546,10 @@ export interface operations {
                                 number?: number;
                                 name?: string;
                             };
+                            score_types?: {
+                                slug?: string;
+                                name?: string;
+                            }[];
                             result?: {
                                 submitted_at?: string;
                                 submitted_by?: {
@@ -3554,6 +3563,7 @@ export interface operations {
                             attendees?: {
                                 id?: number;
                                 name?: string;
+                                is_winner?: boolean;
                                 members?: {
                                     id?: number;
                                     name?: string;
@@ -5196,6 +5206,10 @@ export interface operations {
                                 number?: number;
                                 name?: string;
                             };
+                            score_types?: {
+                                slug?: string;
+                                name?: string;
+                            }[];
                             result?: {
                                 submitted_at?: string;
                                 submitted_by?: {
@@ -5209,6 +5223,7 @@ export interface operations {
                             attendees?: {
                                 id?: number;
                                 name?: string;
+                                is_winner?: boolean;
                                 members?: {
                                     id?: number;
                                     name?: string;
@@ -5366,6 +5381,10 @@ export interface operations {
                                 number?: number;
                                 name?: string;
                             };
+                            score_types?: {
+                                slug?: string;
+                                name?: string;
+                            }[];
                             result?: {
                                 submitted_at?: string;
                                 submitted_by?: {
@@ -5379,6 +5398,7 @@ export interface operations {
                             attendees?: {
                                 id?: number;
                                 name?: string;
+                                is_winner?: boolean;
                                 members?: {
                                     id?: number;
                                     name?: string;
@@ -5460,6 +5480,10 @@ export interface operations {
                                 number?: number;
                                 name?: string;
                             };
+                            score_types?: {
+                                slug?: string;
+                                name?: string;
+                            }[];
                             result?: {
                                 submitted_at?: string;
                                 submitted_by?: {
@@ -5473,6 +5497,7 @@ export interface operations {
                             attendees?: {
                                 id?: number;
                                 name?: string;
+                                is_winner?: boolean;
                                 members?: {
                                     id?: number;
                                     name?: string;
@@ -5520,6 +5545,10 @@ export interface operations {
                                 number?: number;
                                 name?: string;
                             };
+                            score_types?: {
+                                slug?: string;
+                                name?: string;
+                            }[];
                             result?: {
                                 submitted_at?: string;
                                 submitted_by?: {
@@ -5533,6 +5562,7 @@ export interface operations {
                             attendees?: {
                                 id?: number;
                                 name?: string;
+                                is_winner?: boolean;
                                 members?: {
                                     id?: number;
                                     name?: string;

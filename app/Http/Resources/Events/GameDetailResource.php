@@ -4,6 +4,7 @@ namespace App\Http\Resources\Events;
 
 use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
 use App\Models\EventAttendee;
+use App\Models\EventScoreType;
 use App\Models\Game;
 use App\Models\GameScore;
 use Illuminate\Http\Request;
@@ -27,6 +28,9 @@ class GameDetailResource extends JsonResource
                 fn (GameScore $score) => [$score->scoreType->slug => $score->value]
             ));
 
+        $scoreTypes = $this->round->event->scoreTypes->sortBy('display_order')->values();
+        $winner = $this->winningAttendeeId($scoreTypes);
+
         return [
             'id' => $this->id,
             'table_number' => $this->table_number,
@@ -36,6 +40,14 @@ class GameDetailResource extends JsonResource
                 'number' => $this->round->number,
                 'name' => $this->round->name,
             ],
+            // The columns this Game is scored on, sent whether or not a
+            // result has landed. Read from the Event rather than inferred
+            // from the scores in hand, so a Game nobody has played yet shows
+            // what it is waiting for instead of collapsing to nothing.
+            'score_types' => $scoreTypes->map(fn (EventScoreType $type): array => [
+                'slug' => $type->slug,
+                'name' => $type->name,
+            ])->all(),
             'result' => [
                 'submitted_at' => $this->submitted_at?->toIso8601String(),
                 'submitted_by' => $this->whenLoaded('submittedBy', fn (): ?array => $this->submittedBy === null ? null : [
@@ -52,6 +64,10 @@ class GameDetailResource extends JsonResource
             'attendees' => $this->attendees->map(fn (EventAttendee $attendee): array => [
                 'id' => $attendee->id,
                 'name' => $attendee->displayName(),
+                // Decided here rather than left to the client, which would
+                // have to be told each Score Type's ranking order and sort
+                // direction to work out the same thing.
+                'is_winner' => $attendee->id === $winner,
                 'members' => $this->serialiseMembers($attendee, withArmyList: true),
                 'scores' => $scoresByAttendee->get($attendee->id, collect())->toArray(),
             ])->all(),

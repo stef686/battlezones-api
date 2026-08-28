@@ -73,7 +73,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":680,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-14T14:10:16Z","ends_at":"2027-02-16T14:10:16Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":696,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-17T00:58:01Z","ends_at":"2027-02-19T00:58:01Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"banner":null,"created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -303,7 +303,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":61,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-07T22:11:37Z","author":{"id":1512,"name":"Cordia Cummings"},"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":62,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-10T08:59:21Z","author":{"id":1540,"name":"Cordia Cummings"},"created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -364,7 +364,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":199,"name":"","allegiance":null,"members":[]}}'
+        content: '{"data":{"id":204,"name":"","allegiance":null,"members":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -474,7 +474,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":200,"name":"","allegiance":null,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":205,"name":"","allegiance":null,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -523,7 +523,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":101,"number":1,"name":null,"status":"draft"},{"id":102,"number":3,"name":null,"status":"draft"}]}'
+        content: '{"data":[{"id":103,"number":1,"name":null,"status":"draft"},{"id":104,"number":5,"name":null,"status":"draft"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -584,7 +584,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":4,"number":2,"name":"Round 2","status":"live","games":[{"id":18,"table_number":5,"is_bye":false,"is_rematch":false,"result":{"submitted_at":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true}],"scores":{"match-points":3,"victory-points":85}}]}]}}'
+        content: '{"data":{"id":4,"number":2,"name":"Round 2","status":"live","score_types":[{"slug":"match-points","name":"Match Points"},{"slug":"victory-points","name":"Victory Points"}],"games":[{"id":18,"table_number":5,"is_bye":false,"is_rematch":false,"result":{"submitted_at":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true}],"scores":{"match-points":3,"victory-points":85}}]}]}}'
         headers: []
         description: ''
     responseFields: []
@@ -645,7 +645,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points"},{"slug":"victory-points","name":"Victory Points"}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: ''
     responseFields: []
@@ -860,7 +860,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":320,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":326,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1787922000&signature=519e9bf1b7f2feda8facd7d02d80714f9f71d16f9ef3c875b249a18f8a7326ca","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1787922000&signature=4b74b02fe3506520501f776d3a50c9fb8fe11babae74e60176ad0d09bd70bcb8","created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -1787,7 +1787,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":232,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":233,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
+        content: '{"data":[{"id":237,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":238,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
         headers: []
         description: ''
       -
@@ -1878,7 +1878,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":234,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":239,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -1951,7 +1951,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":235,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":240,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2152,7 +2152,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":236,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":241,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2569,7 +2569,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":691,"name":"Quos velit et fugiat","slug":"quos-velit-et-fugiat-76344","description":"Modi deserunt aut ab provident perspiciatis. Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","starts_at":"2026-09-11T19:59:39Z","ends_at":"2026-09-13T19:59:39Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":707,"name":"Quos velit et fugiat","slug":"quos-velit-et-fugiat-76344","description":"Modi deserunt aut ab provident perspiciatis. Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","starts_at":"2026-09-14T06:47:23Z","ends_at":"2026-09-16T06:47:23Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"banner":null,"created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
         headers: []
         description: ''
       -
@@ -2642,7 +2642,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":692,"name":"Nihil accusantium harum","slug":"nihil-accusantium-harum-31583","description":"Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure. Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.","status":"draft","pairing_format":"swiss","starts_at":"2026-12-25T03:21:40Z","ends_at":"2026-12-27T03:21:40Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Leffler-Glover Hall","address":"723 Wisoky Passage","city":"Micaelatown","country":"BO"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":708,"name":"Nihil accusantium harum","slug":"nihil-accusantium-harum-31583","description":"Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure. Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.","status":"draft","pairing_format":"swiss","starts_at":"2026-12-27T14:09:24Z","ends_at":"2026-12-29T14:09:24Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Leffler-Glover Hall","address":"723 Wisoky Passage","city":"Micaelatown","country":"BO"},"banner":null,"created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
         headers: []
         description: ''
       -
@@ -2703,7 +2703,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":693,"name":"Odit quia officia est","slug":"odit-quia-officia-est-71680","description":"Veritatis excepturi doloribus delectus fugit. Repudiandae laboriosam est alias tenetur ratione. Voluptate accusamus ut et recusandae. Rerum ex repellendus assumenda et.","status":"draft","pairing_format":"swiss","starts_at":"2026-11-20T05:48:27Z","ends_at":"2026-11-22T05:48:27Z","max_attendees":65,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Cassin Inc Hall","address":"71854 Rosario Terrace Suite 298","city":"Walkerside","country":"VE"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":709,"name":"Modi deserunt aut","slug":"modi-deserunt-aut-6749","description":"Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","starts_at":"2026-09-20T20:10:14Z","ends_at":"2026-09-22T20:10:14Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"banner":null,"created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
         headers: []
         description: ''
       -
@@ -2830,7 +2830,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":90,"label":"Awards","type":"info","starts_at":"2026-09-02T23:34:20+00:00","ends_at":"2026-09-03T00:34:20+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":92,"label":"Awards","type":"info","starts_at":"2026-09-05T10:22:04+00:00","ends_at":"2026-09-05T11:22:04+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -3054,7 +3054,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":91,"label":"Awards","type":"info","starts_at":"2026-09-02T23:34:20+00:00","ends_at":"2026-09-03T00:34:20+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":93,"label":"Awards","type":"info","starts_at":"2026-09-05T10:22:04+00:00","ends_at":"2026-09-05T11:22:04+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
         headers: []
         description: ''
       -
@@ -3182,7 +3182,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points"},{"slug":"victory-points","name":"Victory Points"}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: ''
       -
@@ -3354,7 +3354,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points"},{"slug":"victory-points","name":"Victory Points"}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: ''
       -
@@ -3366,7 +3366,7 @@ endpoints:
       -
         custom: []
         status: 409
-        content: '{"message":"A result has already been submitted for this game. Flag it if it needs correcting.","data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"message":"A result has already been submitted for this game. Flag it if it needs correcting.","data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points"},{"slug":"victory-points","name":"Victory Points"}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: 'A result already exists. The body carries the Game as it stands, so a client whose own submission lost its response can recognise it rather than reporting a dispute.'
       -
@@ -3453,7 +3453,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points"},{"slug":"victory-points","name":"Victory Points"}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: ''
       -
