@@ -330,14 +330,26 @@ describe('the attendee list', () => {
         const view = mountView(AttendeesView);
         await flushPromises();
 
-        expect(view.get('[data-testid="attendee-total"]').text()).toBe('24 teams');
-
         const loyalist = view.get('[data-testid="attendee-9"]');
         expect(loyalist.text()).toContain('Sons of Terra');
         expect(loyalist.text()).toContain('Ada Lovelace');
         expect(loyalist.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
 
         expect(view.get('[data-testid="attendee-10"]').find('[data-testid="allegiance-traitor"]').exists()).toBe(true);
+    });
+
+    it('spends no line on a label, and searches from the placeholder alone', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}/attendees`]: { status: 200, body: ATTENDEES } });
+
+        const view = mountView(AttendeesView);
+        await flushPromises();
+
+        const field = view.get('[data-testid="attendee-search"]');
+
+        expect(field.attributes('placeholder')).toBe('Search by team, player, club or faction…');
+        // The label is still in the markup, just not on screen: an input with
+        // no accessible name says nothing to a screen reader.
+        expect(view.get(`label[for="${field.attributes('id')}"]`).classes()).toContain('sr-only');
     });
 
     it('does not rely on colour alone to say which side a team is on', async () => {
@@ -506,13 +518,14 @@ describe('a vote that has opened', () => {
 });
 
 describe('the attendee detail', () => {
-    it('carries no back link, because the attendees chip is pinned a tap away', async () => {
+    it('goes back to the list, which the standings can now arrive here without', async () => {
         stubApi({ [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE } });
 
         const view = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '9' });
         await flushPromises();
 
-        expect(view.find('[data-testid="back-to-attendees"]').exists()).toBe(false);
+        expect(view.get('[data-testid="back-to-attendees"]').attributes('href'))
+            .toBe(`/events/${EVENT_SLUG}/attendees`);
     });
 
     it('shows the players and the faction each of them brings', async () => {

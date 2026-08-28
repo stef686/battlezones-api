@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { ChevronLeft } from 'lucide-vue-next';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { revealArmyLists, unlockArmyList } from '@/api/army-lists';
@@ -74,6 +76,19 @@ async function run(action: () => Promise<unknown>): Promise<void> {
 
 <template>
   <main class="mx-auto flex w-full max-w-md flex-col gap-6 p-5">
+    <!-- The Attendees tab reaches this list too, but it is no longer the only
+         way in: the standings now open a team from its row, and a reader who
+         arrived that way has no way back to the list they were reading
+         without one. -->
+    <RouterLink
+      :to="{ name: 'attendees', params: { eventSlug: props.eventSlug } }"
+      data-testid="back-to-attendees"
+      class="inline-flex items-center gap-x-1 self-start text-sm font-medium text-muted-foreground-1 hover:text-foreground focus:text-foreground focus:outline-hidden"
+    >
+      <ChevronLeft class="size-4 shrink-0" />
+      Back to the attendees
+    </RouterLink>
+
     <p
       v-if="isPending"
       class="text-muted-foreground-1"
