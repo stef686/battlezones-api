@@ -129,6 +129,15 @@ describe('the standings', () => {
         expect(view.get('[data-testid="standing-11"] [data-testid="match-points"]').text()).toBe('—');
     });
 
+    it('opens a team from its row, rather than sending a reader round by the attendees tab', async () => {
+        const view = await mountStandings();
+
+        const link = view.get('[data-testid="open-attendee-10"]');
+
+        expect(link.attributes('href')).toBe(`/events/${EVENT_SLUG}/attendees/10`);
+        expect(link.text()).toBe('The Warmaster\'s Own');
+    });
+
     it('filters the table down to a team the reader is looking for', async () => {
         const view = await mountStandings();
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import type { ApiError } from '@/api/errors';
@@ -89,14 +90,24 @@ function score(standing: Standing, slug: string): string {
         testid="standings-search"
       />
 
-      <!-- The same card and the same table the Round's Games are drawn in, so
-           a Player who reads a scoreline on one screen is not asked to learn a
-           second way of reading numbers on the next. Only the strip along the
-           top is filled; the rows sit on the page's own ground, which is what
-           gives the table its rhythm. -->
+      <!-- The same table the Round's Games are drawn in — only the strip
+           along the top is filled, and the rows sit on the page's own ground
+           — so a Player who reads a scoreline on one screen is not asked to
+           learn a second way of reading numbers on the next.
+
+           It runs to both edges rather than sitting in a card, which is the
+           one place it parts company with a Game. A Game is one of a stack
+           and needs an outline to be one thing among several; the standings
+           are the whole screen, and the width a card gives back is width the
+           names were being truncated to fit. Rules top and bottom are all
+           that is left of the card.
+
+           The columns at either end carry the page's own inset rather than
+           the table's, so the position and the last score line up with the
+           field above them; only the columns between stay tight. -->
       <div
         v-if="!nothingMatched"
-        class="overflow-hidden rounded-xl border border-card-line shadow-2xs"
+        class="-mx-5 border-y border-card-line"
       >
         <table
           data-testid="standings"
@@ -106,7 +117,7 @@ function score(standing: Standing, slug: string): string {
             <tr class="bg-background-1 text-xs uppercase tracking-widest text-muted-foreground">
               <th
                 scope="col"
-                class="px-3 py-2 text-start font-bold"
+                class="py-2 pl-5 pr-3 text-start font-bold"
               >
                 #
               </th>
@@ -127,7 +138,7 @@ function score(standing: Standing, slug: string): string {
               </th>
               <th
                 scope="col"
-                class="px-3 py-2 text-center font-bold whitespace-nowrap"
+                class="py-2 pl-3 pr-5 text-center font-bold whitespace-nowrap"
               >
                 VP
                 <span class="sr-only">Victory Points</span>
@@ -141,7 +152,7 @@ function score(standing: Standing, slug: string): string {
               :key="standing.id"
               :data-testid="`standing-${standing.attendee.id}`"
             >
-              <td class="px-3 py-2 text-xs tabular-nums whitespace-nowrap text-muted-foreground-1">
+              <td class="py-2 pl-5 pr-3 text-xs tabular-nums whitespace-nowrap text-muted-foreground-1">
                 {{ standing.position }}
               </td>
               <!-- The name is cut rather than allowed to push the numbers off a
@@ -149,9 +160,21 @@ function score(standing: Standing, slug: string): string {
                    are the whole point of reading it. -->
               <th
                 scope="row"
-                class="max-w-0 px-3 py-2 text-start text-xs font-normal text-foreground"
+                class="max-w-0 text-start text-xs font-normal text-foreground"
               >
-                <span class="block truncate">{{ standing.attendee.name }}</span>
+                <!-- A row cannot be a link, so the name is, and it carries
+                     the cell's padding rather than the cell so the whole
+                     width of it is the target rather than the text alone. A
+                     reader scanning the table for a team is a reader who
+                     wants that team, and the Attendees tab is a long way
+                     round to reach it. -->
+                <RouterLink
+                  :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: standing.attendee.id } }"
+                  :data-testid="`open-attendee-${standing.attendee.id}`"
+                  class="block truncate px-3 py-2 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
+                >
+                  {{ standing.attendee.name }}
+                </RouterLink>
               </th>
               <td
                 class="px-3 py-2 text-center text-xs font-medium tabular-nums whitespace-nowrap text-foreground"
@@ -160,7 +183,7 @@ function score(standing: Standing, slug: string): string {
                 {{ score(standing, 'match-points') }}
               </td>
               <td
-                class="px-3 py-2 text-center text-xs font-medium tabular-nums whitespace-nowrap text-foreground"
+                class="py-2 pl-3 pr-5 text-center text-xs font-medium tabular-nums whitespace-nowrap text-foreground"
                 data-testid="victory-points"
               >
                 {{ score(standing, 'victory-points') }}
