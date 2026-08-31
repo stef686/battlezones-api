@@ -100,32 +100,35 @@ test('a captain drops a partner before the deadline', function () {
     [$event, $attendee, $captain] = teamOfOneSoFar();
     $partner = User::factory()->create();
     $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
 
     $this->actingAs($captain)
         ->deleteJson(route('events.attendees.members.destroy', [
             'event' => $event->slug,
             'attendee' => $attendee->id,
-            'membership' => $membership->id,
+            'member' => $partner->id,
         ]))
         ->assertSuccessful();
 
     expect($attendee->fresh()->members)->toHaveCount(1);
 });
 
+/**
+ * A Player is named here even though they have no account of their own yet.
+ * That resolves because the parameter is scoped to the Attendee, which binds
+ * through the relation rather than through `User::resolveRouteBinding()`.
+ */
 test('a captain drops a partner who never answered their invitation', function () {
     Notification::fake();
 
     [$event, $attendee, $captain] = teamOfOneSoFar();
     $partner = User::factory()->unclaimed()->create();
     $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
 
     $this->actingAs($captain)
         ->deleteJson(route('events.attendees.members.destroy', [
             'event' => $event->slug,
             'attendee' => $attendee->id,
-            'membership' => $membership->id,
+            'member' => $partner->id,
         ]))
         ->assertSuccessful();
 

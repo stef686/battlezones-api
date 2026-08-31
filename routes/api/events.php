@@ -187,6 +187,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.update');
     Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members', StoreAttendeeMemberController::class)
         ->name('events.attendees.members.store');
+    Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/members/{member}', DeleteAttendeeMemberController::class)
+        ->name('events.attendees.members.destroy');
     // Keyed on the membership rather than the Player, because the membership
     // is what they amend: the seat carries the Faction and the army list, and
     // a corrected address moves that seat to another account.
@@ -194,6 +196,4 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.members.update');
     Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members/{membership}/invite', ResendAttendeeInviteController::class)
         ->name('events.attendees.members.invite');
-    Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/members/{membership}', DeleteAttendeeMemberController::class)
-        ->name('events.attendees.members.destroy');
 });

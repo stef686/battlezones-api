@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Events;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventAttendee;
-use App\Models\EventAttendeeMembership;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -22,20 +22,13 @@ class DeleteAttendeeMemberController extends Controller
     #[Endpoint('Remove a Player from a Team', 'Closed to members once registration closes; Organisers are never blocked.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
-    #[UrlParam('membership_id', 'integer', 'The id of the seat to empty.', example: 4)]
+    #[UrlParam('id', 'integer', 'The id of the Player to remove.', example: 1)]
     #[Response(description: 'The member was removed from the Attendee.')]
-    public function __invoke(
-        Request $request,
-        Event $event,
-        EventAttendee $attendee,
-        EventAttendeeMembership $membership,
-    ): JsonResponse {
+    public function __invoke(Request $request, Event $event, EventAttendee $attendee, User $member): JsonResponse
+    {
         Gate::authorize('changeMembers', $attendee);
 
-        // The seat rather than the Player, matching the endpoints that amend
-        // it: a team is a fixed set of seats, and dropping somebody empties
-        // one rather than acting on the account that happened to fill it.
-        $attendee->members()->detach($membership->user_id);
+        $attendee->members()->detach($member->getKey());
 
         return response()->json(status: 200);
     }
