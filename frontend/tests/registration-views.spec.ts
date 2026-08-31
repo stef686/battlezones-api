@@ -358,6 +358,11 @@ describe('the my team hub', () => {
         const view = mountView(MyTeamView);
         await flushPromises();
 
+        // The team as the rest of the Event sees it, above the rows that edit it.
+        expect(view.get('[data-testid="team-name"]').text()).toBe('Sons of Terra');
+        expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
+        expect(view.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
+
         expect(view.get('[data-testid="team-details-row"]').text()).toContain('Sons of Terra');
         expect(view.get('[data-testid="my-details-row"]').text()).toContain('Imperial Fists');
         expect(view.get('[data-testid="my-list-row"]').text()).toContain('Not submitted');

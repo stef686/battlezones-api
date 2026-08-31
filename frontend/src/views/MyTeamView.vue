@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import AppLinkRow from '@/components/AppLinkRow.vue';
+import TeamAvatar from '@/components/TeamAvatar.vue';
 import { useMyTeam } from '@/composables/useMyTeam';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -35,15 +37,35 @@ const paintingState = computed(() => (attendee.value?.painting_entered === true 
   <main class="mx-auto flex w-full max-w-md flex-col gap-6 px-5 pb-5">
     <p
       v-if="loading"
-      class="text-muted-foreground-1"
+      class="pt-5 text-muted-foreground-1"
     >
       Loading your team…
     </p>
 
     <template v-else-if="attendee && event">
-      <h1 class="sr-only">
-        My team
-      </h1>
+      <!-- The team as the rest of the Event sees it, at the top of the screen
+           that edits it: the badge on the left with the name and the side it
+           fights for beside it, exactly as the team's own page draws them. -->
+      <header class="flex items-center gap-4 pt-5">
+        <TeamAvatar
+          :name="attendee.name ?? ''"
+          :src="attendee.avatar"
+          size="lg"
+        />
+
+        <div class="flex min-w-0 flex-col items-start gap-2">
+          <h1
+            data-testid="team-name"
+            class="text-2xl font-bold tracking-tight text-foreground"
+          >
+            {{ attendee.name }}
+          </h1>
+          <AllegianceBadge
+            v-if="event.requires_allegiance"
+            :allegiance="attendee.allegiance"
+          />
+        </div>
+      </header>
 
       <!-- Edge to edge, and nothing but a rule between rows: the hub is a way
            through to five screens, so it should read as a list of them rather
