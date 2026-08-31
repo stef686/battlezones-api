@@ -6,6 +6,16 @@ import type { AttendeeMember } from './events';
 export interface Standing {
     id: number;
     position: number;
+    /**
+     * Places gained since the Round before the one being played: positive for
+     * a climb, negative for a drop, zero for holding. Null until two Rounds
+     * have been scored, which is a table with no arrows rather than a table
+     * full of dashes.
+     *
+     * Worked out by the API, which is what knows that a smaller position is a
+     * better one.
+     */
+    movement: number | null;
     attendee: { id: number; name: string; members: AttendeeMember[] };
     scores: { value: number | string; score_type: { slug: string; name: string } }[];
 }

@@ -22,6 +22,11 @@ class EventStandingResource extends JsonResource
         return [
             'id' => $this->attendee->id,
             'position' => $this->position,
+            // Places gained since the Round before the one being played, so a
+            // reader sees who is climbing rather than only who is ahead. Null
+            // until two Rounds have results to compare, which is a table with
+            // no arrows rather than a table full of dashes.
+            'movement' => $this->movement(),
             'attendee' => [
                 'id' => $this->attendee->id,
                 'name' => $this->attendee->displayName(),

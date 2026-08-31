@@ -628,7 +628,7 @@ export interface paths {
         };
         /**
          * List Event Standings
-         * @description Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position.
+         * @description Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position. Movement is places gained since the round before the one being played, computed the same way; it is null until two rounds have been scored.
          */
         get: operations["listEventStandings"];
         put?: never;
@@ -3613,6 +3613,7 @@ export interface operations {
                         data?: {
                             id?: number;
                             position?: number;
+                            movement?: number;
                             attendee?: {
                                 id?: number;
                                 name?: string;

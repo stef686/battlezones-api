@@ -8,6 +8,7 @@ import type { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import { factionsOf, fetchStandings, scoreOf, type Standing } from '@/api/standings';
+import StandingMovement from '@/components/StandingMovement.vue';
 import TextField from '@/components/TextField.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 
@@ -118,7 +119,7 @@ function score(standing: Standing, slug: string): string {
             <tr class="bg-background-1 text-2xs uppercase tracking-widest text-muted-foreground">
               <th
                 scope="col"
-                class="py-2 pl-5 pr-3 text-start font-bold"
+                class="py-2 pl-5 pr-2 text-start font-bold"
               >
                 #
               </th>
@@ -126,20 +127,20 @@ function score(standing: Standing, slug: string): string {
                    width the position and the scores do not. -->
               <th
                 scope="col"
-                class="w-full px-3 py-2 text-start font-medium"
+                class="w-full px-2 py-2 text-start font-medium"
               >
                 <span class="sr-only">Attendee</span>
               </th>
               <th
                 scope="col"
-                class="px-3 py-2 text-center font-bold whitespace-nowrap"
+                class="px-2 py-2 text-center font-bold whitespace-nowrap"
               >
                 MP
                 <span class="sr-only">Match Points</span>
               </th>
               <th
                 scope="col"
-                class="py-2 pl-3 pr-5 text-center font-bold whitespace-nowrap"
+                class="py-2 pl-2 pr-5 text-center font-bold whitespace-nowrap"
               >
                 VP
                 <span class="sr-only">Victory Points</span>
@@ -153,8 +154,18 @@ function score(standing: Standing, slug: string): string {
               :key="standing.id"
               :data-testid="`standing-${standing.attendee.id}`"
             >
-              <td class="py-3 pl-5 pr-3 align-top text-2xs tabular-nums whitespace-nowrap text-muted-foreground-1">
-                {{ standing.position }}
+              <!-- The arrow sits with the position rather than in a column of
+                   its own: it is a fact about that number, and a phone has no
+                   width to spend on a column that is empty for a whole first
+                   round. -->
+              <td class="py-3 pl-5 pr-2 align-top text-2xs tabular-nums whitespace-nowrap text-muted-foreground-1">
+                <span class="flex items-center gap-1.5">
+                  {{ standing.position }}
+                  <StandingMovement
+                    :data-testid="`movement-${standing.attendee.id}`"
+                    :movement="standing.movement"
+                  />
+                </span>
               </td>
               <!-- The name is cut rather than allowed to push the numbers off a
                    phone: a table that scrolls sideways hides the scores that
@@ -172,7 +183,7 @@ function score(standing: Standing, slug: string): string {
                 <RouterLink
                   :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: standing.attendee.id } }"
                   :data-testid="`open-attendee-${standing.attendee.id}`"
-                  class="block px-3 py-3 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
+                  class="block px-2 py-3 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
                 >
                   <!-- The name keeps the step the rest of the table gave up:
                        it is what a reader is scanning for, and the numbers
@@ -197,13 +208,13 @@ function score(standing: Standing, slug: string): string {
                 </RouterLink>
               </th>
               <td
-                class="px-3 py-3 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
+                class="px-2 py-3 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
                 data-testid="match-points"
               >
                 {{ score(standing, 'match-points') }}
               </td>
               <td
-                class="py-3 pl-3 pr-5 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
+                class="py-3 pl-2 pr-5 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
                 data-testid="victory-points"
               >
                 {{ score(standing, 'victory-points') }}

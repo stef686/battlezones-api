@@ -396,7 +396,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1542,"updated_at":"2026-08-31T15:21:39Z","public_name":"Ms. Audra Crooks II","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1567,"updated_at":"2026-08-31T15:55:38Z","public_name":"Ms. Audra Crooks II","country":"NR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
       -
@@ -585,7 +585,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1543,"updated_at":"2026-08-31T15:21:39Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1568,"updated_at":"2026-08-31T15:55:38Z","public_name":"Ms. Audra Crooks II","country":"MX","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -800,7 +800,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -814,7 +814,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -828,7 +828,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - push
+          - email
         type: 'string[]'
         enumValues:
           - email
@@ -880,11 +880,11 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       primary_messages:
-        - push
+        - email
       message_requests:
-        - push
+        - email
       event_messages:
-        - push
+        - email
       round_live:
         - push
       result_activity:
@@ -1065,7 +1065,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1548,"public_name":"Ms. Audra Crooks II","username":"breitenberg.gilbert"},{"id":1549,"public_name":"Miss Jazlyn Keebler III","username":"bauch.marcelo"}]}'
+        content: '{"data":[{"id":1573,"public_name":"Ms. Audra Crooks II","username":"breitenberg.gilbert"},{"id":1574,"public_name":"Miss Jazlyn Keebler III","username":"bauch.marcelo"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -1114,7 +1114,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1550,"updated_at":"2026-08-31T15:21:39Z","public_name":"Eulalia VonRueden","country":"MF","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1575,"updated_at":"2026-08-31T15:55:38Z","public_name":"Eulalia VonRueden","country":"MF","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1163,7 +1163,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1551,"updated_at":"2026-08-31T15:21:39Z","public_name":"Akeem Hettinger","country":"MR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1576,"updated_at":"2026-08-31T15:55:38Z","public_name":"Akeem Hettinger","country":"MR","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1212,7 +1212,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1552,"public_name":"Colt Balistreri","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1577,"public_name":"Colt Balistreri","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1261,7 +1261,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1553,"public_name":"Dr. Alan Green","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1578,"public_name":"Dr. Alan Green","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []
@@ -1310,7 +1310,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1554,"updated_at":"2026-08-31T15:21:39Z","public_name":"Fausto Conroy","country":"IN","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1579,"updated_at":"2026-08-31T15:55:38Z","public_name":"Fausto Conroy","country":"IN","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1359,7 +1359,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1555,"updated_at":"2026-08-31T15:21:39Z","public_name":"Garett Runolfsson","country":"CD","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
+        content: '{"data":{"id":1580,"updated_at":"2026-08-31T15:55:38Z","public_name":"Garett Runolfsson","country":"CD","game_systems":[],"avatar":"","location":"","events_count":0,"followers_count":0,"following_count":0}}'
         headers: []
         description: ''
     responseFields: []
@@ -1396,7 +1396,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1556,"public_name":"Noemy Klocko","avatar":"","is_following":false}}'
+        content: '{"data":{"id":1581,"public_name":"Noemy Klocko","avatar":"","is_following":false}}'
         headers: []
         description: ''
     responseFields: []

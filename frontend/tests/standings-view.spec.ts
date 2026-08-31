@@ -52,6 +52,7 @@ const STANDINGS = {
         {
             id: 1,
             position: 1,
+            movement: 2,
             // A doubles team, so two Factions under one name.
             attendee: {
                 id: 9,
@@ -63,6 +64,7 @@ const STANDINGS = {
         {
             id: 2,
             position: 2,
+            movement: -1,
             attendee: {
                 id: 10,
                 name: 'The Warmaster\'s Own',
@@ -73,6 +75,7 @@ const STANDINGS = {
         {
             id: 3,
             position: 3,
+            movement: 0,
             // Nobody has chosen a Faction here, which is a row with no second
             // line rather than a row with a blank one.
             attendee: { id: 11, name: 'Terran Reserve', members: [member(4, 'Katherine Johnson', null)] },
@@ -182,6 +185,45 @@ describe('the standings', () => {
         // Nothing chosen is a row with no second line, not a row with a blank
         // one — a team halfway through registering is not a team with a gap.
         expect(view.find('[data-testid="factions-11"]').exists()).toBe(false);
+    });
+
+    it('shows which way each team is moving, and says so in words for a screen reader', async () => {
+        const view = await mountStandings();
+
+        // Shape as well as colour: an arrow that differs only by being red
+        // says nothing to a reader who cannot tell it from the green one.
+        const climber = view.get('[data-testid="movement-9"]');
+
+        expect(climber.classes()).toContain('text-success');
+        expect(climber.text()).toBe('Up 2 places');
+
+        const faller = view.get('[data-testid="movement-10"]');
+
+        expect(faller.classes()).toContain('text-destructive');
+        expect(faller.text()).toBe('Down 1 place');
+
+        // Holding a place is a grey dash, and reads as such.
+        const held = view.get('[data-testid="movement-11"]');
+
+        expect(held.classes()).toContain('text-muted-foreground');
+        expect(held.text()).toBe('No change');
+    });
+
+    it('dashes every row before there is a round to have moved from', async () => {
+        const nothingScoredYet = {
+            data: STANDINGS.data.map((standing) => ({ ...standing, movement: null })),
+        };
+
+        const view = await mountStandings(nothingScoredYet);
+
+        // A mark on every row from the first round on: a column that appears a
+        // round in shifts the numbers beside it, and a blank cell reads as a
+        // mark that failed to load rather than as nothing having happened.
+        const marks = view.findAll('[data-testid^="movement-"]');
+
+        expect(marks).toHaveLength(3);
+        expect(marks.map((mark) => mark.text())).toEqual(['No change', 'No change', 'No change']);
+        expect(marks[0]?.classes()).toContain('text-muted-foreground');
     });
 
     it('filters the table down to a team the reader is looking for', async () => {

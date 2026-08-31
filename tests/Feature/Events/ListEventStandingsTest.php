@@ -274,3 +274,95 @@ test('it includes score type metadata', function () {
         ->and($data['scores'][0]['score_type']['slug'])->toBe('battle-points')
         ->and($data['scores'][0]['score_type']['sort_direction'])->toBe('desc');
 });
+
+test('it reports how far each attendee has moved since the previous round', function () {
+    $event = Event::factory()->published()->standingsVisible()->create();
+    EventScoreType::factory()->matchPoints(win: 3, draw: 1, loss: 0)->rankedAt(1)->for($event)->create(['display_order' => 0]);
+    $victoryPoints = EventScoreType::factory()->victoryPoints()->rankedAt(2)->for($event)->create(['display_order' => 1]);
+
+    $climber = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Climber']))->create();
+    $faller = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Faller']))->create();
+
+    // Round one: the faller wins, and leads going into round two.
+    $first = Round::factory()->for($event)->live()->create(['number' => 1]);
+    playGame($first, $faller, $climber, 90, 60, $victoryPoints);
+
+    // Round two turns it over, so each has moved one place the other way.
+    $second = Round::factory()->for($event)->live()->create(['number' => 2]);
+    playGame($second, $climber, $faller, 100, 10, $victoryPoints);
+
+    $response = $this->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertSuccessful();
+
+    $movement = collect($response->json('data'))->pluck('movement', 'attendee.name');
+
+    expect($movement['Climber'])->toBe(1)
+        ->and($movement['Faller'])->toBe(-1);
+});
+
+test('it reports no movement where an attendee has held their place', function () {
+    $event = Event::factory()->published()->standingsVisible()->create();
+    EventScoreType::factory()->matchPoints(win: 3, draw: 1, loss: 0)->rankedAt(1)->for($event)->create(['display_order' => 0]);
+    $victoryPoints = EventScoreType::factory()->victoryPoints()->rankedAt(2)->for($event)->create(['display_order' => 1]);
+
+    $leader = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Leader']))->create();
+    $chaser = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Chaser']))->create();
+
+    $first = Round::factory()->for($event)->live()->create(['number' => 1]);
+    playGame($first, $leader, $chaser, 90, 60, $victoryPoints);
+
+    $second = Round::factory()->for($event)->live()->create(['number' => 2]);
+    playGame($second, $leader, $chaser, 80, 50, $victoryPoints);
+
+    $movement = collect($this->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->json('data'))->pluck('movement', 'attendee.name');
+
+    // Holding a place is nothing gained, which is a different thing from
+    // having nowhere to have moved from.
+    expect($movement['Leader'])->toBe(0)
+        ->and($movement['Chaser'])->toBe(0);
+});
+
+test('it reports no movement at all until two rounds have been scored', function () {
+    $event = Event::factory()->published()->standingsVisible()->create();
+    EventScoreType::factory()->matchPoints(win: 3, draw: 1, loss: 0)->rankedAt(1)->for($event)->create(['display_order' => 0]);
+    $victoryPoints = EventScoreType::factory()->victoryPoints()->rankedAt(2)->for($event)->create(['display_order' => 1]);
+
+    $home = EventAttendee::factory()->for($event)->withMember()->create();
+    $away = EventAttendee::factory()->for($event)->withMember()->create();
+
+    // One scored round is a table nobody has moved within, not a table where
+    // everybody has held their place.
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+    playGame($round, $home, $away, 90, 60, $victoryPoints);
+
+    $response = $this->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertSuccessful();
+
+    expect(collect($response->json('data'))->pluck('movement')->all())->toEqual([null, null]);
+});
+
+test('an attendee who has played nothing yet ranks last rather than reading as a climber', function () {
+    $event = Event::factory()->published()->standingsVisible()->create();
+    EventScoreType::factory()->matchPoints(win: 3, draw: 1, loss: 0)->rankedAt(1)->for($event)->create(['display_order' => 0]);
+    $victoryPoints = EventScoreType::factory()->victoryPoints()->rankedAt(2)->for($event)->create(['display_order' => 1]);
+
+    $home = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Home']))->create();
+    $away = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Away']))->create();
+    $latecomer = EventAttendee::factory()->for($event)->withMember(User::factory()->create(['name' => 'Latecomer']))->create();
+
+    $first = Round::factory()->for($event)->live()->create(['number' => 1]);
+    playGame($first, $home, $away, 90, 60, $victoryPoints);
+
+    $second = Round::factory()->for($event)->live()->create(['number' => 2]);
+    playGame($second, $away, $home, 90, 60, $victoryPoints);
+
+    $movement = collect($this->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->json('data'))->pluck('movement', 'attendee.name');
+
+    // Somebody with no games appears in both rankings on zero, so they have
+    // held last place rather than fallen into it from nowhere.
+    expect($movement['Latecomer'])->toBe(0);
+});
