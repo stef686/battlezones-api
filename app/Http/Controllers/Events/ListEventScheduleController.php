@@ -28,7 +28,7 @@ class ListEventScheduleController extends Controller
             'ends_at' => '2026-09-12T12:00:00+00:00',
             'display_order' => 0,
             'target_id' => 4,
-            'is_target_live' => true,
+            'target_state' => 'live',
             'round' => ['id' => 4, 'number' => 1, 'name' => 'Round 1'],
         ]],
     ]]])]

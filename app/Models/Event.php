@@ -117,6 +117,16 @@ class Event extends Model
     private array $latestPolls = [];
 
     /**
+     * Memoised like the Polls above, and for the same reason: a schedule asks
+     * every one of its Round blocks which Round is current, and that is one
+     * question about the Event rather than one per block. Held per instance,
+     * so a request that publishes a Round reads the answer on a fresh model.
+     */
+    private ?Round $currentRound = null;
+
+    private bool $currentRoundLoaded = false;
+
+    /**
      * @var list<string>
      */
     protected $fillable = [
@@ -367,7 +377,12 @@ class Event extends Model
      */
     public function currentRound(): ?Round
     {
-        return $this->rounds()->live()->orderByDesc('number')->first();
+        if (! $this->currentRoundLoaded) {
+            $this->currentRound = $this->rounds()->live()->orderByDesc('number')->first();
+            $this->currentRoundLoaded = true;
+        }
+
+        return $this->currentRound;
     }
 
     /**

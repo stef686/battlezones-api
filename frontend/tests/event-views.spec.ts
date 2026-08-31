@@ -53,7 +53,7 @@ const SCHEDULE = {
                     ends_at: '2026-09-12T09:15:00+01:00',
                     display_order: 0,
                     target_id: null,
-                    is_target_live: false,
+                    target_state: null,
                     round: null,
                 },
                 {
@@ -64,7 +64,7 @@ const SCHEDULE = {
                     ends_at: '2026-09-12T12:00:00+01:00',
                     display_order: 1,
                     target_id: 4,
-                    is_target_live: true,
+                    target_state: 'live',
                     round: { id: 4, number: 1, name: 'Round 1', status: 'live' },
                 },
             ],
@@ -301,12 +301,35 @@ describe('the schedule', () => {
         expect(view.get('[data-testid="block-1"]').find('[data-testid="block-live"]').exists()).toBe(false);
     });
 
+    it('badges a round the event has moved past as finished rather than as now', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: {
+                status: 200,
+                body: {
+                    data: [{
+                        date: '2026-09-12',
+                        blocks: [
+                            { ...SCHEDULE.data[0]!.blocks[1]!, id: 5, label: 'Round 1', target_state: 'finished' },
+                            { ...SCHEDULE.data[0]!.blocks[1]!, id: 6, label: 'Round 2', target_state: 'live' },
+                        ],
+                    }],
+                },
+            },
+        });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="block-5"]').find('[data-testid="block-finished"]').exists()).toBe(true);
+        expect(view.get('[data-testid="block-6"]').find('[data-testid="block-live"]').exists()).toBe(true);
+    });
+
     it('tabs the days, and opens on the one being played', async () => {
         const SECOND_DAY = {
             data: [
                 {
                     date: '2026-09-12',
-                    blocks: [{ ...SCHEDULE.data[0]!.blocks[0]!, is_target_live: false }],
+                    blocks: [{ ...SCHEDULE.data[0]!.blocks[0]!, target_state: null }],
                 },
                 {
                     date: '2026-09-13',
@@ -318,7 +341,7 @@ describe('the schedule', () => {
                         ends_at: '2026-09-13T12:00:00+01:00',
                         display_order: 0,
                         target_id: 7,
-                        is_target_live: true,
+                        target_state: 'live',
                         round: { id: 7, number: 4, name: 'Round 4' },
                     }],
                 },
@@ -363,7 +386,7 @@ describe('the schedule', () => {
                 date: '2026-09-12',
                 blocks: [{
                     ...SCHEDULE.data[0]!.blocks[1]!,
-                    is_target_live: false,
+                    target_state: null,
                     round: { id: 4, number: 1, name: 'Round 1', status: 'draft' },
                 }],
             }],

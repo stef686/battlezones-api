@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\EventStatus;
 use App\Enums\PollType;
 use App\Enums\ScheduleBlockType;
+use App\Enums\ScheduleTargetState;
 use Database\Factories\EventScheduleBlockFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -102,18 +104,57 @@ class EventScheduleBlock extends Model
     }
 
     /**
-     * Whether the thing this block describes is happening now.
+     * Where the thing this block describes has got to, if anywhere.
      *
-     * The API says live or not and hands back an id; where that leads is the
-     * front end's routing decision, not something to hard-code into a payload.
+     * The API says live, finished or neither and hands back an id; where that
+     * leads is the front end's routing decision, not something to hard-code
+     * into a payload.
+     *
+     * A Round is live only while it is the Event's current one. `live` is a
+     * latch — nothing ever takes a Round back out of it — so asking each Round
+     * for its own status badged every Round played that day as happening now,
+     * Round 1 included, right through to the prizegiving.
      */
-    public function isTargetLive(): bool
+    public function targetState(): ?ScheduleTargetState
     {
         return match ($this->type) {
-            ScheduleBlockType::Info => false,
-            ScheduleBlockType::Round => $this->round?->isLive() ?? false,
-            ScheduleBlockType::PaintingVoting => $this->event->openPoll(PollType::Painting) !== null,
+            ScheduleBlockType::Info => null,
+            ScheduleBlockType::Round => $this->roundState(),
+            ScheduleBlockType::PaintingVoting => $this->pollState(),
         };
+    }
+
+    /**
+     * A Draft is nowhere yet; the current Round is live; anything the field has
+     * moved past is finished, as is every Round of an Event that is over.
+     */
+    private function roundState(): ?ScheduleTargetState
+    {
+        $round = $this->round;
+
+        if ($round === null || $round->isDraft()) {
+            return null;
+        }
+
+        if ($this->event->status === EventStatus::Completed) {
+            return ScheduleTargetState::Finished;
+        }
+
+        return $round->is($this->event->currentRound())
+            ? ScheduleTargetState::Live
+            : ScheduleTargetState::Finished;
+    }
+
+    /** A Poll that has never been opened is nowhere; a closed one is finished. */
+    private function pollState(): ?ScheduleTargetState
+    {
+        if ($this->event->openPoll(PollType::Painting) !== null) {
+            return ScheduleTargetState::Live;
+        }
+
+        return $this->event->latestPoll(PollType::Painting)?->opens_at === null
+            ? null
+            : ScheduleTargetState::Finished;
     }
 
     /**

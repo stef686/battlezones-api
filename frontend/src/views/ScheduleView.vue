@@ -70,7 +70,7 @@ watch(days, (loaded) => {
     return;
   }
 
-  const live = loaded.findIndex((day) => day.blocks.some((block) => block.is_target_live));
+  const live = loaded.findIndex((day) => day.blocks.some((block) => block.target_state === 'live'));
 
   if (live !== -1) {
     selected.value = live;
@@ -276,7 +276,7 @@ async function add(): Promise<void> {
           :data-testid="`block-${block.id}`"
           class="flex items-center gap-4 px-5 py-3.5"
           :class="[
-            block.is_target_live ? 'bg-primary/10' : '',
+            block.target_state === 'live' ? 'bg-primary/10' : '',
             roundLink(block) ? 'hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden' : '',
           ]"
         >
@@ -296,12 +296,18 @@ async function add(): Promise<void> {
             {{ block.label }}
           </p>
 
+          <!-- One "Now" on the schedule, on the Round being played rather
+               than on every Round that has been published. What is behind it
+               says so instead. -->
           <span
-            v-if="block.is_target_live"
-            data-testid="block-live"
-            class="ms-auto inline-flex shrink-0 items-center rounded-full bg-primary px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-primary-foreground"
+            v-if="block.target_state"
+            :data-testid="block.target_state === 'live' ? 'block-live' : 'block-finished'"
+            class="ms-auto inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-2xs font-medium uppercase tracking-wide"
+            :class="block.target_state === 'live'
+              ? 'bg-primary text-primary-foreground'
+              : 'border border-border text-muted-foreground'"
           >
-            Now
+            {{ block.target_state === 'live' ? 'Now' : 'Finished' }}
           </span>
 
           <ChevronRight

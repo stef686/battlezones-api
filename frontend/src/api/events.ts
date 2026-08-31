@@ -58,7 +58,12 @@ export interface ScheduleBlock {
     ends_at: string;
     display_order: number;
     target_id: number | null;
-    is_target_live: boolean;
+    /**
+     * Where the thing this block describes has got to: the Round being played
+     * or the open Poll is `live`, one the Event has moved past is `finished`,
+     * and anything not yet under way is null.
+     */
+    target_state: 'live' | 'finished' | null;
     round: { id: number; number: number; name: string | null; status: string } | null;
 }
 
