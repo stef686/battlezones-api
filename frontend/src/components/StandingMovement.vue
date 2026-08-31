@@ -59,8 +59,9 @@ const description = computed(() => {
 </script>
 
 <template>
+  <!-- No testid of its own: the table names each mark by the team it belongs
+       to, and a fallthrough attribute would overwrite one set here anyway. -->
   <span
-    data-testid="movement"
     class="inline-flex shrink-0 items-center"
     :class="tone"
   >

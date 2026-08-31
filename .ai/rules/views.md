@@ -35,3 +35,10 @@ Drafts are stepped over when resolving — only an Organiser is sent one, and la
 The search on the Round screen filters the Games already in hand rather than asking the API per keystroke, and matches team names — the same names the rows show. It deliberately survives moving between Rounds: a Player following one team walks the chevrons with the filter held, and the empty state names the term so a Round that team did not play in explains itself.
 
 The Event screen lists no destinations either — the nav owns Rounds, Standings, Attendees, Schedule and, for an Organiser, the organiser hub. What it carries instead is the conditional calls-to-action the nav deliberately does not: entering the Event, the open vote, and My game, which is read only for a viewer who has entered (`viewer.is_attendee`) and shown only while `/my-game` returns a Game. Running the Event is not among them any more — that is the Organisers tab, and it must not come back as a section on Home. One consequence to know: with the list group gone, the Votes list is reachable only through the "Voting is open" call-to-action.
+
+## Score columns come from the Event, never from a hard-coded slug
+An Event declares its own Score Types, so no screen names one. The Round and Game screens read `score_types` off the payload (`listedColumns` for a listing, all of them on a Game); the Standings derive theirs from the scores in hand with `columnsOf` in `api/standings.ts`, taking every column any Attendee has a score under. Headings are `columnLabel`, initials of a multi-word name and the first three letters of a single-word one.
+
+A hard-coded 'match-points'/'victory-points' pair shows two columns of dashes to every Event scored on anything else — which is exactly what the Standings did until this was fixed.
+
+An absent score renders an em dash, never a zero: a Game nobody has played would otherwise read as a nil-all somebody actually played. A zero that was entered still reads as a zero.

@@ -20,7 +20,7 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
-import { byNumber, fetchRound, fetchRounds, listedColumns, roundTitle, type Pairing, type RoundSummary } from '@/api/rounds';
+import { byNumber, fetchRound, fetchRounds, listedColumns, roundTitle, tableLabel, type Pairing, type RoundSummary } from '@/api/rounds';
 import GameScoreTable from '@/components/GameScoreTable.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import TextField from '@/components/TextField.vue';
@@ -282,7 +282,7 @@ const columns = computed(() => listedColumns(round.value?.score_types ?? []));
                   data-testid="pairing-table"
                   class="game-label"
                 >
-                  {{ pairing.is_bye ? 'Bye' : `Table ${pairing.table_number}` }}
+                  {{ tableLabel(pairing) }}
                 </span>
 
                 <!-- Beside the table, because it qualifies the pairing rather

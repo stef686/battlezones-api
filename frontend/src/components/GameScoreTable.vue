@@ -47,9 +47,17 @@ const isListing = computed(() => props.variant === 'listing');
  */
 const scoreCell = computed(() => isListing.value ? 'w-16 text-end' : 'px-3 text-center last:pe-0');
 
-/** A team's score in one column, which is zero until somebody says otherwise. */
+/**
+ * A team's score in one column, or a dash where there is none.
+ *
+ * A Game nobody has played carries no scores at all, and drawing those as
+ * zeroes reads as a played nil-all rather than as a table still out there. A
+ * zero that was actually entered still reads as a zero.
+ */
 function scoreOf(attendee: ScoredAttendee, column: string): string {
-  return formatScore(attendee.scores[column] ?? 0);
+  const score = attendee.scores[column];
+
+  return score === undefined || score === null ? '—' : formatScore(score);
 }
 </script>
 
@@ -114,7 +122,7 @@ function scoreOf(attendee: ScoredAttendee, column: string): string {
         <td
           v-for="column in columns"
           :key="column.slug"
-          :data-testid="`score-${column.slug}`"
+          :data-testid="`score-${attendee.id}-${column.slug}`"
           class="py-2 text-xs font-medium tabular-nums whitespace-nowrap text-foreground"
           :class="scoreCell"
         >

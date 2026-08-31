@@ -23,7 +23,7 @@ import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import { fetchGame, type GameAttendee, type GameMember } from '@/api/results';
-import { roundTitle } from '@/api/rounds';
+import { roundTitle, tableLabel } from '@/api/rounds';
 import GameScoreTable from '@/components/GameScoreTable.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
@@ -52,13 +52,7 @@ const { data: game, isPending, error } = useQuery({
 const missing = computed(() => error.value instanceof ApiError && error.value.kind === 'not_found');
 
 /** What a Player crossing the hall calls this Game. */
-const title = computed(() => {
-  if (game.value === undefined) {
-    return 'Game';
-  }
-
-  return game.value.is_bye ? 'Bye' : `Table ${game.value.table_number}`;
-});
+const title = computed(() => game.value === undefined ? 'Game' : tableLabel(game.value));
 
 /** The sides of the table: two teams, or the one team that drew the Bye. */
 const teams = computed<GameAttendee[]>(() => game.value?.attendees ?? []);

@@ -355,7 +355,7 @@ describe('the round detail', () => {
 
         // A fixed column on the right, so a run of games reads as two straight
         // edges and the names take everything that is left.
-        expect(view.get('[data-testid="pairing-18"] [data-testid="score-victory-points"]').classes())
+        expect(view.get('[data-testid="pairing-18"] [data-testid="score-12-victory-points"]').classes())
             .toEqual(expect.arrayContaining(['w-16', 'text-end']));
 
         // A rule between the games, so it is clear where one game's two teams
@@ -428,10 +428,11 @@ describe('the round detail', () => {
         expect(played.get('[data-testid="pairing-team-13"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
             .toEqual(['70']);
 
-        // A Game nobody has played yet shows the column it is waiting on,
-        // scored at zero — not a blank where the number will go.
+        // A Game nobody has played yet shows the column it is waiting on with
+        // a dash under it: a blank reads as a number that failed to load, and
+        // a zero reads as a nil-all somebody actually played.
         expect(view.get('[data-testid="pairing-team-9"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
-            .toEqual(['0']);
+            .toEqual(['—']);
     });
 
     it('moves between rounds on the chevrons either side of the name', async () => {

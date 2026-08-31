@@ -17,7 +17,13 @@ export interface Standing {
      */
     movement: number | null;
     attendee: { id: number; name: string; members: AttendeeMember[] };
-    scores: { value: number | string; score_type: { slug: string; name: string } }[];
+    scores: { value: number | string; score_type: StandingColumn }[];
+}
+
+/** A Score Type as the Standings send it, named the way a heading needs. */
+export interface StandingColumn {
+    slug: string;
+    name: string;
 }
 
 export function fetchStandings(client: ApiClient, slug: string): Promise<Standing[]> {
@@ -30,6 +36,29 @@ export function scoreOf(standing: Standing, slug: string): string {
     const found = standing.scores.find((entry) => entry.score_type.slug === slug);
 
     return found === undefined ? '—' : formatScore(found.value);
+}
+
+/**
+ * The columns the table is scored on, in the order the API sends them.
+ *
+ * Read from the Standings themselves rather than hard-coded: an Event
+ * declares its own Score Types, and a table that names two of them shows a
+ * column of dashes to every Event scored on anything else. Every Standing is
+ * read rather than only the first, so a column that one Attendee has no score
+ * under still gets its heading.
+ */
+export function columnsOf(standings: Standing[]): StandingColumn[] {
+    const columns = new Map<string, StandingColumn>();
+
+    for (const standing of standings) {
+        for (const entry of standing.scores) {
+            if (! columns.has(entry.score_type.slug)) {
+                columns.set(entry.score_type.slug, entry.score_type);
+            }
+        }
+    }
+
+    return [...columns.values()];
 }
 
 /**

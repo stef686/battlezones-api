@@ -7,7 +7,8 @@ import { useApiClient } from '@/api';
 import type { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
-import { factionsOf, fetchStandings, scoreOf, type Standing } from '@/api/standings';
+import { columnLabel } from '@/api/rounds';
+import { columnsOf, factionsOf, fetchStandings, scoreOf, type Standing, type StandingColumn } from '@/api/standings';
 import StandingMovement from '@/components/StandingMovement.vue';
 import TextField from '@/components/TextField.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
@@ -44,14 +45,29 @@ const standings = computed(() => all.value.filter(matchesSearch));
 
 const nothingMatched = computed(() => all.value.length > 0 && standings.value.length === 0);
 
+/**
+ * The columns the Event is scored on, read off the Standings rather than
+ * named here: an Event declares its own Score Types, exactly as a Round's
+ * Games do, and a table that knows only Match Points and Victory Points shows
+ * two columns of dashes to every Event scored on anything else.
+ */
+const columns = computed<StandingColumn[]>(() => columnsOf(all.value));
+
+/**
+ * A row with what it takes to draw it worked out once: the Factions are read
+ * twice — to decide whether the line is there at all, and to fill it — and a
+ * template calls a function again every time it names it.
+ */
+const rows = computed(() => standings.value.map((standing) => ({
+  standing,
+  factions: factionsOf(standing),
+  scores: columns.value.map((column) => ({ slug: column.slug, value: scoreOf(standing, column.slug) })),
+})));
+
 function matchesSearch(standing: Standing): boolean {
   const term = search.value.trim().toLowerCase();
 
   return term === '' || standing.attendee.name.toLowerCase().includes(term);
-}
-
-function score(standing: Standing, slug: string): string {
-  return scoreOf(standing, slug);
 }
 </script>
 
@@ -131,28 +147,28 @@ function score(standing: Standing, slug: string): string {
               >
                 <span class="sr-only">Attendee</span>
               </th>
+              <!-- Initials over the numbers, with the name behind them for a
+                   screen reader, which has no run of rows to read the heading
+                   against. The last column carries the page's own inset. -->
               <th
+                v-for="(column, index) in columns"
+                :key="column.slug"
+                :data-testid="`column-${column.slug}`"
                 scope="col"
-                class="px-2 py-2 text-center font-bold whitespace-nowrap"
+                class="py-2 text-center font-bold whitespace-nowrap"
+                :class="index === columns.length - 1 ? 'pl-2 pr-5' : 'px-2'"
               >
-                MP
-                <span class="sr-only">Match Points</span>
-              </th>
-              <th
-                scope="col"
-                class="py-2 pl-2 pr-5 text-center font-bold whitespace-nowrap"
-              >
-                VP
-                <span class="sr-only">Victory Points</span>
+                {{ columnLabel(column) }}
+                <span class="sr-only">{{ column.name }}</span>
               </th>
             </tr>
           </thead>
 
           <tbody class="divide-y divide-card-divider border-t border-card-divider">
             <tr
-              v-for="standing in standings"
-              :key="standing.id"
-              :data-testid="`standing-${standing.attendee.id}`"
+              v-for="row in rows"
+              :key="row.standing.id"
+              :data-testid="`standing-${row.standing.attendee.id}`"
             >
               <!-- The arrow sits with the position rather than in a column of
                    its own: it is a fact about that number, and a phone has no
@@ -160,10 +176,10 @@ function score(standing: Standing, slug: string): string {
                    round. -->
               <td class="py-3 pl-5 pr-2 align-top text-2xs tabular-nums whitespace-nowrap text-muted-foreground-1">
                 <span class="flex items-center gap-1.5">
-                  {{ standing.position }}
+                  {{ row.standing.position }}
                   <StandingMovement
-                    :data-testid="`movement-${standing.attendee.id}`"
-                    :movement="standing.movement"
+                    :data-testid="`movement-${row.standing.attendee.id}`"
+                    :movement="row.standing.movement"
                   />
                 </span>
               </td>
@@ -181,17 +197,17 @@ function score(standing: Standing, slug: string): string {
                      wants that team, and the Attendees tab is a long way
                      round to reach it. -->
                 <RouterLink
-                  :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: standing.attendee.id } }"
-                  :data-testid="`open-attendee-${standing.attendee.id}`"
+                  :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: row.standing.attendee.id } }"
+                  :data-testid="`open-attendee-${row.standing.attendee.id}`"
                   class="block px-2 py-3 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
                 >
                   <!-- The name keeps the step the rest of the table gave up:
                        it is what a reader is scanning for, and the numbers
                        and the Factions are what it is read against. -->
                   <span
-                    :data-testid="`name-${standing.attendee.id}`"
+                    :data-testid="`name-${row.standing.attendee.id}`"
                     class="block truncate text-xs"
-                  >{{ standing.attendee.name }}</span>
+                  >{{ row.standing.attendee.name }}</span>
 
                   <!-- Under the name and in grey, because it qualifies the
                        team rather than identifying it: two teams called
@@ -199,25 +215,22 @@ function score(standing: Standing, slug: string): string {
                        brought. Truncated on its own line so a doubles pair
                        cannot push the scores off a phone. -->
                   <span
-                    v-if="factionsOf(standing) !== ''"
-                    :data-testid="`factions-${standing.attendee.id}`"
+                    v-if="row.factions !== ''"
+                    :data-testid="`factions-${row.standing.attendee.id}`"
                     class="block truncate text-muted-foreground"
                   >
-                    {{ factionsOf(standing) }}
+                    {{ row.factions }}
                   </span>
                 </RouterLink>
               </th>
               <td
-                class="px-2 py-3 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
-                data-testid="match-points"
+                v-for="(cell, index) in row.scores"
+                :key="cell.slug"
+                :data-testid="cell.slug"
+                class="py-3 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
+                :class="index === row.scores.length - 1 ? 'pl-2 pr-5' : 'px-2'"
               >
-                {{ score(standing, 'match-points') }}
-              </td>
-              <td
-                class="py-3 pl-2 pr-5 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
-                data-testid="victory-points"
-              >
-                {{ score(standing, 'victory-points') }}
+                {{ cell.value }}
               </td>
             </tr>
           </tbody>

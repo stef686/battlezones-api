@@ -120,15 +120,33 @@ export function byNumber(rounds: RoundSummary[]): RoundSummary[] {
  * declares its own Score Types and a hard-coded pair only ever fits one Event.
  * The full name travels with it, so nothing depends on reading the initials.
  */
-export function columnLabel(column: ScoreColumn): string {
-    const initials = column.name
-        .split(/\s+/)
-        .filter((word) => word.length > 0)
-        .map((word) => word[0])
-        .join('')
-        .toUpperCase();
+export function columnLabel(column: { name: string }): string {
+    const words = column.name.split(/\s+/).filter((word) => word.length > 0);
 
-    return initials.slice(0, 3) || column.name.slice(0, 3).toUpperCase();
+    // One word has no initials to take — "Kills" abbreviated to "K" says less
+    // than the first three letters of it do — so a single-word Score Type is
+    // shortened rather than reduced to its first letter.
+    const short = words.length > 1
+        ? words.map((word) => word[0]).join('')
+        : (words[0] ?? column.name).slice(0, 3);
+
+    return short.slice(0, 3).toUpperCase() || column.name.slice(0, 3).toUpperCase();
+}
+
+/**
+ * Where a Game is being played, as a reader crossing a hall asks for it.
+ *
+ * A Bye is not at a table at all. A Game that is at one and has no number yet
+ * says so rather than reading as "Table null": an unnumbered table is a
+ * pairing an Organiser has not finished placing, which is a different thing
+ * from a team sitting out.
+ */
+export function tableLabel(game: Pick<Pairing, 'is_bye' | 'table_number'>): string {
+    if (game.is_bye) {
+        return 'Bye';
+    }
+
+    return game.table_number === null ? 'Table TBC' : `Table ${game.table_number}`;
 }
 
 /** What a Round is called, falling back to its number rather than to blank. */

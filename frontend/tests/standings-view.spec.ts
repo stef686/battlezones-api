@@ -162,6 +162,30 @@ describe('the standings', () => {
         expect(view.get('[data-testid="standing-11"] [data-testid="match-points"]').text()).toBe('—');
     });
 
+    it('draws the columns the event is scored on, whatever they are', async () => {
+        const view = await mountStandings({
+            data: [{
+                id: 1,
+                position: 1,
+                movement: null,
+                attendee: { id: 9, name: 'Sons of Terra', members: [] },
+                scores: [
+                    { value: '4.00', score_type: { slug: 'battle-points', name: 'Battle Points' } },
+                    { value: '12.50', score_type: { slug: 'kill-points', name: 'Kill Points' } },
+                ],
+            }],
+        });
+
+        // An event declares its own Score Types, so the table follows them
+        // rather than naming a pair of them here.
+        expect(view.findAll('thead th[data-testid^="column-"]').map((heading) => heading.text()))
+            .toEqual(['BP Battle Points', 'KP Kill Points']);
+
+        expect(view.get('[data-testid="battle-points"]').text()).toBe('4');
+        expect(view.get('[data-testid="kill-points"]').text()).toBe('12.5');
+        expect(view.find('[data-testid="match-points"]').exists()).toBe(false);
+    });
+
     it('opens a team from its row, rather than sending a reader round by the attendees tab', async () => {
         const view = await mountStandings();
 
