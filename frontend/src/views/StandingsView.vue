@@ -10,6 +10,7 @@ import { keys } from '@/api/keys';
 import { columnLabel } from '@/api/rounds';
 import { columnsOf, factionsOf, fetchStandings, scoreOf, type Standing, type StandingColumn } from '@/api/standings';
 import StandingMovement from '@/components/StandingMovement.vue';
+import TeamAvatar from '@/components/TeamAvatar.vue';
 import TextField from '@/components/TextField.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 
@@ -203,11 +204,20 @@ function matchesSearch(standing: Standing): boolean {
                 >
                   <!-- The name keeps the step the rest of the table gave up:
                        it is what a reader is scanning for, and the numbers
-                       and the Factions are what it is read against. -->
-                  <span
-                    :data-testid="`name-${row.standing.attendee.id}`"
-                    class="block truncate text-xs"
-                  >{{ row.standing.attendee.name }}</span>
+                       and the Factions are what it is read against. The badge
+                       rides beside it at the smallest size the table draws,
+                       because width here comes out of the name. -->
+                  <span class="flex min-w-0 items-center gap-1.5">
+                    <TeamAvatar
+                      :name="row.standing.attendee.name"
+                      :src="row.standing.attendee.avatar"
+                      size="xs"
+                    />
+                    <span
+                      :data-testid="`name-${row.standing.attendee.id}`"
+                      class="block truncate text-xs"
+                    >{{ row.standing.attendee.name }}</span>
+                  </span>
 
                   <!-- Under the name and in grey, because it qualifies the
                        team rather than identifying it: two teams called

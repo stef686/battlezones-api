@@ -3,6 +3,7 @@ paths:
   - app/Services/EventBannerService.php
   - app/Http/Requests/Events/StoreEventBannerRequest.php
   - app/Services/UploadStorage.php
+  - app/Services/AttendeeAvatarService.php
 ---
 
 # Banners
@@ -24,3 +25,12 @@ The bucket is private, so there is no permanent URL: `url()` returns a signed on
 `uploads_local` is deliberately not the `public` disk: files sit outside the web root and are served through Laravel's signed route at `/uploads`, so a link that would not survive production does not work locally either. Its URI cannot be `/storage` — Laravel refuses two served disks on one URI.
 
 Tests: `Storage::fake(UploadStorage::name())`. See docs/adr/0004-uploads-live-on-a-private-bucket.md.
+
+## A team Avatar is one 256px square, cropped from the centre
+`AttendeeAvatarService` covers-crops every upload to a single 256x256 WebP and discards the original, the same bargain as a Banner (ADR 0003) — but one variant, not a pair, because an Avatar is only ever drawn small: an Attendees row, a Standings row, a side of a pairing. Centre crop, not top: nothing is overlaid on it, unlike the Banner whose type sits at the bottom.
+
+Validation mirrors the Banner's — explicit `mimes:jpeg,png,webp` allowlist (SVG is a scriptable document, and refusing it is a security boundary), 8MB, and a 128x128 floor rather than upscaling. Any aspect ratio is accepted; the square is cut on the way in.
+
+Upload is `POST`/`DELETE /events/{event:slug}/attendees/{attendee}/avatar`, not a field on the Attendee PATCH, because PHP does not populate uploaded files for a PATCH body. Authorised with the `update` ability — the team and its Organisers, the same people who name it.
+
+`avatar` is a signed URL from `EventAttendee::avatarUrl()`, serialised in five places: the Attendee list and detail, the Standings, a Round's pairings and a Game. Null is the common answer, and every screen draws `TeamAvatar`'s initials placeholder rather than a gap.

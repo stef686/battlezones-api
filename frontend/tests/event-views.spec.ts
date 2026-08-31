@@ -78,6 +78,7 @@ const ATTENDEES = {
             id: 9,
             name: 'Sons of Terra',
             allegiance: 'loyalist',
+            avatar: 'https://uploads.test/badge.webp',
             members: [{ id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' } }],
         },
         {
@@ -336,6 +337,20 @@ describe('the attendee list', () => {
         expect(loyalist.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
 
         expect(view.get('[data-testid="attendee-10"]').find('[data-testid="allegiance-traitor"]').exists()).toBe(true);
+    });
+
+    it('badges a team that has an avatar, and keeps the row\'s shape for one that has not', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}/attendees`]: { status: 200, body: ATTENDEES } });
+
+        const view = mountView(AttendeesView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="attendee-9"]').get('[data-testid="team-avatar"]').attributes('src'))
+            .toBe('https://uploads.test/badge.webp');
+
+        // The placeholder is the common case, not an error state: it holds the
+        // row's shape and carries initials rather than an empty circle.
+        expect(view.get('[data-testid="attendee-10"]').get('[data-testid="team-avatar-placeholder"]').text()).toBe('WO');
     });
 
     it('spends no line on a label, and searches from the placeholder alone', async () => {

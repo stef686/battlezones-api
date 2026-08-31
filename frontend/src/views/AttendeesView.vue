@@ -8,6 +8,7 @@ import { ApiError } from '@/api/errors';
 import { fetchAttendees } from '@/api/events';
 import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
+import TeamAvatar from '@/components/TeamAvatar.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import AppButton from '@/components/AppButton.vue';
 import TextField from '@/components/TextField.vue';
@@ -108,9 +109,14 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
           <RouterLink
             :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: attendee.id } }"
             :data-testid="`attendee-${attendee.id}`"
-            class="flex items-center justify-between gap-3 px-5 py-3.5 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
+            class="flex items-center gap-3 px-5 py-3.5 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
           >
-            <span class="flex min-w-0 flex-col">
+            <TeamAvatar
+              :name="attendee.name"
+              :src="attendee.avatar"
+            />
+
+            <span class="flex min-w-0 flex-1 flex-col">
               <span class="truncate text-base font-semibold text-foreground">{{ attendee.name }}</span>
               <span class="truncate text-sm text-muted-foreground">
                 {{ attendee.members.map((member) => member.name).join(' & ') }}

@@ -57,6 +57,7 @@ const STANDINGS = {
             attendee: {
                 id: 9,
                 name: 'Sons of Terra',
+                avatar: 'https://uploads.test/badge.webp',
                 members: [member(1, 'Ada Lovelace', 'Imperial Fists'), member(2, 'Grace Hopper', 'Death Guard')],
             },
             scores: scored('6.00', '170.50'),
@@ -160,6 +161,14 @@ describe('the standings', () => {
         expect(leader.get('[data-testid="victory-points"]').text()).toBe('170.5');
         // A team with nothing scored yet is dashed rather than left blank.
         expect(view.get('[data-testid="standing-11"] [data-testid="match-points"]').text()).toBe('—');
+    });
+
+    it('badges the teams that have an avatar, without costing the others their row', async () => {
+        const view = await mountStandings();
+
+        expect(view.get('[data-testid="standing-9"] [data-testid="team-avatar"]').attributes('src'))
+            .toBe('https://uploads.test/badge.webp');
+        expect(view.get('[data-testid="standing-10"] [data-testid="team-avatar-placeholder"]').text()).toBe('WO');
     });
 
     it('draws the columns the event is scored on, whatever they are', async () => {

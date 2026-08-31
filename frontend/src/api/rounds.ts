@@ -17,6 +17,8 @@ export interface RoundSummary {
 export interface ScoredAttendee {
     id: number;
     name: string;
+    /** The team's badge, signed and expiring. Null where they have not uploaded one. */
+    avatar?: string | null;
     /**
      * Decided by the API, which knows each Score Type's ranking order and
      * sort direction. A drawn Game — and one nobody has played, where every

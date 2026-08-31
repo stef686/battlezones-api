@@ -20,6 +20,7 @@ import { CircleCheck } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 import { columnLabel, type ScoreColumn, type ScoredAttendee } from '@/api/rounds';
+import TeamAvatar from '@/components/TeamAvatar.vue';
 import { formatScore } from '@/lib/scores';
 
 const props = withDefaults(defineProps<{
@@ -107,6 +108,11 @@ function scoreOf(attendee: ScoredAttendee, column: string): string {
           :class="attendee.is_winner ? 'font-semibold' : 'font-normal'"
         >
           <span class="flex min-w-0 items-center gap-1.5">
+            <TeamAvatar
+              :name="attendee.name"
+              :src="attendee.avatar"
+              size="xs"
+            />
             <span class="truncate">{{ attendee.name }}</span>
 
             <span

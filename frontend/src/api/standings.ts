@@ -16,7 +16,7 @@ export interface Standing {
      * better one.
      */
     movement: number | null;
-    attendee: { id: number; name: string; members: AttendeeMember[] };
+    attendee: { id: number; name: string; avatar?: string | null; members: AttendeeMember[] };
     scores: { value: number | string; score_type: StandingColumn }[];
 }
 

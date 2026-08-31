@@ -27,6 +27,7 @@ class EventAttendeeDetailResource extends JsonResource
             'id' => $this->id,
             'name' => $this->displayName(),
             'allegiance' => $this->allegiance?->value,
+            'avatar' => $this->avatarUrl(),
             // Allegiance is a pairing constraint, so it stops being editable
             // the moment Games depend on it. Sent rather than inferred so the
             // form can close the field instead of letting a Player choose and

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Events\ClaimInviteController;
 use App\Http\Controllers\Events\CloseEventPollController;
+use App\Http\Controllers\Events\DeleteAttendeeAvatarController;
 use App\Http\Controllers\Events\DeleteAttendeeMemberController;
 use App\Http\Controllers\Events\DeleteEventBannerController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
@@ -39,6 +40,7 @@ use App\Http\Controllers\Events\ShowEventRoundController;
 use App\Http\Controllers\Events\ShowFeedbackFormController;
 use App\Http\Controllers\Events\ShowInviteController;
 use App\Http\Controllers\Events\ShowMyGameController;
+use App\Http\Controllers\Events\StoreAttendeeAvatarController;
 use App\Http\Controllers\Events\StoreAttendeeMemberController;
 use App\Http\Controllers\Events\StoreEventAttendeeController;
 use App\Http\Controllers\Events\StoreEventBannerController;
@@ -185,6 +187,13 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.store');
     Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}', UpdateEventAttendeeController::class)
         ->name('events.attendees.update');
+    // Its own multipart routes rather than a field on the Attendee PATCH,
+    // exactly as the Banner is: PHP does not populate uploaded files for a
+    // PATCH body.
+    Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/avatar', StoreAttendeeAvatarController::class)
+        ->name('events.attendees.avatar.store');
+    Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/avatar', DeleteAttendeeAvatarController::class)
+        ->name('events.attendees.avatar.destroy');
     Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members', StoreAttendeeMemberController::class)
         ->name('events.attendees.members.store');
     Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/members/{member}', DeleteAttendeeMemberController::class)

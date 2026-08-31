@@ -5,7 +5,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | Applies to | Rule file |
 | --- | --- |
 | app/** | .ai/rules/app.md |
-| app/Services/EventBannerService.php, app/Http/Requests/Events/StoreEventBannerRequest.php, app/Services/UploadStorage.php | .ai/rules/banners.md |
+| app/Services/EventBannerService.php, app/Http/Requests/Events/StoreEventBannerRequest.php, app/Services/UploadStorage.php, app/Services/AttendeeAvatarService.php | .ai/rules/banners.md |
 | frontend/src/components/** | .ai/rules/components.md |
 | frontend/src/composables/** | .ai/rules/composables.md |
 | app/Http/Controllers/** | .ai/rules/controllers.md |

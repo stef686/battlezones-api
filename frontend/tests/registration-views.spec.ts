@@ -461,6 +461,73 @@ describe('the my team screens', () => {
         expect(view.text()).toContain('Frozen now the event has begun');
     });
 
+    it('uploads a team avatar on its own request, and offers to take it off again', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/avatar`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, avatar: 'https://uploads.test/badge.webp' } },
+            },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, avatar: 'https://uploads.test/badge.webp' } },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(TeamDetailsView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="team-avatar"]').attributes('src')).toBe('https://uploads.test/badge.webp');
+
+        const input = view.get('[data-testid="team-avatar-input"]');
+        const file = new File(['badge'], 'badge.png', { type: 'image/png' });
+
+        Object.defineProperty(input.element, 'files', { value: [file], writable: false });
+        await input.trigger('change');
+        await flushPromises();
+
+        // Its own multipart request rather than a field on the save: a PATCH
+        // body carries no files.
+        const upload = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/avatar') && init?.method === 'POST')!;
+        expect(upload[1]?.body).toBeInstanceOf(FormData);
+        expect((upload[1]?.body as FormData).get('avatar')).toBe(file);
+
+        await view.get('[data-testid="remove-team-avatar"]').trigger('click');
+        await flushPromises();
+
+        expect(fetch.mock.calls.some(([url, init]) => String(url).endsWith('/avatar') && init?.method === 'DELETE')).toBe(true);
+    });
+
+    it('draws a placeholder for a team that has uploaded nothing, and says what is refused', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/avatar`]: {
+                status: 422,
+                body: {
+                    message: 'The given data was invalid.',
+                    errors: { avatar: ['The avatar has invalid image dimensions.'] },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(TeamDetailsView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
+        expect(view.find('[data-testid="remove-team-avatar"]').exists()).toBe(false);
+
+        const input = view.get('[data-testid="team-avatar-input"]');
+        Object.defineProperty(input.element, 'files', {
+            value: [new File(['x'], 'tiny.png', { type: 'image/png' })],
+            writable: false,
+        });
+        await input.trigger('change');
+        await flushPromises();
+
+        expect(view.get('[data-testid="team-avatar-error"]').text()).toContain('dimensions');
+    });
+
     it('reports an allegiance frozen by a live round', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },

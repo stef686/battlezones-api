@@ -69,6 +69,8 @@ export interface AttendeeSummary {
     id: number;
     name: string;
     allegiance: string | null;
+    /** The team's badge, signed and expiring. Null where they have not uploaded one. */
+    avatar?: string | null;
     members: AttendeeMember[];
 }
 
@@ -113,6 +115,8 @@ export interface Attendee {
     id: number;
     name: string | null;
     allegiance: string | null;
+    /** The team's badge, signed and expiring. Null where they have not uploaded one. */
+    avatar?: string | null;
     /** Whether the Event has begun, which is what freezes the side it fights for. */
     allegiance_locked?: boolean;
     members: AttendeeMember[];
@@ -250,6 +254,27 @@ export function amendAttendee(
  */
 export function recordMyFaction(client: ApiClient, slug: string, factionId: number | null): Promise<Attendee> {
     return client.patch<{ data: Attendee }>(`${eventPath(slug)}/my-faction`, { faction_id: factionId })
+        .then((response) => response.data);
+}
+
+/**
+ * Upload a team's Avatar.
+ *
+ * Multipart and a route of its own for the same reason the Banner is: PHP does
+ * not populate uploaded files for a PATCH body. The square is cut on the way
+ * in and the original discarded.
+ */
+export function uploadTeamAvatar(client: ApiClient, slug: string, attendeeId: number, file: File): Promise<Attendee> {
+    const form = new FormData();
+    form.set('avatar', file);
+
+    return client.post<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/avatar`, form)
+        .then((response) => response.data);
+}
+
+/** Take the Avatar off, returning the team to its placeholder. */
+export function removeTeamAvatar(client: ApiClient, slug: string, attendeeId: number): Promise<Attendee> {
+    return client.delete<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/avatar`)
         .then((response) => response.data);
 }
 

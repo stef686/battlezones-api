@@ -30,6 +30,7 @@ class EventStandingResource extends JsonResource
             'attendee' => [
                 'id' => $this->attendee->id,
                 'name' => $this->attendee->displayName(),
+                'avatar' => $this->attendee->avatarUrl(),
                 'members' => $this->serialiseMembers($this->attendee, withClubs: true),
             ],
             'scores' => $this->scores->map(fn (array $score): array => [

@@ -68,6 +68,7 @@ class RoundDetailResource extends JsonResource
                     'attendees' => $game->attendees->map(fn (EventAttendee $attendee): array => [
                         'id' => $attendee->id,
                         'name' => $attendee->displayName(),
+                        'avatar' => $attendee->avatarUrl(),
                         // Decided here rather than left to the client, which
                         // would have to be told each Score Type's ranking
                         // order and sort direction to work out the same thing.

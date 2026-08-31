@@ -3,11 +3,12 @@ import { computed, ref, watch } from 'vue';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { amendAttendee, type Allegiance } from '@/api/events';
+import { amendAttendee, removeTeamAvatar, uploadTeamAvatar, type Allegiance, type Attendee } from '@/api/events';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
 import SelectField from '@/components/SelectField.vue';
+import TeamAvatar from '@/components/TeamAvatar.vue';
 import TextField from '@/components/TextField.vue';
 import { useMyTeam } from '@/composables/useMyTeam';
 
@@ -42,6 +43,50 @@ watch(attendee, (loaded) => {
   partyName.value = loaded.name ?? '';
   allegiance.value = loaded.allegiance ?? '';
 }, { immediate: true });
+
+/**
+ * The Avatar is its own multipart request, fired the moment a file is chosen
+ * rather than held until Save: one button that sometimes makes two requests
+ * and can half-succeed is worse than two that each say what they did.
+ */
+const avatarBusy = ref(false);
+const avatarErrors = ref<string[]>([]);
+
+async function chooseAvatar(payload: Event): Promise<void> {
+  const input = payload.target as HTMLInputElement;
+  const file = input.files?.[0];
+
+  if (file === undefined || attendeeId.value === null || avatarBusy.value) {
+    return;
+  }
+
+  await withAvatar(() => uploadTeamAvatar(client, props.eventSlug, attendeeId.value as number, file));
+
+  // Cleared so choosing the same file twice still fires a change.
+  input.value = '';
+}
+
+async function dropAvatar(): Promise<void> {
+  if (attendeeId.value !== null && !avatarBusy.value) {
+    await withAvatar(() => removeTeamAvatar(client, props.eventSlug, attendeeId.value as number));
+  }
+}
+
+async function withAvatar(change: () => Promise<Attendee>): Promise<void> {
+  avatarBusy.value = true;
+  avatarErrors.value = [];
+
+  try {
+    await change();
+    await refresh();
+  } catch (caught) {
+    avatarErrors.value = caught instanceof ApiError
+      ? (caught.fields['avatar'] ?? [caught.message])
+      : ['That could not be uploaded.'];
+  } finally {
+    avatarBusy.value = false;
+  }
+}
 
 const saving = ref(false);
 const saved = ref(false);
@@ -96,6 +141,51 @@ async function save(): Promise<void> {
       <h1 class="text-2xl font-bold tracking-tight text-foreground">
         Team details
       </h1>
+
+      <section class="flex flex-col items-start gap-3">
+        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          Team avatar
+        </h2>
+
+        <TeamAvatar
+          :name="attendee.name ?? ''"
+          :src="attendee.avatar"
+          size="lg"
+        />
+
+        <p class="text-xs text-muted-foreground">
+          At least 128 by 128, up to 8MB. JPEG, PNG or WebP. It is cropped to a square from the
+          centre, and the original is not kept.
+        </p>
+
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          data-testid="team-avatar-input"
+          :disabled="avatarBusy"
+          class="block w-full text-sm text-muted-foreground-1 file:me-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground"
+          @change="chooseAvatar"
+        >
+
+        <AppAlert
+          v-if="avatarErrors.length > 0"
+          data-testid="team-avatar-error"
+          tone="error"
+        >
+          {{ avatarErrors.join(' ') }}
+        </AppAlert>
+
+        <AppButton
+          v-if="attendee.avatar"
+          data-testid="remove-team-avatar"
+          variant="secondary"
+          size="sm"
+          :disabled="avatarBusy"
+          @click="dropAvatar"
+        >
+          {{ avatarBusy ? 'Working…' : 'Remove avatar' }}
+        </AppButton>
+      </section>
 
       <form
         class="flex flex-col gap-4"
