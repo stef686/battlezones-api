@@ -70,7 +70,7 @@ const paintingState = computed(() => (attendee.value?.painting_entered === true 
       <!-- Edge to edge, and nothing but a rule between rows: the hub is a way
            through to five screens, so it should read as a list of them rather
            than as five panels competing with the Event nav above it. -->
-      <ul class="-mx-5 divide-y divide-card-divider">
+      <ul class="-mx-5 divide-y divide-card-divider border-t border-card-line">
         <AppLinkRow
           :to="{ name: 'my-team-details', params: { eventSlug: props.eventSlug } }"
           label="Team details"
