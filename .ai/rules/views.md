@@ -20,6 +20,13 @@ Standings, Attendees and Schedule wear their name in the Event nav pinned above 
 
 This applies only to a fixed section name. A screen titled with content — a Round's name, an Attendee's, a Poll's — keeps its visible heading, since the nav cannot say which one you opened. The Rounds tab lands on exactly such a screen: the Round's name is the visible `<h1>`, centred between the chevrons, and the tab saying "Rounds" does not say which Round. My team is one of them: its `<h1>` is the team's own name, beside the Avatar and the Allegiance in a header that draws the team exactly as the Attendee screen does. What it must not do is wear "My team" as a visible title, which is what the nav tab already says.
 
+## The Schedule is tabbed by day, and opens on the day being played
+`ScheduleView` renders one `TabStrip` tab per day — `shortDay` gives "12th Sat", date first because a Player knows which day of the Event they are in, not which weekday it is — over an edge-to-edge list of that day's blocks. Both days stacked on one screen meant scrolling through Saturday to find when Sunday starts.
+
+Which tab opens is decided from the payload, not the phone: the day holding a live block wins, then today's date, then the first day. A phone's clock and the hall's are not always the same thing, and `is_target_live` is the hall's answer.
+
+Dates stay as the `YYYY-MM-DD` the API groups by and are parsed field by field. Never hand one to `new Date(string)` — it reads a bare date as UTC midnight and names the day before to every reader west of Greenwich.
+
 ## Back links only where the Event nav cannot reach
 The Round screen carries no back link: it *is* what the Rounds tab reaches, so there is nothing behind it to go back to. The Poll screen keeps its back link, because the nav does not reach the Votes list. The organiser screens keep theirs too, even though the Organisers tab now reaches the hub they hang off. The Game screen keeps one to its Round, which the Rounds tab does not reach past. Do not add a back link to a screen the nav itself lands on.
 

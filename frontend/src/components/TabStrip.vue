@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends { id: number; name: string }">
+<script setup lang="ts" generic="T extends { id: number | string; name: string }">
 import { computed } from 'vue';
 
 /**
@@ -46,11 +46,11 @@ function onKeydown(event: KeyboardEvent): void {
   document.getElementById(tabId(props.items[target] as T))?.focus();
 }
 
-function tabId(item: { id: number }): string {
+function tabId(item: { id: number | string }): string {
   return `${props.idPrefix}-tab-${item.id}`;
 }
 
-function panelId(item: { id: number }): string {
+function panelId(item: { id: number | string }): string {
   return `${props.idPrefix}-panel-${item.id}`;
 }
 </script>

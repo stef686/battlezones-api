@@ -6,7 +6,7 @@ import type { Router } from 'vue-router';
 
 import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
-import { formatDay, wallClockTime } from '@/lib/dates';
+import { shortDay, wallClockTime } from '@/lib/dates';
 import { createAppRouter } from '@/router';
 import AttendeesView from '@/views/AttendeesView.vue';
 import AttendeeView from '@/views/AttendeeView.vue';
@@ -279,8 +279,13 @@ describe('the schedule', () => {
     it('names the day the API grouped by, not the day before it', () => {
         // A bare date read as UTC midnight shows the day before to anyone west
         // of Greenwich, which is the whole hazard here.
-        expect(formatDay('2026-09-12')).toContain('12');
-        expect(formatDay('2026-09-12')).toContain('September');
+        expect(shortDay('2026-09-12')).toBe('12th Sat');
+
+        // The ordinal is not a suffix table anyone gets right by accident.
+        expect(shortDay('2026-09-01')).toContain('1st');
+        expect(shortDay('2026-09-11')).toContain('11th');
+        expect(shortDay('2026-09-22')).toContain('22nd');
+        expect(shortDay('2026-09-23')).toContain('23rd');
     });
 
     it('renders each day in order, marking what is live', async () => {
@@ -294,6 +299,47 @@ describe('the schedule', () => {
 
         expect(view.get('[data-testid="block-2"]').find('[data-testid="block-live"]').exists()).toBe(true);
         expect(view.get('[data-testid="block-1"]').find('[data-testid="block-live"]').exists()).toBe(false);
+    });
+
+    it('tabs the days, and opens on the one being played', async () => {
+        const SECOND_DAY = {
+            data: [
+                {
+                    date: '2026-09-12',
+                    blocks: [{ ...SCHEDULE.data[0]!.blocks[0]!, is_target_live: false }],
+                },
+                {
+                    date: '2026-09-13',
+                    blocks: [{
+                        id: 3,
+                        label: 'Round 4',
+                        type: 'round',
+                        starts_at: '2026-09-13T09:30:00+01:00',
+                        ends_at: '2026-09-13T12:00:00+01:00',
+                        display_order: 0,
+                        target_id: 7,
+                        is_target_live: true,
+                        round: { id: 7, number: 4, name: 'Round 4' },
+                    }],
+                },
+            ],
+        };
+
+        stubApi({ [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SECOND_DAY } });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.findAll('[role="tab"]').map((tab) => tab.text())).toEqual(['12th Sat', '13th Sun']);
+
+        // A Player opening the schedule mid-event wants the day they are
+        // standing in, not the day the event started.
+        expect(view.get('[data-testid="day-2026-09-13"]').text()).toContain('Round 4');
+        expect(view.find('[data-testid="day-2026-09-12"]').exists()).toBe(false);
+
+        await view.get('[data-testid="day-tab-2026-09-12"]').trigger('click');
+
+        expect(view.get('[data-testid="day-2026-09-12"]').text()).toContain('Registration');
     });
 
     it('says an empty schedule is empty rather than showing nothing at all', async () => {

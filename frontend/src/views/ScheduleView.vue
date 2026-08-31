@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchSchedule } from '@/api/events';
 import { keys } from '@/api/keys';
 import MissingNotice from '@/components/MissingNotice.vue';
-import { formatDay, wallClockTime } from '@/lib/dates';
+import TabStrip from '@/components/TabStrip.vue';
+import { shortDay, wallClockTime } from '@/lib/dates';
 
 const props = defineProps<{ eventSlug: string }>();
 
@@ -21,6 +22,45 @@ const { data: days, isPending, error } = useQuery({
 
 const missing = computed(() => error.value instanceof ApiError && error.value.kind === 'not_found');
 const empty = computed(() => days.value !== undefined && days.value.length === 0);
+
+/**
+ * The days as tabs: the date leads, the weekday follows.
+ *
+ * A two-day event stacked both days on one screen, which meant scrolling
+ * through Saturday to find out when Sunday starts. Tabbed, each day is a
+ * screen of its own and the one being played is the one that opens.
+ */
+const tabs = computed(() => (days.value ?? []).map((day) => ({ id: day.date, name: shortDay(day.date) })));
+
+const selected = ref(0);
+
+/**
+ * Open on the day the Event is in rather than on its first.
+ *
+ * A live block says which day that is without the phone's clock having to
+ * agree with the hall's; today's date is the fallback for the hours between
+ * Rounds, and the first day for anyone reading the schedule in advance.
+ */
+watch(days, (loaded) => {
+  if (loaded === undefined || loaded.length === 0) {
+    return;
+  }
+
+  const live = loaded.findIndex((day) => day.blocks.some((block) => block.is_target_live));
+
+  if (live !== -1) {
+    selected.value = live;
+
+    return;
+  }
+
+  const today = new Date().toLocaleDateString('en-CA');
+  const now = loaded.findIndex((day) => day.date === today);
+
+  selected.value = now === -1 ? 0 : now;
+}, { immediate: true });
+
+const openDay = computed(() => days.value?.[selected.value] ?? null);
 </script>
 
 <template>
@@ -60,58 +100,63 @@ const empty = computed(() => days.value !== undefined && days.value.length === 0
       Nothing scheduled yet.
     </p>
 
-    <div
-      v-else
-      class="flex flex-col gap-6"
+    <TabStrip
+      v-else-if="openDay"
+      v-model="selected"
+      :items="tabs"
+      label="Days"
+      id-prefix="day"
     >
-      <section
-        v-for="day in days"
-        :key="day.date"
-        :data-testid="`day-${day.date}`"
+      <!-- One rule between blocks and nothing else: a schedule is a column of
+           times, and a card around it only sets the day apart from the tab
+           that already names it. -->
+      <div
+        :data-testid="`day-${openDay.date}`"
+        class="-mx-5 divide-y divide-card-divider"
       >
-        <h2 class="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          {{ formatDay(day.date) }}
-        </h2>
-
-        <!-- One card per day, blocks divided inside it: a schedule reads as a
-             column, not as a stack of separate things. -->
-        <div class="divide-y divide-card-divider overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs">
-          <article
-            v-for="block in day.blocks"
-            :key="block.id"
-            :data-testid="`block-${block.id}`"
-            class="flex items-baseline gap-4 px-4 py-3.5"
-            :class="block.is_target_live ? 'bg-primary/10' : ''"
+        <article
+          v-for="block in openDay.blocks"
+          :key="block.id"
+          :data-testid="`block-${block.id}`"
+          class="flex items-baseline gap-4 px-5 py-3.5"
+          :class="block.is_target_live ? 'bg-primary/10' : ''"
+        >
+          <!-- The time as the hall reads it, tabular so the column lines up
+               down the page rather than jittering with the digits. -->
+          <time
+            :datetime="block.starts_at"
+            data-testid="block-time"
+            class="w-14 shrink-0 text-lg font-semibold tabular-nums text-foreground"
           >
-            <!-- The time as the hall reads it, tabular so the column lines up
-                 down the page rather than jittering with the digits. -->
-            <time
-              :datetime="block.starts_at"
-              data-testid="block-time"
-              class="w-14 shrink-0 text-lg font-semibold tabular-nums text-foreground"
-            >
-              {{ wallClockTime(block.starts_at) }}
-            </time>
+            {{ wallClockTime(block.starts_at) }}
+          </time>
 
-            <div class="flex min-w-0 flex-col">
-              <p class="truncate text-sm font-medium text-foreground">
-                {{ block.label }}
-              </p>
-              <p class="text-sm text-muted-foreground">
-                until {{ wallClockTime(block.ends_at) }}
-              </p>
-            </div>
+          <div class="flex min-w-0 flex-col">
+            <p class="truncate text-sm font-medium text-foreground">
+              {{ block.label }}
+            </p>
+            <p class="text-sm text-muted-foreground">
+              until {{ wallClockTime(block.ends_at) }}
+            </p>
+          </div>
 
-            <span
-              v-if="block.is_target_live"
-              data-testid="block-live"
-              class="ms-auto inline-flex shrink-0 items-center rounded-full bg-primary px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-primary-foreground"
-            >
-              Now
-            </span>
-          </article>
-        </div>
-      </section>
-    </div>
+          <span
+            v-if="block.is_target_live"
+            data-testid="block-live"
+            class="ms-auto inline-flex shrink-0 items-center rounded-full bg-primary px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-primary-foreground"
+          >
+            Now
+          </span>
+        </article>
+
+        <p
+          v-if="openDay.blocks.length === 0"
+          data-testid="day-empty"
+          class="px-5 py-3.5 text-muted-foreground-1"
+        >
+          Nothing scheduled on this day.
+        </p>
+      </div>
+    </TabStrip>
   </main>
 </template>

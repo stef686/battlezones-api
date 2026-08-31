@@ -54,18 +54,33 @@ export function wallClockTime(iso: string): string {
 }
 
 /**
- * A schedule day heading, from the plain `YYYY-MM-DD` the API groups by.
+ * A schedule day, short enough to be a tab: "26th Wed".
  *
- * Parsed field by field rather than through `new Date(...)`, which reads a
- * bare date as UTC midnight and so shows the day before to anyone west of it.
+ * From the plain `YYYY-MM-DD` the API groups by, parsed field by field rather
+ * than through `new Date(...)`, which reads a bare date as UTC midnight and so
+ * names the day before to anyone west of it.
+ *
+ * The date leads because a Player checking a schedule knows which day of the
+ * Event they are standing in, not which weekday it happens to be, and two tabs
+ * reading "Sat" and "Sun" are two tabs that look alike at a glance.
  */
-export function formatDay(date: string): string {
+export function shortDay(date: string): string {
     const [year, month, day] = date.split('-').map(Number);
 
     if (year === undefined || month === undefined || day === undefined) {
         return date;
     }
 
-    return new Date(year, month - 1, day)
-        .toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+    const weekday = new Date(year, month - 1, day).toLocaleDateString(undefined, { weekday: 'short' });
+
+    return `${day}${ordinal(day)} ${weekday}`;
+}
+
+/** English ordinal suffix: 1st, 2nd, 3rd, 4th, and the 11th–13th exceptions. */
+function ordinal(day: number): string {
+    if (day >= 11 && day <= 13) {
+        return 'th';
+    }
+
+    return { 1: 'st', 2: 'nd', 3: 'rd' }[day % 10] ?? 'th';
 }
