@@ -16,18 +16,31 @@
   --color-battlezones-900: oklch(28.6% 0.06 55);
   --color-battlezones-950: oklch(25.3% 0.05 55);
 
-  /* Gray palette */
-  --color-battlezones-gray-50: oklch(98% 0.002 55);
-  --color-battlezones-gray-100: oklch(95.5% 0.004 55);
-  --color-battlezones-gray-200: oklch(89.7% 0.008 55);
-  --color-battlezones-gray-300: oklch(82.7% 0.012 55);
-  --color-battlezones-gray-400: oklch(73% 0.018 55);
-  --color-battlezones-gray-500: oklch(62.5% 0.02 55);
-  --color-battlezones-gray-600: oklch(52.8% 0.016 55);
-  --color-battlezones-gray-700: oklch(41.4% 0.012 55);
-  --color-battlezones-gray-800: oklch(26.9% 0.006 55);
-  --color-battlezones-gray-900: oklch(20.5% 0.004 55);
-  --color-battlezones-gray-950: oklch(14.1% 0.002 55);
+  /*
+   * Gray palette.
+   *
+   * Cool rather than warm: hue 255, not the brand's 55. The greys are almost
+   * every surface in the app and the brand orange is what lands on them, so a
+   * warm grey put the two a few degrees apart and read as a muddier orange
+   * rather than as a neutral. Held further from the brand, the ground stays
+   * out of the way and the orange keeps its heat.
+   *
+   * Chroma rises through the dark end rather than fading out. The app is
+   * dark-only, so 800 through 950 are the surfaces a reader actually looks
+   * at, and a near-neutral there reads as flat black however cool the light
+   * steps are.
+   */
+  --color-battlezones-gray-50: oklch(98% 0.003 255);
+  --color-battlezones-gray-100: oklch(95.5% 0.005 255);
+  --color-battlezones-gray-200: oklch(89.7% 0.009 255);
+  --color-battlezones-gray-300: oklch(82.7% 0.013 255);
+  --color-battlezones-gray-400: oklch(73% 0.018 255);
+  --color-battlezones-gray-500: oklch(62.5% 0.021 255);
+  --color-battlezones-gray-600: oklch(52.8% 0.02 255);
+  --color-battlezones-gray-700: oklch(41.4% 0.018 255);
+  --color-battlezones-gray-800: oklch(26.9% 0.014 255);
+  --color-battlezones-gray-900: oklch(20.5% 0.011 255);
+  --color-battlezones-gray-950: oklch(14.1% 0.008 255);
 
 }
 
