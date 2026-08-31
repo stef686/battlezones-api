@@ -24,6 +24,8 @@ export interface EventSummary {
     /** How many Players make up one party. Two for a doubles Event. */
     attendee_size: number;
     requires_allegiance: boolean;
+    /** The wall clock the Event is run on, which every schedule time is in. */
+    timezone: string;
     registration_closes_at: string | null;
     attendees_count?: number;
     is_full: boolean;
@@ -207,6 +209,25 @@ export function fetchAttendees(client: ApiClient, slug: string, options: { searc
     const suffix = query.toString() === '' ? '' : `?${query.toString()}`;
 
     return client.get<Page<AttendeeSummary>>(`${eventPath(slug)}/attendees${suffix}`);
+}
+
+export interface NewScheduleBlock {
+    label: string;
+    type: string;
+    starts_at: string;
+    ends_at: string;
+    round_id?: number | null;
+}
+
+/** Put one more block on the schedule. Organisers only, as the API enforces. */
+export function addScheduleBlock(client: ApiClient, slug: string, block: NewScheduleBlock): Promise<ScheduleBlock> {
+    return client.post<{ data: ScheduleBlock }>(`${eventPath(slug)}/schedule`, {
+        label: block.label,
+        type: block.type,
+        starts_at: block.starts_at,
+        ends_at: block.ends_at,
+        ...(block.round_id === undefined || block.round_id === null ? {} : { round_id: block.round_id }),
+    }).then((response) => response.data);
 }
 
 export function fetchFactions(client: ApiClient, slug: string): Promise<Faction[]> {

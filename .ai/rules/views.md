@@ -25,6 +25,10 @@ This applies only to a fixed section name. A screen titled with content — a Ro
 
 Which tab opens is decided from the payload, not the phone: the day holding a live block wins, then today's date, then the first day. A phone's clock and the hall's are not always the same thing, and `is_target_live` is the hall's answer.
 
+An Organiser adds a block from the foot of the open day (`add-block`), or from beside "Nothing scheduled yet" on an Event that has none. The form sits outside the `TabStrip`, because the block being added may belong to a day the schedule does not have yet and a form inside the panel would take what was typed with it when the reader changed tab.
+
+Times an Organiser types are the hall's, so `eventTimestamp` writes them with the Event's own offset for that date (`offsetAt`, from the `timezone` on the Event payload) — never the offset of the machine doing the typing, and asked of the date so an Event straddling a clock change writes each day correctly.
+
 Dates stay as the `YYYY-MM-DD` the API groups by and are parsed field by field. Never hand one to `new Date(string)` — it reads a bare date as UTC midnight and names the day before to every reader west of Greenwich.
 
 ## Back links only where the Event nav cannot reach

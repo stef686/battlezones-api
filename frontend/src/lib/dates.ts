@@ -84,3 +84,42 @@ function ordinal(day: number): string {
 
     return { 1: 'st', 2: 'nd', 3: 'rd' }[day % 10] ?? 'th';
 }
+
+/**
+ * The UTC offset a zone is on for a given day, as "+01:00".
+ *
+ * Asked of the date rather than of now, because an Event that straddles a
+ * clock change is one where "the offset" is two different things, and the one
+ * that matters is the one the hall will be on when the block runs.
+ */
+export function offsetAt(date: string, timeZone: string): string {
+    const [year, month, day] = date.split('-').map(Number);
+
+    if (year === undefined || month === undefined || day === undefined) {
+        return 'Z';
+    }
+
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone, timeZoneName: 'longOffset' })
+        .formatToParts(Date.UTC(year, month - 1, day, 12));
+
+    const named = parts.find((part) => part.type === 'timeZoneName')?.value ?? '';
+
+    // "GMT" alone means no offset; "GMT+01:00" means one.
+    return named === 'GMT' ? '+00:00' : named.replace('GMT', '');
+}
+
+/**
+ * A date and a wall-clock time, as the timestamp the API stores.
+ *
+ * The time an Organiser types is the time the hall will read, so it is written
+ * with the Event's offset rather than the phone's — a schedule typed on a
+ * laptop in another country must not shift when it is read in the venue.
+ */
+export function eventTimestamp(date: string, time: string, timeZone: string): string {
+    return `${date}T${time}:00${offsetAt(date, timeZone)}`;
+}
+
+/** The day a timestamp falls on in a given zone, as `YYYY-MM-DD`. */
+export function dayInZone(iso: string, timeZone: string): string {
+    return new Date(iso).toLocaleDateString('en-CA', { timeZone });
+}

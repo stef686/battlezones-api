@@ -39,6 +39,10 @@ class EventResource extends JsonResource
             'description' => $this->description,
             'status' => $this->status->value,
             'pairing_format' => $this->pairing_format->value,
+            // The wall clock the Event is run on. Every schedule time is read
+            // and written in it, so a form building a timestamp has to know it
+            // — the phone's own zone is not the hall's.
+            'timezone' => $this->timezone,
             'starts_at' => $this->starts_at->toIso8601ZuluString(),
             'ends_at' => $this->ends_at->toIso8601ZuluString(),
             'max_attendees' => $this->max_attendees,

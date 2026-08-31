@@ -342,6 +342,62 @@ describe('the schedule', () => {
         expect(view.get('[data-testid="day-2026-09-12"]').text()).toContain('Registration');
     });
 
+    it('offers an organiser an item at the foot of the day, and writes the hall\'s time', async () => {
+        const ORGANISING = eventBody({
+            timezone: 'Europe/London',
+            viewer: {
+                is_organiser: true,
+                is_lead_organiser: true,
+                is_attendee: false,
+                attendee_id: null,
+                permissions: { organise: true, register: false, manage_organisers: true },
+            },
+        });
+
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: { data: [] } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISING },
+        });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        await view.get('[data-testid="add-block"]').trigger('click');
+
+        // The day being read is the day being added to, already filled in.
+        expect((view.get('[data-testid="block-date"]').element as HTMLInputElement).value).toBe('2026-09-12');
+
+        await view.get('[data-testid="block-label"]').setValue('Prizegiving');
+        await view.get('[data-testid="block-starts"]').setValue('17:00');
+        await view.get('[data-testid="block-ends"]').setValue('17:30');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        const added = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/schedule') && init?.method === 'POST')!;
+
+        // Written with the Event's own offset, not the offset of whatever
+        // machine the organiser is typing on.
+        expect(JSON.parse(added[1]?.body as string)).toEqual({
+            label: 'Prizegiving',
+            type: 'info',
+            starts_at: '2026-09-12T17:00:00+01:00',
+            ends_at: '2026-09-12T17:30:00+01:00',
+        });
+    });
+
+    it('offers nothing to add to a reader who does not run the event', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.find('[data-testid="add-block"]').exists()).toBe(false);
+    });
+
     it('says an empty schedule is empty rather than showing nothing at all', async () => {
         stubApi({ [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: { data: [] } } });
 
