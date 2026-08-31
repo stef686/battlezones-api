@@ -187,9 +187,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.update');
     Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members', StoreAttendeeMemberController::class)
         ->name('events.attendees.members.store');
-    // Keyed on the membership rather than the Player: these exist for the team
-    // mate who has not claimed their account, and an unclaimed User is
-    // deliberately unresolvable by route.
+    // Keyed on the membership rather than the Player, because the membership
+    // is what they amend: the seat carries the Faction and the army list, and
+    // a corrected address moves that seat to another account.
     Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}/members/{membership}', UpdateAttendeeMemberController::class)
         ->name('events.attendees.members.update');
     Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members/{membership}/invite', ResendAttendeeInviteController::class)

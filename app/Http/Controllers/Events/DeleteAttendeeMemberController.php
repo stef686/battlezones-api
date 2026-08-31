@@ -32,9 +32,9 @@ class DeleteAttendeeMemberController extends Controller
     ): JsonResponse {
         Gate::authorize('changeMembers', $attendee);
 
-        // The seat rather than the Player, because the Player most likely to
-        // be dropped is one who never answered their invitation, and an
-        // unclaimed account is deliberately unresolvable by route.
+        // The seat rather than the Player, matching the endpoints that amend
+        // it: a team is a fixed set of seats, and dropping somebody empties
+        // one rather than acting on the account that happened to fill it.
         $attendee->members()->detach($membership->user_id);
 
         return response()->json(status: 200);

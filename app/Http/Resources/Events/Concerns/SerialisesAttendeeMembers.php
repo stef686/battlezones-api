@@ -52,10 +52,9 @@ trait SerialisesAttendeeMembers
                 ];
 
                 if ($withInviteState) {
-                    // The membership rather than the Player, because an
-                    // unclaimed account is not addressable by route: the one
-                    // Player whose details a team mate may still change is
-                    // exactly the one who cannot be named in a URL.
+                    // The seat, which is what the endpoints amending a team
+                    // mate are keyed on: the Faction and army list hang off it
+                    // and survive a correction to whose seat it is.
                     $member['membership_id'] = $membership->id;
                     $member['invite_outstanding'] = ! $membership->user->isClaimed();
 

@@ -22,7 +22,7 @@ class UpdateAttendeeMemberController extends Controller
 {
     #[Endpoint(
         'Amend an Invited Player',
-        'The name, address and Faction of a team mate who has not claimed their account. Refused once they have: their details are then theirs alone. Addressed by membership because an unclaimed account is not addressable by route.'
+        'The name, address and Faction of a team mate who has not claimed their account. Refused once they have: their details are then theirs alone. Addressed by membership because the membership is the seat being amended.'
     )]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]

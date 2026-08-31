@@ -277,8 +277,8 @@ export function addMember(
  *
  * Only while their invitation is outstanding: once they claim the account the
  * API refuses this, because their name and address are then theirs. Addressed
- * by membership for the same reason `recordMyFaction` is addressed as "mine" —
- * an unclaimed Player cannot be named in a URL.
+ * by membership because the seat is what is being amended — correcting the
+ * address moves that seat to another account, faction and list intact.
  */
 export function amendMember(
     client: ApiClient,
