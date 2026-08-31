@@ -131,14 +131,13 @@ const openDay = computed(() => days.value?.[selected.value] ?? null);
             {{ wallClockTime(block.starts_at) }}
           </time>
 
-          <div class="flex min-w-0 flex-col">
-            <p class="truncate text-sm font-medium text-foreground">
-              {{ block.label }}
-            </p>
-            <p class="text-sm text-muted-foreground">
-              until {{ wallClockTime(block.ends_at) }}
-            </p>
-          </div>
+          <!-- The end time reads as a tail on the label rather than a line of
+               its own: it qualifies the block, and a schedule of two-line rows
+               is half as much of the day on a phone. -->
+          <p class="flex min-w-0 items-baseline gap-2 text-sm">
+            <span class="truncate font-medium text-foreground">{{ block.label }}</span>
+            <span class="shrink-0 text-muted-foreground">'til {{ wallClockTime(block.ends_at) }}</span>
+          </p>
 
           <span
             v-if="block.is_target_live"
