@@ -118,7 +118,7 @@ const openDay = computed(() => days.value?.[selected.value] ?? null);
           v-for="block in openDay.blocks"
           :key="block.id"
           :data-testid="`block-${block.id}`"
-          class="flex items-baseline gap-4 px-5 py-3.5"
+          class="flex items-center gap-4 px-5 py-3.5"
           :class="block.is_target_live ? 'bg-primary/10' : ''"
         >
           <!-- The time as the hall reads it, tabular so the column lines up
@@ -126,7 +126,7 @@ const openDay = computed(() => days.value?.[selected.value] ?? null);
           <time
             :datetime="block.starts_at"
             data-testid="block-time"
-            class="w-14 shrink-0 text-lg font-semibold tabular-nums text-foreground"
+            class="w-12 shrink-0 text-base font-semibold tabular-nums text-foreground"
           >
             {{ wallClockTime(block.starts_at) }}
           </time>
