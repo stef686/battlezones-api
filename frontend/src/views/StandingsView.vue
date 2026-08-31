@@ -7,7 +7,7 @@ import { useApiClient } from '@/api';
 import type { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
-import { fetchStandings, scoreOf, type Standing } from '@/api/standings';
+import { factionsOf, fetchStandings, scoreOf, type Standing } from '@/api/standings';
 import TextField from '@/components/TextField.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 
@@ -99,22 +99,23 @@ function score(standing: Standing, slug: string): string {
            one place it parts company with a Game. A Game is one of a stack
            and needs an outline to be one thing among several; the standings
            are the whole screen, and the width a card gives back is width the
-           names were being truncated to fit. Rules top and bottom are all
-           that is left of the card.
+           names were being truncated to fit. One rule under the last row is
+           all that is left of the card — nothing above the headings, which
+           the search field already sits clear of.
 
            The columns at either end carry the page's own inset rather than
            the table's, so the position and the last score line up with the
            field above them; only the columns between stay tight. -->
       <div
         v-if="!nothingMatched"
-        class="-mx-5 border-y border-card-line"
+        class="-mx-5 border-b border-card-line"
       >
         <table
           data-testid="standings"
           class="w-full"
         >
           <thead>
-            <tr class="bg-background-1 text-xs uppercase tracking-widest text-muted-foreground">
+            <tr class="bg-background-1 text-2xs uppercase tracking-widest text-muted-foreground">
               <th
                 scope="col"
                 class="py-2 pl-5 pr-3 text-start font-bold"
@@ -152,7 +153,7 @@ function score(standing: Standing, slug: string): string {
               :key="standing.id"
               :data-testid="`standing-${standing.attendee.id}`"
             >
-              <td class="py-2 pl-5 pr-3 text-xs tabular-nums whitespace-nowrap text-muted-foreground-1">
+              <td class="py-3 pl-5 pr-3 align-top text-2xs tabular-nums whitespace-nowrap text-muted-foreground-1">
                 {{ standing.position }}
               </td>
               <!-- The name is cut rather than allowed to push the numbers off a
@@ -160,7 +161,7 @@ function score(standing: Standing, slug: string): string {
                    are the whole point of reading it. -->
               <th
                 scope="row"
-                class="max-w-0 text-start text-xs font-normal text-foreground"
+                class="max-w-0 align-top text-start text-2xs font-normal text-foreground"
               >
                 <!-- A row cannot be a link, so the name is, and it carries
                      the cell's padding rather than the cell so the whole
@@ -171,19 +172,38 @@ function score(standing: Standing, slug: string): string {
                 <RouterLink
                   :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: standing.attendee.id } }"
                   :data-testid="`open-attendee-${standing.attendee.id}`"
-                  class="block truncate px-3 py-2 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
+                  class="block px-3 py-3 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
                 >
-                  {{ standing.attendee.name }}
+                  <!-- The name keeps the step the rest of the table gave up:
+                       it is what a reader is scanning for, and the numbers
+                       and the Factions are what it is read against. -->
+                  <span
+                    :data-testid="`name-${standing.attendee.id}`"
+                    class="block truncate text-xs"
+                  >{{ standing.attendee.name }}</span>
+
+                  <!-- Under the name and in grey, because it qualifies the
+                       team rather than identifying it: two teams called
+                       something forgettable are told apart by what they
+                       brought. Truncated on its own line so a doubles pair
+                       cannot push the scores off a phone. -->
+                  <span
+                    v-if="factionsOf(standing) !== ''"
+                    :data-testid="`factions-${standing.attendee.id}`"
+                    class="block truncate text-muted-foreground"
+                  >
+                    {{ factionsOf(standing) }}
+                  </span>
                 </RouterLink>
               </th>
               <td
-                class="px-3 py-2 text-center text-xs font-medium tabular-nums whitespace-nowrap text-foreground"
+                class="px-3 py-3 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
                 data-testid="match-points"
               >
                 {{ score(standing, 'match-points') }}
               </td>
               <td
-                class="py-2 pl-3 pr-5 text-center text-xs font-medium tabular-nums whitespace-nowrap text-foreground"
+                class="py-3 pl-3 pr-5 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
                 data-testid="victory-points"
               >
                 {{ score(standing, 'victory-points') }}

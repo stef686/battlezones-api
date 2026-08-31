@@ -45,6 +45,15 @@
     --text-hall--line-height: 1;
 
     /*
+     * One step under Tailwind's smallest, for a table read down rather than
+     * across: the Standings put a name, what it brought and two scores on one
+     * line, and at `xs` the names were being truncated to buy room the row
+     * did not have.
+     */
+    --text-2xs: 0.6875rem;
+    --text-2xs--line-height: 1rem;
+
+    /*
      * Corners, one step tighter than Tailwind's defaults.
      *
      * The app is a dense stack of cards and strips on a phone, and at that

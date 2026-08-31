@@ -43,11 +43,41 @@ function scored(match: string, victory: string) {
     ];
 }
 
+function member(id: number, name: string, faction: string | null) {
+    return { id, name, faction: faction === null ? null : { id, name: faction } };
+}
+
 const STANDINGS = {
     data: [
-        { id: 1, position: 1, attendee: { id: 9, name: 'Sons of Terra' }, scores: scored('6.00', '170.50') },
-        { id: 2, position: 2, attendee: { id: 10, name: 'The Warmaster\'s Own' }, scores: scored('3.00', '150.00') },
-        { id: 3, position: 3, attendee: { id: 11, name: 'Terran Reserve' }, scores: [] },
+        {
+            id: 1,
+            position: 1,
+            // A doubles team, so two Factions under one name.
+            attendee: {
+                id: 9,
+                name: 'Sons of Terra',
+                members: [member(1, 'Ada Lovelace', 'Imperial Fists'), member(2, 'Grace Hopper', 'Death Guard')],
+            },
+            scores: scored('6.00', '170.50'),
+        },
+        {
+            id: 2,
+            position: 2,
+            attendee: {
+                id: 10,
+                name: 'The Warmaster\'s Own',
+                members: [member(3, 'Alan Turing', 'Sons of Horus')],
+            },
+            scores: scored('3.00', '150.00'),
+        },
+        {
+            id: 3,
+            position: 3,
+            // Nobody has chosen a Faction here, which is a row with no second
+            // line rather than a row with a blank one.
+            attendee: { id: 11, name: 'Terran Reserve', members: [member(4, 'Katherine Johnson', null)] },
+            scores: [],
+        },
     ],
 };
 
@@ -94,7 +124,7 @@ async function mountStandings(standings: unknown = STANDINGS) {
 }
 
 function names(view: Awaited<ReturnType<typeof mountStandings>>): string[] {
-    return view.findAll('tbody tr').map((row) => row.get('th[scope="row"]').text());
+    return view.findAll('tbody tr').map((row) => row.get('[data-testid^="name-"]').text());
 }
 
 beforeEach(async () => {
@@ -135,7 +165,23 @@ describe('the standings', () => {
         const link = view.get('[data-testid="open-attendee-10"]');
 
         expect(link.attributes('href')).toBe(`/events/${EVENT_SLUG}/attendees/10`);
-        expect(link.text()).toBe('The Warmaster\'s Own');
+        expect(link.get('[data-testid="name-10"]').text()).toBe('The Warmaster\'s Own');
+    });
+
+    it('names what each team brought, under the team, and skips a team that has chosen nothing', async () => {
+        const view = await mountStandings();
+
+        // A doubles team fields two Factions, and the pair is what tells one
+        // forgettably-named team from another at a glance.
+        expect(view.get('[data-testid="factions-9"]').text()).toBe('Imperial Fists & Death Guard');
+        expect(view.get('[data-testid="factions-10"]').text()).toBe('Sons of Horus');
+
+        // Greyed, because it qualifies the team rather than identifying it.
+        expect(view.get('[data-testid="factions-9"]').classes()).toContain('text-muted-foreground');
+
+        // Nothing chosen is a row with no second line, not a row with a blank
+        // one — a team halfway through registering is not a team with a gap.
+        expect(view.find('[data-testid="factions-11"]').exists()).toBe(false);
     });
 
     it('filters the table down to a team the reader is looking for', async () => {

@@ -1,11 +1,12 @@
 import { formatScore } from '@/lib/scores';
 
 import type { ApiClient } from './client';
+import type { AttendeeMember } from './events';
 
 export interface Standing {
     id: number;
     position: number;
-    attendee: { id: number; name: string };
+    attendee: { id: number; name: string; members: AttendeeMember[] };
     scores: { value: number | string; score_type: { slug: string; name: string } }[];
 }
 
@@ -19,6 +20,21 @@ export function scoreOf(standing: Standing, slug: string): string {
     const found = standing.scores.find((entry) => entry.score_type.slug === slug);
 
     return found === undefined ? '—' : formatScore(found.value);
+}
+
+/**
+ * The Factions a Standing is fielding, named in the order its Players are.
+ *
+ * A doubles team brings two, and the pair is what tells one team from another
+ * at a glance — a name says who, a Faction says what turned up. Players who
+ * have not chosen one are left out rather than named as blanks, so a team
+ * halfway through registering reads as one Faction and not as a gap.
+ */
+export function factionsOf(standing: Standing): string {
+    return (standing.attendee.members ?? [])
+        .map((member) => member.faction?.name)
+        .filter((name): name is string => name !== undefined && name !== null)
+        .join(' & ');
 }
 
 /** Position by Attendee id, for screens that show standings beside something else. */
