@@ -170,13 +170,17 @@ class Game extends Model
      * its lone Attendee is the winner from the moment it is paired. This is
      * the same fact `StoreGameScores::awardByeWin()` writes Match Points for.
      *
-     * Reads `scores` and `scores.scoreType` from the relations in hand, so
-     * callers must have loaded them.
+     * Reads the `attendees` and `scores` in hand rather than querying per
+     * Game — a Round is decided one Game at a time, and a lookup inside that
+     * loop is the N+1 the eager loads exist to avoid. Loaded here only where
+     * a caller has not, which costs nothing when they have.
      *
      * @param  Collection<int, EventScoreType>  $scoreTypes
      */
-    public function winningAttendeeId($scoreTypes): ?int
+    public function winningAttendeeId(Collection $scoreTypes): ?int
     {
+        $this->loadMissing(['attendees', 'scores']);
+
         if ($this->is_bye) {
             return $this->attendees->first()?->id;
         }

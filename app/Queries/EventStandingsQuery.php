@@ -39,13 +39,18 @@ class EventStandingsQuery
      * The last Round anybody had finished a Game in before the one being
      * played, or null where this is the first — there is nowhere to have
      * moved from until two Rounds have results in them.
+     *
+     * Resolved when the query is built rather than when it is constructed:
+     * finding it costs a query of its own, and building a Standings query is
+     * not the same thing as running one.
      */
-    private ?int $previousRoundNumber;
+    private ?int $previousRoundNumber = null;
+
+    private bool $previousRoundResolved = false;
 
     private function __construct(private Event $event)
     {
         $this->scoreTypes = $event->scoreTypes()->orderBy('display_order')->get();
-        $this->previousRoundNumber = $this->roundBeforeTheLatestScoredOne();
     }
 
     public static function forEvent(Event $event): self
@@ -90,9 +95,11 @@ class EventStandingsQuery
                 ...$this->scoreTypes->map(fn (EventScoreType $scoreType): string => "standings.{$this->column($scoreType)}")->all(),
             ]);
 
-        if ($this->previousRoundNumber !== null) {
+        $previousRound = $this->previousRoundNumber();
+
+        if ($previousRound !== null) {
             $query->joinSub(
-                $this->rankedTotals($this->previousRoundNumber),
+                $this->rankedTotals($previousRound),
                 'previous_standings',
                 'previous_standings.id',
                 '=',
@@ -183,6 +190,16 @@ class EventStandingsQuery
      * one rather than from that one, so an Event mid-Round shows how it stood
      * going into the Round being played rather than an arrow against itself.
      */
+    private function previousRoundNumber(): ?int
+    {
+        if (! $this->previousRoundResolved) {
+            $this->previousRoundNumber = $this->roundBeforeTheLatestScoredOne();
+            $this->previousRoundResolved = true;
+        }
+
+        return $this->previousRoundNumber;
+    }
+
     private function roundBeforeTheLatestScoredOne(): ?int
     {
         $scored = DB::table('rounds')
@@ -191,6 +208,9 @@ class EventStandingsQuery
             ->where('rounds.event_id', $this->event->getKey())
             ->distinct()
             ->orderByDesc('rounds.number')
+            // Only the latest two matter, and an Event that has run all day
+            // has no reason to hand every Round number back to read one.
+            ->limit(2)
             ->pluck('rounds.number');
 
         return $scored->count() < 2 ? null : (int) $scored[1];

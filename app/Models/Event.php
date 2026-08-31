@@ -481,10 +481,15 @@ class Event extends Model
      * where nobody has, the first column played for at the table wins, since a
      * derived column (Match Points from the result) says less at a glance than
      * the score the result was worked out from.
+     *
+     * A caller that has already put the Score Types in display order passes
+     * them in rather than paying for the sort twice.
+     *
+     * @param  Collection<int, EventScoreType>|null  $ordered
      */
-    public function primaryScoreType(): ?EventScoreType
+    public function primaryScoreType(?Collection $ordered = null): ?EventScoreType
     {
-        $ordered = $this->scoreTypes->sortBy('display_order')->values();
+        $ordered ??= $this->scoreTypes->sortBy('display_order')->values();
 
         return $ordered->firstWhere('is_primary', true)
             ?? $ordered->firstWhere('is_derived', false)

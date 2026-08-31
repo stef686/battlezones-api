@@ -3,8 +3,8 @@
 namespace App\Http\Resources\Events;
 
 use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
+use App\Http\Resources\Events\Concerns\SerialisesScoreTypes;
 use App\Models\EventAttendee;
-use App\Models\EventScoreType;
 use App\Models\Game;
 use App\Models\GameScore;
 use App\Models\Round;
@@ -17,6 +17,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class RoundDetailResource extends JsonResource
 {
     use SerialisesAttendeeMembers;
+    use SerialisesScoreTypes;
 
     /**
      * @return array<string, mixed>
@@ -32,29 +33,17 @@ class RoundDetailResource extends JsonResource
         $isOrganiser = $this->event->isOrganisedBy($request->user('sanctum'));
         $rematches = $isOrganiser ? $this->rematchGameIds() : [];
 
-        $scoreTypes = $this->event->scoreTypes->sortBy('display_order')->values();
-
-        // Resolved here rather than sent raw, so exactly one column is marked
-        // however the Event was set up: a listing has room for one number per
-        // team, and a client should not have to pick which when nobody has.
-        $primary = $this->event->primaryScoreType();
+        $scoreTypes = $this->orderedScoreTypes($this->event);
 
         return [
             'id' => $this->id,
             'number' => $this->number,
             'name' => $this->name,
             'status' => $this->status->value,
-            // The columns every Game in this Round is scored on, whether or
-            // not a result has landed yet. Sent with the Round rather than
-            // inferred from the scores, so an unplayed Game still knows how
-            // many numbers it is waiting for.
-            'score_types' => $scoreTypes->map(fn (EventScoreType $type): array => [
-                'slug' => $type->slug,
-                'name' => $type->name,
-                // Which column a Game listing leads with, where it has room
-                // for one. Everything else is read on the Game itself.
-                'is_primary' => $type->id === $primary?->id,
-            ])->all(),
+            'score_types' => $this->serialiseScoreTypes(
+                $scoreTypes,
+                $this->event->primaryScoreType($scoreTypes),
+            ),
             'games' => $this->games->map(function (Game $game) use ($isOrganiser, $rematches, $scoreTypes): array {
                 $scoresByAttendee = $game->scores
                     ->groupBy('event_attendee_id')

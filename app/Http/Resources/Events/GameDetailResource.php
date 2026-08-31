@@ -3,8 +3,8 @@
 namespace App\Http\Resources\Events;
 
 use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
+use App\Http\Resources\Events\Concerns\SerialisesScoreTypes;
 use App\Models\EventAttendee;
-use App\Models\EventScoreType;
 use App\Models\Game;
 use App\Models\GameScore;
 use Illuminate\Http\Request;
@@ -16,6 +16,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class GameDetailResource extends JsonResource
 {
     use SerialisesAttendeeMembers;
+    use SerialisesScoreTypes;
 
     /**
      * @return array<string, mixed>
@@ -28,8 +29,7 @@ class GameDetailResource extends JsonResource
                 fn (GameScore $score) => [$score->scoreType->slug => $score->value]
             ));
 
-        $scoreTypes = $this->round->event->scoreTypes->sortBy('display_order')->values();
-        $primary = $this->round->event->primaryScoreType();
+        $scoreTypes = $this->orderedScoreTypes($this->round->event);
         $winner = $this->winningAttendeeId($scoreTypes);
 
         return [
@@ -41,17 +41,10 @@ class GameDetailResource extends JsonResource
                 'number' => $this->round->number,
                 'name' => $this->round->name,
             ],
-            // The columns this Game is scored on, sent whether or not a
-            // result has landed. Read from the Event rather than inferred
-            // from the scores in hand, so a Game nobody has played yet shows
-            // what it is waiting for instead of collapsing to nothing.
-            'score_types' => $scoreTypes->map(fn (EventScoreType $type): array => [
-                'slug' => $type->slug,
-                'name' => $type->name,
-                // Which column a Game listing leads with. The Game screen shows them all, and
-                // sends the flag so both screens agree on which one it is.
-                'is_primary' => $type->id === $primary?->id,
-            ])->all(),
+            'score_types' => $this->serialiseScoreTypes(
+                $scoreTypes,
+                $this->round->event->primaryScoreType($scoreTypes),
+            ),
             'result' => [
                 'submitted_at' => $this->submitted_at?->toIso8601String(),
                 'submitted_by' => $this->whenLoaded('submittedBy', fn (): ?array => $this->submittedBy === null ? null : [
