@@ -63,6 +63,7 @@ const chipOfRoute: Record<string, string> = {
   'my-team-painting': 'my-team',
   organise: 'organise',
   'event-settings': 'organise',
+  'event-format': 'organise',
   flags: 'organise',
 };
 

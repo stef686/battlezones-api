@@ -128,6 +128,17 @@ describe('who may run an event', () => {
             .toBe(`/events/${EVENT_SLUG}/organise/settings`);
     });
 
+    it('leads to the event format, and leaves places to it', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="format-link"]').attributes('href'))
+            .toBe(`/events/${EVENT_SLUG}/organise/format`);
+        expect(view.get('[data-testid="settings-link"]').text()).not.toContain('places');
+    });
+
     it('is not there at all for a reader without the permission', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(false) },

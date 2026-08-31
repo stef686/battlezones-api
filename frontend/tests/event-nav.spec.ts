@@ -185,6 +185,22 @@ describe('the event nav', () => {
         expect(view.get('[data-testid="event-nav-organise"]').attributes('aria-current')).toBe('page');
     });
 
+    it('lights organisers from the event format screen too', async () => {
+        stubSignedIn(eventBody(entrant({ permissions: { organise: true, register: false, manage_organisers: false } })));
+
+        const storage = new InMemoryTokenStorage();
+        storage.write('a-token');
+        createApiClient(router, { baseUrl: 'https://api.test', storage });
+
+        await router.push(`/events/${EVENT_SLUG}/organise/format`);
+        await router.isReady();
+
+        const view = mountNav();
+        await flushPromises();
+
+        expect(view.get('[data-testid="event-nav-organise"]').attributes('aria-current')).toBe('page');
+    });
+
     it('leaves my team out for a viewer who has not entered', async () => {
         stubEvent(eventBody(entrant({ is_attendee: false, attendee_id: null })));
         await router.push(`/events/${EVENT_SLUG}`);

@@ -144,6 +144,12 @@ const routes: RouteRecordRaw[] = [
         props: true,
     },
     {
+        path: '/events/:eventSlug/organise/format',
+        name: 'event-format',
+        component: () => import('@/views/EventFormatView.vue'),
+        props: true,
+    },
+    {
         path: '/events/:eventSlug/organise/flags',
         name: 'flags',
         component: () => import('@/views/FlagsView.vue'),

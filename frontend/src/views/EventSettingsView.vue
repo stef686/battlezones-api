@@ -58,7 +58,6 @@ interface Form {
   starts_at: string;
   ends_at: string;
   registration_closes_at: string;
-  max_attendees: string;
 }
 
 function formOf(loaded: EventSummary): Form {
@@ -72,7 +71,6 @@ function formOf(loaded: EventSummary): Form {
     starts_at: localMoment(loaded.starts_at),
     ends_at: localMoment(loaded.ends_at),
     registration_closes_at: localMoment(loaded.registration_closes_at),
-    max_attendees: loaded.max_attendees === null ? '' : String(loaded.max_attendees),
   };
 }
 
@@ -116,10 +114,6 @@ const changes = computed<EventChanges>(() => {
     if (current[field] !== original[field]) {
       changed[field] = current[field] === '' ? null : `${current[field]}:00Z`;
     }
-  }
-
-  if (current.max_attendees !== original.max_attendees) {
-    changed.max_attendees = current.max_attendees === '' ? null : Number(current.max_attendees);
   }
 
   return changed;
@@ -347,15 +341,6 @@ function localMoment(iso: string | null): string {
           type="datetime-local"
           testid="settings-registration-closes-at"
           :errors="errors.registration_closes_at"
-        />
-
-        <TextField
-          v-model="form.max_attendees"
-          label="Places"
-          inputmode="numeric"
-          hint="Leave empty for no limit. Never fewer than have already entered."
-          testid="settings-max-attendees"
-          :errors="errors.max_attendees"
         />
 
         <TextField

@@ -58,6 +58,22 @@ const { data: flags } = useQuery({
 
 const disputed = computed(() => (flags.value ?? []).length);
 
+/**
+ * The shape of the Event, said in the row that leads to it: the Game System it
+ * is played under and how many Players make up a party.
+ */
+const formatState = computed(() => {
+  const loaded = event.value;
+
+  if (loaded === undefined) {
+    return '';
+  }
+
+  const system = loaded.game_system?.name ?? 'No game system';
+
+  return `${system} · ${loaded.attendee_size > 1 ? `teams of ${loaded.attendee_size}` : 'singles'}`;
+});
+
 const live = computed(() => [...(rounds.value ?? [])]
   .filter((round) => round.status === 'live')
   .sort((left, right) => right.number - left.number)[0] ?? null);
@@ -178,8 +194,17 @@ const byes = computed(() => (liveDetail.value?.games ?? []).filter((game) => gam
         <AppLinkRow
           :to="{ name: 'event-settings', params: { eventSlug: props.eventSlug } }"
           label="Event settings"
-          value="Name, dates, venue, places"
+          value="Name, dates, venue"
           testid="settings-link"
+        />
+
+        <!-- What the Event *is*, as against what it is called: the shape a
+             Player enters at, and the columns they are scored on. -->
+        <AppLinkRow
+          :to="{ name: 'event-format', params: { eventSlug: props.eventSlug } }"
+          label="Event format"
+          :value="formatState"
+          testid="format-link"
         />
 
         <!-- What is holding up the next Round is the question an Organiser
