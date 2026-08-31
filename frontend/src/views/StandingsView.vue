@@ -175,7 +175,7 @@ function matchesSearch(standing: Standing): boolean {
                    its own: it is a fact about that number, and a phone has no
                    width to spend on a column that is empty for a whole first
                    round. -->
-              <td class="py-3 pl-5 pr-2 align-top text-2xs tabular-nums whitespace-nowrap text-muted-foreground-1">
+              <td class="py-3 pl-5 pr-2 align-middle text-2xs tabular-nums whitespace-nowrap text-muted-foreground-1">
                 <span class="flex items-center gap-1.5">
                   {{ row.standing.position }}
                   <StandingMovement
@@ -189,7 +189,7 @@ function matchesSearch(standing: Standing): boolean {
                    are the whole point of reading it. -->
               <th
                 scope="row"
-                class="max-w-0 align-top text-start text-2xs font-normal text-foreground"
+                class="max-w-0 align-middle text-start text-2xs font-normal text-foreground"
               >
                 <!-- A row cannot be a link, so the name is, and it carries
                      the cell's padding rather than the cell so the whole
@@ -202,34 +202,38 @@ function matchesSearch(standing: Standing): boolean {
                   :data-testid="`open-attendee-${row.standing.attendee.id}`"
                   class="block px-2 py-3 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
                 >
-                  <!-- The name keeps the step the rest of the table gave up:
-                       it is what a reader is scanning for, and the numbers
-                       and the Factions are what it is read against. The badge
-                       rides beside it at the smallest size the table draws,
-                       because width here comes out of the name. -->
-                  <span class="flex min-w-0 items-center gap-1.5">
+                  <!-- The badge stands beside the whole team — the name and
+                       what it brought — rather than beside the name alone,
+                       which left it hanging off one line of a two-line cell. -->
+                  <span class="flex min-w-0 items-center gap-2">
                     <TeamAvatar
                       :name="row.standing.attendee.name"
                       :src="row.standing.attendee.avatar"
-                      size="xs"
                     />
-                    <span
-                      :data-testid="`name-${row.standing.attendee.id}`"
-                      class="block truncate text-xs"
-                    >{{ row.standing.attendee.name }}</span>
-                  </span>
 
-                  <!-- Under the name and in grey, because it qualifies the
-                       team rather than identifying it: two teams called
-                       something forgettable are told apart by what they
-                       brought. Truncated on its own line so a doubles pair
-                       cannot push the scores off a phone. -->
-                  <span
-                    v-if="row.factions !== ''"
-                    :data-testid="`factions-${row.standing.attendee.id}`"
-                    class="block truncate text-muted-foreground"
-                  >
-                    {{ row.factions }}
+                    <span class="flex min-w-0 flex-col">
+                      <!-- The name keeps the step the rest of the table gave
+                           up: it is what a reader is scanning for, and the
+                           numbers and the Factions are what it is read
+                           against. -->
+                      <span
+                        :data-testid="`name-${row.standing.attendee.id}`"
+                        class="block truncate text-xs"
+                      >{{ row.standing.attendee.name }}</span>
+
+                      <!-- Under the name and in grey, because it qualifies the
+                           team rather than identifying it: two teams called
+                           something forgettable are told apart by what they
+                           brought. Truncated on its own line so a doubles pair
+                           cannot push the scores off a phone. -->
+                      <span
+                        v-if="row.factions !== ''"
+                        :data-testid="`factions-${row.standing.attendee.id}`"
+                        class="block truncate text-muted-foreground"
+                      >
+                        {{ row.factions }}
+                      </span>
+                    </span>
                   </span>
                 </RouterLink>
               </th>
@@ -237,7 +241,7 @@ function matchesSearch(standing: Standing): boolean {
                 v-for="(cell, index) in row.scores"
                 :key="cell.slug"
                 :data-testid="cell.slug"
-                class="py-3 align-top text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
+                class="py-3 align-middle text-center text-2xs font-medium tabular-nums whitespace-nowrap text-foreground"
                 :class="index === row.scores.length - 1 ? 'pl-2 pr-5' : 'px-2'"
               >
                 {{ cell.value }}
