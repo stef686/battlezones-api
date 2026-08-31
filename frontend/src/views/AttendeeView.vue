@@ -112,22 +112,26 @@ async function run(action: () => Promise<unknown>): Promise<void> {
     </p>
 
     <template v-else-if="attendee">
-      <header class="flex flex-col items-start gap-3">
-        <!-- Big here, where there is room for it and only one team on the
-             screen: this is the page that answers "is this them?". -->
+      <!-- Badge on the left with the name and allegiance beside it, so the
+           three read as one identity rather than as a picture with a heading
+           under it. Big, because there is room and only one team here: this
+           is the page that answers "is this them?". -->
+      <header class="flex items-center gap-4">
         <TeamAvatar
           :name="attendee.name ?? ''"
           :src="attendee.avatar"
           size="lg"
         />
 
-        <h1
-          data-testid="attendee-name"
-          class="text-2xl font-bold tracking-tight text-foreground"
-        >
-          {{ attendee.name }}
-        </h1>
-        <AllegianceBadge :allegiance="attendee.allegiance" />
+        <div class="flex min-w-0 flex-col items-start gap-2">
+          <h1
+            data-testid="attendee-name"
+            class="text-2xl font-bold tracking-tight text-foreground"
+          >
+            {{ attendee.name }}
+          </h1>
+          <AllegianceBadge :allegiance="attendee.allegiance" />
+        </div>
       </header>
 
       <section class="flex flex-col gap-3">
