@@ -26,10 +26,12 @@
  * have to read the word to know which side a team is on.
  */
 @theme {
-    --color-loyalist: oklch(0.74 0.13 240);
+    /* #FFD700 — light and gold, read against the near-black type it carries. */
+    --color-loyalist: oklch(0.887 0.182 95.3);
     --color-loyalist-foreground: oklch(0.17 0.01 260);
-    --color-traitor: oklch(0.68 0.17 30);
-    --color-traitor-foreground: oklch(0.17 0.01 260);
+    /* #00545E — dark teal, which needs the light foreground gold does not. */
+    --color-traitor: oklch(0.408 0.07 208.6);
+    --color-traitor-foreground: oklch(0.99 0 0);
     --color-success: oklch(0.72 0.15 150);
 
     /*
