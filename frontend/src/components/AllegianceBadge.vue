@@ -39,7 +39,7 @@ const classes = computed(() => {
   <span
     :data-testid="`allegiance-${allegiance ?? 'none'}`"
     :data-known="known"
-    class="inline-flex shrink-0 items-center gap-x-1.5 rounded-full px-3 py-1.5 text-xs font-medium uppercase tracking-wide"
+    class="inline-flex shrink-0 items-center gap-x-1.5 rounded-full px-2.5 py-1 text-2xs font-medium uppercase tracking-wide"
     :class="classes"
   >
     {{ label }}
