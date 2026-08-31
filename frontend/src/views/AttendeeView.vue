@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ChevronLeft } from 'lucide-vue-next';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
@@ -12,6 +12,7 @@ import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
+import TabStrip from '@/components/TabStrip.vue';
 import TeamAvatar from '@/components/TeamAvatar.vue';
 
 const props = defineProps<{ eventSlug: string; attendeeId: string }>();
@@ -46,6 +47,19 @@ const missing = computed(() => error.value instanceof ApiError && error.value.ki
  */
 const listsRevealed = computed(() => (attendee.value?.members ?? [])
   .some((member) => member.army_list !== undefined));
+
+/**
+ * The Player whose list is open.
+ *
+ * Tabbed rather than stacked, exactly as a Game's two sides are: a list runs
+ * to a screenful, and a reader who came to see what one half of a doubles
+ * team brought should not scroll past the other half to reach it.
+ */
+const openPlayer = ref(0);
+
+watch(() => props.attendeeId, () => {
+  openPlayer.value = 0;
+});
 
 const working = ref(false);
 const problem = ref<string | null>(null);
@@ -135,58 +149,64 @@ async function run(action: () => Promise<unknown>): Promise<void> {
       </header>
 
       <section class="flex flex-col gap-3">
-        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+        <h2 class="sr-only">
           {{ attendee.members.length === 1 ? 'Player' : 'Players' }}
         </h2>
 
-        <article
-          v-for="member in attendee.members"
-          :key="member.id"
-          :data-testid="`member-${member.id}`"
-          class="flex flex-col gap-0.5 rounded-xl border border-card-line bg-card px-4 py-3.5 shadow-2xs"
+        <!-- The Players are the tabs, so the panel does not name the one it
+             is showing: the lit tab above it already does. -->
+        <TabStrip
+          v-model="openPlayer"
+          :items="attendee.members"
+          label="Players"
+          id-prefix="player"
         >
-          <p class="text-base font-semibold text-foreground">
-            {{ member.name }}
-          </p>
-          <p
-            data-testid="member-faction"
-            class="text-sm"
-            :class="member.faction ? 'text-muted-foreground-1' : 'text-muted-foreground'"
-          >
-            {{ member.faction?.name ?? 'Faction not chosen' }}
-          </p>
+          <template #default="{ item: member }">
+            <article
+              :data-testid="`member-${member.id}`"
+              class="flex flex-col gap-0.5 rounded-xl border border-card-line bg-card px-4 py-3.5 shadow-2xs"
+            >
+              <p
+                data-testid="member-faction"
+                class="text-sm"
+                :class="member.faction ? 'text-muted-foreground-1' : 'text-muted-foreground'"
+              >
+                {{ member.faction?.name ?? 'Faction not chosen' }}
+              </p>
 
-          <p
-            v-if="!listsRevealed"
-            class="text-sm"
-            :class="member.army_list_locked ? 'text-success' : 'text-muted-foreground'"
-          >
-            {{ member.army_list_locked ? 'List in' : 'List not submitted' }}
-          </p>
+              <p
+                v-if="!listsRevealed"
+                class="text-sm"
+                :class="member.army_list_locked ? 'text-success' : 'text-muted-foreground'"
+              >
+                {{ member.army_list_locked ? 'List in' : 'List not submitted' }}
+              </p>
 
-          <p
-            v-else
-            :data-testid="`army-list-${member.id}`"
-            class="mt-2 whitespace-pre-wrap text-sm"
-            :class="member.army_list ? 'text-foreground' : 'text-muted-foreground'"
-          >
-            {{ member.army_list || 'No list was written.' }}
-          </p>
+              <p
+                v-else
+                :data-testid="`army-list-${member.id}`"
+                class="mt-2 whitespace-pre-wrap text-sm"
+                :class="member.army_list ? 'text-foreground' : 'text-muted-foreground'"
+              >
+                {{ member.army_list || 'No list was written.' }}
+              </p>
 
-          <!-- Locking has no other way out, and a wrong list matters to every
-               opponent who prepares against it. -->
-          <AppButton
-            v-if="mayOrganise && member.army_list_locked"
-            :data-testid="`unlock-${member.id}`"
-            variant="secondary"
-            size="sm"
-            :disabled="working"
-            class="mt-2 self-start"
-            @click="unlock(member.id)"
-          >
-            Reopen this list
-          </AppButton>
-        </article>
+              <!-- Locking has no other way out, and a wrong list matters to
+                   every opponent who prepares against it. -->
+              <AppButton
+                v-if="mayOrganise && member.army_list_locked"
+                :data-testid="`unlock-${member.id}`"
+                variant="secondary"
+                size="sm"
+                :disabled="working"
+                class="mt-2 self-start"
+                @click="unlock(member.id)"
+              >
+                Reopen this list
+              </AppButton>
+            </article>
+          </template>
+        </TabStrip>
 
         <!-- Closed lists are said to be closed. A blank where a list would be
              reads as a Player who never wrote one. -->

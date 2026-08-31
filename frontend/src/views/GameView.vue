@@ -25,6 +25,7 @@ import { keys } from '@/api/keys';
 import { fetchGame, type GameAttendee, type GameMember } from '@/api/results';
 import { roundTitle, tableLabel } from '@/api/rounds';
 import GameScoreTable from '@/components/GameScoreTable.vue';
+import TabStrip from '@/components/TabStrip.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 
@@ -65,8 +66,6 @@ watch(gameId, () => {
   selected.value = 0;
 });
 
-const openTeam = computed<GameAttendee | null>(() => teams.value[selected.value] ?? null);
-
 /**
  * Whether this reader is entitled to a list at all.
  *
@@ -78,36 +77,6 @@ function isRevealed(member: GameMember): boolean {
   return member.army_list !== undefined;
 }
 
-/**
- * Move between tabs on the arrow keys, which is what a tablist owes a reader
- * who is not using a pointer. The ends wrap, so neither arrow ever dead-ends.
- */
-function onKeydown(event: KeyboardEvent): void {
-  const last = teams.value.length - 1;
-
-  const target = {
-    ArrowRight: selected.value === last ? 0 : selected.value + 1,
-    ArrowLeft: selected.value === 0 ? last : selected.value - 1,
-    Home: 0,
-    End: last,
-  }[event.key];
-
-  if (target === undefined) {
-    return;
-  }
-
-  event.preventDefault();
-  selected.value = target;
-  document.getElementById(tabId(teams.value[target] as GameAttendee))?.focus();
-}
-
-function tabId(team: GameAttendee): string {
-  return `army-list-tab-${team.id}`;
-}
-
-function panelId(team: GameAttendee): string {
-  return `army-list-panel-${team.id}`;
-}
 </script>
 
 <template>
@@ -204,105 +173,67 @@ function panelId(team: GameAttendee): string {
           Army lists
         </h2>
 
-        <!-- The sides split the width evenly rather than each taking what
-             its name happens to need: two tabs of the same size are two
-             halves of a table, and a long team name would otherwise push its
-             opponent's into a corner of the screen. A name too long for its
-             half is truncated — it is already on the scoreline above, and
-             both the tooltip and the panel below give it back in full —
-             because the alternatives are wrapping to a second row, which
-             moves the lists every time a Player changes side, or scrolling,
-             which hides one of only two tabs. -->
-        <div
-          role="tablist"
-          aria-label="Army lists"
-          data-testid="army-list-tabs"
-          class="flex border-b border-card-line"
-          @keydown="onKeydown"
+        <!-- The sides of the table, tabbed rather than stacked: the lists are
+             long, and a reader who came here for one team should not scroll
+             past the other to reach it. -->
+        <TabStrip
+          v-model="selected"
+          :items="teams"
+          label="Army lists"
+          id-prefix="army-list"
         >
-          <!-- A tablist is a single tab stop: only the open tab is reachable
-               with Tab, and the arrows move between them. -->
-          <button
-            v-for="(team, index) in teams"
-            :id="tabId(team)"
-            :key="team.id"
-            type="button"
-            role="tab"
-            :data-testid="`army-list-tab-${team.id}`"
-            :aria-selected="index === selected"
-            :aria-controls="panelId(team)"
-            :tabindex="index === selected ? 0 : -1"
-            :title="team.name"
-            class="min-w-0 flex-1 truncate border-b-2 px-3 py-2 text-sm font-medium focus:outline-hidden"
-            :class="index === selected
-              ? 'border-primary text-foreground'
-              : 'border-transparent text-muted-foreground-1 hover:text-foreground focus:text-foreground'"
-            @click="selected = index"
-          >
-            {{ team.name }}
-          </button>
-        </div>
-
-        <div
-          v-if="openTeam"
-          :id="panelId(openTeam)"
-          :key="openTeam.id"
-          role="tabpanel"
-          :aria-labelledby="tabId(openTeam)"
-          :data-testid="`army-list-panel-${openTeam.id}`"
-          tabindex="0"
-          class="flex flex-col gap-3 focus:outline-hidden"
-        >
-          <!-- Every Player on the side that is open, each in their own card:
+          <template #default="{ item: team }">
+            <!-- Every Player on the side that is open, each in their own card:
                a doubles team is two lists, and they are read one after the
                other rather than looked up one at a time. -->
-          <article
-            v-for="member in openTeam.members"
-            :key="member.id"
-            :data-testid="`member-${member.id}`"
-            class="flex flex-col gap-0.5 rounded-xl border border-card-line bg-card px-4 py-3.5 shadow-2xs"
-          >
-            <p class="text-base font-semibold text-foreground">
-              {{ member.name }}
-            </p>
-            <p
-              data-testid="member-faction"
-              class="text-sm"
-              :class="member.faction ? 'text-muted-foreground-1' : 'text-muted-foreground'"
+            <article
+              v-for="member in team.members"
+              :key="member.id"
+              :data-testid="`member-${member.id}`"
+              class="flex flex-col gap-0.5 rounded-xl border border-card-line bg-card px-4 py-3.5 shadow-2xs"
             >
-              {{ member.faction?.name ?? 'Faction not chosen' }}
-            </p>
+              <p class="text-base font-semibold text-foreground">
+                {{ member.name }}
+              </p>
+              <p
+                data-testid="member-faction"
+                class="text-sm"
+                :class="member.faction ? 'text-muted-foreground-1' : 'text-muted-foreground'"
+              >
+                {{ member.faction?.name ?? 'Faction not chosen' }}
+              </p>
 
-            <!-- Closed lists are said to be closed. A blank where a list would
+              <!-- Closed lists are said to be closed. A blank where a list would
                  be reads as a Player who never wrote one. -->
-            <p
-              v-if="!isRevealed(member)"
-              :data-testid="`army-list-closed-${member.id}`"
-              class="mt-2 text-sm text-muted-foreground"
-            >
-              {{ member.army_list_locked
-                ? 'This list is in, and opens once every player on the team has submitted.'
-                : 'This list has not been submitted yet.' }}
-            </p>
+              <p
+                v-if="!isRevealed(member)"
+                :data-testid="`army-list-closed-${member.id}`"
+                class="mt-2 text-sm text-muted-foreground"
+              >
+                {{ member.army_list_locked
+                  ? 'This list is in, and opens once every player on the team has submitted.'
+                  : 'This list has not been submitted yet.' }}
+              </p>
+
+              <p
+                v-else
+                :data-testid="`army-list-${member.id}`"
+                class="mt-2 whitespace-pre-wrap text-sm"
+                :class="member.army_list ? 'text-foreground' : 'text-muted-foreground'"
+              >
+                {{ member.army_list || 'No list was written.' }}
+              </p>
+            </article>
 
             <p
-              v-else
-              :data-testid="`army-list-${member.id}`"
-              class="mt-2 whitespace-pre-wrap text-sm"
-              :class="member.army_list ? 'text-foreground' : 'text-muted-foreground'"
+              v-if="team.members.length === 0"
+              data-testid="team-members-empty"
+              class="text-muted-foreground-1"
             >
-              {{ member.army_list || 'No list was written.' }}
+              Nobody has been named for this team yet.
             </p>
-          </article>
-
-          <p
-            v-if="openTeam.members.length === 0"
-            data-testid="team-members-empty"
-            class="text-muted-foreground-1"
-          >
-            Nobody has been named for this team yet.
-          </p>
-        </div>
+          </template>
+        </TabStrip>
       </section>
     </template>
   </main>

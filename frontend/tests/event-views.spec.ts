@@ -553,7 +553,14 @@ describe('the attendee detail', () => {
         expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
         expect(view.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
 
+        // One Player at a time, tabbed by name: the tab says who, the panel
+        // says what they brought.
+        expect(view.get('[data-testid="player-tab-12"]').text()).toBe('Ada Lovelace');
         expect(view.get('[data-testid="member-12"]').text()).toContain('Imperial Fists');
+        expect(view.find('[data-testid="member-13"]').exists()).toBe(false);
+
+        await view.get('[data-testid="player-tab-13"]').trigger('click');
+
         expect(view.get('[data-testid="member-13"]').text()).toContain('Faction not chosen');
     });
 
@@ -577,6 +584,8 @@ describe('the attendee detail', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="army-list-12"]').text()).toContain('Legion Tactical Squad');
+
+        await view.get('[data-testid="player-tab-13"]').trigger('click');
 
         // Locked with nothing in it is a Player who submitted an empty list,
         // not a list being withheld.
@@ -607,6 +616,8 @@ describe('the attendee detail', () => {
 
         // Who is still holding the team up is not a secret, and is the only
         // thing anyone can act on while the lists are closed.
+        await view.get('[data-testid="player-tab-13"]').trigger('click');
+
         expect(view.get('[data-testid="member-13"]').text()).toContain('List not submitted');
     });
 
@@ -649,9 +660,13 @@ describe('the attendee detail', () => {
 
         expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/attendees/9/army-lists/reveal'))).toBe(true);
 
-        // Only a locked list has anything to reopen.
+        // Only a locked list has anything to reopen, which is a fact about
+        // that Player's panel rather than about the panel being closed.
+        await view.get('[data-testid="player-tab-13"]').trigger('click');
+        expect(view.find('[data-testid="member-13"]').exists()).toBe(true);
         expect(view.find('[data-testid="unlock-13"]').exists()).toBe(false);
 
+        await view.get('[data-testid="player-tab-12"]').trigger('click');
         await view.get('[data-testid="unlock-12"]').trigger('click');
         await flushPromises();
 

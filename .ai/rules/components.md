@@ -13,6 +13,8 @@ Preline's class strings are a dozen utilities long, which is how a codebase grow
 - `AuthCard` — the centred card for every screen reached without a session (login, claim, reset, forgot, invite). `title`, optional `subtitle`, default slot, optional `#footer`.
 - `TextField` / `SelectField` — labelled inputs. They own `useId()` label association and wire hint + errors through `aria-describedby`; do not hand-roll a labelled input. Where a single field's placeholder already says what it is — the Round screen's team search — pass `label-hidden` and a `placeholder` rather than dropping the label: it goes `sr-only`, never out of the markup, because an input with no accessible name says nothing to a screen reader and a placeholder is not a label.
 
+- `TabStrip` — a row of tabs and the panel under it, used by the Game screen (the two sides of the table) and the Attendee screen (the Players in a team). It owns the roles, the arrow keys and the single tab stop a tablist owes a reader, and takes `items` (anything with `id` and `name`), an `aria-label`, and an `id-prefix` that names every tab and panel testid. Do not hand-roll a second tablist; two implementations means one of them is quietly broken for the keyboard.
+
 A raw `<button>` is right only for a selection toggle that carries `aria-pressed` and its own selected styling (rating pickers, poll picks, pairing swap). Chrome (the tab bar) is `AppShell` + `AppTabBar` and is applied in `App.vue` from `meta.chrome`, never by a view.
 
 ## Two navs, and only the fixed-slot one keeps a constant shape
