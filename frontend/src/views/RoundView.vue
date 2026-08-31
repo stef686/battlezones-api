@@ -20,7 +20,7 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
-import { byNumber, fetchRound, fetchRounds, roundTitle, type Pairing, type RoundSummary } from '@/api/rounds';
+import { byNumber, fetchRound, fetchRounds, listedColumns, roundTitle, type Pairing, type RoundSummary } from '@/api/rounds';
 import GameScoreTable from '@/components/GameScoreTable.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import TextField from '@/components/TextField.vue';
@@ -98,18 +98,25 @@ function names(pairing: Pairing): string[] {
 }
 
 /**
- * The score columns every Game in this Round is played on, in the order the
- * Event declared them.
+ * The score column the cards carry: the Event's primary one, and only it.
  *
  * Read from the Round rather than from the scores in hand: a Game nobody has
- * played yet carries no scores at all, and inferring the columns from what
- * was entered would leave it blank instead of showing what it is waiting for.
+ * played yet carries no scores at all, and inferring the column from what was
+ * entered would leave it blank instead of showing what it is waiting for.
+ *
+ * The rest are not dropped, only not listed — an Event can be scored on half
+ * a dozen columns, and a Player scanning a hall wants the number that was
+ * played for, not the whole scoresheet. The Game screen has room for the lot.
  */
-const columns = computed(() => round.value?.score_types ?? []);
+const columns = computed(() => listedColumns(round.value?.score_types ?? []));
+
 </script>
 
 <template>
-  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
+  <!-- Tighter above and between than the other screens: the Round is a list
+       read at arm's length in a hall, and every line the chrome takes is a
+       Game the reader has to scroll for. -->
+  <main class="mx-auto flex w-full max-w-md flex-col gap-3 px-5 pt-4 pb-5">
     <p
       v-if="isPending"
       class="text-muted-foreground-1"
@@ -135,7 +142,11 @@ const columns = computed(() => round.value?.score_types ?? []);
       <!-- The name is centred between the chevrons rather than pushed left,
            so the two ways out of the Round are equally weighted and the thumb
            finds either without looking. -->
-      <header class="flex items-center justify-between gap-2">
+      <!-- Pulled in by the padding the chevrons carry, rather than by taking
+           that padding off them: it is there to give a thumb something to hit
+           on a moving train, and the space it costs the layout is bought back
+           here instead. -->
+      <header class="-my-1 flex items-center justify-between gap-2">
         <!-- Both chevrons are always drawn, greyed where there is no Round
              that way. An arrow that vanishes at the ends moves the name
              sideways and leaves a Player guessing whether they have reached
@@ -164,7 +175,7 @@ const columns = computed(() => round.value?.score_types ?? []);
         <span class="flex min-w-0 flex-col items-center gap-1">
           <h1
             data-testid="round-name"
-            class="truncate text-lg font-bold tracking-tight text-foreground"
+            class="truncate text-base font-bold tracking-tight text-foreground"
           >
             {{ title }}
           </h1>
@@ -226,21 +237,29 @@ const columns = computed(() => round.value?.score_types ?? []);
         No team in this round matches “{{ search.trim() }}”.
       </p>
 
-      <!-- One card per Game rather than one row: a Game is a table, two teams
+      <!-- One block per Game rather than one row: a Game is a table, two teams
            and a scoreline, and a single divided list flattened all three into
-           a line that a Player had to parse rather than read. -->
+           a line that a Player had to parse rather than read. Nothing is
+           drawn around them — the gap between the blocks separates them, and
+           on a phone a run of boxed cards is chrome the scoreline has to be
+           read through. They keep the screen's own gutters, so the names
+           start on the same line the search field does.
+
+           A rule between them rather than a gap alone: with the scores pinned
+           to one edge, a Player following a column down the screen needs to
+           see where one Game's two teams end and the next Game's begin. It
+           divides rather than boxes — no line above the first or below the
+           last, which would read as a frame again. -->
       <ul
         v-else
-        class="flex flex-col gap-4"
+        data-testid="pairings"
+        class="flex flex-col divide-y divide-card-divider"
       >
-        <!-- Only the table strip is filled. The teams sit on the page's own
-             ground so the numbers are what carries weight down the card, and
-             a reader scanning a hall's worth of Games reads the filled strips
-             as the rhythm between them. -->
         <li
           v-for="pairing in pairings"
           :key="pairing.id"
           :data-testid="`pairing-${pairing.id}`"
+          class="py-3"
         >
           <!-- The whole card is the target rather than a link tucked inside
                it: a Player looking for what their opponent brought is aiming
@@ -248,16 +267,20 @@ const columns = computed(() => round.value?.score_types ?? []);
           <RouterLink
             :to="{ name: 'game', params: { eventSlug: props.eventSlug, gameId: pairing.id } }"
             :data-testid="`open-game-${pairing.id}`"
-            class="block overflow-hidden rounded-xl border border-card-line shadow-2xs focus:outline-hidden focus:border-primary"
+            class="block rounded-lg focus:outline-hidden focus-visible:bg-background-1"
           >
             <!-- The table number leads, because it is what somebody crossing a
                  hall is looking for. What state the Game is in sits opposite it,
                  where a reader scanning down the cards finds it in one column. -->
-            <header class="flex items-baseline justify-between gap-3 border-b border-card-line bg-card px-3 py-2">
+            <header class="flex items-center justify-between gap-3 py-2">
               <span class="flex min-w-0 items-center gap-1.5">
+                <!-- Where the Game is and whether it is done are both labels
+                     rather than running text: they are the two facts a reader
+                     crossing a hall picks a card out by, and set on their own
+                     ground they are found without reading the row. -->
                 <span
                   data-testid="pairing-table"
-                  class="text-xs font-semibold text-foreground"
+                  class="game-label"
                 >
                   {{ pairing.is_bye ? 'Bye' : `Table ${pairing.table_number}` }}
                 </span>
@@ -282,15 +305,20 @@ const columns = computed(() => round.value?.score_types ?? []);
               <span
                 v-if="pairing.result.submitted_at"
                 data-testid="pairing-finished"
-                class="shrink-0 text-xs text-muted-foreground-1"
+                class="game-label shrink-0"
               >
                 Finished
               </span>
             </header>
 
+            <!-- The initials are dropped here and only here: the same three
+                 columns repeat down every Game in the Round, so naming them
+                 once per card is noise a Player reads past. They stay in the
+                 markup for a screen reader, which has no such run to read. -->
             <GameScoreTable
               :attendees="pairing.attendees"
               :columns="columns"
+              variant="listing"
             />
           </RouterLink>
         </li>

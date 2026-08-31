@@ -44,8 +44,8 @@ const ROUND = {
         name: null,
         status: 'live',
         score_types: [
-            { slug: 'match-points', name: 'Match Points' },
-            { slug: 'victory-points', name: 'Victory Points' },
+            { slug: 'match-points', name: 'Match Points', is_primary: false },
+            { slug: 'victory-points', name: 'Victory Points', is_primary: true },
         ],
         games: [
             {
@@ -70,8 +70,8 @@ const GAME = {
         is_bye: false,
         round: { id: 4, number: 2, name: null },
         score_types: [
-            { slug: 'match-points', name: 'Match Points' },
-            { slug: 'victory-points', name: 'Victory Points' },
+            { slug: 'match-points', name: 'Match Points', is_primary: false },
+            { slug: 'victory-points', name: 'Victory Points', is_primary: true },
         ],
         result: {
             submitted_at: '2026-09-12T14:05:00Z',
@@ -210,11 +210,25 @@ describe('the game detail', () => {
 
         expect(view.get('[data-testid="game-name"]').text()).toBe('Table 1');
         expect(view.get('[data-testid="column-match-points"]').text()).toContain('MP');
+
+        // One game on screen, so the columns are named where they are read
+        // rather than hidden the way the round's run of cards hides them.
+        expect(view.get('[data-testid="pairing-columns"]').classes()).not.toContain('sr-only');
         expect(view.get('[data-testid="pairing-team-9"]').text()).toContain('Sons of Terra');
         expect(view.get('[data-testid="pairing-team-9"]').text()).toContain('85.5');
         expect(view.find('[data-testid="winner-9"]').exists()).toBe(true);
         expect(view.find('[data-testid="winner-10"]').exists()).toBe(false);
         expect(view.get('[data-testid="game-finished"]').text()).toBe('Finished');
+
+        // The same pill the round's rows wear, on both facts.
+        expect(view.get('[data-testid="game-name"]').classes()).toContain('game-label');
+        expect(view.get('[data-testid="game-finished"]').classes()).toContain('game-label');
+
+        // A rule under the scoreline, matching the one between games on the
+        // round, so the numbers end somewhere rather than running into the
+        // lists below them.
+        expect(view.get('[data-testid="game-scoreline"]').classes())
+            .toEqual(expect.arrayContaining(['border-b', 'border-card-divider']));
     });
 
     it('goes back to the round, which the rounds tab reaches and this is under', async () => {

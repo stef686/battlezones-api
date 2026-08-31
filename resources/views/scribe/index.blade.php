@@ -432,7 +432,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: August 28, 2026</li>
+        <li>Last updated: August 31, 2026</li>
     </ul>
 </div>
 
@@ -1611,14 +1611,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 387,
+        &quot;id&quot;: 394,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -1777,14 +1777,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 388,
+        &quot;id&quot;: 395,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -1968,9 +1968,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 166,
-        &quot;conversation_id&quot;: 389,
-        &quot;user_id&quot;: 1537,
+        &quot;id&quot;: 169,
+        &quot;conversation_id&quot;: 396,
+        &quot;user_id&quot;: 1562,
         &quot;body&quot;: &quot;Animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -1978,7 +1978,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -2133,14 +2133,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 390,
+        &quot;id&quot;: 397,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -2632,14 +2632,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 391,
+        &quot;id&quot;: 398,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -3385,9 +3385,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 167,
-        &quot;conversation_id&quot;: 392,
-        &quot;user_id&quot;: 1538,
+        &quot;id&quot;: 170,
+        &quot;conversation_id&quot;: 399,
+        &quot;user_id&quot;: 1563,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3395,7 +3395,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -3573,9 +3573,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 168,
-        &quot;conversation_id&quot;: 393,
-        &quot;user_id&quot;: 1539,
+        &quot;id&quot;: 171,
+        &quot;conversation_id&quot;: 400,
+        &quot;user_id&quot;: 1564,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3583,7 +3583,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -3937,14 +3937,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 696,
+        &quot;id&quot;: 712,
         &quot;name&quot;: &quot;Eius et animi&quot;,
         &quot;slug&quot;: &quot;eius-et-animi-565&quot;,
         &quot;description&quot;: &quot;Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2027-02-17T00:58:01Z&quot;,
-        &quot;ends_at&quot;: &quot;2027-02-19T00:58:01Z&quot;,
+        &quot;starts_at&quot;: &quot;2027-02-20T04:51:33Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-02-22T04:51:33Z&quot;,
         &quot;max_attendees&quot;: 100,
         &quot;attendee_size&quot;: 1,
         &quot;requires_allegiance&quot;: false,
@@ -3957,8 +3957,8 @@ fetch(url, {
             &quot;country&quot;: &quot;IE&quot;
         },
         &quot;banner&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -4436,17 +4436,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 62,
+        &quot;id&quot;: 63,
         &quot;title&quot;: &quot;Fugit deleniti distinctio eum doloremque&quot;,
         &quot;body&quot;: &quot;Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.&quot;,
         &quot;pinned&quot;: false,
-        &quot;published_at&quot;: &quot;2026-08-10T08:59:21Z&quot;,
+        &quot;published_at&quot;: &quot;2026-08-13T12:52:53Z&quot;,
         &quot;author&quot;: {
-            &quot;id&quot;: 1540,
+            &quot;id&quot;: 1565,
             &quot;name&quot;: &quot;Cordia Cummings&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -4599,7 +4599,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 204,
+        &quot;id&quot;: 206,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
         &quot;members&quot;: []
@@ -4912,7 +4912,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 205,
+        &quot;id&quot;: 207,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
         &quot;members&quot;: [],
@@ -5077,14 +5077,14 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 103,
+            &quot;id&quot;: 105,
             &quot;number&quot;: 1,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
         },
         {
-            &quot;id&quot;: 104,
-            &quot;number&quot;: 5,
+            &quot;id&quot;: 106,
+            &quot;number&quot;: 1,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
         }
@@ -5238,11 +5238,13 @@ fetch(url, {
         &quot;score_types&quot;: [
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
-                &quot;name&quot;: &quot;Match Points&quot;
+                &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
-                &quot;name&quot;: &quot;Victory Points&quot;
+                &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;is_primary&quot;: true
             }
         ],
         &quot;games&quot;: [
@@ -5446,11 +5448,13 @@ fetch(url, {
         &quot;score_types&quot;: [
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
-                &quot;name&quot;: &quot;Match Points&quot;
+                &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
-                &quot;name&quot;: &quot;Victory Points&quot;
+                &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;is_primary&quot;: true
             }
         ],
         &quot;result&quot;: {
@@ -6052,13 +6056,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 326,
+        &quot;id&quot;: 332,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1787922000&amp;signature=519e9bf1b7f2feda8facd7d02d80714f9f71d16f9ef3c875b249a18f8a7326ca&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1787922000&amp;signature=4b74b02fe3506520501f776d3a50c9fb8fe11babae74e60176ad0d09bd70bcb8&quot;,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&amp;signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&amp;signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373&quot;,
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:40Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:40Z&quot;
     }
 }</code>
  </pre>
@@ -8518,7 +8522,7 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 237,
+            &quot;id&quot;: 242,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -8529,7 +8533,7 @@ fetch(url, {
             &quot;my_ballot&quot;: []
         },
         {
-            &quot;id&quot;: 238,
+            &quot;id&quot;: 243,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -8703,7 +8707,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 239,
+        &quot;id&quot;: 244,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -8916,7 +8920,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 240,
+        &quot;id&quot;: 245,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -9458,7 +9462,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 241,
+        &quot;id&quot;: 246,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -10104,14 +10108,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 707,
+        &quot;id&quot;: 723,
         &quot;name&quot;: &quot;Quos velit et fugiat&quot;,
         &quot;slug&quot;: &quot;quos-velit-et-fugiat-76344&quot;,
         &quot;description&quot;: &quot;Modi deserunt aut ab provident perspiciatis. Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2026-09-14T06:47:23Z&quot;,
-        &quot;ends_at&quot;: &quot;2026-09-16T06:47:23Z&quot;,
+        &quot;starts_at&quot;: &quot;2026-09-17T10:40:56Z&quot;,
+        &quot;ends_at&quot;: &quot;2026-09-19T10:40:56Z&quot;,
         &quot;max_attendees&quot;: 82,
         &quot;attendee_size&quot;: 1,
         &quot;requires_allegiance&quot;: false,
@@ -10124,8 +10128,8 @@ fetch(url, {
             &quot;country&quot;: &quot;EE&quot;
         },
         &quot;banner&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:40Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:40Z&quot;
     }
 }</code>
  </pre>
@@ -10445,7 +10449,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'banner',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpg6s7m486klftcYy10rD', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpk1mtu9b4el3qcnufTTb', 'r')
             ],
         ],
     ]
@@ -10483,14 +10487,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 708,
+        &quot;id&quot;: 724,
         &quot;name&quot;: &quot;Nihil accusantium harum&quot;,
         &quot;slug&quot;: &quot;nihil-accusantium-harum-31583&quot;,
         &quot;description&quot;: &quot;Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure. Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2026-12-27T14:09:24Z&quot;,
-        &quot;ends_at&quot;: &quot;2026-12-29T14:09:24Z&quot;,
+        &quot;starts_at&quot;: &quot;2026-12-30T18:02:57Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-01-01T18:02:57Z&quot;,
         &quot;max_attendees&quot;: 100,
         &quot;attendee_size&quot;: 1,
         &quot;requires_allegiance&quot;: false,
@@ -10503,8 +10507,8 @@ fetch(url, {
             &quot;country&quot;: &quot;BO&quot;
         },
         &quot;banner&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:40Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:40Z&quot;
     }
 }</code>
  </pre>
@@ -10627,7 +10631,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>A wide image, at least 1200x400, at most 8MB. JPEG, PNG or WebP. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpg6s7m486klftcYy10rD</code></p>
+<p>A wide image, at least 1200x400, at most 8MB. JPEG, PNG or WebP. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpk1mtu9b4el3qcnufTTb</code></p>
         </div>
         </form>
 
@@ -10685,14 +10689,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 709,
+        &quot;id&quot;: 725,
         &quot;name&quot;: &quot;Modi deserunt aut&quot;,
         &quot;slug&quot;: &quot;modi-deserunt-aut-6749&quot;,
         &quot;description&quot;: &quot;Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2026-09-20T20:10:14Z&quot;,
-        &quot;ends_at&quot;: &quot;2026-09-22T20:10:14Z&quot;,
+        &quot;starts_at&quot;: &quot;2026-09-24T00:03:47Z&quot;,
+        &quot;ends_at&quot;: &quot;2026-09-26T00:03:47Z&quot;,
         &quot;max_attendees&quot;: 82,
         &quot;attendee_size&quot;: 1,
         &quot;requires_allegiance&quot;: false,
@@ -10705,8 +10709,8 @@ fetch(url, {
             &quot;country&quot;: &quot;EE&quot;
         },
         &quot;banner&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:40Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:40Z&quot;
     }
 }</code>
  </pre>
@@ -10877,11 +10881,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 92,
+        &quot;id&quot;: 94,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-09-05T10:22:04+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-09-05T11:22:04+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-09-08T14:15:37+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-09-08T15:15:37+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
         &quot;is_target_live&quot;: false,
@@ -11341,11 +11345,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 93,
+        &quot;id&quot;: 95,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-09-05T10:22:04+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-09-05T11:22:04+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-09-08T14:15:37+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-09-08T15:15:37+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
         &quot;is_target_live&quot;: false,
@@ -11774,11 +11778,13 @@ fetch(url, {
         &quot;score_types&quot;: [
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
-                &quot;name&quot;: &quot;Match Points&quot;
+                &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
-                &quot;name&quot;: &quot;Victory Points&quot;
+                &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;is_primary&quot;: true
             }
         ],
         &quot;result&quot;: {
@@ -12223,11 +12229,13 @@ fetch(url, {
         &quot;score_types&quot;: [
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
-                &quot;name&quot;: &quot;Match Points&quot;
+                &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
-                &quot;name&quot;: &quot;Victory Points&quot;
+                &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;is_primary&quot;: true
             }
         ],
         &quot;result&quot;: {
@@ -12294,11 +12302,13 @@ fetch(url, {
         &quot;score_types&quot;: [
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
-                &quot;name&quot;: &quot;Match Points&quot;
+                &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
-                &quot;name&quot;: &quot;Victory Points&quot;
+                &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;is_primary&quot;: true
             }
         ],
         &quot;result&quot;: {
@@ -12545,11 +12555,13 @@ fetch(url, {
         &quot;score_types&quot;: [
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
-                &quot;name&quot;: &quot;Match Points&quot;
+                &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
-                &quot;name&quot;: &quot;Victory Points&quot;
+                &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;is_primary&quot;: true
             }
         ],
         &quot;result&quot;: {
@@ -15835,13 +15847,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 321,
+        &quot;id&quot;: 327,
         &quot;name&quot;: &quot;Sunt suscipit doloribus fugiat.&quot;,
         &quot;description&quot;: &quot;Deserunt et error neque recusandae et. Dolorem et ut dicta. Assumenda consequatur ut et sunt quisquam. Repellendus ut eaque alias ratione dolores.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/2b9698b7-206f-39ef-afe7-680996a8a00c.jpg?expires=1787922000&amp;signature=7cbf70c768764a53c4ffc8c6eacb317e28c36740d3f58f88dc6be04f96f9ab76&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/b791a78a-bdb6-3c15-a840-a911ad9b9a6e.jpg?expires=1787922000&amp;signature=21e5cdfda717ed668fe1a2f2102d00bba51591e5f280f1c3bc6c77b6ed48354c&quot;,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/2b9698b7-206f-39ef-afe7-680996a8a00c.jpg?expires=1788195600&amp;signature=98710ec0affc1877aa87ed253e09c3e0aa41bf6e474ddbe567b945908314d66e&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/b791a78a-bdb6-3c15-a840-a911ad9b9a6e.jpg?expires=1788195600&amp;signature=9ac74d7228bdc92a7b865669d12d3b5f3fd0159a3270f0a1b31f56d2cdb6a16e&quot;,
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -15951,7 +15963,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpbgevfqe5o10pa6hQSER', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpr9t56d6rfut7aQO0D2h', 'r')
             ],
         ],
     ]
@@ -15991,13 +16003,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 322,
+        &quot;id&quot;: 328,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1787922000&amp;signature=519e9bf1b7f2feda8facd7d02d80714f9f71d16f9ef3c875b249a18f8a7326ca&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1787922000&amp;signature=4b74b02fe3506520501f776d3a50c9fb8fe11babae74e60176ad0d09bd70bcb8&quot;,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&amp;signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&amp;signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373&quot;,
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -16110,7 +16122,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpbgevfqe5o10pa6hQSER</code></p>
+<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpr9t56d6rfut7aQO0D2h</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -16179,13 +16191,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 323,
+        &quot;id&quot;: 329,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1787922000&amp;signature=519e9bf1b7f2feda8facd7d02d80714f9f71d16f9ef3c875b249a18f8a7326ca&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1787922000&amp;signature=4b74b02fe3506520501f776d3a50c9fb8fe11babae74e60176ad0d09bd70bcb8&quot;,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&amp;signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&amp;signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373&quot;,
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -16308,7 +16320,7 @@ $response = $client-&gt;patch(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php1td8t3h5t6md5rRLeQT', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpnltiatpu21v69Tf6t28', 'r')
             ],
         ],
     ]
@@ -16348,13 +16360,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 324,
+        &quot;id&quot;: 330,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1787922000&amp;signature=519e9bf1b7f2feda8facd7d02d80714f9f71d16f9ef3c875b249a18f8a7326ca&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1787922000&amp;signature=4b74b02fe3506520501f776d3a50c9fb8fe11babae74e60176ad0d09bd70bcb8&quot;,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&amp;signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&amp;signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373&quot;,
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -16480,7 +16492,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php1td8t3h5t6md5rRLeQT</code></p>
+<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpnltiatpu21v69Tf6t28</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -16691,13 +16703,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 325,
+        &quot;id&quot;: 331,
         &quot;name&quot;: &quot;Fugit deleniti distinctio eum.&quot;,
         &quot;description&quot;: &quot;Aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/dc407d02-9b9b-35e5-8d69-87904a6787e3.jpg?expires=1787922000&amp;signature=1ec7027d009b032275931fac595c35ddea75348eebee4b54b017c6a953cdf7c7&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/b3dfd3b4-abf6-34e6-9ab5-ef739060a5da.jpg?expires=1787922000&amp;signature=05eb2640daa6618dbc4adbeca400b6e9aedce6ce384f27efed7ad2f77136a1e7&quot;,
-        &quot;created_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/dc407d02-9b9b-35e5-8d69-87904a6787e3.jpg?expires=1788195600&amp;signature=472c3b40b7508fd1608b2c0b407dc84017aceffc99f2803b82decadc71051fbc&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/b3dfd3b4-abf6-34e6-9ab5-ef739060a5da.jpg?expires=1788195600&amp;signature=2c13f18b378c36248047217faf47237bbfed6c4bbe3348314e3c5927aea80147&quot;,
+        &quot;created_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;
     }
 }</code>
  </pre>
@@ -17187,8 +17199,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1517,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
+        &quot;id&quot;: 1542,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;NR&quot;,
         &quot;game_systems&quot;: [],
@@ -17756,8 +17768,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1518,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
+        &quot;id&quot;: 1543,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;MX&quot;,
         &quot;game_systems&quot;: [],
@@ -18520,10 +18532,10 @@ $response = $client-&gt;patch(
         'json' =&gt; [
             'primary_messages' =&gt; ['push'],
             'message_requests' =&gt; ['push'],
-            'event_messages' =&gt; ['email'],
+            'event_messages' =&gt; ['push'],
             'round_live' =&gt; ['push'],
-            'result_activity' =&gt; ['email'],
-            'voting_open' =&gt; ['push'],
+            'result_activity' =&gt; ['push'],
+            'voting_open' =&gt; ['email'],
         ],
     ]
 );
@@ -18549,16 +18561,16 @@ let body = {
         "push"
     ],
     "event_messages": [
-        "email"
+        "push"
     ],
     "round_live": [
         "push"
     ],
     "result_activity": [
-        "email"
+        "push"
     ],
     "voting_open": [
-        "push"
+        "email"
     ]
 };
 
@@ -19243,12 +19255,12 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 1523,
+            &quot;id&quot;: 1548,
             &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
             &quot;username&quot;: &quot;breitenberg.gilbert&quot;
         },
         {
-            &quot;id&quot;: 1524,
+            &quot;id&quot;: 1549,
             &quot;public_name&quot;: &quot;Miss Jazlyn Keebler III&quot;,
             &quot;username&quot;: &quot;bauch.marcelo&quot;
         }
@@ -19395,8 +19407,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1525,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
+        &quot;id&quot;: 1550,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
         &quot;public_name&quot;: &quot;Eulalia VonRueden&quot;,
         &quot;country&quot;: &quot;MF&quot;,
         &quot;game_systems&quot;: [],
@@ -19548,8 +19560,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1526,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
+        &quot;id&quot;: 1551,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
         &quot;public_name&quot;: &quot;Akeem Hettinger&quot;,
         &quot;country&quot;: &quot;MR&quot;,
         &quot;game_systems&quot;: [],
@@ -19701,7 +19713,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1527,
+        &quot;id&quot;: 1552,
         &quot;public_name&quot;: &quot;Colt Balistreri&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
@@ -19848,7 +19860,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1528,
+        &quot;id&quot;: 1553,
         &quot;public_name&quot;: &quot;Dr. Alan Green&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
@@ -19995,8 +20007,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1529,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
+        &quot;id&quot;: 1554,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
         &quot;public_name&quot;: &quot;Fausto Conroy&quot;,
         &quot;country&quot;: &quot;IN&quot;,
         &quot;game_systems&quot;: [],
@@ -20148,8 +20160,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1530,
-        &quot;updated_at&quot;: &quot;2026-08-28T11:28:07Z&quot;,
+        &quot;id&quot;: 1555,
+        &quot;updated_at&quot;: &quot;2026-08-31T15:21:39Z&quot;,
         &quot;public_name&quot;: &quot;Garett Runolfsson&quot;,
         &quot;country&quot;: &quot;CD&quot;,
         &quot;game_systems&quot;: [],
@@ -20301,7 +20313,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1531,
+        &quot;id&quot;: 1556,
         &quot;public_name&quot;: &quot;Noemy Klocko&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false

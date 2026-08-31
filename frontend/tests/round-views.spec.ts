@@ -53,8 +53,8 @@ const ROUND = {
         name: null,
         status: 'live',
         score_types: [
-            { slug: 'match-points', name: 'Match Points' },
-            { slug: 'victory-points', name: 'Victory Points' },
+            { slug: 'match-points', name: 'Match Points', is_primary: false },
+            { slug: 'victory-points', name: 'Victory Points', is_primary: true },
         ],
         games: [
             {
@@ -307,7 +307,7 @@ describe('the round detail', () => {
         expect(view.get('[data-testid="pairing-18"]').find('[data-testid="pairing-rematch"]').exists()).toBe(false);
     });
 
-    it('names the score columns once, above the two teams', async () => {
+    it('lists the primary score alone, and names it for a screen reader', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
             [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
@@ -320,13 +320,48 @@ describe('the round detail', () => {
 
         const headings = view.get('[data-testid="pairing-18"] [data-testid="pairing-columns"]');
 
-        // The initials sit over the numbers; the full name goes to a screen
-        // reader, so nothing rests on working out what MP means.
-        expect(headings.get('[data-testid="column-match-points"]').text()).toContain('MP');
+        // Victory points are played for at the table; match points fall out
+        // of the result, so the list carries the one and not the other.
         expect(headings.get('[data-testid="column-victory-points"]').text()).toContain('Victory Points');
+        expect(headings.find('[data-testid="column-match-points"]').exists()).toBe(false);
 
         // Once per card, not once per team.
         expect(view.get('[data-testid="pairing-18"]').findAll('[data-testid="pairing-columns"]')).toHaveLength(1);
+
+        // Read out, not drawn: the same column repeats down every game in the
+        // round, so its initials are noise on the list and only the number is
+        // shown. A screen reader still hears what it is.
+        expect(headings.classes()).toContain('sr-only');
+    });
+
+    it('sets the table and the result as labels, and pins the score to one edge', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        // Both facts a reader picks a game out by wear the same pill — the
+        // one the game screen wears too, so tapping a row lands on the thing
+        // that was tapped rather than on a restatement of it.
+        for (const testid of ['pairing-table', 'pairing-finished']) {
+            expect(view.get(`[data-testid="pairing-18"] [data-testid="${testid}"]`).classes())
+                .toContain('game-label');
+        }
+
+        // A fixed column on the right, so a run of games reads as two straight
+        // edges and the names take everything that is left.
+        expect(view.get('[data-testid="pairing-18"] [data-testid="score-victory-points"]').classes())
+            .toEqual(expect.arrayContaining(['w-16', 'text-end']));
+
+        // A rule between the games, so it is clear where one game's two teams
+        // end and the next one's begin. Divided, not boxed.
+        expect(view.get('[data-testid="pairings"]').classes())
+            .toEqual(expect.arrayContaining(['divide-y', 'divide-card-divider']));
     });
 
     it('marks the winning team, and leaves a game nobody won unmarked', async () => {
@@ -387,16 +422,16 @@ describe('the round detail', () => {
 
         expect(played.get('[data-testid="pairing-team-12"]').text()).toContain('First Table');
         // The column holds two decimal places so half points survive; a card
-        // read at a glance shows 3, not 3.00 — and 85.5 rather than 85.50.
+        // read at a glance shows 85.5 rather than 85.50.
         expect(played.get('[data-testid="pairing-team-12"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
-            .toEqual(['3', '85.5']);
+            .toEqual(['85.5']);
         expect(played.get('[data-testid="pairing-team-13"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
-            .toEqual(['0', '70']);
+            .toEqual(['70']);
 
-        // A Game nobody has played yet shows the columns it is waiting on,
-        // scored at zero — not a blank where the numbers will go.
+        // A Game nobody has played yet shows the column it is waiting on,
+        // scored at zero — not a blank where the number will go.
         expect(view.get('[data-testid="pairing-team-9"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
-            .toEqual(['0', '0']);
+            .toEqual(['0']);
     });
 
     it('moves between rounds on the chevrons either side of the name', async () => {

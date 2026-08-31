@@ -32,7 +32,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":321,"name":"Sunt suscipit doloribus fugiat.","description":"Deserunt et error neque recusandae et. Dolorem et ut dicta. Assumenda consequatur ut et sunt quisquam. Repellendus ut eaque alias ratione dolores.","url":"http:\/\/battlezones.test\/uploads\/photos\/2b9698b7-206f-39ef-afe7-680996a8a00c.jpg?expires=1787922000&signature=7cbf70c768764a53c4ffc8c6eacb317e28c36740d3f58f88dc6be04f96f9ab76","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/b791a78a-bdb6-3c15-a840-a911ad9b9a6e.jpg?expires=1787922000&signature=21e5cdfda717ed668fe1a2f2102d00bba51591e5f280f1c3bc6c77b6ed48354c","created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
+        content: '{"data":{"id":327,"name":"Sunt suscipit doloribus fugiat.","description":"Deserunt et error neque recusandae et. Dolorem et ut dicta. Assumenda consequatur ut et sunt quisquam. Repellendus ut eaque alias ratione dolores.","url":"http:\/\/battlezones.test\/uploads\/photos\/2b9698b7-206f-39ef-afe7-680996a8a00c.jpg?expires=1788195600&signature=98710ec0affc1877aa87ed253e09c3e0aa41bf6e474ddbe567b945908314d66e","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/b791a78a-bdb6-3c15-a840-a911ad9b9a6e.jpg?expires=1788195600&signature=9ac74d7228bdc92a7b865669d12d3b5f3fd0159a3270f0a1b31f56d2cdb6a16e","created_at":"2026-08-31T15:21:39Z","updated_at":"2026-08-31T15:21:39Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -105,7 +105,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":322,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1787922000&signature=519e9bf1b7f2feda8facd7d02d80714f9f71d16f9ef3c875b249a18f8a7326ca","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1787922000&signature=4b74b02fe3506520501f776d3a50c9fb8fe11babae74e60176ad0d09bd70bcb8","created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
+        content: '{"data":{"id":328,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373","created_at":"2026-08-31T15:21:39Z","updated_at":"2026-08-31T15:21:39Z"}}'
         headers: []
         description: ''
       -
@@ -160,7 +160,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":323,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1787922000&signature=519e9bf1b7f2feda8facd7d02d80714f9f71d16f9ef3c875b249a18f8a7326ca","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1787922000&signature=4b74b02fe3506520501f776d3a50c9fb8fe11babae74e60176ad0d09bd70bcb8","created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
+        content: '{"data":{"id":329,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373","created_at":"2026-08-31T15:21:39Z","updated_at":"2026-08-31T15:21:39Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -245,7 +245,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":324,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1787922000&signature=519e9bf1b7f2feda8facd7d02d80714f9f71d16f9ef3c875b249a18f8a7326ca","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1787922000&signature=4b74b02fe3506520501f776d3a50c9fb8fe11babae74e60176ad0d09bd70bcb8","created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
+        content: '{"data":{"id":330,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373","created_at":"2026-08-31T15:21:39Z","updated_at":"2026-08-31T15:21:39Z"}}'
         headers: []
         description: ''
       -
@@ -349,7 +349,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":325,"name":"Fugit deleniti distinctio eum.","description":"Aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio.","url":"http:\/\/battlezones.test\/uploads\/photos\/dc407d02-9b9b-35e5-8d69-87904a6787e3.jpg?expires=1787922000&signature=1ec7027d009b032275931fac595c35ddea75348eebee4b54b017c6a953cdf7c7","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/b3dfd3b4-abf6-34e6-9ab5-ef739060a5da.jpg?expires=1787922000&signature=05eb2640daa6618dbc4adbeca400b6e9aedce6ce384f27efed7ad2f77136a1e7","created_at":"2026-08-28T11:28:07Z","updated_at":"2026-08-28T11:28:07Z"}}'
+        content: '{"data":{"id":331,"name":"Fugit deleniti distinctio eum.","description":"Aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio.","url":"http:\/\/battlezones.test\/uploads\/photos\/dc407d02-9b9b-35e5-8d69-87904a6787e3.jpg?expires=1788195600&signature=472c3b40b7508fd1608b2c0b407dc84017aceffc99f2803b82decadc71051fbc","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/b3dfd3b4-abf6-34e6-9ab5-ef739060a5da.jpg?expires=1788195600&signature=2c13f18b378c36248047217faf47237bbfed6c4bbe3348314e3c5927aea80147","created_at":"2026-08-31T15:21:39Z","updated_at":"2026-08-31T15:21:39Z"}}'
         headers: []
         description: ''
     responseFields: []

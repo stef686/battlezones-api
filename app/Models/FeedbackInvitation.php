@@ -30,6 +30,15 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation whereExpiresAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation whereSentAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation whereSubmittedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation whereToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackInvitation whereUserId($value)
  *
  * @mixin \Eloquent
  */

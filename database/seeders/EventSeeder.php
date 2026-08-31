@@ -209,6 +209,7 @@ class EventSeeder extends Seeder
                 'name' => 'Battle Points',
                 'slug' => 'battle-points',
                 'sort_direction' => SortDirection::Desc,
+                'is_primary' => true,
                 'display_order' => 0,
             ]),
             EventScoreType::factory()->for($event)->create([

@@ -12,7 +12,7 @@ function game(submittedById: number | null): Game {
         table_number: 7,
         is_bye: false,
         round: { id: 4, number: 1, name: 'Round 1' },
-        score_types: [{ slug: 'victory-points', name: 'Victory Points' }, { slug: 'match-points', name: 'Match Points' }],
+        score_types: [{ slug: 'victory-points', name: 'Victory Points', is_primary: true }, { slug: 'match-points', name: 'Match Points', is_primary: false }],
         result: {
             submitted_at: '2026-09-12T14:05:00+00:00',
             submitted_by: submittedById === null ? null : { id: submittedById, name: 'Ada Lovelace' },

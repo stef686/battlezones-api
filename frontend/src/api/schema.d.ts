@@ -3481,6 +3481,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                is_primary?: boolean;
                             }[];
                             games?: {
                                 id?: number;
@@ -3549,6 +3550,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                is_primary?: boolean;
                             }[];
                             result?: {
                                 submitted_at?: string;
@@ -5209,6 +5211,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                is_primary?: boolean;
                             }[];
                             result?: {
                                 submitted_at?: string;
@@ -5384,6 +5387,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                is_primary?: boolean;
                             }[];
                             result?: {
                                 submitted_at?: string;
@@ -5483,6 +5487,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                is_primary?: boolean;
                             }[];
                             result?: {
                                 submitted_at?: string;
@@ -5548,6 +5553,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                is_primary?: boolean;
                             }[];
                             result?: {
                                 submitted_at?: string;

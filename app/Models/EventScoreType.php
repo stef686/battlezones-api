@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
  * @property string $slug
  * @property SortDirection $sort_direction
  * @property bool $is_derived
+ * @property bool $is_primary
  * @property int|null $ranking_order
  * @property numeric|null $win_points
  * @property numeric|null $draw_points
@@ -35,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereIsDerived($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereIsPrimary($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereLossPoints($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType whereRankingOrder($value)
@@ -59,6 +61,7 @@ class EventScoreType extends Model
         'slug',
         'sort_direction',
         'is_derived',
+        'is_primary',
         'ranking_order',
         'win_points',
         'draw_points',
@@ -74,6 +77,7 @@ class EventScoreType extends Model
         return [
             'sort_direction' => SortDirection::class,
             'is_derived' => 'boolean',
+            'is_primary' => 'boolean',
             'ranking_order' => 'integer',
             'win_points' => 'decimal:2',
             'draw_points' => 'decimal:2',

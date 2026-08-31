@@ -29,6 +29,7 @@ class GameDetailResource extends JsonResource
             ));
 
         $scoreTypes = $this->round->event->scoreTypes->sortBy('display_order')->values();
+        $primary = $this->round->event->primaryScoreType();
         $winner = $this->winningAttendeeId($scoreTypes);
 
         return [
@@ -47,6 +48,9 @@ class GameDetailResource extends JsonResource
             'score_types' => $scoreTypes->map(fn (EventScoreType $type): array => [
                 'slug' => $type->slug,
                 'name' => $type->name,
+                // Which column a Game listing leads with. The Game screen shows them all, and
+                // sends the flag so both screens agree on which one it is.
+                'is_primary' => $type->id === $primary?->id,
             ])->all(),
             'result' => [
                 'submitted_at' => $this->submitted_at?->toIso8601String(),

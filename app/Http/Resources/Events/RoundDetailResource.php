@@ -34,6 +34,11 @@ class RoundDetailResource extends JsonResource
 
         $scoreTypes = $this->event->scoreTypes->sortBy('display_order')->values();
 
+        // Resolved here rather than sent raw, so exactly one column is marked
+        // however the Event was set up: a listing has room for one number per
+        // team, and a client should not have to pick which when nobody has.
+        $primary = $this->event->primaryScoreType();
+
         return [
             'id' => $this->id,
             'number' => $this->number,
@@ -46,6 +51,9 @@ class RoundDetailResource extends JsonResource
             'score_types' => $scoreTypes->map(fn (EventScoreType $type): array => [
                 'slug' => $type->slug,
                 'name' => $type->name,
+                // Which column a Game listing leads with, where it has room
+                // for one. Everything else is read on the Game itself.
+                'is_primary' => $type->id === $primary?->id,
             ])->all(),
             'games' => $this->games->map(function (Game $game) use ($isOrganiser, $rematches, $scoreTypes): array {
                 $scoresByAttendee = $game->scores

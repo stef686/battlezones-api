@@ -140,10 +140,12 @@ function panelId(team: GameAttendee): string {
     </p>
 
     <template v-else-if="game">
-      <!-- The way back and the name of the place travel together, tight: the
-           table number is a label on the scoreline below it rather than a
-           title the screen has to be introduced by. -->
-      <div class="flex flex-col gap-1.5">
+      <!-- The way back and the name of the place travel together: the table
+           number is a label on the scoreline below it rather than a title the
+           screen has to be introduced by. They are not tight against each
+           other, though — a pill sitting directly under the link reads as
+           part of it rather than as the thing it leads to. -->
+      <div class="flex flex-col gap-5">
         <!-- The Rounds tab reaches the Round, not the Game beneath it, so this
              screen keeps the back link the Round screen does without. -->
         <RouterLink
@@ -155,10 +157,15 @@ function panelId(team: GameAttendee): string {
           Back to {{ roundTitle(game.round) }}
         </RouterLink>
 
-        <header class="flex items-baseline justify-between gap-3">
+        <!-- Both facts wear the same pill the Round's rows do, so tapping a
+             row lands on the thing that was tapped. The table number stays the
+             screen's heading — a deep link has to land somewhere named — it
+             simply is not dressed as a title, because the scoreline under it
+             is what the screen is for. -->
+        <header class="flex items-center justify-between gap-3">
           <h1
             data-testid="game-name"
-            class="text-lg font-bold tracking-tight text-foreground"
+            class="game-label"
           >
             {{ title }}
           </h1>
@@ -166,17 +173,21 @@ function panelId(team: GameAttendee): string {
           <span
             v-if="game.result.submitted_at"
             data-testid="game-finished"
-            class="shrink-0 text-xs text-muted-foreground-1"
+            class="game-label shrink-0"
           >
             Finished
           </span>
         </header>
       </div>
 
-      <!-- The same table the card on the Round screen carries, in the same
-           card, so tapping through reads as opening the card rather than as
-           arriving somewhere the numbers have been restated. -->
-      <div class="overflow-hidden rounded-xl border border-card-line shadow-2xs">
+      <!-- The same table the Round screen lists, opened out: every column the
+           Event scores on rather than the one it leads with. Nothing is drawn
+           around it, so it reads as the top of this screen rather than as a
+           card restating the one that was tapped. -->
+      <div
+        data-testid="game-scoreline"
+        class="border-b border-card-divider pb-4"
+      >
         <GameScoreTable
           :attendees="game.attendees"
           :columns="game.score_types"

@@ -1994,6 +1994,8 @@ paths:
                               type: string
                             name:
                               type: string
+                            is_primary:
+                              type: boolean
                       games:
                         type: array
                         items:
@@ -2097,6 +2099,8 @@ paths:
                               type: string
                             name:
                               type: string
+                            is_primary:
+                              type: boolean
                       result:
                         type: object
                         properties:
@@ -4237,6 +4241,8 @@ paths:
                                   type: string
                                 name:
                                   type: string
+                                is_primary:
+                                  type: boolean
                           result:
                             type: object
                             properties:
@@ -4465,6 +4471,8 @@ paths:
                               type: string
                             name:
                               type: string
+                            is_primary:
+                              type: boolean
                       result:
                         type: object
                         properties:
@@ -4566,6 +4574,8 @@ paths:
                               type: string
                             name:
                               type: string
+                            is_primary:
+                              type: boolean
                       result:
                         type: object
                         properties:
@@ -4693,6 +4703,8 @@ paths:
                               type: string
                             name:
                               type: string
+                            is_primary:
+                              type: boolean
                       result:
                         type: object
                         properties:

@@ -49,6 +49,23 @@ export interface Pairing {
 export interface ScoreColumn {
     slug: string;
     name: string;
+    /**
+     * The one column a listing of Games leads with, of however many the Event
+     * is scored on. Exactly one column carries it — the API resolves which,
+     * so nothing here has to fall back when an Organiser has marked none.
+     */
+    is_primary: boolean;
+}
+
+/**
+ * The columns a Game listing has room for: the primary one alone.
+ *
+ * A Round is a hall of Games read at a glance, and a row of every column the
+ * Event scores on is a table to parse rather than a number to see. The Game
+ * itself still shows them all.
+ */
+export function listedColumns(columns: ScoreColumn[]): ScoreColumn[] {
+    return columns.filter((column) => column.is_primary);
 }
 
 export interface RoundDetail extends RoundSummary {

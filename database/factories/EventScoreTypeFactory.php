@@ -26,6 +26,7 @@ class EventScoreTypeFactory extends Factory
             'slug' => Str::slug($name),
             'sort_direction' => SortDirection::Desc,
             'is_derived' => false,
+            'is_primary' => false,
             'ranking_order' => null,
             'win_points' => null,
             'draw_points' => null,
@@ -41,6 +42,14 @@ class EventScoreTypeFactory extends Factory
             'slug' => 'victory-points',
             'sort_direction' => SortDirection::Desc,
             'is_derived' => false,
+        ]);
+    }
+
+    /** The one column a Game listing leads with. */
+    public function primary(): static
+    {
+        return $this->state([
+            'is_primary' => true,
         ]);
     }
 

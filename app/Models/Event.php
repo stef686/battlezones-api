@@ -472,4 +472,22 @@ class Event extends Model
     {
         return $this->hasMany(EventScoreType::class);
     }
+
+    /**
+     * The one Score Type a listing of Games leads with.
+     *
+     * An Event can be scored on any number of columns, and a Game listing has
+     * room for one number per team. The Organiser marks which one that is;
+     * where nobody has, the first column played for at the table wins, since a
+     * derived column (Match Points from the result) says less at a glance than
+     * the score the result was worked out from.
+     */
+    public function primaryScoreType(): ?EventScoreType
+    {
+        $ordered = $this->scoreTypes->sortBy('display_order')->values();
+
+        return $ordered->firstWhere('is_primary', true)
+            ?? $ordered->firstWhere('is_derived', false)
+            ?? $ordered->first();
+    }
 }

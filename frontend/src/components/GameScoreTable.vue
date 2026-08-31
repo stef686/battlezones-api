@@ -2,20 +2,27 @@
 /**
  * One Game's scoreline: the teams read down, the Score Types read across.
  *
- * A real table, because that is what this is. Letting the browser size the
- * columns keeps the headings centred over their numbers however wide the
- * label or the score turns out to be, which hand-set widths only manage until
- * the first three-digit score.
+ * A real table, because that is what this is.
  *
- * Drawn identically on the Round's cards and at the top of a Game, so a
- * Player who taps a card is looking at the same rows they just tapped.
+ * It is drawn two ways. On a Game it is a `detail` table: every column the
+ * Event scores on, named above its numbers, the browser sizing each so a
+ * heading stays centred over a three-digit score. In a Round's listing it is
+ * a `listing` row: one column, no visible heading, and a fixed-width score
+ * pinned right so a run of Games reads as two straight edges rather than a
+ * ragged one — the names take everything that is left.
+ *
+ * Neither carries gutters of its own. The screen's padding is what the rows
+ * line up with, so the names start where the rest of the page starts; the
+ * space between the detail table's columns is interior and stops at the last
+ * one, which sits flush against the right edge.
  */
 import { CircleCheck } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 import { columnLabel, type ScoreColumn, type ScoredAttendee } from '@/api/rounds';
 import { formatScore } from '@/lib/scores';
 
-defineProps<{
+const props = withDefaults(defineProps<{
   attendees: ScoredAttendee[];
   /**
    * The columns the Game is played on, sent by the API whether or not any
@@ -23,7 +30,22 @@ defineProps<{
    * for rather than collapsing to nothing.
    */
   columns: ScoreColumn[];
-}>();
+  /**
+   * Where the table is being drawn. A `listing` hides its headings — they
+   * stay in the markup, because a number with no name is nothing to a screen
+   * reader, but the same column repeats down every Game in the Round and the
+   * initials only compete with the scores.
+   */
+  variant?: 'listing' | 'detail';
+}>(), { variant: 'detail' });
+
+const isListing = computed(() => props.variant === 'listing');
+
+/**
+ * A listed score is one fixed column on the right; a detail one is as wide as
+ * its heading needs, spaced from its neighbours and flush at the last.
+ */
+const scoreCell = computed(() => isListing.value ? 'w-16 text-end' : 'px-3 text-center last:pe-0');
 
 /** A team's score in one column, which is zero until somebody says otherwise. */
 function scoreOf(attendee: ScoredAttendee, column: string): string {
@@ -36,13 +58,14 @@ function scoreOf(attendee: ScoredAttendee, column: string): string {
     <thead>
       <tr
         data-testid="pairing-columns"
-        class="bg-background-1 text-xs uppercase tracking-widest text-muted-foreground"
+        class="text-xs uppercase tracking-widest text-muted-foreground"
+        :class="isListing ? 'sr-only' : ''"
       >
         <!-- The names below need no heading, and the empty cell takes the
              width the score columns do not. -->
         <th
           scope="col"
-          class="w-full px-3 py-2 text-start font-medium"
+          class="w-full py-2 text-start font-medium"
         >
           <span class="sr-only">Team</span>
         </th>
@@ -51,7 +74,8 @@ function scoreOf(attendee: ScoredAttendee, column: string): string {
           :key="column.slug"
           :data-testid="`column-${column.slug}`"
           scope="col"
-          class="px-3 py-2 text-center font-bold whitespace-nowrap"
+          class="py-2 font-bold whitespace-nowrap"
+          :class="scoreCell"
         >
           {{ columnLabel(column) }}
           <span class="sr-only">{{ column.name }}</span>
@@ -59,7 +83,7 @@ function scoreOf(attendee: ScoredAttendee, column: string): string {
       </tr>
     </thead>
 
-    <tbody class="divide-y divide-card-divider border-t border-card-divider">
+    <tbody>
       <tr
         v-for="attendee in attendees"
         :key="attendee.id"
@@ -71,7 +95,7 @@ function scoreOf(attendee: ScoredAttendee, column: string): string {
              across a hall of cards. -->
         <th
           scope="row"
-          class="max-w-0 px-3 py-2 text-start text-xs text-foreground"
+          class="max-w-0 py-2 text-start text-xs text-foreground"
           :class="attendee.is_winner ? 'font-semibold' : 'font-normal'"
         >
           <span class="flex min-w-0 items-center gap-1.5">
@@ -91,7 +115,8 @@ function scoreOf(attendee: ScoredAttendee, column: string): string {
           v-for="column in columns"
           :key="column.slug"
           :data-testid="`score-${column.slug}`"
-          class="px-3 py-2 text-center text-xs font-medium tabular-nums whitespace-nowrap text-foreground"
+          class="py-2 text-xs font-medium tabular-nums whitespace-nowrap text-foreground"
+          :class="scoreCell"
         >
           {{ scoreOf(attendee, column.slug) }}
         </td>

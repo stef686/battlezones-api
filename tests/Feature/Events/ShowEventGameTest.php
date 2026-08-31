@@ -69,9 +69,11 @@ test('it names the score columns in the order the event declared them', function
     $response = $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
         ->assertSuccessful();
 
+    // The Game screen shows every column, and is told which of them a Round's
+    // listing leads with so the two screens agree on the number in common.
     expect($response->json('data.score_types'))->toBe([
-        ['slug' => 'match-points', 'name' => 'Match Points'],
-        ['slug' => 'victory-points', 'name' => 'Victory Points'],
+        ['slug' => 'match-points', 'name' => 'Match Points', 'is_primary' => false],
+        ['slug' => 'victory-points', 'name' => 'Victory Points', 'is_primary' => true],
     ]);
 });
 

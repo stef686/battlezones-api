@@ -172,6 +172,39 @@ test('it names the score columns a round is played on, whether or not results ar
         ->and($response->json('data.games.0.attendees.0.scores'))->toBe([]);
 });
 
+test('it marks the one score column a game listing leads with', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+
+    EventScoreType::factory()->matchPoints()->for($event)->create(['display_order' => 0]);
+    EventScoreType::factory()->victoryPoints()->primary()->for($event)->create(['display_order' => 1]);
+
+    $response = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertSuccessful();
+
+    expect(collect($response->json('data.score_types'))->firstWhere('is_primary', true))
+        ->toMatchArray(['slug' => 'victory-points'])
+        // One column and one only, whatever the Event is scored on: a listing
+        // has room for a single number per team.
+        ->and(collect($response->json('data.score_types'))->where('is_primary', true))->toHaveCount(1);
+});
+
+test('it falls back to the first column played for where no primary is marked', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+
+    // Match Points are worked out from the result rather than played for, so
+    // they lose to Victory Points even though they are declared first.
+    EventScoreType::factory()->matchPoints()->for($event)->create(['display_order' => 0]);
+    EventScoreType::factory()->victoryPoints()->for($event)->create(['display_order' => 1]);
+
+    $response = $this->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertSuccessful();
+
+    expect(collect($response->json('data.score_types'))->firstWhere('is_primary', true))
+        ->toMatchArray(['slug' => 'victory-points']);
+});
+
 test('it tells an organiser a game repeats a pairing, and tells a player nothing', function () {
     $event = Event::factory()->active()->create();
     $first = Round::factory()->for($event)->live()->create(['number' => 1]);
