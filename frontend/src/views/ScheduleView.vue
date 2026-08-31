@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { ChevronRight } from 'lucide-vue-next';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, ref, watch } from 'vue';
+import { RouterLink, type RouteLocationRaw } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { addScheduleBlock, fetchEvent, fetchSchedule } from '@/api/events';
+import { addScheduleBlock, fetchEvent, fetchSchedule, type ScheduleBlock } from '@/api/events';
 import { keys } from '@/api/keys';
 import { fetchRounds, roundTitle } from '@/api/rounds';
 import AppAlert from '@/components/AppAlert.vue';
@@ -83,6 +85,33 @@ watch(days, (loaded) => {
 }, { immediate: true });
 
 const openDay = computed(() => days.value?.[selected.value] ?? null);
+
+/**
+ * Where a block leads, or null where it leads nowhere.
+ *
+ * A Round block is the schedule's way into the pairings, but only once there
+ * are pairings to reach: Rounds are hidden entirely until the Event is under
+ * way, and a Draft is an Organiser's business alone. A row that cannot be
+ * opened is drawn as a row rather than as a link to a 404.
+ */
+function roundLink(block: ScheduleBlock): RouteLocationRaw | null {
+  const round = block.round;
+
+  if (round === null || !roundsReachable.value) {
+    return null;
+  }
+
+  if (round.status === 'draft' && !mayOrganise.value) {
+    return null;
+  }
+
+  return { name: 'round', params: { eventSlug: props.eventSlug, roundId: round.id } };
+}
+
+/** Rounds are not published to anybody until the Event itself is under way. */
+const roundsReachable = computed(
+  () => event.value?.status === 'active' || event.value?.status === 'completed',
+);
 
 /**
  * Adding a block, at the foot of the day it is being added to.
@@ -237,12 +266,19 @@ async function add(): Promise<void> {
         :data-testid="`day-${openDay.date}`"
         class="-mx-5 divide-y divide-card-divider"
       >
-        <article
+        <!-- A Round block is a way into its pairings, so it is a real link
+             where the Round can be opened and a plain row where it cannot. -->
+        <component
+          :is="roundLink(block) ? RouterLink : 'article'"
           v-for="block in openDay.blocks"
           :key="block.id"
+          :to="roundLink(block) ?? undefined"
           :data-testid="`block-${block.id}`"
           class="flex items-center gap-4 px-5 py-3.5"
-          :class="block.is_target_live ? 'bg-primary/10' : ''"
+          :class="[
+            block.is_target_live ? 'bg-primary/10' : '',
+            roundLink(block) ? 'hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden' : '',
+          ]"
         >
           <!-- The time as the hall reads it, tabular so the column lines up
                down the page rather than jittering with the digits. -->
@@ -267,7 +303,12 @@ async function add(): Promise<void> {
           >
             Now
           </span>
-        </article>
+
+          <ChevronRight
+            v-if="roundLink(block)"
+            class="ms-auto size-4 shrink-0 text-muted-foreground"
+          />
+        </component>
 
         <p
           v-if="openDay.blocks.length === 0"

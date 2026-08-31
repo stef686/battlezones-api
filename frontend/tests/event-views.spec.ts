@@ -65,7 +65,7 @@ const SCHEDULE = {
                     display_order: 1,
                     target_id: 4,
                     is_target_live: true,
-                    round: { id: 4, number: 1, name: 'Round 1' },
+                    round: { id: 4, number: 1, name: 'Round 1', status: 'live' },
                 },
             ],
         },
@@ -340,6 +340,59 @@ describe('the schedule', () => {
         await view.get('[data-testid="day-tab-2026-09-12"]').trigger('click');
 
         expect(view.get('[data-testid="day-2026-09-12"]').text()).toContain('Registration');
+    });
+
+    it('opens a round block into its pairings once the event is under way', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody({ status: 'active' }) },
+        });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="block-2"]').attributes('href')).toBe(`/events/${EVENT_SLUG}/rounds/4`);
+
+        // Registration runs no Round, so it leads nowhere.
+        expect(view.get('[data-testid="block-1"]').attributes('href')).toBeUndefined();
+    });
+
+    it('leads nowhere while the rounds are not out, rather than linking to a 404', async () => {
+        const DRAFT_ROUND = {
+            data: [{
+                date: '2026-09-12',
+                blocks: [{
+                    ...SCHEDULE.data[0]!.blocks[1]!,
+                    is_target_live: false,
+                    round: { id: 4, number: 1, name: 'Round 1', status: 'draft' },
+                }],
+            }],
+        };
+
+        // Published, so Rounds are not shown to anybody yet.
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const early = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(early.get('[data-testid="block-2"]').attributes('href')).toBeUndefined();
+
+        // Under way, but that Round is still a Draft: an Organiser's business
+        // alone, and a 404 to everybody else.
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: DRAFT_ROUND },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody({ status: 'active' }) },
+        });
+
+        pinia = createPinia();
+        setActivePinia(pinia);
+        const drafted = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(drafted.get('[data-testid="block-2"]').attributes('href')).toBeUndefined();
     });
 
     it('offers an organiser an item at the foot of the day, and writes the hall\'s time', async () => {

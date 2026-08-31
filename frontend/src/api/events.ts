@@ -59,7 +59,7 @@ export interface ScheduleBlock {
     display_order: number;
     target_id: number | null;
     is_target_live: boolean;
-    round: { id: number; number: number; name: string | null } | null;
+    round: { id: number; number: number; name: string | null; status: string } | null;
 }
 
 export interface ScheduleDay {

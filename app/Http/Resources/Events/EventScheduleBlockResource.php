@@ -29,6 +29,11 @@ class EventScheduleBlockResource extends JsonResource
                 'id' => $this->round->id,
                 'number' => $this->round->number,
                 'name' => $this->round->name,
+                // A Draft Round is not there for anybody but an Organiser, so
+                // the schedule has to know whether the block it draws is one a
+                // reader can open. Without it the row is a link to a 404 for
+                // every Player until the Round is published.
+                'status' => $this->round->status->value,
             ],
         ];
     }
