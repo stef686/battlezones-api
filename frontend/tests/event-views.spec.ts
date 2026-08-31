@@ -550,6 +550,7 @@ describe('the attendee detail', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="attendee-name"]').text()).toBe('Sons of Terra');
+        expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
         expect(view.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
 
         expect(view.get('[data-testid="member-12"]').text()).toContain('Imperial Fists');

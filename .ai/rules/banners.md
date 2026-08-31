@@ -33,4 +33,4 @@ Validation mirrors the Banner's — explicit `mimes:jpeg,png,webp` allowlist (SV
 
 Upload is `POST`/`DELETE /events/{event:slug}/attendees/{attendee}/avatar`, not a field on the Attendee PATCH, because PHP does not populate uploaded files for a PATCH body. Authorised with the `update` ability — the team and its Organisers, the same people who name it.
 
-`avatar` is a signed URL from `EventAttendee::avatarUrl()`, serialised in five places: the Attendee list and detail, the Standings, a Round's pairings and a Game. Null is the common answer, and every screen draws `TeamAvatar`'s initials placeholder rather than a gap.
+`avatar` is a signed URL from `EventAttendee::avatarUrl()`, serialised in five places: the Attendee list and detail, the Standings, a Round's pairings and a Game. It is drawn at `lg` on the Attendee's own page and on the team's details screen, `xs` in the Standings and a pairing, `sm` in the Attendees list. Null is the common answer, and every screen draws `TeamAvatar`'s initials placeholder rather than a gap.

@@ -12,6 +12,7 @@ import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
+import TeamAvatar from '@/components/TeamAvatar.vue';
 
 const props = defineProps<{ eventSlug: string; attendeeId: string }>();
 
@@ -112,6 +113,14 @@ async function run(action: () => Promise<unknown>): Promise<void> {
 
     <template v-else-if="attendee">
       <header class="flex flex-col items-start gap-3">
+        <!-- Big here, where there is room for it and only one team on the
+             screen: this is the page that answers "is this them?". -->
+        <TeamAvatar
+          :name="attendee.name ?? ''"
+          :src="attendee.avatar"
+          size="lg"
+        />
+
         <h1
           data-testid="attendee-name"
           class="text-2xl font-bold tracking-tight text-foreground"
