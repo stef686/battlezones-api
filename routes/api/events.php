@@ -25,6 +25,7 @@ use App\Http\Controllers\Events\OpenEventPollController;
 use App\Http\Controllers\Events\PublishRoundController;
 use App\Http\Controllers\Events\ReorderEventScheduleController;
 use App\Http\Controllers\Events\ReplaceBallotController;
+use App\Http\Controllers\Events\ResendAttendeeInviteController;
 use App\Http\Controllers\Events\ResolveGameResultFlagController;
 use App\Http\Controllers\Events\RevealArmyListsController;
 use App\Http\Controllers\Events\SendEventFeedbackRequestsController;
@@ -52,6 +53,7 @@ use App\Http\Controllers\Events\SwapRoundPairingsController;
 use App\Http\Controllers\Events\UnlockArmyListController;
 use App\Http\Controllers\Events\UnpublishRoundController;
 use App\Http\Controllers\Events\UpdateArmyListController;
+use App\Http\Controllers\Events\UpdateAttendeeMemberController;
 use App\Http\Controllers\Events\UpdateEventAttendeeController;
 use App\Http\Controllers\Events\UpdateEventController;
 use App\Http\Controllers\Events\UpdateEventScheduleBlockController;
@@ -185,6 +187,13 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.update');
     Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members', StoreAttendeeMemberController::class)
         ->name('events.attendees.members.store');
-    Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/members/{member}', DeleteAttendeeMemberController::class)
+    // Keyed on the membership rather than the Player: these exist for the team
+    // mate who has not claimed their account, and an unclaimed User is
+    // deliberately unresolvable by route.
+    Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}/members/{membership}', UpdateAttendeeMemberController::class)
+        ->name('events.attendees.members.update');
+    Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members/{membership}/invite', ResendAttendeeInviteController::class)
+        ->name('events.attendees.members.invite');
+    Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/members/{membership}', DeleteAttendeeMemberController::class)
         ->name('events.attendees.members.destroy');
 });

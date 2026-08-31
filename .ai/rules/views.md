@@ -16,9 +16,9 @@ FeedbackView deliberately does not render `MissingNotice` for its 404. The not-f
 It still leaks nothing: unknown, already used and expired all answer 404 in the API and are stated together on the screen as one outcome. Do not split them apart — which of the three it is only matters to somebody holding a token they were never sent.
 
 ## A nav-reachable screen keeps its title for screen readers only
-Standings, Attendees and Schedule wear their name in the Event nav pinned above them, so a visible `<h1>` repeating it spends a line of a phone viewport saying what the lit tab already says. Those three keep the heading as `class="sr-only"` — a deep link still lands on a named screen for a screen reader — and no screen the nav reaches should get its section name back as a visible title.
+Standings, Attendees, Schedule and My team wear their name in the Event nav pinned above them, so a visible `<h1>` repeating it spends a line of a phone viewport saying what the lit tab already says. Those four keep the heading as `class="sr-only"` — a deep link still lands on a named screen for a screen reader — and no screen the nav reaches should get its section name back as a visible title.
 
-This applies only to a fixed section name. A screen titled with content — a Round's name, an Attendee's, a Poll's, the viewer's own team — keeps its visible heading, since the nav cannot say which one you opened. The Rounds tab lands on exactly such a screen: the Round's name is the visible `<h1>`, centred between the chevrons, and the tab saying "Rounds" does not say which Round.
+This applies only to a fixed section name. A screen titled with content — a Round's name, an Attendee's, a Poll's — keeps its visible heading, since the nav cannot say which one you opened. The Rounds tab lands on exactly such a screen: the Round's name is the visible `<h1>`, centred between the chevrons, and the tab saying "Rounds" does not say which Round. My team is not one of them: there is only ever one, the nav tab already names it, and the team's own name is the first field of the form on it — a heading repeating that name over the Event name cost two lines of a phone viewport saying nothing new.
 
 ## Back links only where the Event nav cannot reach
 The Round screen carries no back link: it *is* what the Rounds tab reaches, so there is nothing behind it to go back to. The Poll screen keeps its back link, because the nav does not reach the Votes list. The organiser screens keep theirs too, even though the Organisers tab now reaches the hub they hang off. The Game screen keeps one to its Round, which the Rounds tab does not reach past. Do not add a back link to a screen the nav itself lands on.
@@ -42,3 +42,10 @@ An Event declares its own Score Types, so no screen names one. The Round and Gam
 A hard-coded 'match-points'/'victory-points' pair shows two columns of dashes to every Event scored on anything else — which is exactly what the Standings did until this was fixed.
 
 An absent score renders an em dash, never a zero: a Game nobody has played would otherwise read as a nil-all somebody actually played. A zero that was entered still reads as a zero.
+
+## My team is a hub of one-thing screens, not a screen of stacked forms
+`MyTeamView` renders only a list group: Team details, My details, My list, Partner (doubles only), and the painting vote (only where the Event runs one). Each row says where that part of the entry stands — the team's name, the faction chosen, "Not submitted", "waiting" — so a Player sees what is outstanding without opening anything. Every row leads to a screen that edits one thing; do not put a form back on the hub.
+
+The list is edge-to-edge (`-mx-5`) with `divide-y divide-card-divider` and no card: it is a way through to five screens, not five panels. Rows are `AppLinkRow`.
+
+The sub-screens keep a visible `<h1>` and a `BackLink` to the hub — the nav tab says "My team" and cannot say which of the five you opened. They share `useMyTeam`, which owns the Event and Attendee reads, `me`/`partner`, the painting Poll, and the redirect to the entry form for a reader who has not entered.

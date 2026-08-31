@@ -1,382 +1,96 @@
 <script setup lang="ts">
-import { useQuery, useQueryClient } from '@tanstack/vue-query';
-import { computed, ref, watch } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { computed } from 'vue';
 
-import { useApiClient } from '@/api';
-import { submitArmyList } from '@/api/army-lists';
-import { amendAttendee, fetchAttendee, fetchEvent, fetchFactions, recordMyFaction, type Allegiance } from '@/api/events';
-import { ApiError } from '@/api/errors';
-import { keys } from '@/api/keys';
-import { enterPainting, fetchPolls } from '@/api/polls';
-import AppButton from '@/components/AppButton.vue';
-import SelectField from '@/components/SelectField.vue';
-import TextField from '@/components/TextField.vue';
-import { useSessionStore } from '@/stores/session';
+import AppLinkRow from '@/components/AppLinkRow.vue';
+import { useMyTeam } from '@/composables/useMyTeam';
 
 const props = defineProps<{ eventSlug: string }>();
 
-const client = useApiClient();
-const session = useSessionStore();
-const router = useRouter();
-const queryClient = useQueryClient();
-
-const { data: event, isPending: eventPending } = useQuery({
-  queryKey: computed(() => keys.event(props.eventSlug)),
-  queryFn: () => fetchEvent(client, props.eventSlug),
-  retry: false,
-});
-
-const attendeeId = computed(() => event.value?.viewer?.attendee_id ?? null);
-
-const { data: attendee, isPending: attendeePending } = useQuery({
-  queryKey: computed(() => keys.attendee(props.eventSlug, attendeeId.value as number)),
-  queryFn: () => fetchAttendee(client, props.eventSlug, attendeeId.value as number),
-  enabled: computed(() => attendeeId.value !== null),
-  retry: false,
-});
-
-const { data: factions } = useQuery({
-  queryKey: computed(() => keys.factions(props.eventSlug)),
-  queryFn: () => fetchFactions(client, props.eventSlug),
-  retry: false,
-});
-
-const factionOptions = computed(() => (factions.value ?? []).map((faction) => ({
-  value: String(faction.id),
-  label: faction.name,
-})));
-
-const ALLEGIANCES: { value: Allegiance; label: string }[] = [
-  { value: 'loyalist', label: 'Loyalist' },
-  { value: 'traitor', label: 'Traitor' },
-];
-
-/** Not entered yet: the thing to offer is the entry form, not an empty team. */
-watch(event, (loaded) => {
-  if (loaded !== undefined && loaded.viewer?.is_attendee !== true) {
-    void router.replace({ name: 'register', params: { eventSlug: props.eventSlug } });
-  }
-}, { immediate: true });
-
-const partyName = ref('');
-const allegiance = ref('');
-const myFactionId = ref('');
-/**
- * The painting Poll, if this Event runs one.
- *
- * Entering is the Player saying their army is on the display table, which is
- * theirs to say — the number beside it is not, and belongs to whoever laid
- * the table out.
- */
-const { data: polls } = useQuery({
-  queryKey: computed(() => keys.polls(props.eventSlug)),
-  queryFn: () => fetchPolls(client, props.eventSlug),
-  retry: false,
-});
-
-const paintingPoll = computed(() => (polls.value ?? []).find((poll) => poll.type === 'painting') ?? null);
-const paintingEntered = computed(() => attendee.value?.painting_entered === true);
-const enteringPainting = ref(false);
-
-async function togglePainting(): Promise<void> {
-  if (attendeeId.value === null) {
-    return;
-  }
-
-  enteringPainting.value = true;
-
-  try {
-    await enterPainting(client, props.eventSlug, attendeeId.value, !paintingEntered.value);
-    await queryClient.invalidateQueries({ queryKey: ['events', props.eventSlug, 'attendees'] });
-  } finally {
-    enteringPainting.value = false;
-  }
-}
-
-const armyList = ref('');
-const submittingList = ref(false);
-const listProblem = ref<string | null>(null);
-
-const me = computed(() => attendee.value?.members.find((member) => member.id === session.viewer?.id) ?? null);
-const teamMates = computed(() => (attendee.value?.members ?? []).filter((member) => member.id !== session.viewer?.id));
-
-// The form mirrors what the API last returned rather than holding its own
-// idea of the team: a correction made on another device wins on the next read.
-watch(attendee, (loaded) => {
-  if (loaded === undefined) {
-    return;
-  }
-
-  partyName.value = loaded.name ?? '';
-  allegiance.value = loaded.allegiance ?? '';
-  myFactionId.value = me.value?.faction === null || me.value?.faction === undefined ? '' : String(me.value.faction.id);
-  armyList.value = me.value?.army_list ?? '';
-});
+const { event, attendee, me, partner, isDoubles, paintingPoll, loading } = useMyTeam(() => props.eventSlug);
 
 /**
- * Locked means submitted: the API refuses an edit and only an Organiser can
- * reopen it, so the screen has to say which of the two states a Player is in
- * rather than leaving them to guess from an empty box.
+ * The hub says where every part of an entry stands so a Player can see what is
+ * outstanding without opening five screens to find out. Each row edits one
+ * thing, because a phone in a hall is a bad place to scroll past four forms to
+ * reach the fifth.
  */
-const listLocked = computed(() => me.value?.army_list_locked === true);
+const teamName = computed(() => attendee.value?.name ?? 'Not named');
+const myFaction = computed(() => me.value?.faction?.name ?? 'Not chosen');
+const myList = computed(() => (me.value?.army_list_locked === true ? 'Submitted' : 'Not submitted'));
 
-async function submitList(): Promise<void> {
-  submittingList.value = true;
-  listProblem.value = null;
+const partnerState = computed(() => {
+  const mate = partner.value;
 
-  try {
-    await submitArmyList(client, props.eventSlug, armyList.value);
-    await queryClient.invalidateQueries({ queryKey: ['events', props.eventSlug, 'attendees'] });
-  } catch (caught) {
-    listProblem.value = caught instanceof ApiError ? caught.message : 'That could not be sent.';
-  } finally {
-    submittingList.value = false;
-  }
-}
-
-const saving = ref(false);
-const saved = ref(false);
-const failure = ref<ApiError | null>(null);
-
-function fieldErrors(field: string): string[] {
-  return failure.value?.fields[field] ?? [];
-}
-
-async function save(): Promise<void> {
-  if (attendeeId.value === null) {
-    return;
+  if (mate === null) {
+    return 'Nobody yet';
   }
 
-  saving.value = true;
-  saved.value = false;
-  failure.value = null;
+  return mate.invite_outstanding === true ? `${mate.name} · waiting` : mate.name;
+});
 
-  try {
-    await amendAttendee(client, props.eventSlug, attendeeId.value, {
-      name: partyName.value === '' ? null : partyName.value,
-      allegiance: allegiance.value === '' ? null : (allegiance.value as Allegiance),
-    });
-
-    await recordMyFaction(client, props.eventSlug, myFactionId.value === '' ? null : Number(myFactionId.value));
-
-    await queryClient.invalidateQueries({ queryKey: ['events', props.eventSlug, 'attendees'] });
-    saved.value = true;
-  } catch (caught) {
-    failure.value = caught instanceof ApiError ? caught : null;
-  } finally {
-    saving.value = false;
-  }
-}
+const paintingState = computed(() => (attendee.value?.painting_entered === true ? 'Entered' : 'Not entered'));
 </script>
 
 <template>
-  <main class="mx-auto flex w-full max-w-md flex-col gap-6 p-5">
+  <main class="mx-auto flex w-full max-w-md flex-col gap-6 px-5 pb-5">
     <p
-      v-if="eventPending || attendeePending"
+      v-if="loading"
       class="text-muted-foreground-1"
     >
       Loading your team…
     </p>
 
     <template v-else-if="attendee && event">
-      <header>
-        <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          {{ event.name }}
-        </p>
-        <h1
-          data-testid="team-name"
-          class="mt-1 text-2xl font-bold tracking-tight text-foreground"
-        >
-          {{ attendee.name }}
-        </h1>
-      </header>
+      <h1 class="sr-only">
+        My team
+      </h1>
 
-      <section
-        v-if="teamMates.length > 0"
-        class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
-      >
-        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          Playing with you
-        </h2>
-
-        <div
-          v-for="mate in teamMates"
-          :key="mate.id"
-          :data-testid="`team-mate-${mate.id}`"
-          class="flex items-baseline justify-between gap-3"
-        >
-          <span class="min-w-0 truncate text-sm font-medium text-foreground">{{ mate.name }}</span>
-          <span class="flex shrink-0 flex-col items-end gap-0.5 text-sm">
-            <span class="text-muted-foreground-1">{{ mate.faction?.name ?? 'Faction not chosen' }}</span>
-            <span :class="mate.army_list_locked ? 'text-success' : 'text-muted-foreground'">
-              {{ mate.army_list_locked ? 'List in' : 'List not submitted' }}
-            </span>
-          </span>
-        </div>
-
-        <p class="text-sm text-muted-foreground">
-          They were sent their own invitation. They choose their own faction.
-        </p>
-      </section>
-
-      <section
-        v-if="paintingPoll"
-        data-testid="painting-entry"
-        class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
-      >
-        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          {{ paintingPoll.name }}
-        </h2>
-
-        <p
-          v-if="paintingEntered"
-          data-testid="painting-entered"
-          class="text-sm font-medium text-success"
-        >
-          Your army is on the display table{{ attendee.display_number ? ` under number ${attendee.display_number}` : '' }}.
-        </p>
-        <p
-          v-else
-          class="text-sm text-muted-foreground-1"
-        >
-          Put your army on the display table and enter it here, so people can vote for it.
-        </p>
-
-        <AppButton
-          data-testid="enter-painting"
-          variant="secondary"
-          size="sm"
-          :disabled="enteringPainting"
-          class="self-start"
-          @click="togglePainting"
-        >
-          {{ paintingEntered ? 'Take it out of the vote' : 'Enter my army' }}
-        </AppButton>
-      </section>
-
-      <section
-        data-testid="army-list-form"
-        class="flex flex-col gap-3 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
-      >
-        <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          Your army list
-        </h2>
-
-        <template v-if="listLocked">
-          <p
-            data-testid="army-list-locked"
-            class="text-sm font-medium text-success"
-          >
-            Submitted and locked. Ask an organiser to reopen it if it needs correcting.
-          </p>
-          <p
-            data-testid="army-list-mine"
-            class="whitespace-pre-wrap text-sm text-foreground"
-          >
-            {{ me?.army_list }}
-          </p>
-        </template>
-
-        <template v-else>
-          <textarea
-            v-model="armyList"
-            data-testid="army-list"
-            rows="8"
-            placeholder="Detachments, units, wargear…"
-            class="block w-full rounded-lg border border-border bg-background-2 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden"
-          />
-          <p class="text-sm text-muted-foreground-1">
-            Submitting locks the list. Only an organiser can reopen it.
-          </p>
-          <AppButton
-            data-testid="submit-army-list"
-            :disabled="submittingList"
-            block
-            @click="submitList"
-          >
-            {{ submittingList ? 'Sending…' : 'Submit list' }}
-          </AppButton>
-        </template>
-
-        <p
-          v-if="listProblem"
-          data-testid="army-list-problem"
-          role="alert"
-          class="text-sm text-destructive"
-        >
-          {{ listProblem }}
-        </p>
-      </section>
-
-      <form
-        class="flex flex-col gap-4"
-        novalidate
-        @submit.prevent="save"
-      >
-        <TextField
-          v-model="partyName"
-          label="Team name"
-          testid="team-name-field"
-          :errors="fieldErrors('name')"
+      <!-- Edge to edge, and nothing but a rule between rows: the hub is a way
+           through to five screens, so it should read as a list of them rather
+           than as five panels competing with the Event nav above it. -->
+      <ul class="-mx-5 divide-y divide-card-divider">
+        <AppLinkRow
+          :to="{ name: 'my-team-details', params: { eventSlug: props.eventSlug } }"
+          label="Team details"
+          :value="teamName"
+          :outstanding="attendee.name === null"
+          testid="team-details-row"
         />
 
-        <SelectField
-          v-if="event.requires_allegiance"
-          v-model="allegiance"
-          label="Allegiance"
-          placeholder="Choose a side"
-          testid="team-allegiance"
-          :options="ALLEGIANCES"
-          hint="Frozen once a round goes live."
-          :errors="fieldErrors('allegiance')"
+        <AppLinkRow
+          :to="{ name: 'my-team-faction', params: { eventSlug: props.eventSlug } }"
+          label="My details"
+          :value="myFaction"
+          :outstanding="!me?.faction"
+          testid="my-details-row"
         />
 
-        <SelectField
-          v-model="myFactionId"
-          label="Your faction"
-          placeholder="Not decided yet"
-          testid="my-faction"
-          :options="factionOptions"
-          :errors="fieldErrors('faction_id')"
+        <AppLinkRow
+          :to="{ name: 'my-team-list', params: { eventSlug: props.eventSlug } }"
+          label="My list"
+          :value="myList"
+          :outstanding="me?.army_list_locked !== true"
+          testid="my-list-row"
         />
 
-        <p
-          v-if="failure && failure.kind !== 'validation'"
-          data-testid="team-error"
-          role="alert"
-          class="text-sm text-destructive"
-        >
-          {{ failure.message }}
-        </p>
+        <AppLinkRow
+          v-if="isDoubles"
+          :to="{ name: 'my-team-partner', params: { eventSlug: props.eventSlug } }"
+          label="Partner"
+          :value="partnerState"
+          :outstanding="partner === null || partner.invite_outstanding === true"
+          testid="partner-row"
+        />
 
-        <p
-          v-if="saved"
-          data-testid="team-saved"
-          role="status"
-          class="text-sm text-success"
-        >
-          Saved.
-        </p>
-
-        <AppButton
-          type="submit"
-          data-testid="save-team"
-          :disabled="saving"
-          block
-          class="mt-2"
-        >
-          {{ saving ? 'Saving…' : 'Save' }}
-        </AppButton>
-      </form>
-
-      <RouterLink
-        :to="{ name: 'my-game', params: { eventSlug: props.eventSlug } }"
-        data-testid="my-game-link"
-        class="text-center text-sm font-medium text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
-      >
-        See your game
-      </RouterLink>
+        <AppLinkRow
+          v-if="paintingPoll"
+          :to="{ name: 'my-team-painting', params: { eventSlug: props.eventSlug } }"
+          :label="paintingPoll.name"
+          :value="paintingState"
+          :outstanding="attendee.painting_entered !== true"
+          testid="painting-row"
+        />
+      </ul>
     </template>
   </main>
 </template>

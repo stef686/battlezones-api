@@ -162,6 +162,38 @@ const routes: RouteRecordRaw[] = [
         props: true,
     },
     {
+        // One screen per thing an entry is made of, hung off the hub rather
+        // than stacked on it: a Player in a hall is looking for one of them.
+        path: '/events/:eventSlug/my-team/details',
+        name: 'my-team-details',
+        component: () => import('@/views/TeamDetailsView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/my-team/faction',
+        name: 'my-team-faction',
+        component: () => import('@/views/MyFactionView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/my-team/list',
+        name: 'my-team-list',
+        component: () => import('@/views/MyArmyListView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/my-team/partner',
+        name: 'my-team-partner',
+        component: () => import('@/views/PartnerView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/my-team/painting',
+        name: 'my-team-painting',
+        component: () => import('@/views/PaintedArmyView.vue'),
+        props: true,
+    },
+    {
         path: '/events/:eventSlug/my-game',
         name: 'my-game',
         component: () => import('@/views/MyGameView.vue'),

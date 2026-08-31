@@ -87,6 +87,19 @@ export interface AttendeeMember {
     id: number;
     name: string;
     faction: { id: number; name: string } | null;
+    /**
+     * The seat rather than the Player, sent only to the team and its
+     * Organisers. It addresses a Player who has not claimed their account,
+     * which no route can name.
+     */
+    membership_id?: number;
+    /** Whether this Player has yet to answer their invitation. */
+    invite_outstanding?: boolean;
+    /**
+     * Where that invitation was sent. Present only while it is outstanding —
+     * a claimed account's address belongs to its owner, not to their team.
+     */
+    email?: string;
     /** Whether this Player's list is in. Says nothing about what it holds. */
     army_list_locked?: boolean;
     /**
@@ -100,6 +113,8 @@ export interface Attendee {
     id: number;
     name: string | null;
     allegiance: string | null;
+    /** Whether the Event has begun, which is what freezes the side it fights for. */
+    allegiance_locked?: boolean;
     members: AttendeeMember[];
     checked_in_at: string | null;
     /** Whether this army is on the display table for the painting vote. */
@@ -236,6 +251,56 @@ export function amendAttendee(
 export function recordMyFaction(client: ApiClient, slug: string, factionId: number | null): Promise<Attendee> {
     return client.patch<{ data: Attendee }>(`${eventPath(slug)}/my-faction`, { faction_id: factionId })
         .then((response) => response.data);
+}
+
+/**
+ * Enrol a team mate into the empty seat.
+ *
+ * They are named by address rather than by account, because most partners have
+ * none when they are named: the API invites them, which is what creates one.
+ */
+export function addMember(
+    client: ApiClient,
+    slug: string,
+    attendeeId: number,
+    player: PlayerEntry,
+): Promise<Attendee> {
+    return client.post<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/members`, {
+        ...(player.name === undefined || player.name === null || player.name === '' ? {} : { name: player.name }),
+        email: player.email,
+        ...(player.faction_id === undefined || player.faction_id === null ? {} : { faction_id: player.faction_id }),
+    }).then((response) => response.data);
+}
+
+/**
+ * Correct a team mate's details on their behalf.
+ *
+ * Only while their invitation is outstanding: once they claim the account the
+ * API refuses this, because their name and address are then theirs. Addressed
+ * by membership for the same reason `recordMyFaction` is addressed as "mine" —
+ * an unclaimed Player cannot be named in a URL.
+ */
+export function amendMember(
+    client: ApiClient,
+    slug: string,
+    attendeeId: number,
+    membershipId: number,
+    changes: { name?: string; email?: string; faction_id?: number | null },
+): Promise<Attendee> {
+    return client.patch<{ data: Attendee }>(
+        `${eventPath(slug)}/attendees/${attendeeId}/members/${membershipId}`,
+        changes,
+    ).then((response) => response.data);
+}
+
+/** A fresh invitation to the address already on file, for a partner who never answered. */
+export function resendMemberInvite(
+    client: ApiClient,
+    slug: string,
+    attendeeId: number,
+    membershipId: number,
+): Promise<unknown> {
+    return client.post(`${eventPath(slug)}/attendees/${attendeeId}/members/${membershipId}/invite`, {});
 }
 
 function eventPath(slug: string): string {
