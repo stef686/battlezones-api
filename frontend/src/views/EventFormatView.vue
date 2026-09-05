@@ -13,11 +13,13 @@ import { computed, ref, watch } from 'vue';
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent, updateEvent, type EventChanges, type EventSummary } from '@/api/events';
+import { fetchGameSystems } from '@/api/game-systems';
 import { keys } from '@/api/keys';
 import { fetchScoreTypes, type ScoreType } from '@/api/score-types';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
+import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -37,6 +39,30 @@ const { data: event, isPending } = useQuery({
  */
 const mayOrganise = computed(() => event.value?.viewer?.permissions.organise === true);
 const forbidden = computed(() => event.value !== undefined && !mayOrganise.value);
+
+/**
+ * The Game System and the party size are the shape every entry is built at, so
+ * the API refuses both once somebody has entered. Unknown means locked: an
+ * Event whose count did not come back is not one to gamble on.
+ */
+const entered = computed(() => event.value?.attendees_count ?? null);
+const shapeLocked = computed(() => entered.value !== 0);
+
+const { data: gameSystems } = useQuery({
+  queryKey: keys.gameSystems(),
+  queryFn: () => fetchGameSystems(client),
+  enabled: computed(() => mayOrganise.value && !shapeLocked.value),
+  retry: false,
+});
+
+const gameSystemOptions = computed(() => (gameSystems.value ?? [])
+  .map((system) => ({ value: String(system.id), label: system.name })));
+
+/** One Player is singles; anything more is a team of that size. */
+const partySizeOptions = Array.from({ length: 8 }, (_, index) => ({
+  value: String(index + 1),
+  label: index === 0 ? 'Singles — one player' : `Teams of ${index + 1}`,
+}));
 
 /**
  * The scoring is read here and edited in a later slice: an Organiser needs to
@@ -80,11 +106,15 @@ function marksOf(scoreType: ScoreType): string[] {
 
 interface Form {
   max_attendees: string;
+  game_system_id: string;
+  attendee_size: string;
 }
 
 function formOf(loaded: EventSummary): Form {
   return {
     max_attendees: loaded.max_attendees === null ? '' : String(loaded.max_attendees),
+    game_system_id: loaded.game_system === null ? '' : String(loaded.game_system.id),
+    attendee_size: String(loaded.attendee_size),
   };
 }
 
@@ -116,6 +146,16 @@ const changes = computed<EventChanges>(() => {
 
   if (current.max_attendees !== original.max_attendees) {
     changed.max_attendees = current.max_attendees === '' ? null : Number(current.max_attendees);
+  }
+
+  // Never sent once the shape is locked: the API would refuse them, and the
+  // fields are read-only anyway.
+  if (!shapeLocked.value && current.game_system_id !== original.game_system_id && current.game_system_id !== '') {
+    changed.game_system_id = Number(current.game_system_id);
+  }
+
+  if (!shapeLocked.value && current.attendee_size !== original.attendee_size) {
+    changed.attendee_size = Number(current.attendee_size);
   }
 
   return changed;
@@ -202,6 +242,39 @@ async function save(): Promise<void> {
         class="flex flex-col gap-5"
         @submit.prevent="save"
       >
+        <SelectField
+          v-model="form.game_system_id"
+          label="Game system"
+          :options="gameSystemOptions"
+          placeholder="Choose a game"
+          :disabled="shapeLocked"
+          testid="format-game-system"
+          :errors="errors.game_system_id"
+        />
+
+        <SelectField
+          v-model="form.attendee_size"
+          label="Played in"
+          :options="partySizeOptions"
+          :disabled="shapeLocked"
+          testid="format-attendee-size"
+          :errors="errors.attendee_size"
+        />
+
+        <p
+          v-if="shapeLocked"
+          data-testid="format-shape-locked"
+          class="text-sm text-muted-foreground-1"
+        >
+          <template v-if="entered !== null">
+            The game and the party size are fixed now {{ entered }} parties have entered: every entry
+            was built at this size, and every faction chosen belongs to this game.
+          </template>
+          <template v-else>
+            The game and the party size are fixed once anybody has entered.
+          </template>
+        </p>
+
         <TextField
           v-model="form.max_attendees"
           label="Places"

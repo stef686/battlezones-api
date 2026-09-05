@@ -167,6 +167,10 @@ export interface EventChanges {
     ends_at?: string | null;
     registration_closes_at?: string | null;
     max_attendees?: number | null;
+    /** Refused by the API once anybody has entered. */
+    game_system_id?: number;
+    /** How many Players make an Attendee. Refused once anybody has entered. */
+    attendee_size?: number;
 }
 
 export function updateEvent(client: ApiClient, slug: string, changes: EventChanges): Promise<EventSummary> {

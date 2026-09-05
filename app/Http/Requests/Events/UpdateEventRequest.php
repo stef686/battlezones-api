@@ -14,9 +14,11 @@ use Knuckles\Scribe\Attributes\BodyParam;
  * The Event fields an Organiser may change, and only those.
  *
  * The refuse list is the decision here, not the accept list: slug is in every
- * Invite email already sent, attendee_size is the shape every existing
- * registration was built at, and status and pairing_format drive Round
- * generation rather than presentation. See
+ * Invite email already sent, and status and pairing_format drive Round
+ * generation rather than presentation. Game System and attendee_size are
+ * refused conditionally — only once somebody has entered, because until then
+ * nothing has been built at the old party size and no Faction has been chosen
+ * against the old Game System. See
  * docs/adr/0002-general-event-patch-endpoint.md before adding a field.
  */
 #[BodyParam('name', 'string', 'What the Event is called.', required: false, example: 'London Grand Tournament')]
@@ -29,6 +31,8 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('ends_at', 'string', 'When the Event ends, as an ISO 8601 timestamp.', required: false, example: '2026-09-13T18:00:00+01:00')]
 #[BodyParam('registration_closes_at', 'string', 'When entry closes, as an ISO 8601 timestamp.', required: false, example: '2026-09-05T23:59:00+01:00')]
 #[BodyParam('max_attendees', 'integer', 'How many parties may enter. Null for no limit, and never fewer than have already entered.', required: false, example: 32)]
+#[BodyParam('game_system_id', 'integer', 'The Game System the Event is played under. Refused once anybody has entered.', required: false, example: 4)]
+#[BodyParam('attendee_size', 'integer', 'How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered.', required: false, example: 2)]
 class UpdateEventRequest extends FormRequest
 {
     /**
@@ -69,13 +73,43 @@ class UpdateEventRequest extends FormRequest
             // rather than an accepted over-fill: nobody is being turned out.
             'max_attendees' => ['sometimes', 'nullable', 'integer', 'min:'.max(1, $this->event()->attendees()->count())],
 
+            // The shape an Event's entries are built at. Free while nobody
+            // has entered; refused loudly the moment somebody has, because
+            // changing either would strand the party sizes and the Factions
+            // already chosen.
+            'game_system_id' => $this->hasEntries()
+                ? ['prohibited']
+                : ['sometimes', 'integer', Rule::exists('game_systems', 'id')],
+            'attendee_size' => $this->hasEntries()
+                ? ['prohibited']
+                : ['sometimes', 'integer', 'between:1,8'],
+
             // Refused loudly rather than quietly dropped, so a caller that
             // tries is told why instead of watching a change not happen.
             'slug' => ['prohibited'],
-            'attendee_size' => ['prohibited'],
             'status' => ['prohibited'],
             'pairing_format' => ['prohibited'],
         ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'game_system_id.prohibited' => 'The game system cannot change once somebody has entered: their factions belong to the system they entered under.',
+            'attendee_size.prohibited' => 'The team size cannot change once somebody has entered: every entry was built at the current size.',
+        ];
+    }
+
+    /**
+     * Whether anybody has entered yet — the line the two shape fields are
+     * drawn at, regardless of the Event's status.
+     */
+    private function hasEntries(): bool
+    {
+        return $this->event()->attendees()->exists();
     }
 
     /**

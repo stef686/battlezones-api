@@ -80,6 +80,15 @@ function scoreTypesBody() {
     };
 }
 
+function gameSystemsBody() {
+    return {
+        data: [
+            { id: 4, name: 'Horus Heresy', slug: 'horus-heresy' },
+            { id: 1, name: 'Warhammer 40,000', slug: 'warhammer-40000' },
+        ],
+    };
+}
+
 const NOT_FOUND = { status: 404, body: { message: 'Not Found.' } };
 
 function stubApi(routes: Record<string, { status: number; body?: unknown }>) {
@@ -271,5 +280,44 @@ describe('the event format screen', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="format-no-score-types"]').text()).toContain('No scoring set up yet');
+    });
+
+    it('lets an organiser reshape an event nobody has entered yet', async () => {
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(true, { attendees_count: 0 }) },
+            '/api/game-systems': { status: 200, body: gameSystemsBody() },
+            [`PATCH /api/events/${EVENT_SLUG}`]: {
+                status: 200,
+                body: eventBody(true, { attendees_count: 0, attendee_size: 1 }),
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(valueOf(view, 'format-game-system')).toBe('4');
+        expect(valueOf(view, 'format-attendee-size')).toBe('2');
+
+        await view.get('[data-testid="format-game-system"]').setValue('1');
+        await view.get('[data-testid="format-attendee-size"]').setValue('1');
+        await view.get('[data-testid="format-save"]').trigger('submit');
+        await flushPromises();
+
+        const patch = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PATCH');
+
+        expect(JSON.parse(String((patch?.[1] as RequestInit).body)))
+            .toEqual({ game_system_id: 1, attendee_size: 1 });
+    });
+
+    it('locks the shape of an event somebody has already entered, and says why', async () => {
+        stubApi({ [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="format-game-system"]').attributes('disabled')).toBeDefined();
+        expect(view.get('[data-testid="format-attendee-size"]').attributes('disabled')).toBeDefined();
+        expect(view.get('[data-testid="format-shape-locked"]').text())
+            .toContain('18 parties have entered');
     });
 });

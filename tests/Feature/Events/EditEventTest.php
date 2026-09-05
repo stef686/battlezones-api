@@ -3,6 +3,7 @@
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScheduleBlock;
+use App\Models\GameSystem;
 use App\Models\User;
 
 test('an organiser edits the event a player reads', function () {
@@ -25,7 +26,7 @@ test('an organiser edits the event a player reads', function () {
         ->and($event->venue_city)->toBe('Croydon');
 });
 
-test('the fields that would break credentials already sent, or registrations already taken, are refused', function () {
+test('the fields that would break credentials already sent, or the way rounds are made, are refused whatever the event', function () {
     $event = Event::factory()->published()->create([
         'slug' => 'london-grand-tournament',
         'attendee_size' => 2,
@@ -35,14 +36,31 @@ test('the fields that would break credentials already sent, or registrations alr
     $this->actingAs($organiser)
         ->patchJson(route('events.update', ['event' => $event->slug]), [
             'slug' => 'something-else',
-            'attendee_size' => 1,
             'status' => 'draft',
             'pairing_format' => 'random',
         ])
-        ->assertJsonValidationErrors(['slug', 'attendee_size', 'status', 'pairing_format']);
+        ->assertJsonValidationErrors(['slug', 'status', 'pairing_format']);
 
-    expect($event->refresh()->slug)->toBe('london-grand-tournament')
-        ->and($event->attendee_size)->toBe(2);
+    expect($event->refresh()->slug)->toBe('london-grand-tournament');
+});
+
+test('the shape of an event is locked the moment somebody has entered', function () {
+    $event = Event::factory()->published()->create(['attendee_size' => 2]);
+    $system = GameSystem::factory()->create();
+    EventAttendee::factory()->for($event)->create();
+
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.update', ['event' => $event->slug]), [
+            'game_system_id' => $system->id,
+            'attendee_size' => 1,
+        ])
+        ->assertJsonValidationErrors([
+            'game_system_id' => 'their factions belong to the system they entered under',
+            'attendee_size' => 'every entry was built at the current size',
+        ]);
+
+    expect($event->refresh()->attendee_size)->toBe(2)
+        ->and($event->game_system_id)->not->toBe($system->id);
 });
 
 test('a cap below the parties already entered is refused rather than allowed to over-fill the event', function () {
@@ -103,4 +121,36 @@ test('an event the caller may not see answers not found', function () {
     $this->actingAs($stranger)
         ->patchJson(route('events.update', ['event' => $event->slug]), ['name' => 'Mine now'])
         ->assertNotFound();
+});
+
+test('an organiser reshapes an event nobody has entered yet', function () {
+    $event = Event::factory()->published()->create(['attendee_size' => 1]);
+    $system = GameSystem::factory()->create(['name' => 'Horus Heresy', 'slug' => 'horus-heresy']);
+
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.update', ['event' => $event->slug]), [
+            'game_system_id' => $system->id,
+            'attendee_size' => 2,
+        ])
+        ->assertSuccessful()
+        ->assertJsonPath('data.game_system.slug', 'horus-heresy')
+        ->assertJsonPath('data.attendee_size', 2);
+
+    expect($event->refresh()->attendee_size)->toBe(2)
+        ->and($event->game_system_id)->toBe($system->id);
+});
+
+test('a party bigger than a table holds, or a game system that does not exist, is refused', function () {
+    $event = Event::factory()->published()->create(['attendee_size' => 2]);
+
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.update', ['event' => $event->slug]), [
+            'attendee_size' => 9,
+            'game_system_id' => 9999,
+        ])
+        ->assertJsonValidationErrors(['attendee_size', 'game_system_id']);
+
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.update', ['event' => $event->slug]), ['attendee_size' => 0])
+        ->assertJsonValidationErrors(['attendee_size']);
 });

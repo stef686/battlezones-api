@@ -22,6 +22,7 @@ use App\Http\Controllers\Events\ListEventsController;
 use App\Http\Controllers\Events\ListEventScoreTypesController;
 use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
+use App\Http\Controllers\Events\ListGameSystemsController;
 use App\Http\Controllers\Events\ListPollCandidatesController;
 use App\Http\Controllers\Events\OpenEventPollController;
 use App\Http\Controllers\Events\PublishRoundController;
@@ -63,6 +64,8 @@ use App\Http\Controllers\Events\UpdateEventScheduleBlockController;
 use App\Http\Controllers\Events\UpdateGameResultController;
 use App\Http\Controllers\Events\UpdateMyFactionController;
 use App\Http\Controllers\Events\UpdatePaintingEntryController;
+
+Route::get('game-systems', ListGameSystemsController::class)->name('game-systems.index');
 
 Route::get('events', ListEventsController::class)->name('events.index');
 Route::get('events/{event:slug}', ShowEventController::class)->name('events.show');
