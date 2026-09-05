@@ -28,3 +28,28 @@ export function fetchScoreTypes(client: ApiClient, slug: string): Promise<ScoreT
     return client.get<{ data: ScoreType[] }>(`/api/events/${slug}/score-types`)
         .then((response) => response.data);
 }
+
+/** One Score Type as an Organiser sends it back. Slugs are the server's alone. */
+export interface ScoreTypeChange {
+    id: number;
+    name: string;
+    sort_direction: 'asc' | 'desc';
+    is_derived: boolean;
+    is_primary: boolean;
+    counts_for_ranking: boolean;
+    win_points: number | null;
+    draw_points: number | null;
+    loss_points: number | null;
+}
+
+/**
+ * Replace the whole ordered set in one request.
+ *
+ * Position sets the display order, and position among the rows counting for
+ * ranking sets the ranking order, so the columns and the Standings can never
+ * half-land against each other.
+ */
+export function replaceScoreTypes(client: ApiClient, slug: string, scoreTypes: ScoreTypeChange[]): Promise<ScoreType[]> {
+    return client.put<{ data: ScoreType[] }>(`/api/events/${slug}/score-types`, { score_types: scoreTypes })
+        .then((response) => response.data);
+}

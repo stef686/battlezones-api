@@ -13,3 +13,8 @@ paths:
 Two behaviours are deliberate: `max_attendees` below the entered count is a validation failure, not an accepted over-fill; and changing the Event's dates leaves every Schedule block's absolute timestamps alone, because a venue change usually affects one day and shifting them all would corrupt a schedule that was right.
 
 An Event that is not publicly visible answers 404 to anyone but its Organisers, from `prepareForValidation` — a 403 would confirm it exists.
+
+## An Event's Score Types are written as one ordered set
+`PUT /events/{event:slug}/score-types` (`ReplaceEventScoreTypesRequest` → `ReplaceEventScoreTypes`) takes the complete ordered set, never a row at a time. Position sets `display_order`, and position among the rows with `counts_for_ranking` sets `ranking_order`; a row that does not count for ranking has none. Slugs are never accepted from the client — a result is submitted and the Standings sorted by slug, so a rename keeps the slug it had.
+
+Refusals: an empty set; two rows claiming `is_primary`; a derived row without win, draw and loss points; and any existing column left out of the payload, which would otherwise read as a request to destroy it and its scores. See `docs/adr/0005-score-types-are-replaced-as-one-ordered-set.md` — reordering is retroactive, because it re-ranks the Standings and therefore the next Round's pairings.

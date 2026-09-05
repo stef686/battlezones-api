@@ -28,6 +28,7 @@ use App\Http\Controllers\Events\OpenEventPollController;
 use App\Http\Controllers\Events\PublishRoundController;
 use App\Http\Controllers\Events\ReorderEventScheduleController;
 use App\Http\Controllers\Events\ReplaceBallotController;
+use App\Http\Controllers\Events\ReplaceEventScoreTypesController;
 use App\Http\Controllers\Events\ResendAttendeeInviteController;
 use App\Http\Controllers\Events\ResolveGameResultFlagController;
 use App\Http\Controllers\Events\RevealArmyListsController;
@@ -172,6 +173,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::get('events/{event:slug}/score-types', ListEventScoreTypesController::class)
         ->name('events.score-types.index');
+    Route::put('events/{event:slug}/score-types', ReplaceEventScoreTypesController::class)
+        ->name('events.score-types.replace');
 
     Route::post('events/{event:slug}/rounds', GenerateRoundController::class)
         ->name('events.rounds.generate');

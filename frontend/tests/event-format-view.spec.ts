@@ -116,7 +116,7 @@ function stubApi(routes: Record<string, { status: number; body?: unknown }>) {
 }
 
 function valueOf(view: ReturnType<typeof mountView>, testid: string): string {
-    return view.get<HTMLInputElement>(`[data-testid="${testid}"]`).element.value;
+    return view.get<HTMLInputElement | HTMLSelectElement>(`[data-testid="${testid}"]`).element.value;
 }
 
 let router: Router;
@@ -247,7 +247,7 @@ describe('the event format screen', () => {
         expect(view.find('[data-testid="format-max-attendees"]').exists()).toBe(false);
     });
 
-    it('lists the score types the event is ranked on, in the order they are shown', async () => {
+    it('opens the scoring on the columns the event already has, in the order they are shown', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
             [`/api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
@@ -256,18 +256,19 @@ describe('the event format screen', () => {
         const view = mountView();
         await flushPromises();
 
-        const rows = view.findAll('[data-testid="format-score-type"]');
+        expect(view.findAll('[data-testid="format-score-type"]')).toHaveLength(2);
+        expect(valueOf(view, 'score-name-0')).toBe('Match Points');
+        expect(valueOf(view, 'score-source-0')).toBe('derived');
+        expect(valueOf(view, 'score-direction-0')).toBe('desc');
+        expect(valueOf(view, 'score-win-0')).toBe('3.00');
+        expect(view.get('[data-testid="score-ranking-0"]').attributes('aria-pressed')).toBe('true');
 
-        expect(rows).toHaveLength(2);
-        expect(rows[0]?.text()).toContain('Match Points');
-        expect(rows[0]?.text()).toContain('Worked out for them');
-        expect(rows[0]?.text()).toContain('Higher is better');
-        expect(rows[0]?.text()).toContain('Counts for ranking');
-        expect(rows[1]?.text()).toContain('Victory Points');
-        expect(rows[1]?.text()).toContain('Entered by players');
-        expect(rows[1]?.text()).toContain('Lower is better');
-        expect(rows[1]?.text()).toContain('Leads a game listing');
-        expect(rows[1]?.text()).not.toContain('Counts for ranking');
+        expect(valueOf(view, 'score-name-1')).toBe('Victory Points');
+        expect(valueOf(view, 'score-source-1')).toBe('entered');
+        expect(valueOf(view, 'score-direction-1')).toBe('asc');
+        expect(view.find('[data-testid="score-win-1"]').exists()).toBe(false);
+        expect(view.get('[data-testid="score-primary-1"]').attributes('aria-pressed')).toBe('true');
+        expect(view.get('[data-testid="score-ranking-1"]').attributes('aria-pressed')).toBe('false');
     });
 
     it('says so when the event is scored on nothing at all', async () => {
@@ -319,5 +320,83 @@ describe('the event format screen', () => {
         expect(view.get('[data-testid="format-attendee-size"]').attributes('disabled')).toBeDefined();
         expect(view.get('[data-testid="format-shape-locked"]').text())
             .toContain('18 parties have entered');
+    });
+
+    it('edits a score type and sends the whole ordered set on its own button', async () => {
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`GET /api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+            [`PUT /api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="score-name-0"]').setValue('League Points');
+        await view.get('[data-testid="score-down-0"]').trigger('click');
+        await view.get('[data-testid="format-scoring-save"]').trigger('submit');
+        await flushPromises();
+
+        const put = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PUT');
+        const sent = JSON.parse(String((put?.[1] as RequestInit).body)) as {
+            score_types: { id: number; name: string; counts_for_ranking: boolean }[];
+        };
+
+        // Victory Points was moved above the renamed row, and the whole set
+        // travels in the order it is now shown.
+        expect(sent.score_types.map((row) => row.id)).toEqual([8, 7]);
+        expect(sent.score_types[1]?.name).toBe('League Points');
+        expect(view.get('[data-testid="format-scoring-saved"]').text()).toContain('Saved');
+    });
+
+    it('saves the scoring without the event fields above it', async () => {
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`GET /api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+            [`PUT /api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        // The places field is left half-filled: saving the scoring must not
+        // depend on it.
+        await view.get('[data-testid="format-max-attendees"]').setValue('');
+        await view.get('[data-testid="score-ranking-1"]').trigger('click');
+        await view.get('[data-testid="format-scoring-save"]').trigger('submit');
+        await flushPromises();
+
+        const methods = fetch.mock.calls.map(([, init]) => (init as RequestInit | undefined)?.method ?? 'GET');
+        const put = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PUT');
+        const sent = JSON.parse(String((put?.[1] as RequestInit).body)) as {
+            score_types: { counts_for_ranking: boolean }[];
+        };
+
+        expect(methods).not.toContain('PATCH');
+        expect(sent.score_types[1]?.counts_for_ranking).toBe(true);
+    });
+
+    it('puts a rejected row under the row it belongs to', async () => {
+        stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`GET /api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+            [`PUT /api/events/${EVENT_SLUG}/score-types`]: {
+                status: 422,
+                body: {
+                    message: 'The given data was invalid.',
+                    errors: { 'score_types.1.name': ['A column needs a name.'] },
+                },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="score-name-1"]').setValue('');
+        await view.get('[data-testid="format-scoring-save"]').trigger('submit');
+        await flushPromises();
+
+        expect(view.get('[data-testid="score-name-1-error"]').text()).toContain('A column needs a name.');
+        expect(view.find('[data-testid="score-name-0-error"]').exists()).toBe(false);
     });
 });
