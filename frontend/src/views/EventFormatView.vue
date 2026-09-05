@@ -14,6 +14,7 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent, updateEvent, type EventChanges, type EventSummary } from '@/api/events';
 import { keys } from '@/api/keys';
+import { fetchScoreTypes, type ScoreType } from '@/api/score-types';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
@@ -36,6 +37,46 @@ const { data: event, isPending } = useQuery({
  */
 const mayOrganise = computed(() => event.value?.viewer?.permissions.organise === true);
 const forbidden = computed(() => event.value !== undefined && !mayOrganise.value);
+
+/**
+ * The scoring is read here and edited in a later slice: an Organiser needs to
+ * see what their Players will be asked for before they can change it.
+ */
+const { data: scoreTypes } = useQuery({
+  queryKey: computed(() => keys.scoreTypes(props.eventSlug)),
+  queryFn: () => fetchScoreTypes(client, props.eventSlug),
+  enabled: mayOrganise,
+  retry: false,
+});
+
+/** How a Score Type is filled in: the platform works it out, or a Player types it. */
+function sourceOf(scoreType: ScoreType): string {
+  return scoreType.is_derived ? 'Worked out for them' : 'Entered by players';
+}
+
+/** Which way up a Score Type ranks, said the way an Organiser would say it. */
+function directionOf(scoreType: ScoreType): string {
+  return scoreType.sort_direction === 'asc' ? 'Lower is better' : 'Higher is better';
+}
+
+/** The parts an Organiser has toggled on, as short badges. */
+function marksOf(scoreType: ScoreType): string[] {
+  const marks: string[] = [];
+
+  if (scoreType.is_primary) {
+    marks.push('Leads a game listing');
+  }
+
+  if (scoreType.counts_for_ranking) {
+    marks.push('Counts for ranking');
+  }
+
+  if (scoreType.is_scored) {
+    marks.push('Already scored');
+  }
+
+  return marks;
+}
 
 interface Form {
   max_attendees: string;
@@ -178,6 +219,51 @@ async function save(): Promise<void> {
           {{ saving ? 'Saving…' : 'Save format' }}
         </AppButton>
       </form>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-foreground">
+          Scoring
+        </h2>
+
+        <p
+          v-if="scoreTypes && scoreTypes.length === 0"
+          data-testid="format-no-score-types"
+          class="text-sm text-muted-foreground-1"
+        >
+          No scoring set up yet.
+        </p>
+
+        <ul
+          v-else-if="scoreTypes"
+          class="flex flex-col gap-2"
+        >
+          <li
+            v-for="scoreType in scoreTypes"
+            :key="scoreType.id"
+            data-testid="format-score-type"
+            class="rounded-lg border border-card-line bg-card p-4"
+          >
+            <p class="text-sm font-medium text-foreground">
+              {{ scoreType.name }}
+            </p>
+            <p class="mt-1 text-xs text-muted-foreground-1">
+              {{ sourceOf(scoreType) }} · {{ directionOf(scoreType) }}
+            </p>
+            <ul
+              v-if="marksOf(scoreType).length"
+              class="mt-2 flex flex-wrap gap-2"
+            >
+              <li
+                v-for="mark in marksOf(scoreType)"
+                :key="mark"
+                class="rounded-full bg-secondary px-2 py-1 text-xs text-secondary-foreground"
+              >
+                {{ mark }}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </section>
     </template>
   </main>
 </template>

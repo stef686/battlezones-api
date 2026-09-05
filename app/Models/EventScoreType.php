@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Enums\SortDirection;
 use Database\Factories\EventScoreTypeFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -25,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event $event
+ * @property-read Collection<int, GameScore> $scores
  *
  * @method static \Database\Factories\EventScoreTypeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EventScoreType newModelQuery()
@@ -92,5 +95,19 @@ class EventScoreType extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    /**
+     * The scores recorded under this column.
+     *
+     * Read to answer whether anything would be destroyed by dropping it —
+     * `game_scores` cascades on delete, so a Score Type with scores is one an
+     * Organiser must not be allowed to remove.
+     *
+     * @return HasMany<GameScore, $this>
+     */
+    public function scores(): HasMany
+    {
+        return $this->hasMany(GameScore::class);
     }
 }

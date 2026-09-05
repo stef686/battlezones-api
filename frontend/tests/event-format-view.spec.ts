@@ -43,6 +43,43 @@ function eventBody(organise = true, overrides: Record<string, unknown> = {}) {
     };
 }
 
+function scoreTypesBody() {
+    return {
+        data: [
+            {
+                id: 7,
+                name: 'Match Points',
+                slug: 'match-points',
+                sort_direction: 'desc',
+                is_derived: true,
+                is_primary: false,
+                counts_for_ranking: true,
+                ranking_order: 1,
+                win_points: '3.00',
+                draw_points: '1.00',
+                loss_points: '0.00',
+                display_order: 0,
+                is_scored: true,
+            },
+            {
+                id: 8,
+                name: 'Victory Points',
+                slug: 'victory-points',
+                sort_direction: 'asc',
+                is_derived: false,
+                is_primary: true,
+                counts_for_ranking: false,
+                ranking_order: null,
+                win_points: null,
+                draw_points: null,
+                loss_points: null,
+                display_order: 1,
+                is_scored: false,
+            },
+        ],
+    };
+}
+
 const NOT_FOUND = { status: 404, body: { message: 'Not Found.' } };
 
 function stubApi(routes: Record<string, { status: number; body?: unknown }>) {
@@ -199,5 +236,40 @@ describe('the event format screen', () => {
         // else's Event has an organiser screen is not this reader's business.
         expect(view.get('[data-testid="missing"]').text()).toContain('Not found');
         expect(view.find('[data-testid="format-max-attendees"]').exists()).toBe(false);
+    });
+
+    it('lists the score types the event is ranked on, in the order they are shown', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`/api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        const rows = view.findAll('[data-testid="format-score-type"]');
+
+        expect(rows).toHaveLength(2);
+        expect(rows[0]?.text()).toContain('Match Points');
+        expect(rows[0]?.text()).toContain('Worked out for them');
+        expect(rows[0]?.text()).toContain('Higher is better');
+        expect(rows[0]?.text()).toContain('Counts for ranking');
+        expect(rows[1]?.text()).toContain('Victory Points');
+        expect(rows[1]?.text()).toContain('Entered by players');
+        expect(rows[1]?.text()).toContain('Lower is better');
+        expect(rows[1]?.text()).toContain('Leads a game listing');
+        expect(rows[1]?.text()).not.toContain('Counts for ranking');
+    });
+
+    it('says so when the event is scored on nothing at all', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`/api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: { data: [] } },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="format-no-score-types"]').text()).toContain('No scoring set up yet');
     });
 });

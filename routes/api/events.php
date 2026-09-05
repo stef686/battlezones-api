@@ -19,6 +19,7 @@ use App\Http\Controllers\Events\ListEventPollsController;
 use App\Http\Controllers\Events\ListEventRoundsController;
 use App\Http\Controllers\Events\ListEventScheduleController;
 use App\Http\Controllers\Events\ListEventsController;
+use App\Http\Controllers\Events\ListEventScoreTypesController;
 use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
 use App\Http\Controllers\Events\ListPollCandidatesController;
@@ -165,6 +166,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.games.flag.resolve');
     Route::get('events/{event:slug}/flags', ListEventFlaggedResultsController::class)
         ->name('events.flags.index');
+
+    Route::get('events/{event:slug}/score-types', ListEventScoreTypesController::class)
+        ->name('events.score-types.index');
 
     Route::post('events/{event:slug}/rounds', GenerateRoundController::class)
         ->name('events.rounds.generate');

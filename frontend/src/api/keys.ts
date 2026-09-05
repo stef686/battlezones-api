@@ -20,6 +20,7 @@ export const keys = {
     game: (slug: string, gameId: number) => ['events', slug, 'games', gameId] as const,
     standings: (slug: string) => ['events', slug, 'standings'] as const,
     myGame: (slug: string) => ['events', slug, 'my-game'] as const,
+    scoreTypes: (slug: string) => ['events', slug, 'score-types'] as const,
     flags: (slug: string) => ['events', slug, 'flags'] as const,
     polls: (slug: string) => ['events', slug, 'polls'] as const,
     pollCandidates: (slug: string, pollId: number) => ['events', slug, 'polls', pollId, 'candidates'] as const,
