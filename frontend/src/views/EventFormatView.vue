@@ -10,7 +10,7 @@
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, ref, watch } from 'vue';
 
-import { Check, ChevronDown, ChevronUp } from 'lucide-vue-next';
+import { Check, ChevronDown, ChevronUp, Trash2 } from 'lucide-vue-next';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
@@ -79,7 +79,10 @@ const { data: scoreTypes } = useQuery({
 
 /** A Score Type as the screen edits it: points are text while being typed. */
 interface ScoreRow {
-  id: number;
+  /** Null on a column being added, which the API creates. */
+  id: number | null;
+  /** Stable for the life of the row, so a reorder does not remount its inputs. */
+  key: string;
   name: string;
   sort_direction: 'asc' | 'desc';
   is_derived: boolean;
@@ -94,6 +97,7 @@ interface ScoreRow {
 function rowOf(scoreType: ScoreType): ScoreRow {
   return {
     id: scoreType.id,
+    key: `saved-${scoreType.id}`,
     name: scoreType.name,
     sort_direction: scoreType.sort_direction,
     is_derived: scoreType.is_derived,
@@ -103,6 +107,25 @@ function rowOf(scoreType: ScoreType): ScoreRow {
     draw_points: scoreType.draw_points ?? '',
     loss_points: scoreType.loss_points ?? '',
     is_scored: scoreType.is_scored,
+  };
+}
+
+let added = 0;
+
+/** A blank column, ready to be named. */
+function blankRow(): ScoreRow {
+  return {
+    id: null,
+    key: `new-${++added}`,
+    name: '',
+    sort_direction: 'desc',
+    is_derived: false,
+    is_primary: false,
+    counts_for_ranking: true,
+    win_points: '',
+    draw_points: '',
+    loss_points: '',
+    is_scored: false,
   };
 }
 
@@ -167,6 +190,24 @@ function claimLead(index: number): void {
   current.forEach((row, position) => {
     row.is_primary = claiming && position === index;
   });
+}
+
+function addRow(): void {
+  rows.value?.push(blankRow());
+}
+
+/**
+ * Drop a column. Refused on one Games have been scored on: the scores would
+ * cascade away with it, taking the Standings computed from them.
+ */
+function removeRow(index: number): void {
+  const current = rows.value;
+
+  if (current === null || current[index]?.is_scored === true) {
+    return;
+  }
+
+  current.splice(index, 1);
 }
 
 const savingScoring = ref(false);
@@ -432,23 +473,15 @@ async function save(): Promise<void> {
           Saved.
         </AppAlert>
 
-        <p
-          v-if="rows && rows.length === 0"
-          data-testid="format-no-score-types"
-          class="text-sm text-muted-foreground-1"
-        >
-          No scoring set up yet.
-        </p>
-
         <form
-          v-else-if="rows"
+          v-if="rows"
           data-testid="format-scoring-save"
           class="flex flex-col gap-4"
           @submit.prevent="saveScoring"
         >
           <div
             v-for="(row, index) in rows"
-            :key="row.id"
+            :key="row.key"
             data-testid="format-score-type"
             class="flex flex-col gap-4 rounded-lg border border-card-line bg-card p-4"
           >
@@ -466,6 +499,16 @@ async function save(): Promise<void> {
                   @click="move(index, -1)"
                 >
                   <ChevronUp class="size-4" />
+                </button>
+                <button
+                  type="button"
+                  :data-testid="`score-remove-${index}`"
+                  :disabled="row.is_scored"
+                  class="rounded-md border border-card-line p-1.5 text-muted-foreground hover:text-destructive disabled:opacity-40"
+                  :aria-label="`Remove ${row.name}`"
+                  @click="removeRow(index)"
+                >
+                  <Trash2 class="size-4" />
                 </button>
                 <button
                   type="button"
@@ -570,6 +613,23 @@ async function save(): Promise<void> {
               Games have already been scored on this column.
             </p>
           </div>
+
+          <p
+            v-if="rows.length === 0"
+            data-testid="format-no-score-types"
+            class="text-sm text-muted-foreground-1"
+          >
+            No scoring set up yet.
+          </p>
+
+          <button
+            type="button"
+            data-testid="score-add"
+            class="rounded-lg border border-dashed border-card-line px-4 py-3 text-sm text-muted-foreground hover:text-foreground"
+            @click="addRow"
+          >
+            Add a score
+          </button>
 
           <p
             v-if="scoringErrors.score_types"

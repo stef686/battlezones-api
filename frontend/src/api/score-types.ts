@@ -31,7 +31,8 @@ export function fetchScoreTypes(client: ApiClient, slug: string): Promise<ScoreT
 
 /** One Score Type as an Organiser sends it back. Slugs are the server's alone. */
 export interface ScoreTypeChange {
-    id: number;
+    /** Absent on a column being added: the Event does not have it yet. */
+    id: number | null;
     name: string;
     sort_direction: 'asc' | 'desc';
     is_derived: boolean;

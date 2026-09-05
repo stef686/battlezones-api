@@ -20,7 +20,7 @@ use Knuckles\Scribe\Attributes\BodyParam;
  * client would refuse a result already in flight.
  */
 #[BodyParam('score_types', 'object[]', 'The complete ordered set. Position sets display order, and position among the rows counting for ranking sets ranking order.', required: true)]
-#[BodyParam('score_types[].id', 'integer', 'The Score Type being edited.', required: true, example: 7)]
+#[BodyParam('score_types[].id', 'integer', 'The Score Type being edited. Leave it out to add a new one.', required: false, example: 7)]
 #[BodyParam('score_types[].name', 'string', 'What the column is called.', required: true, example: 'Battle Points')]
 #[BodyParam('score_types[].sort_direction', 'string', 'Which way up it ranks: asc where lower is better, desc where higher is.', required: true, example: 'desc')]
 #[BodyParam('score_types[].is_derived', 'boolean', 'Whether the platform works it out from the result rather than a Player entering it.', required: true, example: false)]
@@ -45,8 +45,10 @@ class ReplaceEventScoreTypesRequest extends FormRequest
             // An Event scored on nothing has no Standings and nothing for a
             // Player to enter, so an empty set is a mistake, not a choice.
             'score_types' => ['required', 'array', 'min:1'],
+            // Absent on a row being added: a Score Type the Event does not
+            // have yet has no id to send.
             'score_types.*.id' => [
-                'required',
+                'nullable',
                 'integer',
                 'distinct',
                 Rule::exists('event_score_types', 'id')->where('event_id', $this->event()->getKey()),
@@ -72,7 +74,7 @@ class ReplaceEventScoreTypesRequest extends FormRequest
         return [
             fn (Validator $validator) => $this->validateOneLeader($validator),
             fn (Validator $validator) => $this->validateDerivedPoints($validator),
-            fn (Validator $validator) => $this->validateNothingDropped($validator),
+            fn (Validator $validator) => $this->validateNothingScoredIsDropped($validator),
         ];
     }
 
@@ -150,23 +152,33 @@ class ReplaceEventScoreTypesRequest extends FormRequest
     }
 
     /**
-     * Every column the Event has must be in the payload. Adding and removing
-     * columns is its own endpoint's job; a row quietly left out here would
-     * otherwise read as a request to destroy it and its scores.
+     * A column Games have been scored on cannot be dropped.
+     *
+     * `game_scores` cascades on delete, so this guard is the only thing
+     * between an Organiser tidying a column away and the Event's whole score
+     * history — and the Standings computed from it — going with it. An
+     * unscored column is theirs to remove.
      */
-    private function validateNothingDropped(Validator $validator): void
+    private function validateNothingScoredIsDropped(Validator $validator): void
     {
         if ($validator->errors()->isNotEmpty()) {
             return;
         }
 
-        $sent = array_map(intval(...), array_column($this->scoreTypes(), 'id'));
-        $missing = $this->event()->scoreTypes()->whereNotIn('id', $sent)->pluck('name');
+        $kept = array_filter(array_map(
+            fn (array $row): ?int => isset($row['id']) ? (int) $row['id'] : null,
+            $this->scoreTypes(),
+        ));
 
-        if ($missing->isNotEmpty()) {
+        $scored = $this->event()->scoreTypes()
+            ->whereNotIn('id', $kept)
+            ->whereHas('scores')
+            ->pluck('name');
+
+        if ($scored->isNotEmpty()) {
             $validator->errors()->add(
                 'score_types',
-                'Every column must be sent: '.$missing->implode(', ').' is missing.',
+                'Games have already been scored on '.$scored->implode(', ').', so it cannot be removed.',
             );
         }
     }

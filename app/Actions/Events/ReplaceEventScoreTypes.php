@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\EventScoreType;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Write an Event's whole scoring set in one transaction.
@@ -26,9 +27,15 @@ class ReplaceEventScoreTypes
         DB::transaction(function () use ($event, $rows): void {
             $existing = $event->scoreTypes()->get()->keyBy('id');
             $rankingOrder = 0;
+            $kept = [];
 
             foreach ($rows as $displayOrder => $row) {
-                $scoreType = $existing->get((int) $row['id']);
+                $scoreType = isset($row['id'])
+                    ? $existing->get((int) $row['id'])
+                    : new EventScoreType([
+                        'event_id' => $event->getKey(),
+                        'slug' => $this->uniqueSlug($event, (string) $row['name']),
+                    ]);
 
                 if ($scoreType === null) {
                     continue;
@@ -51,9 +58,36 @@ class ReplaceEventScoreTypes
                     'loss_points' => $derived ? $row['loss_points'] : null,
                     'display_order' => $displayOrder,
                 ])->save();
+
+                $kept[] = $scoreType->getKey();
             }
+
+            // Whatever the Organiser left out is gone. A column Games have
+            // been scored on never reaches here: the request refuses to drop
+            // one, because its scores would cascade away with it.
+            $event->scoreTypes()->whereNotIn('id', $kept)->delete();
         });
 
         return $event->scoreTypes()->withExists('scores')->orderBy('display_order')->get();
+    }
+
+    /**
+     * A slug of its own, derived from the name and unique within the Event.
+     *
+     * Never taken from the client: a Score Type is addressed by slug when a
+     * result is submitted and when the Standings are sorted, so the platform
+     * owns the address and the Organiser owns the name.
+     */
+    private function uniqueSlug(Event $event, string $name): string
+    {
+        $base = Str::slug($name) ?: 'score';
+        $slug = $base;
+        $suffix = 1;
+
+        while ($event->scoreTypes()->where('slug', $slug)->exists()) {
+            $slug = $base.'-'.++$suffix;
+        }
+
+        return $slug;
     }
 }

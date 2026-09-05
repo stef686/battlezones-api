@@ -169,13 +169,6 @@ test('scoring an event cannot be set up in a way nothing can be worked out from'
         ->putJson(route('events.score-types.replace', ['event' => $event->slug]), ['score_types' => []])
         ->assertJsonValidationErrors(['score_types']);
 
-    // A column quietly left out would read as a request to destroy it.
-    $this->actingAs($organiser)
-        ->putJson(route('events.score-types.replace', ['event' => $event->slug]), [
-            'score_types' => [$rows()['score_types'][1]],
-        ])
-        ->assertJsonValidationErrors(['score_types' => 'Match Points is missing']);
-
     expect($matchPoints->refresh()->name)->toBe('Match Points')
         ->and($event->scoreTypes()->count())->toBe(2);
 });
@@ -271,4 +264,104 @@ test('reordering the columns re-points what a worked-out column is worked out fr
     // the column that now leads.
     expect($matchPointsFor($theirs))->toBe(3.0)
         ->and($matchPointsFor($mine))->toBe(0.0);
+});
+
+test('a column the event did not have is added, and gets a slug of its own', function () {
+    $event = Event::factory()->published()->create();
+    EventScoreType::factory()->for($event)->create([
+        'name' => 'Painting',
+        'slug' => 'painting',
+        'display_order' => 0,
+    ]);
+    $existing = $event->scoreTypes()->firstOrFail();
+
+    $body = fn () => [
+        'score_types' => [
+            [
+                'id' => $existing->id,
+                'name' => 'Painting',
+                'sort_direction' => 'desc',
+                'is_derived' => false,
+                'is_primary' => true,
+                'counts_for_ranking' => true,
+            ],
+            [
+                'name' => 'Painting',
+                'sort_direction' => 'desc',
+                'is_derived' => false,
+                'is_primary' => false,
+                'counts_for_ranking' => true,
+            ],
+        ],
+    ];
+
+    $this->actingAs(organiserOf($event))
+        ->putJson(route('events.score-types.replace', ['event' => $event->slug]), $body())
+        ->assertSuccessful()
+        ->assertJsonCount(2, 'data')
+        ->assertJsonPath('data.1.name', 'Painting')
+        ->assertJsonPath('data.1.slug', 'painting-2')
+        ->assertJsonPath('data.1.display_order', 1)
+        ->assertJsonPath('data.1.ranking_order', 2)
+        ->assertJsonPath('data.1.is_scored', false);
+
+    expect($event->scoreTypes()->count())->toBe(2);
+});
+
+test('a column nobody has been scored on is dropped when it is left out', function () {
+    $event = pairableEvent();
+    $matchPoints = $event->scoreTypes()->where('slug', 'match-points')->firstOrFail();
+    $spare = EventScoreType::factory()->for($event)->create(['name' => 'Painting', 'slug' => 'painting']);
+    $victoryPoints = $event->scoreTypes()->where('slug', 'victory-points')->firstOrFail();
+
+    $this->actingAs(organiserOf($event))
+        ->putJson(route('events.score-types.replace', ['event' => $event->slug]), [
+            'score_types' => [
+                [
+                    'id' => $matchPoints->id,
+                    'name' => 'Match Points',
+                    'sort_direction' => 'desc',
+                    'is_derived' => true,
+                    'is_primary' => false,
+                    'counts_for_ranking' => true,
+                    'win_points' => 3,
+                    'draw_points' => 1,
+                    'loss_points' => 0,
+                ],
+                [
+                    'id' => $victoryPoints->id,
+                    'name' => 'Victory Points',
+                    'sort_direction' => 'desc',
+                    'is_derived' => false,
+                    'is_primary' => true,
+                    'counts_for_ranking' => true,
+                ],
+            ],
+        ])
+        ->assertSuccessful()
+        ->assertJsonCount(2, 'data');
+
+    expect(EventScoreType::query()->whereKey($spare->id)->exists())->toBeFalse();
+});
+
+test('a column games have been scored on cannot be tidied away', function () {
+    [$event] = submittedGame();
+    $victoryPoints = $event->scoreTypes()->where('slug', 'victory-points')->firstOrFail();
+    $painting = EventScoreType::factory()->for($event)->create(['name' => 'Painting', 'slug' => 'painting']);
+
+    $this->actingAs(organiserOf($event))
+        ->putJson(route('events.score-types.replace', ['event' => $event->slug]), [
+            'score_types' => [[
+                'id' => $painting->id,
+                'name' => 'Painting',
+                'sort_direction' => 'desc',
+                'is_derived' => false,
+                'is_primary' => true,
+                'counts_for_ranking' => true,
+            ]],
+        ])
+        ->assertJsonValidationErrors(['score_types' => 'Victory Points']);
+
+    expect($victoryPoints->refresh()->scores()->count())->toBe(2)
+        ->and($event->scoreTypes()->count())->toBe(2);
 });

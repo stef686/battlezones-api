@@ -281,6 +281,10 @@ describe('the event format screen', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="format-no-score-types"]').text()).toContain('No scoring set up yet');
+
+        // An Event with nothing to score on still has to be able to gain a
+        // column, so the add control is not hidden with the list.
+        expect(view.find('[data-testid="score-add"]').exists()).toBe(true);
     });
 
     it('lets an organiser reshape an event nobody has entered yet', async () => {
@@ -398,5 +402,56 @@ describe('the event format screen', () => {
 
         expect(view.get('[data-testid="score-name-1-error"]').text()).toContain('A column needs a name.');
         expect(view.find('[data-testid="score-name-0-error"]').exists()).toBe(false);
+    });
+
+    it('adds a column the event did not have, and sends it without an id', async () => {
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`GET /api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+            [`PUT /api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="score-add"]').trigger('click');
+        await view.get('[data-testid="score-name-2"]').setValue('Painting');
+        await view.get('[data-testid="format-scoring-save"]').trigger('submit');
+        await flushPromises();
+
+        const put = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PUT');
+        const sent = JSON.parse(String((put?.[1] as RequestInit).body)) as {
+            score_types: { id?: number | null; name: string }[];
+        };
+
+        expect(sent.score_types).toHaveLength(3);
+        expect(sent.score_types[2]?.name).toBe('Painting');
+        expect(sent.score_types[2]?.id ?? null).toBeNull();
+    });
+
+    it('removes a column nobody has been scored on, and will not remove one that has', async () => {
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`GET /api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+            [`PUT /api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        // Match Points has been scored on: its remove control is dead, and
+        // says why.
+        expect(view.get('[data-testid="score-remove-0"]').attributes('disabled')).toBeDefined();
+        expect(view.get('[data-testid="format-score-type"]').text())
+            .toContain('Games have already been scored on this column');
+
+        await view.get('[data-testid="score-remove-1"]').trigger('click');
+        await view.get('[data-testid="format-scoring-save"]').trigger('submit');
+        await flushPromises();
+
+        const put = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PUT');
+        const sent = JSON.parse(String((put?.[1] as RequestInit).body)) as { score_types: { id: number }[] };
+
+        expect(sent.score_types.map((row) => row.id)).toEqual([7]);
     });
 });

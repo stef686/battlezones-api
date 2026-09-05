@@ -46,10 +46,12 @@ is what the API answers to.
 
 ## Consequences
 
-- **Nothing may be quietly left out.** Every Score Type the Event has must appear in the payload; a
-  missing row is a validation failure naming it, not a delete. Adding and removing columns is a
-  separate concern with its own guard (a column Games have been scored under cannot be removed,
-  because `game_scores` cascades).
+- **A row without an id is created; a column left out is deleted** — except one Games have already
+  been scored on, which is a validation failure naming it. `game_scores` cascades on delete, so that
+  guard is the only thing between an Organiser tidying a column away and the Event's whole score
+  history — and the Standings computed from it — going with it. An unscored column is theirs to
+  remove. A new column's slug is derived from its name and made unique within the Event; the client
+  never supplies one.
 - At most one row may claim `is_primary`. The server still resolves a leader when none is marked —
   `Event::primaryScoreType()` — so there is no unique index and no clearing hook. The screen takes
   the lead off whoever held it rather than letting an Organiser trip the refusal.
