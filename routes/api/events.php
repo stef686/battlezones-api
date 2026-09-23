@@ -10,6 +10,7 @@ use App\Http\Controllers\Events\DeleteEventScheduleBlockController;
 use App\Http\Controllers\Events\ExportEventFeedbackController;
 use App\Http\Controllers\Events\FlagGameResultController;
 use App\Http\Controllers\Events\GenerateRoundController;
+use App\Http\Controllers\Events\ListCountriesController;
 use App\Http\Controllers\Events\ListEventAttendeesController;
 use App\Http\Controllers\Events\ListEventFactionsController;
 use App\Http\Controllers\Events\ListEventFlaggedResultsController;
@@ -67,6 +68,7 @@ use App\Http\Controllers\Events\UpdateMyFactionController;
 use App\Http\Controllers\Events\UpdatePaintingEntryController;
 
 Route::get('game-systems', ListGameSystemsController::class)->name('game-systems.index');
+Route::get('countries', ListCountriesController::class)->name('countries.index');
 
 Route::get('events', ListEventsController::class)->name('events.index');
 Route::get('events/{event:slug}', ShowEventController::class)->name('events.show');

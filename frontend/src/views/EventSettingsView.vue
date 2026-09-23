@@ -12,9 +12,11 @@
  * this form sat open.
  */
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
+import { Trash2 } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 
 import { useApiClient } from '@/api';
+import { fetchCountries } from '@/api/countries';
 import { ApiError } from '@/api/errors';
 import {
   fetchEvent,
@@ -29,6 +31,7 @@ import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
+import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -48,6 +51,17 @@ const { data: event, isPending } = useQuery({
  */
 const mayOrganise = computed(() => event.value?.viewer?.permissions.organise === true);
 const forbidden = computed(() => event.value !== undefined && !mayOrganise.value);
+
+const { data: countries } = useQuery({
+  queryKey: keys.countries(),
+  queryFn: () => fetchCountries(client),
+  enabled: mayOrganise,
+  staleTime: Infinity,
+  retry: false,
+});
+
+const countryOptions = computed(() => (countries.value ?? [])
+  .map((country) => ({ value: country.code, label: country.name })));
 
 interface Form {
   name: string;
@@ -262,17 +276,33 @@ function localMoment(iso: string | null): string {
           Banner
         </h2>
 
-        <img
+        <div
           v-if="banner"
-          :src="banner.large"
-          alt=""
-          data-testid="settings-banner-preview"
-          class="aspect-[3/1] w-full rounded-lg object-cover"
+          class="relative"
         >
+          <img
+            :src="banner.large"
+            alt=""
+            data-testid="settings-banner-preview"
+            class="aspect-[3/1] w-full rounded-lg object-cover"
+          >
+
+          <AppButton
+            type="button"
+            variant="danger"
+            size="sm"
+            data-testid="settings-banner-remove"
+            class="absolute end-2 top-2"
+            :disabled="bannerBusy"
+            @click="dropBanner"
+          >
+            <Trash2 class="size-4 shrink-0" />
+            <span class="sr-only">Remove banner</span>
+          </AppButton>
+        </div>
 
         <p class="text-xs text-muted-foreground">
-          At least 1200 by 400, up to 8MB. JPEG, PNG or WebP. It is cropped to a wide strip from
-          the top, and the original is not kept — re-framing means uploading again.
+          At least 1200 by 400, up to 8MB. JPEG, PNG or WebP.
         </p>
 
         <input
@@ -292,17 +322,6 @@ function localMoment(iso: string | null): string {
         >
           {{ errors.banner.join(' ') }}
         </p>
-
-        <AppButton
-          v-if="banner"
-          type="button"
-          variant="secondary"
-          data-testid="settings-banner-remove"
-          :disabled="bannerBusy"
-          @click="dropBanner"
-        >
-          Remove banner
-        </AppButton>
       </section>
 
       <form
@@ -369,10 +388,11 @@ function localMoment(iso: string | null): string {
           :errors="errors.venue_city"
         />
 
-        <TextField
+        <SelectField
           v-model="form.venue_country"
           label="Country"
-          hint="Two-letter country code, such as GB."
+          :options="countryOptions"
+          placeholder="No country"
           testid="settings-venue-country"
           :errors="errors.venue_country"
         />
