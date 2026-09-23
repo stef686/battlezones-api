@@ -29,6 +29,13 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse whereAnswer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse whereFeedbackQuestionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse whereRating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedbackResponse whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

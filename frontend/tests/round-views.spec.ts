@@ -52,32 +52,36 @@ const ROUND = {
         number: 2,
         name: null,
         status: 'live',
+        score_types: [
+            { slug: 'match-points', name: 'Match Points', is_primary: false },
+            { slug: 'victory-points', name: 'Victory Points', is_primary: true },
+        ],
         games: [
             {
                 id: 21,
                 table_number: null,
                 is_bye: true,
-                is_rematch: false,
-                attendees: [{ id: 11, name: 'Odd One Out', members: [], scores: {} }],
+                result: { submitted_at: null, is_flagged: false },
+                attendees: [{ id: 11, name: 'Odd One Out', is_winner: true, members: [], scores: {} }],
             },
             {
                 id: 19,
                 table_number: 5,
                 is_bye: false,
-                is_rematch: true,
+                result: { submitted_at: null, is_flagged: false },
                 attendees: [
-                    { id: 9, name: 'Sons of Terra', members: [], scores: {} },
-                    { id: 10, name: 'The Warmaster\'s Own', members: [], scores: {} },
+                    { id: 9, name: 'Sons of Terra', is_winner: false, members: [], scores: {} },
+                    { id: 10, name: 'The Warmaster\'s Own', is_winner: false, members: [], scores: {} },
                 ],
             },
             {
                 id: 18,
                 table_number: 1,
                 is_bye: false,
-                is_rematch: false,
+                result: { submitted_at: '2026-09-12T14:05:00Z', is_flagged: false },
                 attendees: [
-                    { id: 12, name: 'First Table', members: [], scores: {} },
-                    { id: 13, name: 'Also First Table', members: [], scores: {} },
+                    { id: 12, name: 'First Table', is_winner: true, members: [], scores: { 'match-points': '3.00', 'victory-points': '85.50' } },
+                    { id: 13, name: 'Also First Table', is_winner: false, members: [], scores: { 'match-points': '0.00', 'victory-points': '70.00' } },
                 ],
             },
         ],
@@ -146,39 +150,37 @@ afterEach(() => {
     vi.unstubAllGlobals();
 });
 
-describe('the rounds list', () => {
-    it('lists the rounds it was sent, marking the one being played', async () => {
+describe('the rounds tab', () => {
+    it('takes a reader straight to the last published round', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
             [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
         });
 
-        const view = mountView(RoundsView);
+        mountView(RoundsView);
         await flushPromises();
 
-        expect(view.get('[data-testid="round-3"]').text()).toContain('Round 1');
-        // Unnamed rounds fall back to their number rather than showing blank.
-        expect(view.get('[data-testid="round-4"]').text()).toContain('Round 2');
-
-        expect(view.get('[data-testid="round-4"]').find('[data-testid="now-playing"]').exists()).toBe(true);
-        expect(view.get('[data-testid="round-3"]').find('[data-testid="now-playing"]').exists()).toBe(false);
+        expect(router.currentRoute.value.name).toBe('round');
+        expect(router.currentRoute.value.params.roundId).toBe('4');
     });
 
-    it('shows a Player nothing about drafts, because the API sends them none', async () => {
+    it('leaves nothing to go back to, having replaced itself', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
             [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
         });
 
-        const view = mountView(RoundsView);
+        const replace = vi.spyOn(router, 'replace');
+
+        mountView(RoundsView);
         await flushPromises();
 
-        expect(view.find('[data-testid="draft-badge"]').exists()).toBe(false);
+        expect(replace).toHaveBeenCalledTimes(1);
     });
 
-    it('marks a draft for the organiser who was sent one', async () => {
+    it('walks past a draft, which is not the round being played', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/rounds`]: {
                 status: 200,
@@ -188,10 +190,26 @@ describe('the rounds list', () => {
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
         });
 
-        const view = mountView(RoundsView);
+        mountView(RoundsView);
         await flushPromises();
 
-        expect(view.get('[data-testid="round-5"]').find('[data-testid="draft-badge"]').exists()).toBe(true);
+        expect(router.currentRoute.value.params.roundId).toBe('4');
+    });
+
+    it('lands an organiser on their draft when it is the only round there is', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds`]: {
+                status: 200,
+                body: { data: [{ id: 5, number: 1, name: null, status: 'draft' }] },
+            },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        mountView(RoundsView);
+        await flushPromises();
+
+        expect(router.currentRoute.value.params.roundId).toBe('5');
     });
 
     it('says pairings will appear rather than showing an empty page', async () => {
@@ -205,6 +223,7 @@ describe('the rounds list', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="rounds-empty"]').text()).toContain('published');
+        expect(router.currentRoute.value.name).toBe('rounds');
     });
 });
 
@@ -238,11 +257,294 @@ describe('the round detail', () => {
 
         const tables = view.findAll('[data-testid="pairing-table"]').map((node) => node.text());
         // Table 1, then table 5, then the Bye — which has no table to cross to.
-        expect(tables).toEqual(['1', '5', '—']);
+        expect(tables).toEqual(['Table 1', 'Table 5', 'Bye']);
 
         expect(view.get('[data-testid="pairing-19"]').text()).toContain('Sons of Terra');
-        expect(view.get('[data-testid="pairing-19"]').find('[data-testid="pairing-rematch"]').exists()).toBe(true);
-        expect(view.get('[data-testid="pairing-21"]').find('[data-testid="pairing-bye"]').exists()).toBe(true);
+        // The header already says Bye, so the card does not say it twice.
+        expect(view.get('[data-testid="pairing-21"]').find('[data-testid="pairing-bye"]').exists()).toBe(false);
+    });
+
+    it('says nothing about a rematch to a reader the API did not tell', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        expect(view.find('[data-testid="pairing-rematch"]').exists()).toBe(false);
+    });
+
+    it('marks a rematch beside the table for the organiser who was told', async () => {
+        const round = { data: { ...ROUND.data, games: ROUND.data.games.map((game) => ({ ...game, is_rematch: game.id === 19 })) } };
+
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: round },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        const badge = view.get('[data-testid="pairing-19"] [data-testid="pairing-rematch"]');
+
+        // An icon, with the name it cannot carry itself kept for a screen reader.
+        expect(badge.find('svg').exists()).toBe(true);
+        expect(badge.get('.sr-only').text()).toBe('Rematch');
+
+        // Beside the table number, not opposite it: same group, and the group
+        // is the one the table leads.
+        const leading = view.get('[data-testid="pairing-19"] header > span:first-child');
+
+        expect(leading.find('[data-testid="pairing-table"]').exists()).toBe(true);
+        expect(leading.find('[data-testid="pairing-rematch"]').exists()).toBe(true);
+
+        expect(view.get('[data-testid="pairing-18"]').find('[data-testid="pairing-rematch"]').exists()).toBe(false);
+    });
+
+    it('lists the primary score alone, and names it for a screen reader', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        const headings = view.get('[data-testid="pairing-18"] [data-testid="pairing-columns"]');
+
+        // Victory points are played for at the table; match points fall out
+        // of the result, so the list carries the one and not the other.
+        expect(headings.get('[data-testid="column-victory-points"]').text()).toContain('Victory Points');
+        expect(headings.find('[data-testid="column-match-points"]').exists()).toBe(false);
+
+        // Once per card, not once per team.
+        expect(view.get('[data-testid="pairing-18"]').findAll('[data-testid="pairing-columns"]')).toHaveLength(1);
+
+        // Read out, not drawn: the same column repeats down every game in the
+        // round, so its initials are noise on the list and only the number is
+        // shown. A screen reader still hears what it is.
+        expect(headings.classes()).toContain('sr-only');
+    });
+
+    it('sets the table and the result as labels, and pins the score to one edge', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        // Both facts a reader picks a game out by wear the same pill — the
+        // one the game screen wears too, so tapping a row lands on the thing
+        // that was tapped rather than on a restatement of it.
+        for (const testid of ['pairing-table', 'pairing-finished']) {
+            expect(view.get(`[data-testid="pairing-18"] [data-testid="${testid}"]`).classes())
+                .toContain('game-label');
+        }
+
+        // A fixed column on the right, so a run of games reads as two straight
+        // edges and the names take everything that is left.
+        expect(view.get('[data-testid="pairing-18"] [data-testid="score-12-victory-points"]').classes())
+            .toEqual(expect.arrayContaining(['w-16', 'text-end']));
+
+        // A rule between the games, so it is clear where one game's two teams
+        // end and the next one's begin. Divided, not boxed.
+        expect(view.get('[data-testid="pairings"]').classes())
+            .toEqual(expect.arrayContaining(['divide-y', 'divide-card-divider']));
+    });
+
+    it('marks the winning team, and leaves a game nobody won unmarked', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        const won = view.get('[data-testid="pairing-team-12"]');
+        const lost = view.get('[data-testid="pairing-team-13"]');
+
+        // Weighted and ticked, with the tick named for a screen reader.
+        expect(won.get('th').classes()).toContain('font-semibold');
+        expect(won.get('[data-testid="winner-12"]').find('svg').exists()).toBe(true);
+        expect(won.get('[data-testid="winner-12"] .sr-only').text()).toBe('Won');
+
+        expect(lost.get('th').classes()).toContain('font-normal');
+        expect(lost.find('[data-testid="winner-13"]').exists()).toBe(false);
+
+        // Still being played, so neither side is ahead of the other yet.
+        expect(view.find('[data-testid="winner-9"]').exists()).toBe(false);
+        expect(view.find('[data-testid="winner-10"]').exists()).toBe(false);
+    });
+
+    it('says a game is finished once its result is in', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        expect(view.get('[data-testid="pairing-18"]').find('[data-testid="pairing-finished"]').exists()).toBe(true);
+        // Still being played, so it says what it is instead.
+        expect(view.get('[data-testid="pairing-19"]').find('[data-testid="pairing-finished"]').exists()).toBe(false);
+    });
+
+    it('lines both teams up on the same score columns, in the same order', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        const played = view.get('[data-testid="pairing-18"]');
+
+        expect(played.get('[data-testid="pairing-team-12"]').text()).toContain('First Table');
+        // The column holds two decimal places so half points survive; a card
+        // read at a glance shows 85.5 rather than 85.50.
+        expect(played.get('[data-testid="pairing-team-12"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
+            .toEqual(['85.5']);
+        expect(played.get('[data-testid="pairing-team-13"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
+            .toEqual(['70']);
+
+        // A Game nobody has played yet shows the column it is waiting on with
+        // a dash under it: a blank reads as a number that failed to load, and
+        // a zero reads as a nil-all somebody actually played.
+        expect(view.get('[data-testid="pairing-team-9"]').findAll('[data-testid^="score-"]').map((n) => n.text()))
+            .toEqual(['—']);
+    });
+
+    it('moves between rounds on the chevrons either side of the name', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        expect(view.get('[data-testid="round-name"]').text()).toBe('Round 2');
+        expect(view.get('[data-testid="previous-round"]').attributes('href'))
+            .toBe(`/events/${EVENT_SLUG}/rounds/3`);
+        expect(view.get('[data-testid="previous-round"]').classes()).toContain('text-primary');
+    });
+
+    it('greys the chevron at the end of the rounds rather than dropping it', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        // Round 2 is the last one there is, so there is nowhere forward to go —
+        // but the arrow stays put, or the name shifts sideways at the ends.
+        const forward = view.get('[data-testid="next-round"]');
+
+        expect(forward.attributes('href')).toBeUndefined();
+        expect(forward.classes()).toContain('text-muted-foreground');
+        expect(forward.attributes('aria-hidden')).toBe('true');
+    });
+
+    it('names the round a chevron leads to, so it is not just an arrow', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        expect(view.get('[data-testid="previous-round"]').attributes('aria-label')).toBe('Go to Round 1');
+    });
+
+    it('filters the games down to a team the reader is looking for', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        await view.get('[data-testid="game-search"]').setValue('sons of');
+
+        // Matched on either team of the game, and case does not matter.
+        expect(view.findAll('[data-testid^="pairing-1"]').map((row) => row.attributes('data-testid')))
+            .toEqual(['pairing-19']);
+        expect(view.find('[data-testid="pairing-18"]').exists()).toBe(false);
+        expect(view.find('[data-testid="pairing-21"]').exists()).toBe(false);
+    });
+
+    it('spends no line on a label, and searches from the placeholder alone', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        const field = view.get('[data-testid="game-search"]');
+
+        expect(field.attributes('type')).toBe('search');
+        expect(field.attributes('placeholder')).toContain('team name');
+
+        // Off the screen, still in the markup: an input with no accessible
+        // name says nothing to a screen reader.
+        const label = view.get(`label[for="${field.attributes('id')}"]`);
+
+        expect(label.classes()).toContain('sr-only');
+        expect(label.text()).toBe('Search by team name');
+    });
+
+    it('says nothing matched rather than reading as a round with no games', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds/4`]: { status: 200, body: ROUND },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: ROUNDS },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RoundView, { eventSlug: EVENT_SLUG, roundId: '4' });
+        await flushPromises();
+
+        await view.get('[data-testid="game-search"]').setValue('nobody here');
+
+        expect(view.get('[data-testid="pairings-unmatched"]').text()).toContain('nobody here');
+        expect(view.find('[data-testid="pairings-empty"]').exists()).toBe(false);
     });
 
     it('answers a draft round the same way as one that does not exist', async () => {

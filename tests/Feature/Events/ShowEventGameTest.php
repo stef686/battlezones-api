@@ -57,6 +57,50 @@ test('it returns game detail with attendees, scores and army lists', function ()
         ->and($response->json('data.attendees.1.scores.match-points'))->toBe('0.00');
 });
 
+test('it names the score columns in the order the event declared them', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+
+    EventScoreType::factory()->victoryPoints()->for($event)->create(['display_order' => 1]);
+    EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create(['display_order' => 0]);
+
+    $game = Game::factory()->for($round)->create();
+
+    $response = $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
+        ->assertSuccessful();
+
+    // The Game screen shows every column, and is told which of them a Round's
+    // listing leads with so the two screens agree on the number in common.
+    expect($response->json('data.score_types'))->toBe([
+        ['slug' => 'match-points', 'name' => 'Match Points', 'abbreviation' => 'MP', 'is_primary' => false],
+        ['slug' => 'victory-points', 'name' => 'Victory Points', 'abbreviation' => 'VP', 'is_primary' => true],
+    ]);
+});
+
+test('it marks the winning team, so the client is not left to rank the scores', function () {
+    $event = Event::factory()->active()->create();
+    $round = Round::factory()->for($event)->live()->create();
+
+    $mp = EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create(['display_order' => 0]);
+
+    $winner = EventAttendee::factory()->for($event)->withMember()->create();
+    $loser = EventAttendee::factory()->for($event)->withMember()->create();
+
+    $game = Game::factory()->for($round)->create();
+    $game->attendees()->attach([$winner->id, $loser->id]);
+
+    GameScore::factory()->create(['game_id' => $game->id, 'event_attendee_id' => $winner->id, 'event_score_type_id' => $mp->id, 'value' => 3]);
+    GameScore::factory()->create(['game_id' => $game->id, 'event_attendee_id' => $loser->id, 'event_score_type_id' => $mp->id, 'value' => 0]);
+
+    $response = $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
+        ->assertSuccessful();
+
+    $winners = collect($response->json('data.attendees'))->pluck('is_winner', 'id');
+
+    expect($winners[$winner->id])->toBeTrue()
+        ->and($winners[$loser->id])->toBeFalse();
+});
+
 test('it validates game belongs to event through round', function () {
     $event = Event::factory()->active()->create();
     $otherEvent = Event::factory()->active()->create();

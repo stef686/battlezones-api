@@ -15,6 +15,16 @@ test('it returns a published event by slug', function () {
         ->assertJsonPath('data.status', 'published');
 });
 
+test('it carries the wall clock the event is run on', function () {
+    // Every schedule time is read and written in the Event's own zone, so a
+    // form building a timestamp cannot fall back on the reader's phone.
+    $event = Event::factory()->published()->create(['timezone' => 'Europe/London']);
+
+    $this->getJson(route('events.show', $event))
+        ->assertSuccessful()
+        ->assertJsonPath('data.timezone', 'Europe/London');
+});
+
 test('it is a public endpoint requiring no auth', function () {
     $event = Event::factory()->active()->create();
 

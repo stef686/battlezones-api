@@ -1,17 +1,42 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
-import { computed } from 'vue';
+import { ChevronRight } from 'lucide-vue-next';
+import { useQuery, useQueryClient } from '@tanstack/vue-query';
+import { computed, ref, watch } from 'vue';
+import { RouterLink, type RouteLocationRaw } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { fetchSchedule } from '@/api/events';
+import { addScheduleBlock, fetchEvent, fetchSchedule, type ScheduleBlock } from '@/api/events';
 import { keys } from '@/api/keys';
+import { fetchRounds, roundTitle } from '@/api/rounds';
+import AppAlert from '@/components/AppAlert.vue';
+import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
-import { formatDay, wallClockTime } from '@/lib/dates';
+import SelectField from '@/components/SelectField.vue';
+import TabStrip from '@/components/TabStrip.vue';
+import TextField from '@/components/TextField.vue';
+import { dayInZone, eventTimestamp, shortDay, wallClockTime } from '@/lib/dates';
 
 const props = defineProps<{ eventSlug: string }>();
 
 const client = useApiClient();
+const queryClient = useQueryClient();
+
+const { data: event } = useQuery({
+  queryKey: computed(() => keys.event(props.eventSlug)),
+  queryFn: () => fetchEvent(client, props.eventSlug),
+  retry: false,
+});
+
+const mayOrganise = computed(() => event.value?.viewer?.permissions.organise === true);
+
+/** Only an Organiser adds a block, and only a round block needs the Rounds. */
+const { data: rounds } = useQuery({
+  queryKey: computed(() => keys.rounds(props.eventSlug)),
+  queryFn: () => fetchRounds(client, props.eventSlug),
+  enabled: mayOrganise,
+  retry: false,
+});
 
 const { data: days, isPending, error } = useQuery({
   queryKey: computed(() => keys.schedule(props.eventSlug)),
@@ -21,6 +46,162 @@ const { data: days, isPending, error } = useQuery({
 
 const missing = computed(() => error.value instanceof ApiError && error.value.kind === 'not_found');
 const empty = computed(() => days.value !== undefined && days.value.length === 0);
+
+/**
+ * The days as tabs: the date leads, the weekday follows.
+ *
+ * A two-day event stacked both days on one screen, which meant scrolling
+ * through Saturday to find out when Sunday starts. Tabbed, each day is a
+ * screen of its own and the one being played is the one that opens.
+ */
+const tabs = computed(() => (days.value ?? []).map((day) => ({ id: day.date, name: shortDay(day.date) })));
+
+const selected = ref(0);
+
+/**
+ * Open on the day the Event is in rather than on its first.
+ *
+ * A live block says which day that is without the phone's clock having to
+ * agree with the hall's; today's date is the fallback for the hours between
+ * Rounds, and the first day for anyone reading the schedule in advance.
+ */
+watch(days, (loaded) => {
+  if (loaded === undefined || loaded.length === 0) {
+    return;
+  }
+
+  const live = loaded.findIndex((day) => day.blocks.some((block) => block.target_state === 'live'));
+
+  if (live !== -1) {
+    selected.value = live;
+
+    return;
+  }
+
+  const today = new Date().toLocaleDateString('en-CA');
+  const now = loaded.findIndex((day) => day.date === today);
+
+  selected.value = now === -1 ? 0 : now;
+}, { immediate: true });
+
+const openDay = computed(() => days.value?.[selected.value] ?? null);
+
+/**
+ * Where a block leads, or null where it leads nowhere.
+ *
+ * A Round block is the schedule's way into the pairings, but only once there
+ * are pairings to reach: Rounds are hidden entirely until the Event is under
+ * way, and a Draft is an Organiser's business alone. A row that cannot be
+ * opened is drawn as a row rather than as a link to a 404.
+ */
+function roundLink(block: ScheduleBlock): RouteLocationRaw | null {
+  const round = block.round;
+
+  if (round === null || !roundsReachable.value) {
+    return null;
+  }
+
+  if (round.status === 'draft' && !mayOrganise.value) {
+    return null;
+  }
+
+  return { name: 'round', params: { eventSlug: props.eventSlug, roundId: round.id } };
+}
+
+/** Rounds are not published to anybody until the Event itself is under way. */
+const roundsReachable = computed(
+  () => event.value?.status === 'active' || event.value?.status === 'completed',
+);
+
+/**
+ * Adding a block, at the foot of the day it is being added to.
+ *
+ * Folded away until it is asked for: an Organiser reads this screen far more
+ * often than they write to it, and a form under every day would be the first
+ * thing a Player-facing screen showed the person running the Event.
+ */
+const adding = ref(false);
+
+const BLOCK_TYPES = [
+  { value: 'info', label: 'Information' },
+  { value: 'round', label: 'Round' },
+  { value: 'painting_voting', label: 'Painting voting' },
+];
+
+const form = ref({ date: '', starts: '', ends: '', label: '', type: 'info', roundId: '' });
+
+const roundOptions = computed(() => (rounds.value ?? []).map((round) => ({
+  value: String(round.id),
+  label: roundTitle(round),
+})));
+
+/**
+ * A new block starts on the day being read, and on the Event's first day when
+ * there is no schedule yet to be reading.
+ */
+function openForm(): void {
+  const zone = event.value?.timezone ?? 'UTC';
+  const start = event.value?.starts_at;
+
+  form.value = {
+    date: openDay.value?.date ?? (start === undefined || start === null ? '' : dayInZone(start, zone)),
+    starts: '',
+    ends: '',
+    label: '',
+    type: 'info',
+    roundId: '',
+  };
+
+  problem.value = null;
+  fieldErrors.value = {};
+  adding.value = true;
+}
+
+const saving = ref(false);
+const problem = ref<string | null>(null);
+const fieldErrors = ref<Record<string, string[]>>({});
+
+function errorsFor(field: string): string[] {
+  return fieldErrors.value[field] ?? [];
+}
+
+async function add(): Promise<void> {
+  saving.value = true;
+  problem.value = null;
+  fieldErrors.value = {};
+
+  const zone = event.value?.timezone ?? 'UTC';
+  const { date, starts, ends, label, type, roundId } = form.value;
+
+  try {
+    // The times are the hall's, so they are written with the Event's offset
+    // rather than the offset of whoever is typing them.
+    await addScheduleBlock(client, props.eventSlug, {
+      label,
+      type,
+      starts_at: eventTimestamp(date, starts, zone),
+      ends_at: eventTimestamp(date, ends, zone),
+      round_id: type === 'round' && roundId !== '' ? Number(roundId) : null,
+    });
+
+    await queryClient.invalidateQueries({ queryKey: keys.schedule(props.eventSlug) });
+
+    // The day it landed on is the day to be looking at, which is not
+    // necessarily the day that was open when the form was filled in.
+    const landedOn = (days.value ?? []).findIndex((day) => day.date === date);
+    selected.value = landedOn === -1 ? selected.value : landedOn;
+
+    adding.value = false;
+  } catch (caught) {
+    if (caught instanceof ApiError && caught.kind === 'validation') {
+      fieldErrors.value = caught.fields;
+    } else {
+      problem.value = caught instanceof ApiError ? caught.message : 'That could not be added.';
+    }
+  } finally {
+    saving.value = false;
+  }
+}
 </script>
 
 <template>
@@ -52,66 +233,203 @@ const empty = computed(() => days.value !== undefined && days.value.length === 0
       {{ (error as ApiError).message }}
     </p>
 
-    <p
-      v-else-if="empty"
-      data-testid="schedule-empty"
-      class="text-muted-foreground-1"
-    >
-      Nothing scheduled yet.
-    </p>
-
-    <div
-      v-else
-      class="flex flex-col gap-6"
-    >
-      <section
-        v-for="day in days"
-        :key="day.date"
-        :data-testid="`day-${day.date}`"
+    <template v-else-if="empty">
+      <p
+        data-testid="schedule-empty"
+        class="text-muted-foreground-1"
       >
-        <h2 class="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          {{ formatDay(day.date) }}
-        </h2>
+        Nothing scheduled yet.
+      </p>
 
-        <!-- One card per day, blocks divided inside it: a schedule reads as a
-             column, not as a stack of separate things. -->
-        <div class="divide-y divide-card-divider overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs">
-          <article
-            v-for="block in day.blocks"
-            :key="block.id"
-            :data-testid="`block-${block.id}`"
-            class="flex items-baseline gap-4 px-4 py-3.5"
-            :class="block.is_target_live ? 'bg-primary/10' : ''"
+      <AppButton
+        v-if="mayOrganise && !adding"
+        data-testid="add-block"
+        variant="secondary"
+        class="self-start"
+        @click="openForm"
+      >
+        Add an item
+      </AppButton>
+    </template>
+
+    <TabStrip
+      v-else-if="openDay"
+      v-model="selected"
+      :items="tabs"
+      label="Days"
+      id-prefix="day"
+    >
+      <!-- One rule between blocks and nothing else: a schedule is a column of
+           times, and a card around it only sets the day apart from the tab
+           that already names it. -->
+      <div
+        :data-testid="`day-${openDay.date}`"
+        class="-mx-5 divide-y divide-card-divider"
+      >
+        <!-- A Round block is a way into its pairings, so it is a real link
+             where the Round can be opened and a plain row where it cannot. -->
+        <component
+          :is="roundLink(block) ? RouterLink : 'article'"
+          v-for="block in openDay.blocks"
+          :key="block.id"
+          :to="roundLink(block) ?? undefined"
+          :data-testid="`block-${block.id}`"
+          class="flex items-center gap-4 px-5 py-3.5"
+          :class="[
+            block.target_state === 'live' ? 'bg-primary/10' : '',
+            roundLink(block) ? 'hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden' : '',
+          ]"
+        >
+          <!-- The time as the hall reads it, tabular so the column lines up
+               down the page rather than jittering with the digits. -->
+          <time
+            :datetime="block.starts_at"
+            data-testid="block-time"
+            class="w-12 shrink-0 text-base font-semibold tabular-nums text-foreground"
           >
-            <!-- The time as the hall reads it, tabular so the column lines up
-                 down the page rather than jittering with the digits. -->
-            <time
-              :datetime="block.starts_at"
-              data-testid="block-time"
-              class="w-14 shrink-0 text-lg font-semibold tabular-nums text-foreground"
-            >
-              {{ wallClockTime(block.starts_at) }}
-            </time>
+            {{ wallClockTime(block.starts_at) }}
+          </time>
 
-            <div class="flex min-w-0 flex-col">
-              <p class="truncate text-sm font-medium text-foreground">
-                {{ block.label }}
-              </p>
-              <p class="text-sm text-muted-foreground">
-                until {{ wallClockTime(block.ends_at) }}
-              </p>
-            </div>
+          <!-- Only what a block starts. When it ends is the next row's start
+               time, and saying it twice spent a line of every row on a phone. -->
+          <p class="min-w-0 truncate text-sm font-medium text-foreground">
+            {{ block.label }}
+          </p>
 
-            <span
-              v-if="block.is_target_live"
-              data-testid="block-live"
-              class="ms-auto inline-flex shrink-0 items-center rounded-full bg-primary px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-primary-foreground"
-            >
-              Now
-            </span>
-          </article>
-        </div>
-      </section>
-    </div>
+          <!-- One "Now" on the schedule, on the Round being played rather
+               than on every Round that has been published. What is behind it
+               says so instead. -->
+          <span
+            v-if="block.target_state"
+            :data-testid="block.target_state === 'live' ? 'block-live' : 'block-finished'"
+            class="ms-auto inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-2xs font-medium uppercase tracking-wide"
+            :class="block.target_state === 'live'
+              ? 'bg-primary text-primary-foreground'
+              : 'border border-border text-muted-foreground'"
+          >
+            {{ block.target_state === 'live' ? 'Now' : 'Finished' }}
+          </span>
+
+          <ChevronRight
+            v-if="roundLink(block)"
+            class="ms-auto size-4 shrink-0 text-muted-foreground"
+          />
+        </component>
+
+        <p
+          v-if="openDay.blocks.length === 0"
+          data-testid="day-empty"
+          class="px-5 py-3.5 text-muted-foreground-1"
+        >
+          Nothing scheduled on this day.
+        </p>
+
+        <!-- At the foot of the day, where the next block would go: an
+             Organiser adds to the end of a schedule far more often than into
+             the middle of one, and the API takes the times either way. -->
+        <button
+          v-if="mayOrganise && !adding"
+          type="button"
+          data-testid="add-block"
+          class="flex w-full items-center gap-4 px-5 py-3.5 text-start text-sm font-medium text-primary hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
+          @click="openForm"
+        >
+          Add an item
+        </button>
+      </div>
+    </TabStrip>
+    <!-- Outside the tabs, because a block being added may belong to a day the
+         schedule does not have yet, and a form that vanished when the reader
+         changed tab would take what they had typed with it. -->
+    <form
+      v-if="adding"
+      data-testid="add-block-form"
+      class="flex flex-col gap-4"
+      novalidate
+      @submit.prevent="add"
+    >
+      <TextField
+        v-model="form.label"
+        label="What is it?"
+        testid="block-label"
+        :errors="errorsFor('label')"
+      />
+
+      <SelectField
+        v-model="form.type"
+        label="Kind"
+        testid="block-type"
+        :options="BLOCK_TYPES"
+        hint="A round links the block to the round it runs, which is what lights it as live."
+        :errors="errorsFor('type')"
+      />
+
+      <SelectField
+        v-if="form.type === 'round'"
+        v-model="form.roundId"
+        label="Which round"
+        placeholder="Choose a round"
+        testid="block-round"
+        :options="roundOptions"
+        :errors="errorsFor('round_id')"
+      />
+
+      <TextField
+        v-model="form.date"
+        label="Day"
+        type="date"
+        testid="block-date"
+        :errors="errorsFor('starts_at')"
+      />
+
+      <div class="flex gap-3">
+        <TextField
+          v-model="form.starts"
+          label="Starts"
+          type="time"
+          testid="block-starts"
+          class="flex-1"
+        />
+        <TextField
+          v-model="form.ends"
+          label="Ends"
+          type="time"
+          testid="block-ends"
+          class="flex-1"
+          :errors="errorsFor('ends_at')"
+        />
+      </div>
+
+      <p class="text-sm text-muted-foreground">
+        Times are the ones the hall reads, whatever clock you are typing on.
+      </p>
+
+      <AppAlert
+        v-if="problem"
+        data-testid="add-block-problem"
+        tone="error"
+      >
+        {{ problem }}
+      </AppAlert>
+
+      <div class="flex gap-3">
+        <AppButton
+          type="submit"
+          data-testid="save-block"
+          :disabled="saving"
+          class="flex-1"
+        >
+          {{ saving ? 'Adding…' : 'Add to the schedule' }}
+        </AppButton>
+        <AppButton
+          data-testid="cancel-block"
+          variant="secondary"
+          :disabled="saving"
+          @click="adding = false"
+        >
+          Cancel
+        </AppButton>
+      </div>
+    </form>
   </main>
 </template>

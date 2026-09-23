@@ -23,9 +23,11 @@ class EventScoreTypeFactory extends Factory
         return [
             'event_id' => Event::factory(),
             'name' => $name,
+            'abbreviation' => EventScoreType::abbreviate($name),
             'slug' => Str::slug($name),
             'sort_direction' => SortDirection::Desc,
             'is_derived' => false,
+            'is_primary' => false,
             'ranking_order' => null,
             'win_points' => null,
             'draw_points' => null,
@@ -38,9 +40,18 @@ class EventScoreTypeFactory extends Factory
     {
         return $this->state([
             'name' => 'Victory Points',
+            'abbreviation' => 'VP',
             'slug' => 'victory-points',
             'sort_direction' => SortDirection::Desc,
             'is_derived' => false,
+        ]);
+    }
+
+    /** The one column a Game listing leads with. */
+    public function primary(): static
+    {
+        return $this->state([
+            'is_primary' => true,
         ]);
     }
 
@@ -48,6 +59,7 @@ class EventScoreTypeFactory extends Factory
     {
         return $this->state([
             'name' => 'Match Points',
+            'abbreviation' => 'MP',
             'slug' => 'match-points',
             'sort_direction' => SortDirection::Desc,
             'is_derived' => true,

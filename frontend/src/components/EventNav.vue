@@ -8,11 +8,15 @@
  * away so those five are reachable from anywhere inside the Event — Home
  * first, because a Player who has lost their place wants the Event screen.
  *
- * The lit section is marked with an underline rather than a filled pill: six
- * pills read as six buttons competing with the screen's own calls to action,
+ * An Organiser is a Player too, and they run the Event from inside it rather
+ * than from a call-to-action on one screen: Organisers trails the sections so
+ * their side of it is one tap from wherever they are, not one tap from Home.
+ *
+ * The lit section is marked with an underline rather than a filled pill:
+ * pills read as buttons and compete with the screen's own calls to action,
  * where a tab strip reads as where you are.
  *
- * Six tabs do not fit a phone viewport, so the strip scrolls horizontally —
+ * The tabs do not fit a phone viewport, so the strip scrolls horizontally —
  * natively, because a custom drag handler on a bar this small fights the
  * browser's own momentum and gets it wrong.
  */
@@ -37,19 +41,30 @@ const { data: event, error } = useQuery({
 
 /**
  * Which chip a screen belongs to, by route name rather than by matching the
- * URL: a Round's detail screen belongs to Rounds and an Attendee's to
- * Attendees, while the Poll and My game screens belong to no chip at all.
+ * URL: a Round's detail screen belongs to Rounds — as does a single Game
+ * beneath it — and an Attendee's to Attendees, while the Poll and My game
+ * screens belong to no chip at all.
  * Kept beside the chip list so the whole relationship reads in one place.
  */
 const chipOfRoute: Record<string, string> = {
   event: 'event',
   rounds: 'rounds',
   round: 'rounds',
+  game: 'rounds',
   standings: 'standings',
   attendees: 'attendees',
   attendee: 'attendees',
   schedule: 'schedule',
   'my-team': 'my-team',
+  'my-team-details': 'my-team',
+  'my-team-faction': 'my-team',
+  'my-team-list': 'my-team',
+  'my-team-partner': 'my-team',
+  'my-team-painting': 'my-team',
+  organise: 'organise',
+  'event-settings': 'organise',
+  'event-format': 'organise',
+  flags: 'organise',
 };
 
 const sections = [
@@ -89,13 +104,24 @@ watch(() => route.name, () => {
 const active = computed(() => chipOfRoute[String(route.name)] ?? null);
 
 /**
- * My team is the one chip allowed to be absent, and it is last for exactly
- * that reason: a viewer who has not entered has no team, and a trailing chip
- * can go without moving the five in front of it.
+ * The two chips allowed to be absent trail the five that are not, for exactly
+ * that reason: a viewer who has not entered has no team and a viewer who does
+ * not run the Event has nothing to run, and a trailing chip can go without
+ * moving the sections in front of it.
+ *
+ * Organisers is last because it is the only chip that leaves the Player-facing
+ * Event for the organiser's side of it. It is offered on the permission the
+ * API sent, never hidden with CSS: a reader without it is not sent the link.
  */
-const chips = computed(() => event.value?.viewer?.is_attendee === true
-  ? [...sections, { name: 'my-team', label: 'My team' }]
-  : sections);
+const chips = computed(() => {
+  const viewer = event.value?.viewer;
+
+  return [
+    ...sections,
+    ...(viewer?.is_attendee === true ? [{ name: 'my-team', label: 'My team' }] : []),
+    ...(viewer?.permissions.organise === true ? [{ name: 'organise', label: 'Organisers' }] : []),
+  ];
+});
 </script>
 
 <template>

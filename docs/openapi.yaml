@@ -992,6 +992,34 @@ paths:
         required: true
         schema:
           type: integer
+  /api/game-systems:
+    get:
+      summary: 'List Game Systems'
+      operationId: listGameSystems
+      description: 'Every Game System the platform knows, in name order. Public: the Event listing already filters on a Game System slug.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        slug:
+                          type: string
+      tags:
+        - Events
+      security: []
   /api/events:
     get:
       summary: 'List Events'
@@ -1050,6 +1078,8 @@ paths:
                       status:
                         type: string
                       pairing_format:
+                        type: string
+                      timezone:
                         type: string
                       starts_at:
                         type: string
@@ -1238,6 +1268,8 @@ paths:
                         type: string
                       pairing_format:
                         type: string
+                      timezone:
+                        type: string
                       starts_at:
                         type: string
                       ends_at:
@@ -1335,10 +1367,13 @@ paths:
                 max_attendees:
                   type: integer
                   description: 'How many parties may enter. Null for no limit, and never fewer than have already entered.'
-                slug:
-                  type: string
-                  description: ''
+                game_system_id:
+                  type: integer
+                  description: 'The Game System the Event is played under. Refused once anybody has entered.'
                 attendee_size:
+                  type: integer
+                  description: 'How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered.'
+                slug:
                   type: string
                   description: ''
                 status:
@@ -1434,6 +1469,9 @@ paths:
                       name:
                         type: string
                       allegiance:
+                        type: string
+                        nullable: true
+                      avatar:
                         type: string
                         nullable: true
                       members:
@@ -1676,6 +1714,11 @@ paths:
                       allegiance:
                         type: string
                         nullable: true
+                      avatar:
+                        type: string
+                        nullable: true
+                      allegiance_locked:
+                        type: boolean
                       members:
                         type: array
                       checked_in_at:
@@ -1985,6 +2028,19 @@ paths:
                         type: string
                       status:
                         type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
+                            abbreviation:
+                              type: string
+                            is_primary:
+                              type: boolean
                       games:
                         type: array
                         items:
@@ -2015,6 +2071,8 @@ paths:
                                     type: integer
                                   name:
                                     type: string
+                                  is_winner:
+                                    type: boolean
                                   allegiance:
                                     type: string
                                   members:
@@ -2077,6 +2135,19 @@ paths:
                             type: integer
                           name:
                             type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
+                            abbreviation:
+                              type: string
+                            is_primary:
+                              type: boolean
                       result:
                         type: object
                         properties:
@@ -2106,6 +2177,8 @@ paths:
                               type: integer
                             name:
                               type: string
+                            is_winner:
+                              type: boolean
                             members:
                               type: array
                               items:
@@ -2153,7 +2226,7 @@ paths:
     get:
       summary: 'List Event Standings'
       operationId: listEventStandings
-      description: 'Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position.'
+      description: 'Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position. Movement is places gained since the round before the one being played, computed the same way; it is null until two rounds have been scored.'
       parameters:
         -
           in: query
@@ -2187,6 +2260,8 @@ paths:
                         id:
                           type: integer
                         position:
+                          type: integer
+                        movement:
                           type: integer
                         attendee:
                           type: object
@@ -2229,6 +2304,8 @@ paths:
                                   id:
                                     type: integer
                                   name:
+                                    type: string
+                                  abbreviation:
                                     type: string
                                   slug:
                                     type: string
@@ -2381,8 +2458,8 @@ paths:
                                 type: integer
                               target_id:
                                 type: integer
-                              is_target_live:
-                                type: boolean
+                              target_state:
+                                type: string
                               round:
                                 type: object
                                 properties:
@@ -2426,8 +2503,9 @@ paths:
                       target_id:
                         type: string
                         nullable: true
-                      is_target_live:
-                        type: boolean
+                      target_state:
+                        type: string
+                        nullable: true
                       round:
                         type: string
                         nullable: true
@@ -3821,6 +3899,8 @@ paths:
                         type: string
                       pairing_format:
                         type: string
+                      timezone:
+                        type: string
                       starts_at:
                         type: string
                       ends_at:
@@ -3921,6 +4001,8 @@ paths:
                       status:
                         type: string
                       pairing_format:
+                        type: string
+                      timezone:
                         type: string
                       starts_at:
                         type: string
@@ -4076,8 +4158,9 @@ paths:
                       target_id:
                         type: string
                         nullable: true
-                      is_target_live:
-                        type: boolean
+                      target_state:
+                        type: string
+                        nullable: true
                       round:
                         type: string
                         nullable: true
@@ -4206,6 +4289,19 @@ paths:
                                 type: integer
                               name:
                                 type: string
+                          score_types:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                slug:
+                                  type: string
+                                name:
+                                  type: string
+                                abbreviation:
+                                  type: string
+                                is_primary:
+                                  type: boolean
                           result:
                             type: object
                             properties:
@@ -4235,6 +4331,8 @@ paths:
                                   type: integer
                                 name:
                                   type: string
+                                is_winner:
+                                  type: boolean
                                 members:
                                   type: array
                                   items:
@@ -4423,6 +4521,19 @@ paths:
                             type: integer
                           name:
                             type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
+                            abbreviation:
+                              type: string
+                            is_primary:
+                              type: boolean
                       result:
                         type: object
                         properties:
@@ -4452,6 +4563,8 @@ paths:
                               type: integer
                             name:
                               type: string
+                            is_winner:
+                              type: boolean
                             members:
                               type: array
                               items:
@@ -4513,6 +4626,19 @@ paths:
                             type: integer
                           name:
                             type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
+                            abbreviation:
+                              type: string
+                            is_primary:
+                              type: boolean
                       result:
                         type: object
                         properties:
@@ -4542,6 +4668,8 @@ paths:
                               type: integer
                             name:
                               type: string
+                            is_winner:
+                              type: boolean
                             members:
                               type: array
                               items:
@@ -4629,6 +4757,19 @@ paths:
                             type: integer
                           name:
                             type: string
+                      score_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slug:
+                              type: string
+                            name:
+                              type: string
+                            abbreviation:
+                              type: string
+                            is_primary:
+                              type: boolean
                       result:
                         type: object
                         properties:
@@ -4658,6 +4799,8 @@ paths:
                               type: integer
                             name:
                               type: string
+                            is_winner:
+                              type: boolean
                             members:
                               type: array
                               items:
@@ -4973,6 +5116,196 @@ paths:
                     type: string
       tags:
         - Events
+    parameters:
+      -
+        in: path
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        schema:
+          type: string
+  '/api/events/{event_slug}/score-types':
+    get:
+      summary: 'List Score Types'
+      operationId: listScoreTypes
+      description: 'Organisers only. The columns this Event is scored on, in the order they are shown, with the points behind a derived column and whether any Game has been scored under it yet.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        abbreviation:
+                          type: string
+                        slug:
+                          type: string
+                        sort_direction:
+                          type: string
+                        is_derived:
+                          type: boolean
+                        is_primary:
+                          type: boolean
+                        counts_for_ranking:
+                          type: boolean
+                        ranking_order:
+                          type: integer
+                        win_points:
+                          type: string
+                        draw_points:
+                          type: string
+                        loss_points:
+                          type: string
+                        display_order:
+                          type: integer
+                        is_scored:
+                          type: boolean
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+        - Events
+    put:
+      summary: 'Replace the Score Types'
+      operationId: replaceTheScoreTypes
+      description: 'Organisers only. Send the complete ordered set: position sets the display order, and position among the columns counting for ranking sets the ranking order.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        abbreviation:
+                          type: string
+                        slug:
+                          type: string
+                        sort_direction:
+                          type: string
+                        is_derived:
+                          type: boolean
+                        is_primary:
+                          type: boolean
+                        counts_for_ranking:
+                          type: boolean
+                        ranking_order:
+                          type: integer
+                        win_points:
+                          type: string
+                        draw_points:
+                          type: string
+                        loss_points:
+                          type: string
+                        display_order:
+                          type: integer
+                        is_scored:
+                          type: boolean
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        422:
+          description: 'The submitted data failed validation.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    properties:
+                      field_name:
+                        type: array
+                        items:
+                          type: string
+      tags:
+        - Events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                score_types:
+                  type: array
+                  description: 'The complete ordered set. Position sets display order, and position among the rows counting for ranking sets ranking order.'
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: 'The Score Type being edited. Leave it out to add a new one.'
+                      name:
+                        type: string
+                        description: 'What the column is called.'
+                      abbreviation:
+                        type: string
+                        description: 'The heading shown over the column on a Game and in the Standings. Left out or blank, the platform works one out from the name.'
+                      sort_direction:
+                        type: string
+                        description: 'Which way up it ranks: asc where lower is better, desc where higher is.'
+                      is_derived:
+                        type: boolean
+                        description: 'Whether the platform works it out from the result rather than a Player entering it.'
+                      is_primary:
+                        type: boolean
+                        description: 'Whether it leads a Game listing. At most one may.'
+                      counts_for_ranking:
+                        type: boolean
+                        description: 'Whether it ranks the Standings.'
+                      win_points:
+                        type: number
+                        description: 'What a win is worth. Required on a derived column.'
+                      draw_points:
+                        type: number
+                        description: 'What a draw is worth. Required on a derived column.'
+                      loss_points:
+                        type: number
+                        description: 'What a loss is worth. Required on a derived column.'
+                    required:
+                      - name
+                      - sort_direction
+                      - is_derived
+                      - is_primary
+                      - counts_for_ranking
+              required:
+                - score_types
     parameters:
       -
         in: path
@@ -5523,6 +5856,175 @@ paths:
         required: true
         schema:
           type: integer
+  '/api/events/{event_slug}/attendees/{attendee_id}/avatar':
+    post:
+      summary: 'Upload a Team Avatar'
+      operationId: uploadATeamAvatar
+      description: 'The team and its Organisers. A multipart route of its own rather than a field on the Attendee PATCH, because PHP does not populate uploaded files for PATCH bodies. The upload is cropped to a 256x256 WebP square and the original is discarded.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      allegiance:
+                        type: string
+                      avatar:
+                        type: string
+                      members:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            faction:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                            army_list_locked:
+                              type: boolean
+                            clubs:
+                              type: array
+                      checked_in_at:
+                        type: string
+                        nullable: true
+                      custom_field_responses:
+                        type: array
+                      games:
+                        type: array
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        422:
+          description: 'The submitted data failed validation.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    properties:
+                      field_name:
+                        type: array
+                        items:
+                          type: string
+      tags:
+        - Events
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+                  description: 'A square-ish image, at least 128x128, at most 8MB. JPEG, PNG or WebP.'
+              required:
+                - avatar
+    delete:
+      summary: 'Remove a Team Avatar'
+      operationId: removeATeamAvatar
+      description: 'The team and its Organisers. Deletes the stored square and returns the team to its placeholder.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      allegiance:
+                        type: string
+                      avatar:
+                        type: string
+                      members:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            faction:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                            army_list_locked:
+                              type: boolean
+                            clubs:
+                              type: array
+                      checked_in_at:
+                        type: string
+                        nullable: true
+                      custom_field_responses:
+                        type: array
+                      games:
+                        type: array
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+        - Events
+    parameters:
+      -
+        in: path
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: attendee_id
+        description: 'The id of the attendee.'
+        required: true
+        schema:
+          type: integer
   '/api/events/{event_slug}/attendees/{attendee_id}/members':
     post:
       summary: 'Add a Player to a Team'
@@ -5727,6 +6229,190 @@ paths:
         in: path
         name: id
         description: 'The id of the Player to remove.'
+        required: true
+        schema:
+          type: integer
+  '/api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}':
+    patch:
+      summary: 'Amend an Invited Player'
+      operationId: amendAnInvitedPlayer
+      description: 'The name, address and Faction of a team mate who has not claimed their account. Refused once they have: their details are then theirs alone. Addressed by membership because the membership is the seat being amended.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      allegiance:
+                        type: string
+                      members:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            faction:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                            army_list_locked:
+                              type: boolean
+                            membership_id:
+                              type: integer
+                            invite_outstanding:
+                              type: boolean
+                            clubs:
+                              type: array
+                      checked_in_at:
+                        type: string
+                        nullable: true
+                      custom_field_responses:
+                        type: array
+                      games:
+                        type: array
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          description: 'The Player has an account of their own.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        422:
+          description: 'The submitted data failed validation.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    properties:
+                      field_name:
+                        type: array
+                        items:
+                          type: string
+      tags:
+        - Events
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "The Player's name."
+                email:
+                  type: string
+                  description: 'The address their invitation is sent to.'
+                faction_id:
+                  type: integer
+                  description: 'The Faction this Player brings.'
+    parameters:
+      -
+        in: path
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: attendee_id
+        description: 'The id of the attendee.'
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: membership_id
+        description: 'The id of the membership being amended.'
+        required: true
+        schema:
+          type: integer
+  '/api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}/invite':
+    post:
+      summary: 'Send a Team Mate Their Invitation Again'
+      operationId: sendATeamMateTheirInvitationAgain
+      description: 'A fresh credential to the address already on file. Refused once the Player has claimed their account, which is when they no longer need one.'
+      parameters: []
+      responses:
+        200:
+          description: 'The invitation was sent again.'
+          content:
+            application/json:
+              schema:
+                type: object
+                nullable: true
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          description: 'The Player has an account of their own.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+        - Events
+    parameters:
+      -
+        in: path
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: attendee_id
+        description: 'The id of the attendee.'
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: membership_id
+        description: 'The id of the membership being chased.'
         required: true
         schema:
           type: integer

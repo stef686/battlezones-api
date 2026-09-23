@@ -103,3 +103,22 @@ test('allegiance is published with the team', function () {
         ->assertSuccessful()
         ->assertJsonPath('data.0.allegiance', 'traitor');
 });
+
+test('the team is told whether its allegiance is still open, so the form can close the field', function () {
+    $event = Event::factory()->published()->create(['attendee_size' => 2]);
+    $captain = User::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember($captain)
+        ->create(['allegiance' => Allegiance::Loyalist]);
+
+    Round::factory()->for($event)->create(['number' => 1]);
+
+    $this->actingAs($captain)
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+        ->assertJsonPath('data.allegiance_locked', false);
+
+    Round::factory()->for($event)->live()->create(['number' => 2]);
+
+    $this->actingAs($captain)
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+        ->assertJsonPath('data.allegiance_locked', true);
+});

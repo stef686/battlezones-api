@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SortDirection;
 use Database\Factories\GameFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -155,6 +156,72 @@ class Game extends Model
     public function scores(): HasMany
     {
         return $this->hasMany(GameScore::class);
+    }
+
+    /**
+     * The Attendee who won this Game, or null where nobody did.
+     *
+     * Decided the same way the Standings are: the ranked Score Types in
+     * `ranking_order`, each read in its own `sort_direction`, first one that
+     * separates the two wins it. Anything else is a draw — including a Game
+     * nobody has played, where every score is absent and therefore equal.
+     *
+     * A Bye is a win by the shape of the draw rather than by a scoreline, so
+     * its lone Attendee is the winner from the moment it is paired. This is
+     * the same fact `StoreGameScores::awardByeWin()` writes Match Points for.
+     *
+     * Reads the `attendees` and `scores` in hand rather than querying per
+     * Game — a Round is decided one Game at a time, and a lookup inside that
+     * loop is the N+1 the eager loads exist to avoid. Loaded here only where
+     * a caller has not, which costs nothing when they have.
+     *
+     * @param  Collection<int, EventScoreType>  $scoreTypes
+     */
+    public function winningAttendeeId(Collection $scoreTypes): ?int
+    {
+        $this->loadMissing(['attendees', 'scores']);
+
+        if ($this->is_bye) {
+            return $this->attendees->first()?->id;
+        }
+
+        if ($this->attendees->count() !== 2) {
+            return null;
+        }
+
+        $ranked = $scoreTypes->whereNotNull('ranking_order')->sortBy('ranking_order');
+
+        [$left, $right] = [$this->attendees[0]->id, $this->attendees[1]->id];
+
+        foreach ($ranked as $scoreType) {
+            $comparison = bccomp(
+                $this->scoreFor($left, $scoreType),
+                $this->scoreFor($right, $scoreType),
+                2,
+            );
+
+            if ($comparison === 0) {
+                continue;
+            }
+
+            $leftIsBetter = $scoreType->sort_direction === SortDirection::Desc
+                ? $comparison > 0
+                : $comparison < 0;
+
+            return $leftIsBetter ? $left : $right;
+        }
+
+        return null;
+    }
+
+    /** One Attendee's score under one Score Type, absent reading as zero. */
+    private function scoreFor(int $attendeeId, EventScoreType $scoreType): string
+    {
+        $score = $this->scores
+            ->first(fn (GameScore $row): bool => $row->event_attendee_id === $attendeeId
+                && $row->event_score_type_id === $scoreType->id);
+
+        return $score === null ? '0' : (string) $score->value;
     }
 
     /**

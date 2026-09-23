@@ -8,6 +8,7 @@ import { ApiError } from '@/api/errors';
 import { fetchAttendees } from '@/api/events';
 import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
+import TeamAvatar from '@/components/TeamAvatar.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import AppButton from '@/components/AppButton.vue';
 import TextField from '@/components/TextField.vue';
@@ -42,20 +43,11 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
 
 <template>
   <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
-    <header>
-      <!-- The nav names this screen, so the heading is for a screen reader
-           landing here from a deep link and costs no space. -->
-      <h1 class="sr-only">
-        Who is here
-      </h1>
-      <p
-        v-if="meta"
-        data-testid="attendee-total"
-        class="mt-1 text-sm text-muted-foreground-1"
-      >
-        {{ meta.total }} {{ meta.total === 1 ? 'team' : 'teams' }}
-      </p>
-    </header>
+    <!-- The nav names this screen, so the heading is for a screen reader
+         landing here from a deep link and costs no space. -->
+    <h1 class="sr-only">
+      Who is here
+    </h1>
 
     <MissingNotice
       v-if="missing"
@@ -63,11 +55,17 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
     />
 
     <template v-else>
+      <!-- The placeholder carries what a label and a hint used to, because
+           this is one field on a screen whose whole job is the list beneath
+           it, and it says the same thing in one line rather than three. The
+           label is still there for a screen reader, just not on screen. -->
       <TextField
         v-model="search"
-        label="Search"
+        label="Search by team, player, club or faction"
+        label-hidden
+        type="search"
+        placeholder="Search by team, player, club or faction…"
         testid="attendee-search"
-        hint="By team, player, club or faction."
       />
 
       <p
@@ -94,9 +92,15 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
         Nobody matches that.
       </p>
 
+      <!-- It runs to both edges rather than sitting in a card, as the
+           standings table does: this list is the whole screen rather than one
+           panel among several, and the width a card gives back is width the
+           team names were being truncated to fit. Rules top and bottom are
+           all that is left of the card. The rows carry the page's own inset
+           so their names line up with the field above them. -->
       <ul
         v-else
-        class="divide-y divide-card-divider overflow-hidden rounded-xl border border-card-line bg-card shadow-2xs"
+        class="-mx-5 divide-y divide-card-divider border-y border-card-line"
       >
         <li
           v-for="attendee in attendees"
@@ -105,9 +109,14 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
           <RouterLink
             :to="{ name: 'attendee', params: { eventSlug: props.eventSlug, attendeeId: attendee.id } }"
             :data-testid="`attendee-${attendee.id}`"
-            class="flex items-center justify-between gap-3 px-4 py-3.5 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
+            class="flex items-center gap-3 px-5 py-3.5 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
           >
-            <span class="flex min-w-0 flex-col">
+            <TeamAvatar
+              :name="attendee.name"
+              :src="attendee.avatar"
+            />
+
+            <span class="flex min-w-0 flex-1 flex-col">
               <span class="truncate text-base font-semibold text-foreground">{{ attendee.name }}</span>
               <span class="truncate text-sm text-muted-foreground">
                 {{ attendee.members.map((member) => member.name).join(' & ') }}

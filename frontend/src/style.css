@@ -26,11 +26,16 @@
  * have to read the word to know which side a team is on.
  */
 @theme {
-    --color-loyalist: oklch(0.74 0.13 240);
+    /* #FFD700 — light and gold, read against the near-black type it carries. */
+    --color-loyalist: oklch(0.887 0.182 95.3);
     --color-loyalist-foreground: oklch(0.17 0.01 260);
-    --color-traitor: oklch(0.68 0.17 30);
-    --color-traitor-foreground: oklch(0.17 0.01 260);
+    /* #00545E — dark teal, which needs the light foreground gold does not. */
+    --color-traitor: oklch(0.408 0.07 208.6);
+    --color-traitor-foreground: oklch(0.99 0 0);
     --color-success: oklch(0.72 0.15 150);
+    /* Amber, held apart from the destructive red: a locked field is not a
+       failure, it is the Event having got under way. */
+    --color-warning: oklch(0.8 0.14 85);
 
     /*
      * The Event header's type sits over a scrim rather than over a surface,
@@ -43,6 +48,28 @@
     /* The table number is read across a hall, so it gets its own step. */
     --text-hall: 6rem;
     --text-hall--line-height: 1;
+
+    /*
+     * One step under Tailwind's smallest, for a table read down rather than
+     * across: the Standings put a name, what it brought and two scores on one
+     * line, and at `xs` the names were being truncated to buy room the row
+     * did not have.
+     */
+    --text-2xs: 0.6875rem;
+    --text-2xs--line-height: 1rem;
+
+    /*
+     * Corners, one step tighter than Tailwind's defaults.
+     *
+     * The app is a dense stack of cards and strips on a phone, and at that
+     * size a 12px corner reads as a bubble rather than as a panel. Set here
+     * rather than by rewriting `rounded-xl` to `rounded-lg` across sixty
+     * call sites: the app's corner is one decision, and it should have one
+     * place to be changed. `rounded-full` is untouched — a pill or an avatar
+     * is round because it is round, not because of the scale.
+     */
+    --radius-lg: 0.25rem;
+    --radius-xl: 0.3125rem;
 }
 
 html,
@@ -87,4 +114,27 @@ body {
 @utility event-nav-fade {
     -webkit-mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);
     mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);
+}
+
+/*
+ * The label a Game's facts are set in: which table it is on, and whether the
+ * result is in.
+ *
+ * The same pill on the Round's listing and at the top of the Game, so a
+ * Player who taps a row lands on the thing they tapped rather than on a
+ * restatement of it. It is a label rather than running text because those two
+ * facts are what a reader crossing a hall picks a Game out by, and set on
+ * their own ground they are found without reading the row.
+ */
+@utility game-label {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-5);
+    padding-inline: --spacing(2);
+    padding-block: --spacing(0.5);
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-inverse);
 }

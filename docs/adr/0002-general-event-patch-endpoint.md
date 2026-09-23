@@ -14,14 +14,36 @@ decision worth remembering.
 **Accepted:** `name`, `description`, `venue_name`, `venue_address`, `venue_city`, `venue_country`,
 `starts_at`, `ends_at`, `registration_closes_at`, `max_attendees`.
 
+**Accepted only while the Event has no Attendees** (amended, see below): `game_system_id`,
+`attendee_size`.
+
 **Refused, deliberately:**
 
 - `slug` — the Event's public identity. It is in every Invite email, every shared link and every
   SPA route. Changing it silently breaks credentials already in people's inboxes.
-- `attendee_size` — every existing registration was built at the current party size. Changing it
-  leaves Attendees that are the wrong shape for their own Event.
 - `status` and `pairing_format` — these drive Round generation and visibility, not presentation.
   They need their own transitions with their own rules, not a field in a settings form.
+
+## Amendment: the shape of an Event is editable until the first entry
+
+`game_system_id` and `attendee_size` were both refused unconditionally. The Event format screen
+gives an Organiser the shape of their own Event, so both are now accepted **while no Attendee has
+entered**, and carry the same loud `prohibited` refusal the moment one has — each with a message
+naming the reason rather than the generic one.
+
+The line is drawn at the first entry, and at nothing else:
+
+- Before it, nothing has been built at the old party size, so there is no Attendee to leave the
+  wrong shape for its own Event — the original reason `attendee_size` was refused.
+- Before it, no Player has chosen a Faction, and every Faction belongs to a Game System, so
+  changing the system cannot strand a choice already made.
+
+The gate is the presence of Attendees alone, **regardless of the Event's status**: a published
+Event nobody has entered is as safe to reshape as a draft, and a draft with an Attendee is not.
+Status is a poor proxy for the thing that actually matters.
+
+`attendee_size` is validated 1–8 and `game_system_id` must exist. Neither field is migrated when it
+changes: the gate exists precisely so that no migration is needed.
 
 The Banner is not in the list either: PHP does not populate `$_FILES` for `PATCH` bodies, so it has
 its own multipart route (`POST`/`DELETE /events/{event:slug}/banner`). See ADR 0003.

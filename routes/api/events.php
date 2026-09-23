@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Events\ClaimInviteController;
 use App\Http\Controllers\Events\CloseEventPollController;
+use App\Http\Controllers\Events\DeleteAttendeeAvatarController;
 use App\Http\Controllers\Events\DeleteAttendeeMemberController;
 use App\Http\Controllers\Events\DeleteEventBannerController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
@@ -18,13 +19,17 @@ use App\Http\Controllers\Events\ListEventPollsController;
 use App\Http\Controllers\Events\ListEventRoundsController;
 use App\Http\Controllers\Events\ListEventScheduleController;
 use App\Http\Controllers\Events\ListEventsController;
+use App\Http\Controllers\Events\ListEventScoreTypesController;
 use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
+use App\Http\Controllers\Events\ListGameSystemsController;
 use App\Http\Controllers\Events\ListPollCandidatesController;
 use App\Http\Controllers\Events\OpenEventPollController;
 use App\Http\Controllers\Events\PublishRoundController;
 use App\Http\Controllers\Events\ReorderEventScheduleController;
 use App\Http\Controllers\Events\ReplaceBallotController;
+use App\Http\Controllers\Events\ReplaceEventScoreTypesController;
+use App\Http\Controllers\Events\ResendAttendeeInviteController;
 use App\Http\Controllers\Events\ResolveGameResultFlagController;
 use App\Http\Controllers\Events\RevealArmyListsController;
 use App\Http\Controllers\Events\SendEventFeedbackRequestsController;
@@ -38,6 +43,7 @@ use App\Http\Controllers\Events\ShowEventRoundController;
 use App\Http\Controllers\Events\ShowFeedbackFormController;
 use App\Http\Controllers\Events\ShowInviteController;
 use App\Http\Controllers\Events\ShowMyGameController;
+use App\Http\Controllers\Events\StoreAttendeeAvatarController;
 use App\Http\Controllers\Events\StoreAttendeeMemberController;
 use App\Http\Controllers\Events\StoreEventAttendeeController;
 use App\Http\Controllers\Events\StoreEventBannerController;
@@ -52,12 +58,15 @@ use App\Http\Controllers\Events\SwapRoundPairingsController;
 use App\Http\Controllers\Events\UnlockArmyListController;
 use App\Http\Controllers\Events\UnpublishRoundController;
 use App\Http\Controllers\Events\UpdateArmyListController;
+use App\Http\Controllers\Events\UpdateAttendeeMemberController;
 use App\Http\Controllers\Events\UpdateEventAttendeeController;
 use App\Http\Controllers\Events\UpdateEventController;
 use App\Http\Controllers\Events\UpdateEventScheduleBlockController;
 use App\Http\Controllers\Events\UpdateGameResultController;
 use App\Http\Controllers\Events\UpdateMyFactionController;
 use App\Http\Controllers\Events\UpdatePaintingEntryController;
+
+Route::get('game-systems', ListGameSystemsController::class)->name('game-systems.index');
 
 Route::get('events', ListEventsController::class)->name('events.index');
 Route::get('events/{event:slug}', ShowEventController::class)->name('events.show');
@@ -162,6 +171,11 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('events/{event:slug}/flags', ListEventFlaggedResultsController::class)
         ->name('events.flags.index');
 
+    Route::get('events/{event:slug}/score-types', ListEventScoreTypesController::class)
+        ->name('events.score-types.index');
+    Route::put('events/{event:slug}/score-types', ReplaceEventScoreTypesController::class)
+        ->name('events.score-types.replace');
+
     Route::post('events/{event:slug}/rounds', GenerateRoundController::class)
         ->name('events.rounds.generate');
     Route::scopeBindings()->post('events/{event:slug}/rounds/{round}/publish', PublishRoundController::class)
@@ -183,8 +197,22 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.store');
     Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}', UpdateEventAttendeeController::class)
         ->name('events.attendees.update');
+    // Its own multipart routes rather than a field on the Attendee PATCH,
+    // exactly as the Banner is: PHP does not populate uploaded files for a
+    // PATCH body.
+    Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/avatar', StoreAttendeeAvatarController::class)
+        ->name('events.attendees.avatar.store');
+    Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/avatar', DeleteAttendeeAvatarController::class)
+        ->name('events.attendees.avatar.destroy');
     Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members', StoreAttendeeMemberController::class)
         ->name('events.attendees.members.store');
     Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/members/{member}', DeleteAttendeeMemberController::class)
         ->name('events.attendees.members.destroy');
+    // Keyed on the membership rather than the Player, because the membership
+    // is what they amend: the seat carries the Faction and the army list, and
+    // a corrected address moves that seat to another account.
+    Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}/members/{membership}', UpdateAttendeeMemberController::class)
+        ->name('events.attendees.members.update');
+    Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/members/{membership}/invite', ResendAttendeeInviteController::class)
+        ->name('events.attendees.members.invite');
 });

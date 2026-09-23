@@ -105,6 +105,17 @@ afterEach(() => {
 });
 
 describe('the event settings screen', () => {
+    it('leads back to the organise hub it hangs off', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        const back = view.get('[data-testid="back-to-organise"]');
+
+        expect(back.attributes('href')).toBe(`/events/${EVENT_SLUG}/organise`);
+    });
+
     it('opens on what the event says it is', async () => {
         stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
 
@@ -113,7 +124,6 @@ describe('the event settings screen', () => {
 
         expect(valueOf(view, 'settings-name')).toBe('London Grand Tournament');
         expect(valueOf(view, 'settings-venue-city')).toBe('London');
-        expect(valueOf(view, 'settings-max-attendees')).toBe('32');
     });
 
     it('sends only what the organiser changed', async () => {
@@ -143,7 +153,7 @@ describe('the event settings screen', () => {
                 status: 422,
                 body: {
                     message: 'The given data was invalid.',
-                    errors: { max_attendees: ['There are already 18 parties entered.'] },
+                    errors: { venue_country: ['That is not a country code.'] },
                 },
             },
         });
@@ -151,12 +161,21 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        await view.get('[data-testid="settings-max-attendees"]').setValue('2');
+        await view.get('[data-testid="settings-venue-country"]').setValue('GBR');
         await view.get('[data-testid="settings-save"]').trigger('submit');
         await flushPromises();
 
-        expect(view.get('[data-testid="settings-max-attendees-error"]').text())
-            .toContain('There are already 18 parties entered.');
+        expect(view.get('[data-testid="settings-venue-country-error"]').text())
+            .toContain('That is not a country code.');
+    });
+
+    it('leaves places to the format screen', async () => {
+        stubApi({ [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="settings-max-attendees"]').exists()).toBe(false);
     });
 
     it('uploads a banner as multipart, because a patch body carries no files', async () => {

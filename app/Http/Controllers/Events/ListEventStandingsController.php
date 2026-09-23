@@ -17,11 +17,12 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Group('Events', 'APIs for Events')]
 class ListEventStandingsController extends Controller
 {
-    #[Endpoint('List Event Standings', 'Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position.')]
+    #[Endpoint('List Event Standings', 'Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position. Movement is places gained since the round before the one being played, computed the same way; it is null until two rounds have been scored.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [[
         'id' => 9,
         'position' => 1,
+        'movement' => 2,
         'attendee' => [
             'id' => 9,
             'name' => 'Ada and Grace',
@@ -35,7 +36,7 @@ class ListEventStandingsController extends Controller
         ],
         'scores' => [[
             'value' => 6,
-            'score_type' => ['id' => 1, 'name' => 'Match Points', 'slug' => 'match-points', 'sort_direction' => 'desc'],
+            'score_type' => ['id' => 1, 'name' => 'Match Points', 'abbreviation' => 'MP', 'slug' => 'match-points', 'sort_direction' => 'desc'],
         ]],
     ]]])]
     public function __invoke(ListEventStandingsRequest $request, Event $event): AnonymousResourceCollection

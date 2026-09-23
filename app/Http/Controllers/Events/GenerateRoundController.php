@@ -46,6 +46,7 @@ class GenerateRoundController extends Controller
         $round = $generatePairings->execute($event);
 
         $round->load([
+            'event.scoreTypes',
             'games' => fn ($query) => $query->orderBy('table_number'),
             'games.attendees.memberships.user',
             'games.attendees.memberships.faction',

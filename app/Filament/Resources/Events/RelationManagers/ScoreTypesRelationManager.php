@@ -26,6 +26,10 @@ class ScoreTypesRelationManager extends RelationManager
             TextInput::make('name')
                 ->required()
                 ->maxLength(255),
+            TextInput::make('abbreviation')
+                ->required()
+                ->maxLength(8)
+                ->helperText('The heading shown over the column on a game and in the standings, e.g. MP.'),
             TextInput::make('slug')
                 ->required()
                 ->maxLength(255),
@@ -34,6 +38,10 @@ class ScoreTypesRelationManager extends RelationManager
                 ->enum(SortDirection::class)
                 ->options(SortDirection::class),
             Toggle::make('is_derived')
+                ->default(false),
+            Toggle::make('is_primary')
+                ->label('Primary')
+                ->helperText('The one score shown on game listings. Only the first is used.')
                 ->default(false),
             TextInput::make('ranking_order')
                 ->numeric()
@@ -58,11 +66,16 @@ class ScoreTypesRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('name')
                     ->sortable(),
+                TextColumn::make('abbreviation'),
                 TextColumn::make('slug')
                     ->sortable(),
                 TextColumn::make('sort_direction')
                     ->sortable(),
                 IconColumn::make('is_derived')
+                    ->boolean()
+                    ->sortable(),
+                IconColumn::make('is_primary')
+                    ->label('Primary')
                     ->boolean()
                     ->sortable(),
                 TextColumn::make('ranking_order')

@@ -8,6 +8,7 @@
  * happened to choose.
  */
 export const keys = {
+    gameSystems: () => ['game-systems'] as const,
     event: (slug: string) => ['events', slug] as const,
     pulse: (slug: string) => ['events', slug, 'pulse'] as const,
     schedule: (slug: string) => ['events', slug, 'schedule'] as const,
@@ -17,8 +18,10 @@ export const keys = {
     attendee: (slug: string, attendeeId: number) => ['events', slug, 'attendees', attendeeId] as const,
     rounds: (slug: string) => ['events', slug, 'rounds'] as const,
     round: (slug: string, roundId: number) => ['events', slug, 'rounds', roundId] as const,
+    game: (slug: string, gameId: number) => ['events', slug, 'games', gameId] as const,
     standings: (slug: string) => ['events', slug, 'standings'] as const,
     myGame: (slug: string) => ['events', slug, 'my-game'] as const,
+    scoreTypes: (slug: string) => ['events', slug, 'score-types'] as const,
     flags: (slug: string) => ['events', slug, 'flags'] as const,
     polls: (slug: string) => ['events', slug, 'polls'] as const,
     pollCandidates: (slug: string, pollId: number) => ['events', slug, 'polls', pollId, 'candidates'] as const,

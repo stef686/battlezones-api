@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\DB;
  *
  * Every Attendee appears, whether or not they have played, and Attendees on
  * equal scores share a position.
+ *
+ * Movement between Rounds is computed the same way rather than snapshotted:
+ * a score belongs to a Game, a Game to a Round, so "where everybody stood
+ * after Round 2" is this same aggregate with the later Rounds left out. A
+ * stored position would have to be rewritten by every path that touches a
+ * score — an Organiser's edit, a bye, a flag resolution — and the one that
+ * forgets leaves an arrow pointing the wrong way for the rest of the Event.
  */
 class EventStandingsQuery
 {
@@ -27,6 +34,19 @@ class EventStandingsQuery
     private ?string $search = null;
 
     private ?EventScoreType $sortBy = null;
+
+    /**
+     * The last Round anybody had finished a Game in before the one being
+     * played, or null where this is the first — there is nowhere to have
+     * moved from until two Rounds have results in them.
+     *
+     * Resolved when the query is built rather than when it is constructed:
+     * finding it costs a query of its own, and building a Standings query is
+     * not the same thing as running one.
+     */
+    private ?int $previousRoundNumber = null;
+
+    private bool $previousRoundResolved = false;
 
     private function __construct(private Event $event)
     {
@@ -75,6 +95,18 @@ class EventStandingsQuery
                 ...$this->scoreTypes->map(fn (EventScoreType $scoreType): string => "standings.{$this->column($scoreType)}")->all(),
             ]);
 
+        $previousRound = $this->previousRoundNumber();
+
+        if ($previousRound !== null) {
+            $query->joinSub(
+                $this->rankedTotals($previousRound),
+                'previous_standings',
+                'previous_standings.id',
+                '=',
+                'event_attendees.id',
+            )->addSelect('previous_standings.position as previous_position');
+        }
+
         $this->applySearch($query);
 
         return $this->sortBy instanceof EventScoreType
@@ -89,7 +121,7 @@ class EventStandingsQuery
      * Ranking follows `ranking_order` — Match Points before Victory Points —
      * so RANK() gives tied Attendees the same position.
      */
-    private function rankedTotals(): QueryBuilder
+    private function rankedTotals(?int $throughRoundNumber = null): QueryBuilder
     {
         $ranking = $this->scoreTypes
             ->whereNotNull('ranking_order')
@@ -100,15 +132,28 @@ class EventStandingsQuery
         $order = $ranking->isEmpty() ? 'id' : $ranking->implode(', ');
 
         return DB::query()
-            ->fromSub($this->attendeeTotals(), 'totals')
+            ->fromSub($this->attendeeTotals($throughRoundNumber), 'totals')
             ->select('totals.*')
             ->selectRaw("RANK() OVER (ORDER BY {$order}) as position");
     }
 
-    private function attendeeTotals(): QueryBuilder
+    /**
+     * Every Attendee's totals, optionally as they stood at the end of a Round.
+     *
+     * The Round cap is applied to the join rather than as a `where`, so an
+     * Attendee who had played nothing by then still appears, on zero, instead
+     * of dropping out of the ranking and reading as having climbed into it.
+     */
+    private function attendeeTotals(?int $throughRoundNumber = null): QueryBuilder
     {
         $totals = DB::table('event_attendees')
-            ->leftJoin('game_scores', 'game_scores.event_attendee_id', '=', 'event_attendees.id')
+            ->leftJoin('game_scores', function ($join) use ($throughRoundNumber): void {
+                $join->on('game_scores.event_attendee_id', '=', 'event_attendees.id');
+
+                if ($throughRoundNumber !== null) {
+                    $join->whereIn('game_scores.game_id', $this->gameIdsThroughRound($throughRoundNumber));
+                }
+            })
             ->where('event_attendees.event_id', $this->event->getKey())
             ->groupBy('event_attendees.id')
             ->select('event_attendees.id');
@@ -121,6 +166,54 @@ class EventStandingsQuery
         }
 
         return $totals;
+    }
+
+    /**
+     * The Games played up to and including a Round.
+     */
+    private function gameIdsThroughRound(int $number): QueryBuilder
+    {
+        return DB::table('games')
+            ->join('rounds', 'rounds.id', '=', 'games.round_id')
+            ->where('rounds.event_id', $this->event->getKey())
+            ->where('rounds.number', '<=', $number)
+            ->select('games.id');
+    }
+
+    /**
+     * The Round the movement is measured from: the one before the latest that
+     * anybody has finished a Game in.
+     *
+     * Read from scores rather than from a status, because a Round has no
+     * completed state to read and a stored one can disagree with the results
+     * it claims to summarise. Measured from the Round before the latest scored
+     * one rather than from that one, so an Event mid-Round shows how it stood
+     * going into the Round being played rather than an arrow against itself.
+     */
+    private function previousRoundNumber(): ?int
+    {
+        if (! $this->previousRoundResolved) {
+            $this->previousRoundNumber = $this->roundBeforeTheLatestScoredOne();
+            $this->previousRoundResolved = true;
+        }
+
+        return $this->previousRoundNumber;
+    }
+
+    private function roundBeforeTheLatestScoredOne(): ?int
+    {
+        $scored = DB::table('rounds')
+            ->join('games', 'games.round_id', '=', 'rounds.id')
+            ->join('game_scores', 'game_scores.game_id', '=', 'games.id')
+            ->where('rounds.event_id', $this->event->getKey())
+            ->distinct()
+            ->orderByDesc('rounds.number')
+            // Only the latest two matter, and an Event that has run all day
+            // has no reason to hand every Round number back to read one.
+            ->limit(2)
+            ->pluck('rounds.number');
+
+        return $scored->count() < 2 ? null : (int) $scored[1];
     }
 
     /**
@@ -149,10 +242,13 @@ class EventStandingsQuery
             'scoreType' => $scoreType,
         ])->values();
 
+        $previous = $attendee->getAttribute('previous_position');
+
         return new Standing(
             position: (int) $attendee->getAttribute('position'),
             attendee: $attendee,
             scores: $scores,
+            previousPosition: $previous === null ? null : (int) $previous,
         );
     }
 

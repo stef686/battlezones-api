@@ -24,6 +24,8 @@ export interface EventSummary {
     /** How many Players make up one party. Two for a doubles Event. */
     attendee_size: number;
     requires_allegiance: boolean;
+    /** The wall clock the Event is run on, which every schedule time is in. */
+    timezone: string;
     registration_closes_at: string | null;
     attendees_count?: number;
     is_full: boolean;
@@ -56,8 +58,13 @@ export interface ScheduleBlock {
     ends_at: string;
     display_order: number;
     target_id: number | null;
-    is_target_live: boolean;
-    round: { id: number; number: number; name: string | null } | null;
+    /**
+     * Where the thing this block describes has got to: the Round being played
+     * or the open Poll is `live`, one the Event has moved past is `finished`,
+     * and anything not yet under way is null.
+     */
+    target_state: 'live' | 'finished' | null;
+    round: { id: number; number: number; name: string | null; status: string } | null;
 }
 
 export interface ScheduleDay {
@@ -69,6 +76,8 @@ export interface AttendeeSummary {
     id: number;
     name: string;
     allegiance: string | null;
+    /** The team's badge, signed and expiring. Null where they have not uploaded one. */
+    avatar?: string | null;
     members: AttendeeMember[];
 }
 
@@ -87,6 +96,19 @@ export interface AttendeeMember {
     id: number;
     name: string;
     faction: { id: number; name: string } | null;
+    /**
+     * The seat rather than the Player, sent only to the team and its
+     * Organisers. It addresses a Player who has not claimed their account,
+     * which no route can name.
+     */
+    membership_id?: number;
+    /** Whether this Player has yet to answer their invitation. */
+    invite_outstanding?: boolean;
+    /**
+     * Where that invitation was sent. Present only while it is outstanding —
+     * a claimed account's address belongs to its owner, not to their team.
+     */
+    email?: string;
     /** Whether this Player's list is in. Says nothing about what it holds. */
     army_list_locked?: boolean;
     /**
@@ -100,6 +122,10 @@ export interface Attendee {
     id: number;
     name: string | null;
     allegiance: string | null;
+    /** The team's badge, signed and expiring. Null where they have not uploaded one. */
+    avatar?: string | null;
+    /** Whether the Event has begun, which is what freezes the side it fights for. */
+    allegiance_locked?: boolean;
     members: AttendeeMember[];
     checked_in_at: string | null;
     /** Whether this army is on the display table for the painting vote. */
@@ -141,6 +167,10 @@ export interface EventChanges {
     ends_at?: string | null;
     registration_closes_at?: string | null;
     max_attendees?: number | null;
+    /** Refused by the API once anybody has entered. */
+    game_system_id?: number;
+    /** How many Players make an Attendee. Refused once anybody has entered. */
+    attendee_size?: number;
 }
 
 export function updateEvent(client: ApiClient, slug: string, changes: EventChanges): Promise<EventSummary> {
@@ -190,6 +220,25 @@ export function fetchAttendees(client: ApiClient, slug: string, options: { searc
     return client.get<Page<AttendeeSummary>>(`${eventPath(slug)}/attendees${suffix}`);
 }
 
+export interface NewScheduleBlock {
+    label: string;
+    type: string;
+    starts_at: string;
+    ends_at: string;
+    round_id?: number | null;
+}
+
+/** Put one more block on the schedule. Organisers only, as the API enforces. */
+export function addScheduleBlock(client: ApiClient, slug: string, block: NewScheduleBlock): Promise<ScheduleBlock> {
+    return client.post<{ data: ScheduleBlock }>(`${eventPath(slug)}/schedule`, {
+        label: block.label,
+        type: block.type,
+        starts_at: block.starts_at,
+        ends_at: block.ends_at,
+        ...(block.round_id === undefined || block.round_id === null ? {} : { round_id: block.round_id }),
+    }).then((response) => response.data);
+}
+
 export function fetchFactions(client: ApiClient, slug: string): Promise<Faction[]> {
     return client.get<{ data: Faction[] }>(`${eventPath(slug)}/factions`).then((response) => response.data);
 }
@@ -236,6 +285,77 @@ export function amendAttendee(
 export function recordMyFaction(client: ApiClient, slug: string, factionId: number | null): Promise<Attendee> {
     return client.patch<{ data: Attendee }>(`${eventPath(slug)}/my-faction`, { faction_id: factionId })
         .then((response) => response.data);
+}
+
+/**
+ * Upload a team's Avatar.
+ *
+ * Multipart and a route of its own for the same reason the Banner is: PHP does
+ * not populate uploaded files for a PATCH body. The square is cut on the way
+ * in and the original discarded.
+ */
+export function uploadTeamAvatar(client: ApiClient, slug: string, attendeeId: number, file: File): Promise<Attendee> {
+    const form = new FormData();
+    form.set('avatar', file);
+
+    return client.post<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/avatar`, form)
+        .then((response) => response.data);
+}
+
+/** Take the Avatar off, returning the team to its placeholder. */
+export function removeTeamAvatar(client: ApiClient, slug: string, attendeeId: number): Promise<Attendee> {
+    return client.delete<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/avatar`)
+        .then((response) => response.data);
+}
+
+/**
+ * Enrol a team mate into the empty seat.
+ *
+ * They are named by address rather than by account, because most partners have
+ * none when they are named: the API invites them, which is what creates one.
+ */
+export function addMember(
+    client: ApiClient,
+    slug: string,
+    attendeeId: number,
+    player: PlayerEntry,
+): Promise<Attendee> {
+    return client.post<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/members`, {
+        ...(player.name === undefined || player.name === null || player.name === '' ? {} : { name: player.name }),
+        email: player.email,
+        ...(player.faction_id === undefined || player.faction_id === null ? {} : { faction_id: player.faction_id }),
+    }).then((response) => response.data);
+}
+
+/**
+ * Correct a team mate's details on their behalf.
+ *
+ * Only while their invitation is outstanding: once they claim the account the
+ * API refuses this, because their name and address are then theirs. Addressed
+ * by membership because the seat is what is being amended — correcting the
+ * address moves that seat to another account, faction and list intact.
+ */
+export function amendMember(
+    client: ApiClient,
+    slug: string,
+    attendeeId: number,
+    membershipId: number,
+    changes: { name?: string; email?: string; faction_id?: number | null },
+): Promise<Attendee> {
+    return client.patch<{ data: Attendee }>(
+        `${eventPath(slug)}/attendees/${attendeeId}/members/${membershipId}`,
+        changes,
+    ).then((response) => response.data);
+}
+
+/** A fresh invitation to the address already on file, for a partner who never answered. */
+export function resendMemberInvite(
+    client: ApiClient,
+    slug: string,
+    attendeeId: number,
+    membershipId: number,
+): Promise<unknown> {
+    return client.post(`${eventPath(slug)}/attendees/${attendeeId}/members/${membershipId}/invite`, {});
 }
 
 function eventPath(slug: string): string {

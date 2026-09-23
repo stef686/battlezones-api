@@ -76,7 +76,11 @@ test('a round block links to its round and an info block carries no target', fun
             'ends_at' => '2026-07-11T11:30:00+01:00',
         ])
         ->assertSuccessful()
-        ->assertJsonPath('data.round.number', 1);
+        ->assertJsonPath('data.round.number', 1)
+        // Whether the Round can be opened at all: the schedule draws a Draft
+        // as a row rather than as a link to a 404 for everybody but its
+        // Organisers.
+        ->assertJsonPath('data.round.status', 'draft');
 
     $this->actingAs($organiser)
         ->postJson(route('events.schedule.store', ['event' => $event->slug]), [

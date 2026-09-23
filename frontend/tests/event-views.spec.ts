@@ -6,7 +6,7 @@ import type { Router } from 'vue-router';
 
 import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
-import { formatDay, wallClockTime } from '@/lib/dates';
+import { shortDay, wallClockTime } from '@/lib/dates';
 import { createAppRouter } from '@/router';
 import AttendeesView from '@/views/AttendeesView.vue';
 import AttendeeView from '@/views/AttendeeView.vue';
@@ -53,7 +53,7 @@ const SCHEDULE = {
                     ends_at: '2026-09-12T09:15:00+01:00',
                     display_order: 0,
                     target_id: null,
-                    is_target_live: false,
+                    target_state: null,
                     round: null,
                 },
                 {
@@ -64,8 +64,8 @@ const SCHEDULE = {
                     ends_at: '2026-09-12T12:00:00+01:00',
                     display_order: 1,
                     target_id: 4,
-                    is_target_live: true,
-                    round: { id: 4, number: 1, name: 'Round 1' },
+                    target_state: 'live',
+                    round: { id: 4, number: 1, name: 'Round 1', status: 'live' },
                 },
             ],
         },
@@ -78,6 +78,7 @@ const ATTENDEES = {
             id: 9,
             name: 'Sons of Terra',
             allegiance: 'loyalist',
+            avatar: 'https://uploads.test/badge.webp',
             members: [{ id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' } }],
         },
         {
@@ -197,14 +198,7 @@ describe('the event page', () => {
         expect(notice).not.toContain('published');
     });
 
-    it('offers organiser controls only where the viewer context grants them', async () => {
-        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
-
-        const anonymous = mountView(EventView);
-        await flushPromises();
-
-        expect(anonymous.find('[data-testid="organiser-controls"]').exists()).toBe(false);
-
+    it('leaves running the event to the nav, even for an organiser', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}`]: {
                 status: 200,
@@ -220,12 +214,11 @@ describe('the event page', () => {
             },
         });
 
-        pinia = createPinia();
-        setActivePinia(pinia);
         const organiser = mountView(EventView);
         await flushPromises();
 
-        expect(organiser.find('[data-testid="organiser-controls"]').exists()).toBe(true);
+        expect(organiser.find('[data-testid="organiser-controls"]').exists()).toBe(false);
+        expect(organiser.find('[data-testid="organise-link"]').exists()).toBe(false);
     });
 
     it('leaves my team to the nav, and offers entry only to a reader who may enter', async () => {
@@ -286,8 +279,13 @@ describe('the schedule', () => {
     it('names the day the API grouped by, not the day before it', () => {
         // A bare date read as UTC midnight shows the day before to anyone west
         // of Greenwich, which is the whole hazard here.
-        expect(formatDay('2026-09-12')).toContain('12');
-        expect(formatDay('2026-09-12')).toContain('September');
+        expect(shortDay('2026-09-12')).toBe('12th Sat');
+
+        // The ordinal is not a suffix table anyone gets right by accident.
+        expect(shortDay('2026-09-01')).toContain('1st');
+        expect(shortDay('2026-09-11')).toContain('11th');
+        expect(shortDay('2026-09-22')).toContain('22nd');
+        expect(shortDay('2026-09-23')).toContain('23rd');
     });
 
     it('renders each day in order, marking what is live', async () => {
@@ -301,6 +299,179 @@ describe('the schedule', () => {
 
         expect(view.get('[data-testid="block-2"]').find('[data-testid="block-live"]').exists()).toBe(true);
         expect(view.get('[data-testid="block-1"]').find('[data-testid="block-live"]').exists()).toBe(false);
+    });
+
+    it('badges a round the event has moved past as finished rather than as now', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: {
+                status: 200,
+                body: {
+                    data: [{
+                        date: '2026-09-12',
+                        blocks: [
+                            { ...SCHEDULE.data[0]!.blocks[1]!, id: 5, label: 'Round 1', target_state: 'finished' },
+                            { ...SCHEDULE.data[0]!.blocks[1]!, id: 6, label: 'Round 2', target_state: 'live' },
+                        ],
+                    }],
+                },
+            },
+        });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="block-5"]').find('[data-testid="block-finished"]').exists()).toBe(true);
+        expect(view.get('[data-testid="block-6"]').find('[data-testid="block-live"]').exists()).toBe(true);
+    });
+
+    it('tabs the days, and opens on the one being played', async () => {
+        const SECOND_DAY = {
+            data: [
+                {
+                    date: '2026-09-12',
+                    blocks: [{ ...SCHEDULE.data[0]!.blocks[0]!, target_state: null }],
+                },
+                {
+                    date: '2026-09-13',
+                    blocks: [{
+                        id: 3,
+                        label: 'Round 4',
+                        type: 'round',
+                        starts_at: '2026-09-13T09:30:00+01:00',
+                        ends_at: '2026-09-13T12:00:00+01:00',
+                        display_order: 0,
+                        target_id: 7,
+                        target_state: 'live',
+                        round: { id: 7, number: 4, name: 'Round 4' },
+                    }],
+                },
+            ],
+        };
+
+        stubApi({ [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SECOND_DAY } });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.findAll('[role="tab"]').map((tab) => tab.text())).toEqual(['12th Sat', '13th Sun']);
+
+        // A Player opening the schedule mid-event wants the day they are
+        // standing in, not the day the event started.
+        expect(view.get('[data-testid="day-2026-09-13"]').text()).toContain('Round 4');
+        expect(view.find('[data-testid="day-2026-09-12"]').exists()).toBe(false);
+
+        await view.get('[data-testid="day-tab-2026-09-12"]').trigger('click');
+
+        expect(view.get('[data-testid="day-2026-09-12"]').text()).toContain('Registration');
+    });
+
+    it('opens a round block into its pairings once the event is under way', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody({ status: 'active' }) },
+        });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="block-2"]').attributes('href')).toBe(`/events/${EVENT_SLUG}/rounds/4`);
+
+        // Registration runs no Round, so it leads nowhere.
+        expect(view.get('[data-testid="block-1"]').attributes('href')).toBeUndefined();
+    });
+
+    it('leads nowhere while the rounds are not out, rather than linking to a 404', async () => {
+        const DRAFT_ROUND = {
+            data: [{
+                date: '2026-09-12',
+                blocks: [{
+                    ...SCHEDULE.data[0]!.blocks[1]!,
+                    target_state: null,
+                    round: { id: 4, number: 1, name: 'Round 1', status: 'draft' },
+                }],
+            }],
+        };
+
+        // Published, so Rounds are not shown to anybody yet.
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const early = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(early.get('[data-testid="block-2"]').attributes('href')).toBeUndefined();
+
+        // Under way, but that Round is still a Draft: an Organiser's business
+        // alone, and a 404 to everybody else.
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: DRAFT_ROUND },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody({ status: 'active' }) },
+        });
+
+        pinia = createPinia();
+        setActivePinia(pinia);
+        const drafted = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(drafted.get('[data-testid="block-2"]').attributes('href')).toBeUndefined();
+    });
+
+    it('offers an organiser an item at the foot of the day, and writes the hall\'s time', async () => {
+        const ORGANISING = eventBody({
+            timezone: 'Europe/London',
+            viewer: {
+                is_organiser: true,
+                is_lead_organiser: true,
+                is_attendee: false,
+                attendee_id: null,
+                permissions: { organise: true, register: false, manage_organisers: true },
+            },
+        });
+
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE },
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: { data: [] } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISING },
+        });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        await view.get('[data-testid="add-block"]').trigger('click');
+
+        // The day being read is the day being added to, already filled in.
+        expect((view.get('[data-testid="block-date"]').element as HTMLInputElement).value).toBe('2026-09-12');
+
+        await view.get('[data-testid="block-label"]').setValue('Prizegiving');
+        await view.get('[data-testid="block-starts"]').setValue('17:00');
+        await view.get('[data-testid="block-ends"]').setValue('17:30');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        const added = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/schedule') && init?.method === 'POST')!;
+
+        // Written with the Event's own offset, not the offset of whatever
+        // machine the organiser is typing on.
+        expect(JSON.parse(added[1]?.body as string)).toEqual({
+            label: 'Prizegiving',
+            type: 'info',
+            starts_at: '2026-09-12T17:00:00+01:00',
+            ends_at: '2026-09-12T17:30:00+01:00',
+        });
+    });
+
+    it('offers nothing to add to a reader who does not run the event', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.find('[data-testid="add-block"]').exists()).toBe(false);
     });
 
     it('says an empty schedule is empty rather than showing nothing at all', async () => {
@@ -338,14 +509,40 @@ describe('the attendee list', () => {
         const view = mountView(AttendeesView);
         await flushPromises();
 
-        expect(view.get('[data-testid="attendee-total"]').text()).toBe('24 teams');
-
         const loyalist = view.get('[data-testid="attendee-9"]');
         expect(loyalist.text()).toContain('Sons of Terra');
         expect(loyalist.text()).toContain('Ada Lovelace');
         expect(loyalist.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
 
         expect(view.get('[data-testid="attendee-10"]').find('[data-testid="allegiance-traitor"]').exists()).toBe(true);
+    });
+
+    it('badges a team that has an avatar, and keeps the row\'s shape for one that has not', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}/attendees`]: { status: 200, body: ATTENDEES } });
+
+        const view = mountView(AttendeesView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="attendee-9"]').get('[data-testid="team-avatar"]').attributes('src'))
+            .toBe('https://uploads.test/badge.webp');
+
+        // The placeholder is the common case, not an error state: it holds the
+        // row's shape and carries initials rather than an empty circle.
+        expect(view.get('[data-testid="attendee-10"]').get('[data-testid="team-avatar-placeholder"]').text()).toBe('WO');
+    });
+
+    it('spends no line on a label, and searches from the placeholder alone', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}/attendees`]: { status: 200, body: ATTENDEES } });
+
+        const view = mountView(AttendeesView);
+        await flushPromises();
+
+        const field = view.get('[data-testid="attendee-search"]');
+
+        expect(field.attributes('placeholder')).toBe('Search by team, player, club or faction…');
+        // The label is still in the markup, just not on screen: an input with
+        // no accessible name says nothing to a screen reader.
+        expect(view.get(`label[for="${field.attributes('id')}"]`).classes()).toContain('sr-only');
     });
 
     it('does not rely on colour alone to say which side a team is on', async () => {
@@ -514,13 +711,14 @@ describe('a vote that has opened', () => {
 });
 
 describe('the attendee detail', () => {
-    it('carries no back link, because the attendees chip is pinned a tap away', async () => {
+    it('goes back to the list, which the standings can now arrive here without', async () => {
         stubApi({ [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE } });
 
         const view = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '9' });
         await flushPromises();
 
-        expect(view.find('[data-testid="back-to-attendees"]').exists()).toBe(false);
+        expect(view.get('[data-testid="back-to-attendees"]').attributes('href'))
+            .toBe(`/events/${EVENT_SLUG}/attendees`);
     });
 
     it('shows the players and the faction each of them brings', async () => {
@@ -530,9 +728,17 @@ describe('the attendee detail', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="attendee-name"]').text()).toBe('Sons of Terra');
+        expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
         expect(view.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
 
+        // One Player at a time, tabbed by name: the tab says who, the panel
+        // says what they brought.
+        expect(view.get('[data-testid="player-tab-12"]').text()).toBe('Ada Lovelace');
         expect(view.get('[data-testid="member-12"]').text()).toContain('Imperial Fists');
+        expect(view.find('[data-testid="member-13"]').exists()).toBe(false);
+
+        await view.get('[data-testid="player-tab-13"]').trigger('click');
+
         expect(view.get('[data-testid="member-13"]').text()).toContain('Faction not chosen');
     });
 
@@ -556,6 +762,8 @@ describe('the attendee detail', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="army-list-12"]').text()).toContain('Legion Tactical Squad');
+
+        await view.get('[data-testid="player-tab-13"]').trigger('click');
 
         // Locked with nothing in it is a Player who submitted an empty list,
         // not a list being withheld.
@@ -586,6 +794,8 @@ describe('the attendee detail', () => {
 
         // Who is still holding the team up is not a secret, and is the only
         // thing anyone can act on while the lists are closed.
+        await view.get('[data-testid="player-tab-13"]').trigger('click');
+
         expect(view.get('[data-testid="member-13"]').text()).toContain('List not submitted');
     });
 
@@ -628,9 +838,13 @@ describe('the attendee detail', () => {
 
         expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/attendees/9/army-lists/reveal'))).toBe(true);
 
-        // Only a locked list has anything to reopen.
+        // Only a locked list has anything to reopen, which is a fact about
+        // that Player's panel rather than about the panel being closed.
+        await view.get('[data-testid="player-tab-13"]').trigger('click');
+        expect(view.find('[data-testid="member-13"]').exists()).toBe(true);
         expect(view.find('[data-testid="unlock-13"]').exists()).toBe(false);
 
+        await view.get('[data-testid="player-tab-12"]').trigger('click');
         await view.get('[data-testid="unlock-12"]').trigger('click');
         await flushPromises();
 

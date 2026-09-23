@@ -8,7 +8,12 @@ import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
 import { createAppRouter } from '@/router';
 import { useSessionStore } from '@/stores/session';
+import MyArmyListView from '@/views/MyArmyListView.vue';
+import MyFactionView from '@/views/MyFactionView.vue';
 import MyTeamView from '@/views/MyTeamView.vue';
+import PaintedArmyView from '@/views/PaintedArmyView.vue';
+import PartnerView from '@/views/PartnerView.vue';
+import TeamDetailsView from '@/views/TeamDetailsView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 
 const EVENT_SLUG = 'london-grand-tournament';
@@ -303,7 +308,7 @@ describe('registering a team', () => {
     });
 });
 
-describe('amending a team', () => {
+describe('the my team hub', () => {
     const ENTERED = eventBody({
         viewer: {
             is_organiser: false,
@@ -314,65 +319,227 @@ describe('amending a team', () => {
         },
     });
 
+    const PAINTING_POLL = {
+        data: [{
+            id: 1,
+            name: 'Best Painted Army',
+            type: 'painting',
+            votes_per_player: 2,
+            opens_at: null,
+            closes_at: null,
+            is_open: false,
+            is_open_for_me: false,
+            my_ballot: [],
+        }],
+    };
+
     beforeEach(async () => {
         await router.push(`/events/${EVENT_SLUG}/my-team`);
     });
 
-    it('shows the team, the partner, and the faction each of them brings', async () => {
+    it('says where every part of the entry stands, without opening any of them', async () => {
         stubApi({
-            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
-            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: {
+                    data: {
+                        ...ATTENDEE.data,
+                        members: [
+                            { ...ATTENDEE.data.members[0], membership_id: 41, invite_outstanding: false },
+                            { ...ATTENDEE.data.members[1], membership_id: 42, invite_outstanding: true },
+                        ],
+                    },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}/polls`]: { status: 200, body: PAINTING_POLL },
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
         });
 
         const view = mountView(MyTeamView);
         await flushPromises();
 
+        // The team as the rest of the Event sees it, above the rows that edit it.
         expect(view.get('[data-testid="team-name"]').text()).toBe('Sons of Terra');
+        expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
+        expect(view.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
 
-        // The partner's own faction is theirs to record, so it reads as
-        // outstanding rather than as something this Player should fill in.
-        expect(view.get('[data-testid="team-mate-13"]').text()).toContain('Faction not chosen');
+        expect(view.get('[data-testid="team-details-row"]').text()).toContain('Sons of Terra');
+        expect(view.get('[data-testid="my-details-row"]').text()).toContain('Imperial Fists');
+        expect(view.get('[data-testid="my-list-row"]').text()).toContain('Not submitted');
 
-        expect((view.get('[data-testid="my-faction"]').element as HTMLSelectElement).value).toBe('3');
+        // A partner who has not answered is the thing most likely to sink an
+        // entry, so the hub says so rather than making it a screen to open.
+        expect(view.get('[data-testid="partner-row"]').text()).toContain('waiting');
+        expect(view.get('[data-testid="painting-row"]').text()).toContain('Not entered');
     });
 
-    it('saves the party details and this Player\'s own faction', async () => {
-        const fetch = stubApi({
+    it('offers no partner row where the event is played alone, and no painting row without the vote', async () => {
+        stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
-            [`/api/events/${EVENT_SLUG}/my-faction`]: { status: 200, body: ATTENDEE },
-            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
-            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+            [`/api/events/${EVENT_SLUG}/polls`]: { status: 200, body: { data: [] } },
+            [`/api/events/${EVENT_SLUG}`]: {
+                status: 200,
+                body: eventBody({ attendee_size: 1, viewer: ENTERED.data.viewer }),
+            },
         });
 
         const view = mountView(MyTeamView);
         await flushPromises();
 
+        expect(view.find('[data-testid="partner-row"]').exists()).toBe(false);
+        expect(view.find('[data-testid="painting-row"]').exists()).toBe(false);
+    });
+
+    it('sends a reader who has not entered to the entry form', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        mountView(MyTeamView);
+        await flushPromises();
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('register'));
+    });
+});
+
+describe('the my team screens', () => {
+    const ENTERED = eventBody({
+        viewer: {
+            is_organiser: false,
+            is_lead_organiser: false,
+            is_attendee: true,
+            attendee_id: 9,
+            permissions: { organise: false, register: false, manage_organisers: false },
+        },
+    });
+
+    /** The team as its own members read it, which is the only place the seat ids are sent. */
+    const MY_TEAM = {
+        data: {
+            ...ATTENDEE.data,
+            members: [
+                { id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' }, army_list_locked: false, army_list: null, membership_id: 41, invite_outstanding: false },
+                { id: 13, name: 'Tarik Torgadon', faction: null, army_list_locked: false, army_list: null, membership_id: 42, invite_outstanding: true, email: 'tarik@exmaple.com' },
+            ],
+        },
+    };
+
+    beforeEach(async () => {
+        await router.push(`/events/${EVENT_SLUG}/my-team/details`);
+    });
+
+    it('saves the team name and allegiance', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(TeamDetailsView);
+        await flushPromises();
+
+        expect((view.get('[data-testid="team-name-field"]').element as HTMLInputElement).value).toBe('Sons of Terra');
+
         await view.get('[data-testid="team-name-field"]').setValue('The Ordo Ludi');
-        await view.get('[data-testid="my-faction"]').setValue('4');
         await view.get('form').trigger('submit');
         await flushPromises();
 
         const amend = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/attendees/9') && init?.method === 'PATCH')!;
-        expect(JSON.parse(amend[1]?.body as string)).toEqual({
-            name: 'The Ordo Ludi',
-            allegiance: 'loyalist',
+        expect(JSON.parse(amend[1]?.body as string)).toEqual({ name: 'The Ordo Ludi', allegiance: 'loyalist' });
+        expect(view.find('[data-testid="team-saved"]').exists()).toBe(true);
+    });
+
+    it('closes the allegiance field once the event has begun, rather than refusing the change later', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, allegiance_locked: true } },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
         });
 
-        const faction = fetch.mock.calls.find(([url]) => String(url).endsWith('/my-faction'))!;
-        expect(JSON.parse(faction[1]?.body as string)).toEqual({ faction_id: 4 });
+        const view = mountView(TeamDetailsView);
+        await flushPromises();
 
-        expect(view.find('[data-testid="team-saved"]').exists()).toBe(true);
+        const allegiance = view.get('[data-testid="team-allegiance"]');
+
+        expect((allegiance.element as HTMLSelectElement).disabled).toBe(true);
+        expect(view.text()).toContain('Frozen now the event has begun');
+    });
+
+    it('uploads a team avatar on its own request, and offers to take it off again', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/avatar`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, avatar: 'https://uploads.test/badge.webp' } },
+            },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, avatar: 'https://uploads.test/badge.webp' } },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(TeamDetailsView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="team-avatar"]').attributes('src')).toBe('https://uploads.test/badge.webp');
+
+        const input = view.get('[data-testid="team-avatar-input"]');
+        const file = new File(['badge'], 'badge.png', { type: 'image/png' });
+
+        Object.defineProperty(input.element, 'files', { value: [file], writable: false });
+        await input.trigger('change');
+        await flushPromises();
+
+        // Its own multipart request rather than a field on the save: a PATCH
+        // body carries no files.
+        const upload = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/avatar') && init?.method === 'POST')!;
+        expect(upload[1]?.body).toBeInstanceOf(FormData);
+        expect((upload[1]?.body as FormData).get('avatar')).toBe(file);
+
+        await view.get('[data-testid="remove-team-avatar"]').trigger('click');
+        await flushPromises();
+
+        expect(fetch.mock.calls.some(([url, init]) => String(url).endsWith('/avatar') && init?.method === 'DELETE')).toBe(true);
+    });
+
+    it('draws a placeholder for a team that has uploaded nothing, and says what is refused', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/avatar`]: {
+                status: 422,
+                body: {
+                    message: 'The given data was invalid.',
+                    errors: { avatar: ['The avatar has invalid image dimensions.'] },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(TeamDetailsView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
+        expect(view.find('[data-testid="remove-team-avatar"]').exists()).toBe(false);
+
+        const input = view.get('[data-testid="team-avatar-input"]');
+        Object.defineProperty(input.element, 'files', {
+            value: [new File(['x'], 'tiny.png', { type: 'image/png' })],
+            writable: false,
+        });
+        await input.trigger('change');
+        await flushPromises();
+
+        expect(view.get('[data-testid="team-avatar-error"]').text()).toContain('dimensions');
     });
 
     it('reports an allegiance frozen by a live round', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
-            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
         });
 
-        const view = mountView(MyTeamView);
+        const view = mountView(TeamDetailsView);
         await flushPromises();
 
         stubApi({
@@ -392,18 +559,39 @@ describe('amending a team', () => {
         expect(view.get('[data-testid="team-allegiance-error"]').text()).toContain('once a round is live');
     });
 
-    it('submits this Player\'s own army list, saying that submitting locks it', async () => {
+    it('records the faction this Player is bringing, which is theirs rather than the party\'s', async () => {
         const fetch = stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
-            [`/api/events/${EVENT_SLUG}/army-list`]: { status: 200, body: { data: { army_list: 'Locked in', submitted_at: '2026-09-10T18:30:00Z', is_locked: true } } },
+            [`/api/events/${EVENT_SLUG}/my-faction`]: { status: 200, body: ATTENDEE },
             [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
         });
 
-        const view = mountView(MyTeamView);
+        const view = mountView(MyFactionView);
         await flushPromises();
 
-        expect(view.get('[data-testid="army-list-form"]').text()).toContain('locks');
+        expect((view.get('[data-testid="my-faction"]').element as HTMLSelectElement).value).toBe('3');
+
+        await view.get('[data-testid="my-faction"]').setValue('4');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        const faction = fetch.mock.calls.find(([url]) => String(url).endsWith('/my-faction'))!;
+        expect(JSON.parse(faction[1]?.body as string)).toEqual({ faction_id: 4 });
+        expect(view.find('[data-testid="faction-saved"]').exists()).toBe(true);
+    });
+
+    it('submits this Player\'s own army list, saying that submitting locks it', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}/army-list`]: { status: 200, body: { data: { army_list: 'Locked in', submitted_at: '2026-09-10T18:30:00Z', is_locked: true } } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(MyArmyListView);
+        await flushPromises();
+
+        expect(view.text()).toContain('locks');
 
         await view.get('[data-testid="army-list"]').setValue('Legion Tactical Squad, 10 models');
         await view.get('[data-testid="submit-army-list"]').trigger('click');
@@ -428,24 +616,149 @@ describe('amending a team', () => {
                     },
                 },
             },
-            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
         });
 
-        const view = mountView(MyTeamView);
+        const view = mountView(MyArmyListView);
         await flushPromises();
 
         expect(view.get('[data-testid="army-list-locked"]').text()).toContain('organiser');
         expect(view.get('[data-testid="army-list-mine"]').text()).toContain('Legion Tactical Squad');
         expect(view.find('[data-testid="army-list"]').exists()).toBe(false);
         expect(view.find('[data-testid="submit-army-list"]').exists()).toBe(false);
-
-        // The partner's list is the team's business, so its state is shown
-        // here rather than left as a thing to chase by message.
-        expect(view.get('[data-testid="team-mate-13"]').text()).toContain('List not submitted');
     });
 
-    it('enters this team\'s army for the painting vote, and says when it is in', async () => {
+    it('corrects the details of a partner who has not answered', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/members/42`]: { status: 200, body: MY_TEAM },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: MY_TEAM },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(PartnerView);
+        await flushPromises();
+
+        // The address they were invited at is already in the field: the reason
+        // to open this screen is usually that it was typed wrong.
+        expect((view.get('[data-testid="partner-email"]').element as HTMLInputElement).value).toBe('tarik@exmaple.com');
+
+        await view.get('[data-testid="partner-name"]').setValue('Tarik Torgaddon');
+        await view.get('[data-testid="partner-faction"]').setValue('4');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        const amend = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/members/42') && init?.method === 'PATCH')!;
+
+        expect(JSON.parse(amend[1]?.body as string)).toEqual({
+            name: 'Tarik Torgaddon',
+            email: 'tarik@exmaple.com',
+            faction_id: 4,
+        });
+        expect(view.find('[data-testid="partner-saved"]').exists()).toBe(true);
+    });
+
+    it('sends a corrected address, and can send the invitation again', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/members/42/invite`]: { status: 200 },
+            [`/api/events/${EVENT_SLUG}/attendees/9/members/42`]: { status: 200, body: MY_TEAM },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: MY_TEAM },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(PartnerView);
+        await flushPromises();
+
+        await view.get('[data-testid="partner-email"]').setValue('tarik@example.com');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        const amend = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/members/42') && init?.method === 'PATCH')!;
+        expect(JSON.parse(amend[1]?.body as string)).toMatchObject({ email: 'tarik@example.com' });
+
+        await view.get('[data-testid="resend-invite"]').trigger('click');
+        await flushPromises();
+
+        const resent = fetch.mock.calls.find(([url]) => String(url).endsWith('/members/42/invite'))!;
+        expect(resent[1]?.method).toBe('POST');
+        expect(view.get('[data-testid="invite-resent"]').text()).toContain('stopped working');
+    });
+
+    it('reports a partner who has claimed their account rather than offering their details', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: {
+                    data: {
+                        ...MY_TEAM.data,
+                        members: [
+                            MY_TEAM.data.members[0],
+                            { ...MY_TEAM.data.members[1], name: 'Tarik Torgaddon', invite_outstanding: false, email: undefined },
+                        ],
+                    },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(PartnerView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="partner-details"]').text()).toContain('Tarik Torgaddon');
+        expect(view.find('form').exists()).toBe(false);
+        expect(view.find('[data-testid="resend-invite"]').exists()).toBe(false);
+    });
+
+    it('invites somebody into an empty seat', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/members`]: { status: 201, body: MY_TEAM },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...MY_TEAM.data, members: [MY_TEAM.data.members[0]] } },
+            },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(PartnerView);
+        await flushPromises();
+
+        await view.get('[data-testid="partner-name"]').setValue('Tarik Torgaddon');
+        await view.get('[data-testid="partner-email"]').setValue('tarik@example.com');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        const invited = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/attendees/9/members') && init?.method === 'POST')!;
+        expect(JSON.parse(invited[1]?.body as string)).toEqual({ name: 'Tarik Torgaddon', email: 'tarik@example.com' });
+    });
+
+    it('shows a rejected partner address against the field that carries it', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/members/42`]: {
+                status: 422,
+                body: {
+                    message: 'The given data was invalid.',
+                    errors: { email: ['This player has already entered this event.'] },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: MY_TEAM },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(PartnerView);
+        await flushPromises();
+
+        await view.get('[data-testid="partner-email"]').setValue('loken@example.com');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        expect(view.get('[data-testid="partner-email-error"]').text()).toContain('already entered');
+    });
+
+    it('enters this team\'s army for the painting vote', async () => {
         const fetch = stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9/painting`]: { status: 200, body: ATTENDEE },
             [`/api/events/${EVENT_SLUG}/attendees/9`]: {
@@ -456,11 +769,10 @@ describe('amending a team', () => {
                 status: 200,
                 body: { data: [{ id: 1, name: 'Best Painted Army', type: 'painting', votes_per_player: 2, opens_at: null, closes_at: null, is_open: false, is_open_for_me: false, my_ballot: [] }] },
             },
-            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
         });
 
-        const view = mountView(MyTeamView);
+        const view = mountView(PaintedArmyView);
         await flushPromises();
 
         await view.get('[data-testid="enter-painting"]').trigger('click');
@@ -469,31 +781,5 @@ describe('amending a team', () => {
         const entered = fetch.mock.calls.find(([url]) => String(url).endsWith('/attendees/9/painting'))!;
         expect(entered[1]?.method).toBe('PATCH');
         expect(JSON.parse(entered[1]?.body as string)).toEqual({ painting_entered: true });
-    });
-
-    it('offers no painting entry where the event runs no painting vote', async () => {
-        stubApi({
-            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
-            [`/api/events/${EVENT_SLUG}/polls`]: { status: 200, body: { data: [] } },
-            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
-            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
-        });
-
-        const view = mountView(MyTeamView);
-        await flushPromises();
-
-        expect(view.find('[data-testid="enter-painting"]').exists()).toBe(false);
-    });
-
-    it('sends a reader who has not entered to the entry form', async () => {
-        stubApi({
-            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
-            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
-        });
-
-        mountView(MyTeamView);
-        await flushPromises();
-
-        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('register'));
     });
 });

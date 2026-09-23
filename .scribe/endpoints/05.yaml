@@ -5,6 +5,43 @@ endpoints:
     custom: []
     httpMethods:
       - GET
+    uri: api/game-systems
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Game Systems'
+      description: 'Every Game System the platform knows, in name order. Public: the Event listing already filters on a Game System slug.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":4,"name":"Horus Heresy","slug":"horus-heresy"},{"id":1,"name":"Warhammer 40,000","slug":"warhammer-40000"}]}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
     uri: api/events
     metadata:
       custom: []
@@ -71,7 +108,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":680,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","starts_at":"2027-02-14T14:10:16Z","ends_at":"2027-02-16T14:10:16Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":760,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2026-09-22T04:27:18Z","ends_at":"2026-09-24T04:27:18Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"banner":null,"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -301,7 +338,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":61,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-07T22:11:37Z","author":{"id":1512,"name":"Cordia Cummings"},"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":66,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-18T12:28:41Z","author":{"id":1640,"name":"Cordia Cummings"},"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -362,7 +399,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":199,"name":"","allegiance":null,"members":[]}}'
+        content: '{"data":{"id":212,"name":"","allegiance":null,"avatar":null,"members":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -472,7 +509,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":200,"name":"","allegiance":null,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":213,"name":"","allegiance":null,"avatar":null,"allegiance_locked":false,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -521,7 +558,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":101,"number":1,"name":null,"status":"draft"},{"id":102,"number":3,"name":null,"status":"draft"}]}'
+        content: '{"data":[{"id":111,"number":6,"name":null,"status":"draft"},{"id":112,"number":5,"name":null,"status":"draft"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -582,7 +619,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":4,"number":2,"name":"Round 2","status":"live","games":[{"id":18,"table_number":5,"is_bye":false,"is_rematch":false,"result":{"submitted_at":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true}],"scores":{"match-points":3,"victory-points":85}}]}]}}'
+        content: '{"data":{"id":4,"number":2,"name":"Round 2","status":"live","score_types":[{"slug":"match-points","name":"Match Points","abbreviation":"MP","is_primary":false},{"slug":"victory-points","name":"Victory Points","abbreviation":"VP","is_primary":true}],"games":[{"id":18,"table_number":5,"is_bye":false,"is_rematch":false,"result":{"submitted_at":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true}],"scores":{"match-points":3,"victory-points":85}}]}]}}'
         headers: []
         description: ''
     responseFields: []
@@ -643,7 +680,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points","abbreviation":"MP","is_primary":false},{"slug":"victory-points","name":"Victory Points","abbreviation":"VP","is_primary":true}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: ''
     responseFields: []
@@ -663,7 +700,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'List Event Standings'
-      description: 'Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position.'
+      description: 'Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position. Movement is places gained since the round before the one being played, computed the same way; it is null until two rounds have been scored.'
       authenticated: false
       deprecated: false
     headers:
@@ -716,7 +753,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":9,"position":1,"attendee":{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"clubs":[{"id":2,"name":"The Ordo Ludi"}]}]},"scores":[{"value":6,"score_type":{"id":1,"name":"Match Points","slug":"match-points","sort_direction":"desc"}}]}]}'
+        content: '{"data":[{"id":9,"position":1,"movement":2,"attendee":{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"clubs":[{"id":2,"name":"The Ordo Ludi"}]}]},"scores":[{"value":6,"score_type":{"id":1,"name":"Match Points","abbreviation":"MP","slug":"match-points","sort_direction":"desc"}}]}]}'
         headers: []
         description: ''
     responseFields: []
@@ -858,7 +895,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":320,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"https:\/\/battlezones.test\/storage\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg","thumbnail_url":"https:\/\/battlezones.test\/storage\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg","created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":350,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788624000&signature=eeec725b168237ce2309416e9552eecc02a9c9a7787e72d0a555a9e7b9fec319","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788624000&signature=0afbed08da775d7ab38285861da4a880529e8b725b59a59eb4876fa98c1fd925","created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -907,7 +944,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"date":"2026-09-12","blocks":[{"id":1,"label":"Round 1","type":"round","starts_at":"2026-09-12T09:30:00+00:00","ends_at":"2026-09-12T12:00:00+00:00","display_order":0,"target_id":4,"is_target_live":true,"round":{"id":4,"number":1,"name":"Round 1"}}]}]}'
+        content: '{"data":[{"date":"2026-09-12","blocks":[{"id":1,"label":"Round 1","type":"round","starts_at":"2026-09-12T09:30:00+00:00","ends_at":"2026-09-12T12:00:00+00:00","display_order":0,"target_id":4,"target_state":"live","round":{"id":4,"number":1,"name":"Round 1"}}]}]}'
         headers: []
         description: ''
     responseFields: []
@@ -1785,7 +1822,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":232,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":233,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
+        content: '{"data":[{"id":257,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":258,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
         headers: []
         description: ''
       -
@@ -1876,7 +1913,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":234,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":259,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -1949,7 +1986,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":235,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":260,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2150,7 +2187,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":236,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":261,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2507,13 +2544,13 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      slug:
+      game_system_id:
         custom: []
-        name: slug
-        description: ''
+        name: game_system_id
+        description: 'The Game System the Event is played under. Refused once anybody has entered.'
         required: false
-        example: null
-        type: string
+        example: 4
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
@@ -2521,6 +2558,17 @@ endpoints:
       attendee_size:
         custom: []
         name: attendee_size
+        description: 'How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      slug:
+        custom: []
+        name: slug
         description: ''
         required: false
         example: null
@@ -2562,12 +2610,14 @@ endpoints:
       ends_at: '2026-09-13T18:00:00+01:00'
       registration_closes_at: '2026-09-05T23:59:00+01:00'
       max_attendees: 32
+      game_system_id: 4
+      attendee_size: 2
     fileParameters: []
     responses:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":691,"name":"Quos velit et fugiat","slug":"quos-velit-et-fugiat-76344","description":"Modi deserunt aut ab provident perspiciatis. Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","starts_at":"2026-09-11T19:59:39Z","ends_at":"2026-09-13T19:59:39Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":771,"name":"Fugiat sunt nihil","slug":"fugiat-sunt-nihil-80842","description":"Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2027-02-12T06:35:13Z","ends_at":"2027-02-14T06:35:13Z","max_attendees":25,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Koch PLC Hall","address":"57515 VonRueden Wells Suite 490","city":"Raynormouth","country":"HK"},"banner":null,"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
         headers: []
         description: ''
       -
@@ -2640,7 +2690,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":692,"name":"Nihil accusantium harum","slug":"nihil-accusantium-harum-31583","description":"Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure. Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.","status":"draft","pairing_format":"swiss","starts_at":"2026-12-25T03:21:40Z","ends_at":"2026-12-27T03:21:40Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Leffler-Glover Hall","address":"723 Wisoky Passage","city":"Micaelatown","country":"BO"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":772,"name":"Nihil accusantium harum","slug":"nihil-accusantium-harum-31583","description":"Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure. Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2027-03-02T17:38:43Z","ends_at":"2027-03-04T17:38:43Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Leffler-Glover Hall","address":"723 Wisoky Passage","city":"Micaelatown","country":"BO"},"banner":null,"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
         headers: []
         description: ''
       -
@@ -2701,7 +2751,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":693,"name":"Odit quia officia est","slug":"odit-quia-officia-est-71680","description":"Veritatis excepturi doloribus delectus fugit. Repudiandae laboriosam est alias tenetur ratione. Voluptate accusamus ut et recusandae. Rerum ex repellendus assumenda et.","status":"draft","pairing_format":"swiss","starts_at":"2026-11-20T05:48:27Z","ends_at":"2026-11-22T05:48:27Z","max_attendees":65,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Cassin Inc Hall","address":"71854 Rosario Terrace Suite 298","city":"Walkerside","country":"VE"},"banner":null,"created_at":"2026-08-26T00:40:23Z","updated_at":"2026-08-26T00:40:23Z"}}'
+        content: '{"data":{"id":773,"name":"Modi deserunt aut","slug":"modi-deserunt-aut-6749","description":"Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2027-01-17T23:39:30Z","ends_at":"2027-01-19T23:39:30Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"banner":null,"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
         headers: []
         description: ''
       -
@@ -2828,7 +2878,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":90,"label":"Awards","type":"info","starts_at":"2026-09-02T23:34:20+00:00","ends_at":"2026-09-03T00:34:20+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":102,"label":"Awards","type":"info","starts_at":"2026-09-13T13:51:24+00:00","ends_at":"2026-09-13T14:51:24+00:00","display_order":0,"target_id":null,"target_state":null,"round":null}}'
         headers: []
         description: ''
       -
@@ -3052,7 +3102,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":91,"label":"Awards","type":"info","starts_at":"2026-09-02T23:34:20+00:00","ends_at":"2026-09-03T00:34:20+00:00","display_order":0,"target_id":null,"is_target_live":false,"round":null}}'
+        content: '{"data":{"id":103,"label":"Awards","type":"info","starts_at":"2026-09-13T13:51:24+00:00","ends_at":"2026-09-13T14:51:24+00:00","display_order":0,"target_id":null,"target_state":null,"round":null}}'
         headers: []
         description: ''
       -
@@ -3180,7 +3230,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points","abbreviation":"MP","is_primary":false},{"slug":"victory-points","name":"Victory Points","abbreviation":"VP","is_primary":true}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: ''
       -
@@ -3352,7 +3402,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points","abbreviation":"MP","is_primary":false},{"slug":"victory-points","name":"Victory Points","abbreviation":"VP","is_primary":true}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: ''
       -
@@ -3364,7 +3414,7 @@ endpoints:
       -
         custom: []
         status: 409
-        content: '{"message":"A result has already been submitted for this game. Flag it if it needs correcting.","data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"message":"A result has already been submitted for this game. Flag it if it needs correcting.","data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points","abbreviation":"MP","is_primary":false},{"slug":"victory-points","name":"Victory Points","abbreviation":"VP","is_primary":true}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":true,"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: 'A result already exists. The body carries the Game as it stands, so a client whose own submission lost its response can recognise it rather than reporting a dispute.'
       -
@@ -3451,7 +3501,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
+        content: '{"data":{"id":18,"table_number":5,"is_bye":false,"round":{"id":4,"number":2,"name":"Round 2"},"score_types":[{"slug":"match-points","name":"Match Points","abbreviation":"MP","is_primary":false},{"slug":"victory-points","name":"Victory Points","abbreviation":"VP","is_primary":true}],"result":{"submitted_at":"2026-09-12T14:05:00+00:00","submitted_by":{"id":12,"name":"Ada Lovelace"},"edited_at":null,"edited_by":null,"is_flagged":false},"attendees":[{"id":9,"name":"Ada and Grace","is_winner":true,"members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list":"Legion Tactical Squad, 10 models..."}],"scores":{"match-points":3,"victory-points":85}}]}}'
         headers: []
         description: ''
       -
@@ -3673,6 +3723,255 @@ endpoints:
         content: '{"message":"Unauthenticated."}'
         headers: []
         description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/events/{event_slug}/score-types'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Score Types'
+      description: 'Organisers only. The columns this Event is scored on, in the order they are shown, with the points behind a derived column and whether any Game has been scored under it yet.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":1,"name":"Match Points","abbreviation":"MP","slug":"match-points","sort_direction":"desc","is_derived":true,"is_primary":false,"counts_for_ranking":true,"ranking_order":1,"win_points":"3.00","draw_points":"1.00","loss_points":"0.00","display_order":0,"is_scored":true}]}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/events/{event_slug}/score-types'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Replace the Score Types'
+      description: 'Organisers only. Send the complete ordered set: position sets the display order, and position among the columns counting for ranking sets the ranking order.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      score_types:
+        custom: []
+        name: score_types
+        description: 'The complete ordered set. Position sets display order, and position among the rows counting for ranking sets ranking order.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].id':
+        custom: []
+        name: 'score_types[].id'
+        description: 'The Score Type being edited. Leave it out to add a new one.'
+        required: false
+        example: 7
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].name':
+        custom: []
+        name: 'score_types[].name'
+        description: 'What the column is called.'
+        required: true
+        example: 'Battle Points'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].abbreviation':
+        custom: []
+        name: 'score_types[].abbreviation'
+        description: 'The heading shown over the column on a Game and in the Standings. Left out or blank, the platform works one out from the name.'
+        required: false
+        example: BP
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].sort_direction':
+        custom: []
+        name: 'score_types[].sort_direction'
+        description: 'Which way up it ranks: asc where lower is better, desc where higher is.'
+        required: true
+        example: desc
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].is_derived':
+        custom: []
+        name: 'score_types[].is_derived'
+        description: 'Whether the platform works it out from the result rather than a Player entering it.'
+        required: true
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].is_primary':
+        custom: []
+        name: 'score_types[].is_primary'
+        description: 'Whether it leads a Game listing. At most one may.'
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].counts_for_ranking':
+        custom: []
+        name: 'score_types[].counts_for_ranking'
+        description: 'Whether it ranks the Standings.'
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].win_points':
+        custom: []
+        name: 'score_types[].win_points'
+        description: 'What a win is worth. Required on a derived column.'
+        required: false
+        example: 3
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].draw_points':
+        custom: []
+        name: 'score_types[].draw_points'
+        description: 'What a draw is worth. Required on a derived column.'
+        required: false
+        example: 1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'score_types[].loss_points':
+        custom: []
+        name: 'score_types[].loss_points'
+        description: 'What a loss is worth. Required on a derived column.'
+        required: false
+        example: 0
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      score_types:
+        - id: 7
+          name: 'Battle Points'
+          abbreviation: BP
+          sort_direction: desc
+          is_derived: false
+          is_primary: true
+          counts_for_ranking: true
+          win_points: 3
+          draw_points: 1
+          loss_points: 0
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":7,"name":"Match Points","abbreviation":"MP","slug":"match-points","sort_direction":"desc","is_derived":true,"is_primary":false,"counts_for_ranking":true,"ranking_order":1,"win_points":"3.00","draw_points":"1.00","loss_points":"0.00","display_order":0,"is_scored":true}]}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
     responseFields: []
     auth: []
     controller: null
@@ -4440,6 +4739,158 @@ endpoints:
     custom: []
     httpMethods:
       - POST
+    uri: 'api/events/{event_slug}/attendees/{attendee_id}/avatar'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Upload a Team Avatar'
+      description: 'The team and its Organisers. A multipart route of its own rather than a field on the Attendee PATCH, because PHP does not populate uploaded files for PATCH bodies. The upload is cropped to a 256x256 WebP square and the original is discarded.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_id:
+        custom: []
+        name: attendee_id
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+      attendee_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      avatar:
+        custom: []
+        name: avatar
+        description: 'A square-ish image, at least 128x128, at most 8MB. JPEG, PNG or WebP.'
+        required: true
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters:
+      avatar: null
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":9,"name":"Ada and Grace","allegiance":"loyalist","avatar":"https:\/\/uploads.example\/avatars\/9\/8f1c\u2026.webp","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":false,"clubs":[]}],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/events/{event_slug}/attendees/{attendee_id}/avatar'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove a Team Avatar'
+      description: 'The team and its Organisers. Deletes the stored square and returns the team to its placeholder.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_id:
+        custom: []
+        name: attendee_id
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+      attendee_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":9,"name":"Ada and Grace","allegiance":"loyalist","avatar":"https:\/\/uploads.example\/avatars\/9\/8f1c\u2026.webp","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":false,"clubs":[]}],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
     uri: 'api/events/{event_slug}/attendees/{attendee_id}/members'
     metadata:
       custom: []
@@ -4631,6 +5082,218 @@ endpoints:
         content: '{"message":"Unauthenticated."}'
         headers: []
         description: 'The request carries no valid token.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Amend an Invited Player'
+      description: 'The name, address and Faction of a team mate who has not claimed their account. Refused once they have: their details are then theirs alone. Addressed by membership because the membership is the seat being amended.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_id:
+        custom: []
+        name: attendee_id
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      membership_id:
+        custom: []
+        name: membership_id
+        description: 'The id of the membership being amended.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+      attendee_id: 1
+      membership_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: "The Player's name."
+        required: false
+        example: 'Tarik Torgaddon'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'The address their invitation is sent to.'
+        required: false
+        example: tarik@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      faction_id:
+        custom: []
+        name: faction_id
+        description: 'The Faction this Player brings.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'Tarik Torgaddon'
+      email: tarik@example.com
+      faction_id: 1
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":9,"name":"Ada and Grace","allegiance":"loyalist","members":[{"id":12,"name":"Ada Lovelace","faction":{"id":3,"name":"Sons of Horus"},"army_list_locked":false,"membership_id":4,"invite_outstanding":true,"clubs":[]}],"checked_in_at":null,"custom_field_responses":[],"games":[]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 403
+        content: '{"message":"That player has claimed their account, so only they can change their details."}'
+        headers: []
+        description: 'The Player has an account of their own.'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"field_name":["The field name field is required."]}}'
+        headers: []
+        description: 'The submitted data failed validation.'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}/invite'
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Send a Team Mate Their Invitation Again'
+      description: 'A fresh credential to the address already on file. Refused once the Player has claimed their account, which is when they no longer need one.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      event_slug:
+        custom: []
+        name: event_slug
+        description: 'The slug of the event.'
+        required: true
+        example: london-grand-tournament
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attendee_id:
+        custom: []
+        name: attendee_id
+        description: 'The id of the attendee.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      membership_id:
+        custom: []
+        name: membership_id
+        description: 'The id of the membership being chased.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      event_slug: london-grand-tournament
+      attendee_id: 1
+      membership_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: null
+        headers: []
+        description: 'The invitation was sent again.'
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers: []
+        description: 'The request carries no valid token.'
+      -
+        custom: []
+        status: 403
+        content: '{"message":"That player has claimed their account, so they no longer need an invitation."}'
+        headers: []
+        description: 'The Player has an account of their own.'
     responseFields: []
     auth: []
     controller: null

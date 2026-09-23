@@ -23,6 +23,7 @@ class ShowEventRoundController extends Controller
         'number' => 2,
         'name' => 'Round 2',
         'status' => 'live',
+        'score_types' => [['slug' => 'match-points', 'name' => 'Match Points', 'abbreviation' => 'MP', 'is_primary' => false], ['slug' => 'victory-points', 'name' => 'Victory Points', 'abbreviation' => 'VP', 'is_primary' => true]],
         'games' => [[
             'id' => 18,
             'table_number' => 5,
@@ -32,6 +33,7 @@ class ShowEventRoundController extends Controller
             'attendees' => [[
                 'id' => 9,
                 'name' => 'Ada and Grace',
+                'is_winner' => true,
                 'allegiance' => 'loyalist',
                 'members' => [['id' => 12, 'name' => 'Ada Lovelace', 'faction' => ['id' => 3, 'name' => 'Sons of Horus'], 'army_list_locked' => true]],
                 'scores' => ['match-points' => 3, 'victory-points' => 85],
@@ -43,7 +45,7 @@ class ShowEventRoundController extends Controller
         abort_unless($event->status->hasRoundsVisible(), 404);
         abort_if($round->isDraft() && ! $event->isOrganisedBy($request->user('sanctum')), 404);
 
-        $round->load(['games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType', 'games.openResultFlag']);
+        $round->load(['event.scoreTypes', 'games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType', 'games.openResultFlag']);
 
         return RoundDetailResource::make($round);
     }

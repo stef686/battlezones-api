@@ -10,12 +10,19 @@
  * lets the hint and the error messages be announced with the field through
  * `aria-describedby`: a Player using a screen reader hears why the form was
  * rejected, not just that it was.
+ *
+ * `labelHidden` takes the label off the screen, never out of the markup: a
+ * single field whose placeholder already says what it is does not need a line
+ * of a phone viewport spent repeating it, but an input with no accessible
+ * name says nothing to a screen reader. A placeholder is not a label.
  */
 import { computed, useId } from 'vue';
 
 const props = withDefaults(defineProps<{
   label: string;
   type?: string;
+  placeholder?: string;
+  labelHidden?: boolean;
   autocomplete?: string;
   inputmode?: 'text' | 'email' | 'numeric';
   testid?: string;
@@ -23,6 +30,8 @@ const props = withDefaults(defineProps<{
   hint?: string | null;
 }>(), {
   type: 'text',
+  placeholder: undefined,
+  labelHidden: false,
   autocomplete: undefined,
   inputmode: undefined,
   testid: undefined,
@@ -49,13 +58,14 @@ const describedBy = computed(() => {
   <div>
     <label
       :for="fieldId"
-      class="mb-2 block text-sm font-medium text-foreground"
+      :class="labelHidden ? 'sr-only' : 'mb-2 block text-sm font-medium text-foreground'"
     >{{ label }}</label>
 
     <input
       :id="fieldId"
       v-model="model"
       :type="type"
+      :placeholder="placeholder"
       :autocomplete="autocomplete"
       :inputmode="inputmode"
       :data-testid="testid"

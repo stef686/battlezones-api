@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Allegiance;
+use App\Services\UploadStorage;
 use Database\Factories\EventAttendeeFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property int $event_id
  * @property string|null $name
  * @property Allegiance|null $allegiance
+ * @property string|null $avatar_path
  * @property Carbon|null $army_lists_revealed_at
  * @property Carbon|null $checked_in_at
  * @property bool $painting_entered
@@ -42,6 +44,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|EventAttendee query()
  * @method static Builder<static>|EventAttendee whereAllegiance($value)
  * @method static Builder<static>|EventAttendee whereArmyListsRevealedAt($value)
+ * @method static Builder<static>|EventAttendee whereAvatarPath($value)
  * @method static Builder<static>|EventAttendee whereCheckedInAt($value)
  * @method static Builder<static>|EventAttendee whereCreatedAt($value)
  * @method static Builder<static>|EventAttendee whereDisplayNumber($value)
@@ -65,6 +68,7 @@ class EventAttendee extends Model
         'event_id',
         'name',
         'allegiance',
+        'avatar_path',
         'army_lists_revealed_at',
         'checked_in_at',
         'painting_entered',
@@ -155,6 +159,18 @@ class EventAttendee extends Model
     public function displayName(): string
     {
         return $this->name ?? $this->memberships->first()?->user->public_name ?? '';
+    }
+
+    /**
+     * A signed link to this team's Avatar, or null where they have none.
+     *
+     * Signed and expiring like every upload, so it is read at serialisation
+     * rather than stored anywhere. Null is a first-class answer: most teams
+     * never upload one, and the screens draw a placeholder in its place.
+     */
+    public function avatarUrl(): ?string
+    {
+        return $this->avatar_path === null ? null : UploadStorage::url($this->avatar_path);
     }
 
     /**

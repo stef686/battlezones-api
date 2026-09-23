@@ -59,6 +59,8 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property-read int|null $following_count
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read Collection<int, Event> $organisedEvents
+ * @property-read int|null $organised_events_count
  * @property-read PendingEmailChange|null $pendingEmailChange
  * @property-read PendingPasswordChange|null $pendingPasswordChange
  * @property-read Collection<int, Photo> $photos

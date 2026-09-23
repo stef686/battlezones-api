@@ -1,11 +1,24 @@
 import type { ApiClient } from './client';
 import { ApiError } from './errors';
+import type { ScoreColumn, ScoredAttendee } from './rounds';
 
-export interface GameAttendee {
+export interface GameMember {
     id: number;
     name: string;
-    members: { id: number; name: string; faction: { id: number; name: string } | null }[];
-    scores: Record<string, number | string>;
+    faction: { id: number; name: string } | null;
+    /** Whether a list is in, which is said to every reader. */
+    army_list_locked: boolean;
+    /**
+     * What the list says, and only for a reader entitled to it: the API omits
+     * the key rather than nulling it when a team's lists are still closed, so
+     * an absent key and an empty list mean different things — one is not yet
+     * this reader's business, the other is what the Player submitted.
+     */
+    army_list?: string | null;
+}
+
+export interface GameAttendee extends ScoredAttendee {
+    members: GameMember[];
 }
 
 export interface Game {
@@ -13,6 +26,8 @@ export interface Game {
     table_number: number | null;
     is_bye: boolean;
     round: { id: number; number: number; name: string | null };
+    /** The columns this Game is scored on, sent whether or not it is played. */
+    score_types: ScoreColumn[];
     result: {
         submitted_at: string | null;
         submitted_by?: { id: number; name: string } | null;
@@ -22,6 +37,12 @@ export interface Game {
         is_flagged: boolean;
     };
     attendees: GameAttendee[];
+}
+
+/** One Game in full: its scoreline, and the lists behind it. */
+export function fetchGame(client: ApiClient, slug: string, gameId: number): Promise<Game> {
+    return client.get<{ data: Game }>(`/api/events/${encodeURIComponent(slug)}/games/${gameId}`)
+        .then((response) => response.data);
 }
 
 export type SubmissionOutcome =

@@ -8,11 +8,12 @@
  */
 import { computed } from 'vue';
 
-const props = withDefaults(defineProps<{ tone?: 'success' | 'error' | 'info' }>(), { tone: 'info' });
+const props = withDefaults(defineProps<{ tone?: 'success' | 'error' | 'warning' | 'info' }>(), { tone: 'info' });
 
 const TONES = {
   success: 'border-success/30 text-success',
   error: 'border-destructive/40 text-destructive',
+  warning: 'border-warning/40 text-warning',
   info: 'border-border text-muted-foreground-1',
 } as const;
 

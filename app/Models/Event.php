@@ -117,6 +117,16 @@ class Event extends Model
     private array $latestPolls = [];
 
     /**
+     * Memoised like the Polls above, and for the same reason: a schedule asks
+     * every one of its Round blocks which Round is current, and that is one
+     * question about the Event rather than one per block. Held per instance,
+     * so a request that publishes a Round reads the answer on a fresh model.
+     */
+    private ?Round $currentRound = null;
+
+    private bool $currentRoundLoaded = false;
+
+    /**
      * @var list<string>
      */
     protected $fillable = [
@@ -367,7 +377,12 @@ class Event extends Model
      */
     public function currentRound(): ?Round
     {
-        return $this->rounds()->live()->orderByDesc('number')->first();
+        if (! $this->currentRoundLoaded) {
+            $this->currentRound = $this->rounds()->live()->orderByDesc('number')->first();
+            $this->currentRoundLoaded = true;
+        }
+
+        return $this->currentRound;
     }
 
     /**
@@ -471,5 +486,28 @@ class Event extends Model
     public function scoreTypes(): HasMany
     {
         return $this->hasMany(EventScoreType::class);
+    }
+
+    /**
+     * The one Score Type a listing of Games leads with.
+     *
+     * An Event can be scored on any number of columns, and a Game listing has
+     * room for one number per team. The Organiser marks which one that is;
+     * where nobody has, the first column played for at the table wins, since a
+     * derived column (Match Points from the result) says less at a glance than
+     * the score the result was worked out from.
+     *
+     * A caller that has already put the Score Types in display order passes
+     * them in rather than paying for the sort twice.
+     *
+     * @param  Collection<int, EventScoreType>|null  $ordered
+     */
+    public function primaryScoreType(?Collection $ordered = null): ?EventScoreType
+    {
+        $ordered ??= $this->scoreTypes->sortBy('display_order')->values();
+
+        return $ordered->firstWhere('is_primary', true)
+            ?? $ordered->firstWhere('is_derived', false)
+            ?? $ordered->first();
     }
 }

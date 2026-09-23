@@ -128,6 +128,17 @@ describe('who may run an event', () => {
             .toBe(`/events/${EVENT_SLUG}/organise/settings`);
     });
 
+    it('leads to the event format, and leaves places to it', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="format-link"]').attributes('href'))
+            .toBe(`/events/${EVENT_SLUG}/organise/format`);
+        expect(view.get('[data-testid="settings-link"]').text()).not.toContain('places');
+    });
+
     it('is not there at all for a reader without the permission', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(false) },
@@ -139,11 +150,11 @@ describe('who may run an event', () => {
         // The same answer as an Event that does not exist: whether someone
         // else's Event has an organiser screen is not this reader's business.
         expect(view.find('[data-testid="missing"]').exists()).toBe(true);
-        expect(view.find('[data-testid="generate-round"]').exists()).toBe(false);
-        expect(view.find('[data-testid="publish-round"]').exists()).toBe(false);
+        expect(view.find('[data-testid="settings-link"]').exists()).toBe(false);
+        expect(view.find('[data-testid="rounds-link"]').exists()).toBe(false);
     });
 
-    it('offers the controls to an organiser', async () => {
+    it('shows the hub to an organiser', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: { data: [] } },
             [`/api/events/${EVENT_SLUG}/standings`]: { status: 200, body: { data: [] } },
@@ -155,7 +166,7 @@ describe('who may run an event', () => {
         await flushPromises();
 
         expect(view.find('[data-testid="missing"]').exists()).toBe(false);
-        expect(view.find('[data-testid="generate-round"]').exists()).toBe(true);
+        expect(view.find('[data-testid="rounds-link"]').exists()).toBe(true);
     });
 });
 
@@ -175,7 +186,21 @@ describe('what is holding up the next round', () => {
         };
     }
 
-    it('names the tables still playing', async () => {
+    it('says nothing is being played before the first round is published', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: { data: [] } },
+            [`/api/events/${EVENT_SLUG}/standings`]: { status: 200, body: { data: [] } },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: { data: { current_round: null, rounds: null, standings: null, polls: null } } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="rounds-link"]').text()).toContain('Nothing being played');
+    });
+
+    it('counts the tables still playing in the rounds row', async () => {
         stubApi(withLiveRound([
             pairing({ id: 18, table_number: 1, result: { submitted_at: '2026-09-12T12:00:00Z', is_flagged: false } }),
             pairing({ id: 19, table_number: 5 }),
@@ -185,9 +210,7 @@ describe('what is holding up the next round', () => {
         const view = mountView();
         await flushPromises();
 
-        expect(view.get('[data-testid="outstanding-count"]').text()).toBe('2 tables to go');
-        expect(view.get('[data-testid="outstanding-19"]').text()).toBe('5');
-        expect(view.find('[data-testid="outstanding-18"]').exists()).toBe(false);
+        expect(view.get('[data-testid="rounds-link"]').text()).toContain('Round 1 \u00b7 2 to go');
     });
 
     it('never counts a bye, since nobody can report one', async () => {
@@ -199,7 +222,7 @@ describe('what is holding up the next round', () => {
         const view = mountView();
         await flushPromises();
 
-        expect(view.find('[data-testid="all-reported"]').exists()).toBe(true);
+        expect(view.get('[data-testid="rounds-link"]').text()).toContain('all reported');
     });
 
     it('says so when every table has reported', async () => {
@@ -210,293 +233,7 @@ describe('what is holding up the next round', () => {
         const view = mountView();
         await flushPromises();
 
-        expect(view.get('[data-testid="all-reported"]').text()).toContain('reported');
-    });
-});
-
-describe('reviewing a draft round', () => {
-    function withDraft(games: unknown[]) {
-        return {
-            [`/api/events/${EVENT_SLUG}/rounds/4`]: {
-                status: 200,
-                body: { data: { id: 4, number: 2, name: null, status: 'draft', games } },
-            },
-            [`/api/events/${EVENT_SLUG}/rounds`]: {
-                status: 200,
-                body: { data: [{ id: 4, number: 2, name: null, status: 'draft' }] },
-            },
-            [`/api/events/${EVENT_SLUG}/standings`]: { status: 200, body: STANDINGS },
-            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: { data: { current_round: null, rounds: 'a', standings: null, polls: null } } },
-            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
-        };
-    }
-
-    it('shows each pairing with both allegiances and where the teams stand', async () => {
-        stubApi(withDraft([pairing()]));
-
-        const view = mountView();
-        await flushPromises();
-
-        const review = view.get('[data-testid="review-18"]');
-
-        expect(review.get('[data-testid="review-table"]').text()).toBe('1');
-        expect(review.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
-        expect(review.find('[data-testid="allegiance-traitor"]').exists()).toBe(true);
-
-        expect(review.findAll('[data-testid="review-position"]').map((node) => node.text()))
-            .toEqual(['#1', '#4']);
-    });
-
-    it('warns when a game is not between opposed allegiances', async () => {
-        stubApi(withDraft([pairing({
-            attendees: [
-                { id: 9, name: 'Sons of Terra', allegiance: 'loyalist', members: [], scores: {} },
-                { id: 10, name: 'Also Loyal', allegiance: 'loyalist', members: [], scores: {} },
-            ],
-        })]));
-
-        const view = mountView();
-        await flushPromises();
-
-        expect(view.get('[data-testid="unopposed-warning"]').text()).toContain('not between opposed');
-    });
-
-    it('does not warn about a bye, which has nobody to oppose', async () => {
-        stubApi(withDraft([pairing({ is_bye: true, table_number: null, attendees: [
-            { id: 9, name: 'Sons of Terra', allegiance: 'loyalist', members: [], scores: {} },
-        ] })]));
-
-        const view = mountView();
-        await flushPromises();
-
-        expect(view.find('[data-testid="unopposed-warning"]').exists()).toBe(false);
-        expect(view.find('[data-testid="review-bye"]').exists()).toBe(true);
-    });
-
-    it('offers publish rather than pair once a draft exists', async () => {
-        stubApi(withDraft([pairing()]));
-
-        const view = mountView();
-        await flushPromises();
-
-        expect(view.get('[data-testid="publish-round"]').text()).toContain('Round 2');
-        expect(view.find('[data-testid="generate-round"]').exists()).toBe(false);
-        // Withdrawing is about a published Round, so it is not offered here.
-        expect(view.find('[data-testid="unpublish-round"]').exists()).toBe(false);
-    });
-
-    it('publishes the draft', async () => {
-        const fetch = stubApi({
-            ...withDraft([pairing()]),
-            [`/api/events/${EVENT_SLUG}/rounds/4/publish`]: {
-                status: 200,
-                body: { data: { id: 4, number: 2, name: null, status: 'live', games: [] } },
-            },
-        });
-
-        const view = mountView();
-        await flushPromises();
-
-        await view.get('[data-testid="publish-round"]').trigger('click');
-        await flushPromises();
-
-        const published = fetch.mock.calls.find(([url]) => String(url).endsWith('/rounds/4/publish'))!;
-        expect(published[1]?.method).toBe('POST');
-    });
-});
-
-describe('pairing the next round', () => {
-    const EMPTY = {
-        [`/api/events/${EVENT_SLUG}/rounds`]: { status: 200, body: { data: [{ id: 3, number: 1, name: 'Round 1', status: 'live' }] } },
-        [`/api/events/${EVENT_SLUG}/rounds/3`]: {
-            status: 200,
-            body: { data: { id: 3, number: 1, name: 'Round 1', status: 'live', games: [pairing({ result: { submitted_at: '2026-09-12T12:00:00Z', is_flagged: false } })] } },
-        },
-        [`/api/events/${EVENT_SLUG}/standings`]: { status: 200, body: STANDINGS },
-        [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: { data: { current_round: { id: 3, number: 1 }, rounds: 'a', standings: null, polls: null } } },
-        [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
-    };
-
-    it('asks the API to pair the field', async () => {
-        const fetch = stubApi({
-            ...EMPTY,
-            [`/api/events/${EVENT_SLUG}/rounds`]: EMPTY[`/api/events/${EVENT_SLUG}/rounds`],
-        });
-
-        const view = mountView();
-        await flushPromises();
-
-        await view.get('[data-testid="generate-round"]').trigger('click');
-        await flushPromises();
-
-        const generated = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/rounds') && init?.method === 'POST');
-        expect(generated).toBeTruthy();
-    });
-
-    it('repeats the API\'s reason when the field cannot be paired yet', async () => {
-        stubApi(EMPTY);
-
-        const view = mountView();
-        await flushPromises();
-
-        stubApi({
-            ...EMPTY,
-            [`/api/events/${EVENT_SLUG}/rounds`]: {
-                status: 422,
-                body: { message: 'Round 1 still has results outstanding, so the next Round cannot be paired.' },
-            },
-        });
-
-        await view.get('[data-testid="generate-round"]').trigger('click');
-        await flushPromises();
-
-        // The message names what to put right, so it is shown as it stands
-        // rather than reduced to "that could not be done".
-        expect(view.get('[data-testid="organise-problem"]').text()).toContain('results outstanding');
-    });
-
-    it('withdraws a published round, and repeats the refusal when it is too late', async () => {
-        const fetch = stubApi(EMPTY);
-
-        const view = mountView();
-        await flushPromises();
-
-        expect(view.get('[data-testid="unpublish-round"]').text()).toContain('Round 1');
-
-        await view.get('[data-testid="unpublish-round"]').trigger('click');
-        await flushPromises();
-
-        const withdrawn = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/rounds/3/publish') && init?.method === 'DELETE');
-        expect(withdrawn).toBeTruthy();
-
-        stubApi({
-            ...EMPTY,
-            [`/api/events/${EVENT_SLUG}/rounds/3/publish`]: {
-                status: 422,
-                body: { message: 'Round 1 already has results, so it cannot be unpublished.' },
-            },
-        });
-
-        await view.get('[data-testid="unpublish-round"]').trigger('click');
-        await flushPromises();
-
-        expect(view.get('[data-testid="organise-problem"]').text()).toContain('already has results');
-    });
-});
-
-describe('swapping two pairings', () => {
-    function twoTables() {
-        const games = [
-            pairing({
-                id: 18,
-                table_number: 1,
-                attendees: [
-                    { id: 9, name: 'Loyal One', allegiance: 'loyalist', members: [], scores: {} },
-                    { id: 10, name: 'Traitor One', allegiance: 'traitor', members: [], scores: {} },
-                ],
-            }),
-            pairing({
-                id: 19,
-                table_number: 2,
-                attendees: [
-                    { id: 11, name: 'Loyal Two', allegiance: 'loyalist', members: [], scores: {} },
-                    { id: 12, name: 'Traitor Two', allegiance: 'traitor', members: [], scores: {} },
-                ],
-            }),
-        ];
-
-        return {
-            [`/api/events/${EVENT_SLUG}/rounds/4`]: {
-                status: 200,
-                body: { data: { id: 4, number: 2, name: null, status: 'draft', games } },
-            },
-            [`/api/events/${EVENT_SLUG}/rounds`]: {
-                status: 200,
-                body: { data: [{ id: 4, number: 2, name: null, status: 'draft' }] },
-            },
-            [`/api/events/${EVENT_SLUG}/standings`]: { status: 200, body: STANDINGS },
-            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: { data: { current_round: null, rounds: 'a', standings: null, polls: null } } },
-            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
-        };
-    }
-
-    it('shows what the swap would produce before it is committed', async () => {
-        stubApi(twoTables());
-
-        const view = mountView();
-        await flushPromises();
-
-        await view.get('[data-testid="swap-18"]').trigger('click');
-        expect(view.get('[data-testid="swap-prompt"]').text()).toContain('choose the game');
-
-        await view.get('[data-testid="swap-19"]').trigger('click');
-        await flushPromises();
-
-        const preview = view.get('[data-testid="swap-preview"]');
-
-        // Each table keeps the team already sitting at it; only the opponent
-        // changes, and both games stay opposed.
-        expect(preview.get('[data-testid="preview-18"]').text()).toContain('Loyal One');
-        expect(preview.get('[data-testid="preview-18"]').text()).toContain('Traitor Two');
-        expect(view.find('[data-testid="swap-unopposed"]').exists()).toBe(false);
-    });
-
-    it('sends both games and nothing else, because the exchange is not a choice', async () => {
-        const fetch = stubApi({
-            ...twoTables(),
-            [`/api/events/${EVENT_SLUG}/rounds/4/swap`]: {
-                status: 200,
-                body: { data: { id: 4, number: 2, name: null, status: 'draft', games: [] } },
-            },
-        });
-
-        const view = mountView();
-        await flushPromises();
-
-        await view.get('[data-testid="swap-18"]').trigger('click');
-        await view.get('[data-testid="swap-19"]').trigger('click');
-        await view.get('[data-testid="confirm-swap"]').trigger('click');
-        await flushPromises();
-
-        const swap = fetch.mock.calls.find(([url]) => String(url).endsWith('/rounds/4/swap'))!;
-        expect(JSON.parse(swap[1]?.body as string)).toEqual({ game_ids: [18, 19] });
-    });
-
-    it('repeats the API\'s refusal, which knows things one round cannot show', async () => {
-        stubApi(twoTables());
-
-        const view = mountView();
-        await flushPromises();
-
-        await view.get('[data-testid="swap-18"]').trigger('click');
-        await view.get('[data-testid="swap-19"]').trigger('click');
-
-        stubApi({
-            ...twoTables(),
-            [`/api/events/${EVENT_SLUG}/rounds/4/swap`]: {
-                status: 422,
-                body: { message: 'A Bye has to stay with the Allegiance that has more Attendees, or the Round cannot be paired.' },
-            },
-        });
-
-        await view.get('[data-testid="confirm-swap"]').trigger('click');
-        await flushPromises();
-
-        expect(view.get('[data-testid="organise-problem"]').text()).toContain('more Attendees');
-    });
-
-    it('lets the organiser back out without swapping anything', async () => {
-        stubApi(twoTables());
-
-        const view = mountView();
-        await flushPromises();
-
-        await view.get('[data-testid="swap-18"]').trigger('click');
-        await view.get('[data-testid="swap-19"]').trigger('click');
-        await view.get('[data-testid="cancel-swap"]').trigger('click');
-        await flushPromises();
-
-        expect(view.find('[data-testid="swap-preview"]').exists()).toBe(false);
+        expect(view.get('[data-testid="rounds-link"]').text()).toContain('Round 1 \u00b7 all reported');
     });
 });
 

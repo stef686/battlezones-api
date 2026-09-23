@@ -54,18 +54,72 @@ export function wallClockTime(iso: string): string {
 }
 
 /**
- * A schedule day heading, from the plain `YYYY-MM-DD` the API groups by.
+ * A schedule day, short enough to be a tab: "26th Wed".
  *
- * Parsed field by field rather than through `new Date(...)`, which reads a
- * bare date as UTC midnight and so shows the day before to anyone west of it.
+ * From the plain `YYYY-MM-DD` the API groups by, parsed field by field rather
+ * than through `new Date(...)`, which reads a bare date as UTC midnight and so
+ * names the day before to anyone west of it.
+ *
+ * The date leads because a Player checking a schedule knows which day of the
+ * Event they are standing in, not which weekday it happens to be, and two tabs
+ * reading "Sat" and "Sun" are two tabs that look alike at a glance.
  */
-export function formatDay(date: string): string {
+export function shortDay(date: string): string {
     const [year, month, day] = date.split('-').map(Number);
 
     if (year === undefined || month === undefined || day === undefined) {
         return date;
     }
 
-    return new Date(year, month - 1, day)
-        .toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+    const weekday = new Date(year, month - 1, day).toLocaleDateString(undefined, { weekday: 'short' });
+
+    return `${day}${ordinal(day)} ${weekday}`;
+}
+
+/** English ordinal suffix: 1st, 2nd, 3rd, 4th, and the 11th–13th exceptions. */
+function ordinal(day: number): string {
+    if (day >= 11 && day <= 13) {
+        return 'th';
+    }
+
+    return { 1: 'st', 2: 'nd', 3: 'rd' }[day % 10] ?? 'th';
+}
+
+/**
+ * The UTC offset a zone is on for a given day, as "+01:00".
+ *
+ * Asked of the date rather than of now, because an Event that straddles a
+ * clock change is one where "the offset" is two different things, and the one
+ * that matters is the one the hall will be on when the block runs.
+ */
+export function offsetAt(date: string, timeZone: string): string {
+    const [year, month, day] = date.split('-').map(Number);
+
+    if (year === undefined || month === undefined || day === undefined) {
+        return 'Z';
+    }
+
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone, timeZoneName: 'longOffset' })
+        .formatToParts(Date.UTC(year, month - 1, day, 12));
+
+    const named = parts.find((part) => part.type === 'timeZoneName')?.value ?? '';
+
+    // "GMT" alone means no offset; "GMT+01:00" means one.
+    return named === 'GMT' ? '+00:00' : named.replace('GMT', '');
+}
+
+/**
+ * A date and a wall-clock time, as the timestamp the API stores.
+ *
+ * The time an Organiser types is the time the hall will read, so it is written
+ * with the Event's offset rather than the phone's — a schedule typed on a
+ * laptop in another country must not shift when it is read in the venue.
+ */
+export function eventTimestamp(date: string, time: string, timeZone: string): string {
+    return `${date}T${time}:00${offsetAt(date, timeZone)}`;
+}
+
+/** The day a timestamp falls on in a given zone, as `YYYY-MM-DD`. */
+export function dayInZone(iso: string, timeZone: string): string {
+    return new Date(iso).toLocaleDateString('en-CA', { timeZone });
 }

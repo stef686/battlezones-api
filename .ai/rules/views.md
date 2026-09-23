@@ -16,11 +16,51 @@ FeedbackView deliberately does not render `MissingNotice` for its 404. The not-f
 It still leaks nothing: unknown, already used and expired all answer 404 in the API and are stated together on the screen as one outcome. Do not split them apart — which of the three it is only matters to somebody holding a token they were never sent.
 
 ## A nav-reachable screen keeps its title for screen readers only
-Rounds, Standings, Attendees and Schedule wear their name in the Event nav pinned above them, so a visible `<h1>` repeating it spends a line of a phone viewport saying what the lit tab already says. Those four keep the heading as `class="sr-only"` — a deep link still lands on a named screen for a screen reader — and no screen the nav reaches should get a visible title back.
+Standings, Attendees and Schedule wear their name in the Event nav pinned above them, so a visible `<h1>` repeating it spends a line of a phone viewport saying what the lit tab already says. Those three keep the heading as `class="sr-only"` — a deep link still lands on a named screen for a screen reader — and no screen the nav reaches should get its section name back as a visible title.
 
-This applies only to a fixed section name. A screen titled with content — a Round's name, an Attendee's, a Poll's, the viewer's own team — keeps its visible heading, since the nav cannot say which one you opened.
+This applies only to a fixed section name. A screen titled with content — a Round's name, an Attendee's, a Poll's — keeps its visible heading, since the nav cannot say which one you opened. The Rounds tab lands on exactly such a screen: the Round's name is the visible `<h1>`, centred between the chevrons, and the tab saying "Rounds" does not say which Round. My team is one of them: its `<h1>` is the team's own name, beside the Avatar and the Allegiance in a header that draws the team exactly as the Attendee screen does. What it must not do is wear "My team" as a visible title, which is what the nav tab already says.
+
+## The Schedule is tabbed by day, and opens on the day being played
+`ScheduleView` renders one `TabStrip` tab per day — `shortDay` gives "12th Sat", date first because a Player knows which day of the Event they are in, not which weekday it is — over an edge-to-edge list of that day's blocks. Both days stacked on one screen meant scrolling through Saturday to find when Sunday starts.
+
+Which tab opens is decided from the payload, not the phone: the day holding a live block wins, then today's date, then the first day. A phone's clock and the hall's are not always the same thing, and `is_target_live` is the hall's answer.
+
+A block says where its target has got to through `target_state` — `live`, `finished` or null — and never through the clock: the Round being played is the Event's current one, not the one whose start time has passed. Exactly one block can read "Now".
+
+A Round block links to its Round, but only where the Round can actually be opened: Rounds are hidden from everybody until the Event is `active` or `completed`, and a Draft is its Organisers' business alone. The block payload carries `round.status` for exactly this, and a row that cannot be opened is drawn as a row rather than as a link to a 404.
+
+An Organiser adds a block from the foot of the open day (`add-block`), or from beside "Nothing scheduled yet" on an Event that has none. The form sits outside the `TabStrip`, because the block being added may belong to a day the schedule does not have yet and a form inside the panel would take what was typed with it when the reader changed tab.
+
+Times an Organiser types are the hall's, so `eventTimestamp` writes them with the Event's own offset for that date (`offsetAt`, from the `timezone` on the Event payload) — never the offset of the machine doing the typing, and asked of the date so an Event straddling a clock change writes each day correctly.
+
+Dates stay as the `YYYY-MM-DD` the API groups by and are parsed field by field. Never hand one to `new Date(string)` — it reads a bare date as UTC midnight and names the day before to every reader west of Greenwich.
 
 ## Back links only where the Event nav cannot reach
-The Attendee and Round detail screens carry no back link: the Attendees and Rounds tabs are pinned one tap away and lead to the same place. The Poll screen and the organiser flags screen keep theirs, because the nav reaches neither the Votes list nor the organiser area. Do not add a back link to a screen whose parent is a nav tab.
+The Round screen carries no back link: it *is* what the Rounds tab reaches, so there is nothing behind it to go back to. The Poll screen keeps its back link, because the nav does not reach the Votes list. The organiser screens keep theirs too, even though the Organisers tab now reaches the hub they hang off. The Game screen keeps one to its Round, which the Rounds tab does not reach past. Do not add a back link to a screen the nav itself lands on.
 
-The Event screen lists no destinations either — the nav owns Rounds, Standings, Attendees and Schedule. What it carries instead is the conditional calls-to-action the nav deliberately does not: the open vote, and My game, which is read only for a viewer who has entered (`viewer.is_attendee`) and shown only while `/my-game` returns a Game. One consequence to know: with the list group gone, the Votes list is reachable only through the "Voting is open" call-to-action.
+The Attendee screen is the exception that shows what the rule is actually about. It used to carry none — the Attendees tab was pinned one tap away and led to the same place — but the Standings now open a team from its row, so the nav tab is no longer the only way in and a reader who arrived from the Standings had nothing to go back to. A screen the nav reaches *by one route among several* keeps a back link; only a screen the nav lands on directly does without.
+
+## The Rounds tab resolves to a Round; it is not a list
+`RoundsView` fetches the Rounds, picks the last published one (`latestPlayable` in `api/rounds.ts`) and `router.replace`s to the Round screen. It renders only the states that have no Round to land on: the Event missing, the read failing, or no Rounds published yet. It replaces rather than pushes, because a resolver left in the history makes the phone's back button bounce off it.
+
+The list it used to render is gone on purpose: a Player taps Rounds to see what is being played right now, and a menu of every Round stood between them and the only one most readers ever want. Moving between Rounds is the chevrons either side of the name on the Round screen, driven by the same cached `keys.rounds` list. Do not reintroduce a Rounds index screen; add to the chevrons instead.
+
+Drafts are stepped over when resolving — only an Organiser is sent one, and landing them on pairings nobody else can see while the played Round sits one chevron behind reads as the Event having moved on. An Organiser whose only Round is a Draft still lands on it, because it is the only Round there is.
+
+The search on the Round screen filters the Games already in hand rather than asking the API per keystroke, and matches team names — the same names the rows show. It deliberately survives moving between Rounds: a Player following one team walks the chevrons with the filter held, and the empty state names the term so a Round that team did not play in explains itself.
+
+The Event screen lists no destinations either — the nav owns Rounds, Standings, Attendees, Schedule and, for an Organiser, the organiser hub. What it carries instead is the conditional calls-to-action the nav deliberately does not: entering the Event, the open vote, and My game, which is read only for a viewer who has entered (`viewer.is_attendee`) and shown only while `/my-game` returns a Game. Running the Event is not among them any more — that is the Organisers tab, and it must not come back as a section on Home. One consequence to know: with the list group gone, the Votes list is reachable only through the "Voting is open" call-to-action.
+
+## Score columns come from the Event, never from a hard-coded slug
+An Event declares its own Score Types, so no screen names one. The Round and Game screens read `score_types` off the payload (`listedColumns` for a listing, all of them on a Game); the Standings derive theirs from the scores in hand with `columnsOf` in `api/standings.ts`, taking every column any Attendee has a score under. Headings are `columnLabel`, initials of a multi-word name and the first three letters of a single-word one.
+
+A hard-coded 'match-points'/'victory-points' pair shows two columns of dashes to every Event scored on anything else — which is exactly what the Standings did until this was fixed.
+
+An absent score renders an em dash, never a zero: a Game nobody has played would otherwise read as a nil-all somebody actually played. A zero that was entered still reads as a zero.
+
+## My team is a hub of one-thing screens, not a screen of stacked forms
+`MyTeamView` renders only a list group: Team details, My details, My list, Partner (doubles only), and the painting vote (only where the Event runs one). Each row says where that part of the entry stands — the team's name, the faction chosen, "Not submitted", "waiting" — so a Player sees what is outstanding without opening anything. Every row leads to a screen that edits one thing; do not put a form back on the hub.
+
+Above it sits the team itself — Avatar, name, Allegiance — and the list is edge-to-edge (`-mx-5`) with `divide-y divide-card-divider` and no card: it is a way through to five screens, not five panels. Rows are `AppLinkRow`. The screen has no top padding of its own; the header carries it, so the list bleeds to the edges.
+
+The sub-screens keep a visible `<h1>` and a `BackLink` to the hub — the nav tab says "My team" and cannot say which of the five you opened. They share `useMyTeam`, which owns the Event and Attendee reads, `me`/`partner`, the painting Poll, and the redirect to the entry form for a reader who has not entered.

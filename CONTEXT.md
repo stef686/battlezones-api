@@ -42,7 +42,7 @@ The side an Attendee fights for in Events whose setting divides the field in two
 _Avoid_: Side, alignment, army
 
 **Score Type**:
-A named, per-Event dimension a Game is scored on (e.g. Victory Points, Match Points). An Event defines its own set. A Score Type is either submitted by Players or derived by the system from other scores, never both.
+A named, per-Event dimension a Game is scored on (e.g. Victory Points, Match Points). An Event defines its own set. A Score Type is either submitted by Players or derived by the system from other scores, never both. It carries an abbreviation — the heading it is shown under wherever a column of numbers has no room for the name (MP, VP) — which the platform works out from the name where the Organiser writes none.
 _Avoid_: Metric, category, stat
 
 **Match Points**:

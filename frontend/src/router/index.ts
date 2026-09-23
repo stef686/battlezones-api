@@ -122,6 +122,16 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true },
     },
     {
+        // Hung off the Event rather than off the Round, exactly as the API
+        // is: a Game carries the Round it belongs to, so nesting it under one
+        // would put a number in the URL that nothing reads.
+        path: '/events/:eventSlug/games/:gameId',
+        name: 'game',
+        component: () => import('@/views/GameView.vue'),
+        props: true,
+        meta: { public: true },
+    },
+    {
         path: '/events/:eventSlug/organise',
         name: 'organise',
         component: () => import('@/views/OrganiseView.vue'),
@@ -131,6 +141,12 @@ const routes: RouteRecordRaw[] = [
         path: '/events/:eventSlug/organise/settings',
         name: 'event-settings',
         component: () => import('@/views/EventSettingsView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/organise/format',
+        name: 'event-format',
+        component: () => import('@/views/EventFormatView.vue'),
         props: true,
     },
     {
@@ -149,6 +165,38 @@ const routes: RouteRecordRaw[] = [
         path: '/events/:eventSlug/my-team',
         name: 'my-team',
         component: () => import('@/views/MyTeamView.vue'),
+        props: true,
+    },
+    {
+        // One screen per thing an entry is made of, hung off the hub rather
+        // than stacked on it: a Player in a hall is looking for one of them.
+        path: '/events/:eventSlug/my-team/details',
+        name: 'my-team-details',
+        component: () => import('@/views/TeamDetailsView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/my-team/faction',
+        name: 'my-team-faction',
+        component: () => import('@/views/MyFactionView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/my-team/list',
+        name: 'my-team-list',
+        component: () => import('@/views/MyArmyListView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/my-team/partner',
+        name: 'my-team-partner',
+        component: () => import('@/views/PartnerView.vue'),
+        props: true,
+    },
+    {
+        path: '/events/:eventSlug/my-team/painting',
+        name: 'my-team-painting',
+        component: () => import('@/views/PaintedArmyView.vue'),
         props: true,
     },
     {
