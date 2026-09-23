@@ -215,8 +215,6 @@ describe('the landing route', () => {
 
 describe('which screens are drawn inside the app shell', () => {
     it.each([
-        ['/login'],
-        ['/forgot-password'],
         ['/reset-password?token=abc&email=ada%40example.com'],
         ['/invites/plain-token'],
         ['/feedback/plain-token'],
@@ -228,6 +226,18 @@ describe('which screens are drawn inside the app shell', () => {
         await router.isReady();
 
         expect(router.currentRoute.value.meta.chrome).toBe(false);
+    });
+
+    it.each([
+        ['/login'],
+        ['/forgot-password'],
+    ])('draws %s inside the chrome, because signing in must not strand a signed-out reader', async (path) => {
+        const { router } = routerWithSession(null);
+
+        await router.push(path);
+        await router.isReady();
+
+        expect(router.currentRoute.value.meta.chrome).not.toBe(false);
     });
 
     it('draws an Event screen inside the chrome, which is the default', async () => {

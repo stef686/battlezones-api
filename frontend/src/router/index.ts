@@ -37,13 +37,13 @@ const routes: RouteRecordRaw[] = [
         path: '/login',
         name: 'login',
         component: () => import('@/views/LoginView.vue'),
-        meta: { public: true, unclaimed: true, chrome: false },
+        meta: { public: true, unclaimed: true },
     },
     {
         path: '/forgot-password',
         name: 'forgot-password',
         component: () => import('@/views/ForgotPasswordView.vue'),
-        meta: { public: true, unclaimed: true, chrome: false },
+        meta: { public: true, unclaimed: true },
     },
     {
         // The API mails this one with `?token=&email=`, so the path carries no

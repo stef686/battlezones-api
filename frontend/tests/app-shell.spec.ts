@@ -6,6 +6,7 @@ import type { Router } from 'vue-router';
 
 import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
+import App from '@/App.vue';
 import AppShell from '@/components/AppShell.vue';
 import { createAppRouter } from '@/router';
 import { useSessionStore } from '@/stores/session';
@@ -55,6 +56,15 @@ function stubEvent(body: unknown = eventBody()) {
 let router: Router;
 let pinia: ReturnType<typeof createPinia>;
 let queryClient: QueryClient;
+
+/** The whole app, which is where a route's chrome is decided. */
+function mountApp() {
+    return mount(App, {
+        global: {
+            plugins: [pinia, router, [VueQueryPlugin, { queryClient }]],
+        },
+    });
+}
 
 function mountShell() {
     return mount(AppShell, {
@@ -192,11 +202,25 @@ describe('the app shell', () => {
         }
     });
 
-    it('is absent from a screen that opts out of chrome, because the shell is never drawn there', async () => {
-        await router.push('/login');
+    it.each(['/login', '/forgot-password'])('stays under a signed-out viewer on %s, so signing in is not a dead end', async (path) => {
+        await router.push(path);
         await router.isReady();
 
-        expect(router.currentRoute.value.meta.chrome).toBe(false);
+        const view = mountApp();
+        await flushPromises();
+
+        expect(view.find('[data-testid="tab-bar"]').exists()).toBe(true);
+        expect(view.get('[data-testid="tab-account"]').attributes('href')).toBe('/login');
+    });
+
+    it('is absent from a screen reached with a token, which opts out of chrome', async () => {
+        await router.push('/invites/an-invite-token');
+        await router.isReady();
+
+        const view = mountApp();
+        await flushPromises();
+
+        expect(view.find('[data-testid="tab-bar"]').exists()).toBe(false);
     });
 });
 
