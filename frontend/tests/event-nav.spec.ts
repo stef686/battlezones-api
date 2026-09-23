@@ -83,7 +83,7 @@ function stubSignedIn(body: unknown) {
     );
 }
 
-/** jsdom has no layout, so it ships no scrollIntoView to spy on. */
+/** A spy in place of the no-op tests/setup.ts gives jsdom, to see what was scrolled. */
 let scrollIntoView: ReturnType<typeof vi.fn>;
 
 let router: Router;
