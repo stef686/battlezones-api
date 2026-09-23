@@ -142,9 +142,10 @@ paths:
         204:
           description: ''
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
+                type: object
+                nullable: true
         401:
           description: ''
           content:
