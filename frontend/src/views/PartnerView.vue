@@ -52,6 +52,18 @@ watch(partner, (mate) => {
   factionId.value = mate?.faction === null || mate?.faction === undefined ? '' : String(mate.faction.id);
 }, { immediate: true });
 
+/**
+ * Whether saving would reissue the invitation. Compared the way the API
+ * compares it — trimmed and regardless of case — so the notice appears exactly
+ * when a new email is about to go out, and not for a stray capital.
+ */
+const addressChanged = computed(() => {
+  const onFile = partner.value?.email;
+
+  return onFile !== undefined && onFile !== null
+    && email.value.trim().toLowerCase() !== onFile.toLowerCase();
+});
+
 const saving = ref(false);
 const saved = ref(false);
 const failure = ref<ApiError | null>(null);
@@ -177,7 +189,7 @@ async function resend(): Promise<void> {
           class="text-sm text-muted-foreground-1"
         >
           {{ partner
-            ? 'They have not answered their invitation yet, so you can still put their details right.'
+            ? 'They have not accepted their invitation, so you can still edit their details.'
             : 'Name your partner and we will email them an invitation.' }}
         </p>
 
@@ -198,7 +210,7 @@ async function resend(): Promise<void> {
             label="Their email address"
             type="email"
             testid="partner-email"
-            :hint="partner ? 'Change it and a new invitation goes to the new address. The old link stops working.' : undefined"
+            :hint="addressChanged ? 'A new invitation will be sent to this new email address.' : undefined"
             :errors="fieldErrors('email')"
           />
 
