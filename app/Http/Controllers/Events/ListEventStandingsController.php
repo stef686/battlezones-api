@@ -36,7 +36,7 @@ class ListEventStandingsController extends Controller
         ],
         'scores' => [[
             'value' => 6,
-            'score_type' => ['id' => 1, 'name' => 'Match Points', 'slug' => 'match-points', 'sort_direction' => 'desc'],
+            'score_type' => ['id' => 1, 'name' => 'Match Points', 'abbreviation' => 'MP', 'slug' => 'match-points', 'sort_direction' => 'desc'],
         ]],
     ]]])]
     public function __invoke(ListEventStandingsRequest $request, Event $event): AnonymousResourceCollection

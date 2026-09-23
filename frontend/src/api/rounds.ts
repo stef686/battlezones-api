@@ -51,6 +51,8 @@ export interface Pairing {
 export interface ScoreColumn {
     slug: string;
     name: string;
+    /** The heading to show over the numbers, chosen by the Organiser. */
+    abbreviation: string;
     /**
      * The one column a listing of Games leads with, of however many the Event
      * is scored on. Exactly one column carries it — the API resolves which,
@@ -116,13 +118,20 @@ export function byNumber(rounds: RoundSummary[]): RoundSummary[] {
 /**
  * A score column's heading, short enough to sit over a number.
  *
- * The initials of the Score Type's words — Match Points becomes MP, Victory
- * Points VP — which is what the Standings table has always called them and
- * what a Player says out loud. Derived rather than listed, because an Event
- * declares its own Score Types and a hard-coded pair only ever fits one Event.
- * The full name travels with it, so nothing depends on reading the initials.
+ * The Organiser's own abbreviation, which the API sends with every column and
+ * fills in from the name where none was written. Taken as typed — an Organiser
+ * who writes "VPs" means the lower case — and only fallen back on where a
+ * payload predates the field, since a heading is not something to invent
+ * twice: an Event declares its own Score Types, and the name is not what a
+ * column of numbers has room for.
  */
-export function columnLabel(column: { name: string }): string {
+export function columnLabel(column: { name: string; abbreviation?: string }): string {
+    const written = column.abbreviation?.trim() ?? '';
+
+    if (written !== '') {
+        return written;
+    }
+
     const words = column.name.split(/\s+/).filter((word) => word.length > 0);
 
     // One word has no initials to take — "Kills" abbreviated to "K" says less

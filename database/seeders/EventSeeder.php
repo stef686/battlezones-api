@@ -207,6 +207,7 @@ class EventSeeder extends Seeder
         return [
             EventScoreType::factory()->for($event)->create([
                 'name' => 'Battle Points',
+                'abbreviation' => 'BP',
                 'slug' => 'battle-points',
                 'sort_direction' => SortDirection::Desc,
                 'is_primary' => true,
@@ -214,6 +215,7 @@ class EventSeeder extends Seeder
             ]),
             EventScoreType::factory()->for($event)->create([
                 'name' => 'Sportsmanship',
+                'abbreviation' => 'SPO',
                 'slug' => 'sportsmanship',
                 'sort_direction' => SortDirection::Desc,
                 'display_order' => 1,

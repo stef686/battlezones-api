@@ -49,6 +49,7 @@ class ReplaceEventScoreTypes
                 // leave the Event's existing addresses alone.
                 $scoreType->fill([
                     'name' => $row['name'],
+                    'abbreviation' => $this->abbreviationOf($row),
                     'sort_direction' => $row['sort_direction'],
                     'is_derived' => $derived,
                     'is_primary' => (bool) $row['is_primary'],
@@ -69,6 +70,22 @@ class ReplaceEventScoreTypes
         });
 
         return $event->scoreTypes()->withExists('scores')->orderBy('display_order')->get();
+    }
+
+    /**
+     * The heading the column is shown under.
+     *
+     * An Organiser's own where they wrote one, and the initials of the name
+     * otherwise — a column has to have a heading, and asking every Organiser
+     * to invent one for Victory Points would be asking them to type VP.
+     *
+     * @param  array<string, mixed>  $row
+     */
+    private function abbreviationOf(array $row): string
+    {
+        $written = trim((string) ($row['abbreviation'] ?? ''));
+
+        return $written !== '' ? $written : EventScoreType::abbreviate((string) $row['name']);
     }
 
     /**

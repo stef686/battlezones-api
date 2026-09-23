@@ -25,6 +25,7 @@ class ReplaceEventScoreTypesController extends Controller
     #[Response(['data' => [[
         'id' => 7,
         'name' => 'Match Points',
+        'abbreviation' => 'MP',
         'slug' => 'match-points',
         'sort_direction' => 'desc',
         'is_derived' => true,

@@ -10,6 +10,8 @@ import type { ApiClient } from './client';
 export interface ScoreType {
     id: number;
     name: string;
+    /** The heading it is shown under, where a column of numbers has no room for the name. */
+    abbreviation: string;
     slug: string;
     sort_direction: 'asc' | 'desc';
     is_derived: boolean;
@@ -34,6 +36,8 @@ export interface ScoreTypeChange {
     /** Absent on a column being added: the Event does not have it yet. */
     id: number | null;
     name: string;
+    /** Blank hands it back to the API, which works one out from the name. */
+    abbreviation: string;
     sort_direction: 'asc' | 'desc';
     is_derived: boolean;
     is_primary: boolean;

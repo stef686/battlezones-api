@@ -251,6 +251,7 @@ test('it includes score type metadata', function () {
     $event = Event::factory()->published()->standingsVisible()->create();
     $victoryPoints = EventScoreType::factory()->for($event)->create([
         'name' => 'Battle Points',
+        'abbreviation' => 'BP',
         'slug' => 'battle-points',
         'sort_direction' => 'desc',
         'ranking_order' => 1,
@@ -272,6 +273,9 @@ test('it includes score type metadata', function () {
         ->and($data['scores'][0]['value'])->toBe('75.50')
         ->and($data['scores'][0]['score_type']['name'])->toBe('Battle Points')
         ->and($data['scores'][0]['score_type']['slug'])->toBe('battle-points')
+        // The heading a table column is shown under, so no client has to
+        // shorten a name for itself.
+        ->and($data['scores'][0]['score_type']['abbreviation'])->toBe('BP')
         ->and($data['scores'][0]['score_type']['sort_direction'])->toBe('desc');
 });
 

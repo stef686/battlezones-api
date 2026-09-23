@@ -26,6 +26,10 @@ class ScoreTypesRelationManager extends RelationManager
             TextInput::make('name')
                 ->required()
                 ->maxLength(255),
+            TextInput::make('abbreviation')
+                ->required()
+                ->maxLength(8)
+                ->helperText('The heading shown over the column on a game and in the standings, e.g. MP.'),
             TextInput::make('slug')
                 ->required()
                 ->maxLength(255),
@@ -62,6 +66,7 @@ class ScoreTypesRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('name')
                     ->sortable(),
+                TextColumn::make('abbreviation'),
                 TextColumn::make('slug')
                     ->sortable(),
                 TextColumn::make('sort_direction')

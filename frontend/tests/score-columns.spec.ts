@@ -3,11 +3,15 @@ import { describe, expect, it } from 'vitest';
 import { columnLabel, listedColumns, tableLabel } from '@/api/rounds';
 import { columnsOf, type Standing } from '@/api/standings';
 
-function column(slug: string, name: string, isPrimary = false) {
-    return { slug, name, is_primary: isPrimary };
+function column(slug: string, name: string, isPrimary = false, abbreviation = '') {
+    return { slug, name, abbreviation, is_primary: isPrimary };
 }
 
 describe('a score column heading', () => {
+    it('shows the abbreviation the organiser wrote, exactly as they wrote it', () => {
+        expect(columnLabel(column('victory-points', 'Victory Points', false, 'VPs'))).toBe('VPs');
+    });
+
     it('takes the initials of a Score Type of several words', () => {
         expect(columnLabel(column('match-points', 'Match Points'))).toBe('MP');
         expect(columnLabel(column('vp', 'Very Victory Points Indeed'))).toBe('VVP');
@@ -39,7 +43,7 @@ describe('the columns a listing has room for', () => {
 });
 
 describe('the columns the standings are scored on', () => {
-    function standing(scores: { slug: string; name: string }[]): Standing {
+    function standing(scores: { slug: string; name: string; abbreviation: string }[]): Standing {
         return {
             id: 1,
             position: 1,
@@ -50,17 +54,17 @@ describe('the columns the standings are scored on', () => {
     }
 
     it('reads them off the standings rather than naming a fixed pair', () => {
-        const rows = [standing([{ slug: 'kill-points', name: 'Kill Points' }])];
+        const rows = [standing([{ slug: 'kill-points', name: 'Kill Points', abbreviation: 'KP' }])];
 
-        expect(columnsOf(rows)).toEqual([{ slug: 'kill-points', name: 'Kill Points' }]);
+        expect(columnsOf(rows)).toEqual([{ slug: 'kill-points', name: 'Kill Points', abbreviation: 'KP' }]);
     });
 
     it('keeps a column one team has no score under, and lists each of them once', () => {
         const rows = [
-            standing([{ slug: 'match-points', name: 'Match Points' }]),
+            standing([{ slug: 'match-points', name: 'Match Points', abbreviation: 'MP' }]),
             standing([
-                { slug: 'match-points', name: 'Match Points' },
-                { slug: 'victory-points', name: 'Victory Points' },
+                { slug: 'match-points', name: 'Match Points', abbreviation: 'MP' },
+                { slug: 'victory-points', name: 'Victory Points', abbreviation: 'VP' },
             ]),
         ];
 

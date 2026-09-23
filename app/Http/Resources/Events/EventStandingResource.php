@@ -38,6 +38,7 @@ class EventStandingResource extends JsonResource
                 'score_type' => [
                     'id' => $score['scoreType']->id,
                     'name' => $score['scoreType']->name,
+                    'abbreviation' => $score['scoreType']->abbreviation,
                     'slug' => $score['scoreType']->slug,
                     'sort_direction' => $score['scoreType']->sort_direction->value,
                 ],

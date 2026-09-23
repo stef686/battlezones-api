@@ -72,8 +72,8 @@ test('it names the score columns in the order the event declared them', function
     // The Game screen shows every column, and is told which of them a Round's
     // listing leads with so the two screens agree on the number in common.
     expect($response->json('data.score_types'))->toBe([
-        ['slug' => 'match-points', 'name' => 'Match Points', 'is_primary' => false],
-        ['slug' => 'victory-points', 'name' => 'Victory Points', 'is_primary' => true],
+        ['slug' => 'match-points', 'name' => 'Match Points', 'abbreviation' => 'MP', 'is_primary' => false],
+        ['slug' => 'victory-points', 'name' => 'Victory Points', 'abbreviation' => 'VP', 'is_primary' => true],
     ]);
 });
 

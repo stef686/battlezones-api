@@ -390,6 +390,26 @@ export interface paths {
         patch: operations["updateMessage"];
         trace?: never;
     };
+    "/api/game-systems": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Game Systems
+         * @description Every Game System the platform knows, in name order. Public: the Event listing already filters on a Game System slug.
+         */
+        get: operations["listGameSystems"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events": {
         parameters: {
             query?: never;
@@ -1356,6 +1376,33 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/events/{event_slug}/score-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        /**
+         * List Score Types
+         * @description Organisers only. The columns this Event is scored on, in the order they are shown, with the points behind a derived column and whether any Game has been scored under it yet.
+         */
+        get: operations["listScoreTypes"];
+        /**
+         * Replace the Score Types
+         * @description Organisers only. Send the complete ordered set: position sets the display order, and position among the columns counting for ranking sets the ranking order.
+         */
+        put: operations["replaceTheScoreTypes"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events/{event_slug}/rounds/{round_id}/publish": {
         parameters: {
             query?: never;
@@ -1485,6 +1532,35 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/events/{event_slug}/attendees/{attendee_id}/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload a Team Avatar
+         * @description The team and its Organisers. A multipart route of its own rather than a field on the Attendee PATCH, because PHP does not populate uploaded files for PATCH bodies. The upload is cropped to a 256x256 WebP square and the original is discarded.
+         */
+        post: operations["uploadATeamAvatar"];
+        /**
+         * Remove a Team Avatar
+         * @description The team and its Organisers. Deletes the stored square and returns the team to its placeholder.
+         */
+        delete: operations["removeATeamAvatar"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events/{event_slug}/attendees/{attendee_id}/members": {
         parameters: {
             query?: never;
@@ -1532,6 +1608,60 @@ export interface paths {
          * @description Closed to members once registration closes; Organisers are never blocked.
          */
         delete: operations["removeAPlayerFromATeam"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+                /** @description The id of the membership being amended. */
+                membership_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Amend an Invited Player
+         * @description The name, address and Faction of a team mate who has not claimed their account. Refused once they have: their details are then theirs alone. Addressed by membership because the membership is the seat being amended.
+         */
+        patch: operations["amendAnInvitedPlayer"];
+        trace?: never;
+    };
+    "/api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}/invite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+                /** @description The id of the membership being chased. */
+                membership_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send a Team Mate Their Invitation Again
+         * @description A fresh credential to the address already on file. Refused once the Player has claimed their account, which is when they no longer need one.
+         */
+        post: operations["sendATeamMateTheirInvitationAgain"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2778,6 +2908,31 @@ export interface operations {
             };
         };
     };
+    listGameSystems: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            slug?: string;
+                        }[];
+                    };
+                };
+            };
+        };
+    };
     listEvents: {
         parameters: {
             query?: {
@@ -2807,6 +2962,7 @@ export interface operations {
                             description?: string;
                             status?: string;
                             pairing_format?: string;
+                            timezone?: string;
                             starts_at?: string;
                             ends_at?: string;
                             max_attendees?: number;
@@ -2938,8 +3094,11 @@ export interface operations {
                     registration_closes_at?: string;
                     /** @description How many parties may enter. Null for no limit, and never fewer than have already entered. */
                     max_attendees?: number;
+                    /** @description The Game System the Event is played under. Refused once anybody has entered. */
+                    game_system_id?: number;
+                    /** @description How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered. */
+                    attendee_size?: number;
                     slug?: string;
-                    attendee_size?: string;
                     status?: string;
                     pairing_format?: string;
                 };
@@ -2959,6 +3118,7 @@ export interface operations {
                             description?: string;
                             status?: string;
                             pairing_format?: string;
+                            timezone?: string;
                             starts_at?: string;
                             ends_at?: string;
                             max_attendees?: number;
@@ -3067,6 +3227,7 @@ export interface operations {
                             id?: number;
                             name?: string;
                             allegiance?: string | null;
+                            avatar?: string | null;
                             members?: unknown[];
                         };
                     };
@@ -3245,6 +3406,8 @@ export interface operations {
                             id?: number;
                             name?: string;
                             allegiance?: string | null;
+                            avatar?: string | null;
+                            allegiance_locked?: boolean;
                             members?: unknown[];
                             checked_in_at?: string | null;
                             painting_entered?: boolean;
@@ -3481,6 +3644,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                abbreviation?: string;
                                 is_primary?: boolean;
                             }[];
                             games?: {
@@ -3550,6 +3714,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                abbreviation?: string;
                                 is_primary?: boolean;
                             }[];
                             result?: {
@@ -3636,6 +3801,7 @@ export interface operations {
                                 score_type?: {
                                     id?: number;
                                     name?: string;
+                                    abbreviation?: string;
                                     slug?: string;
                                     sort_direction?: string;
                                 };
@@ -3742,7 +3908,7 @@ export interface operations {
                                 ends_at?: string;
                                 display_order?: number;
                                 target_id?: number;
-                                is_target_live?: boolean;
+                                target_state?: string;
                                 round?: {
                                     id?: number;
                                     number?: number;
@@ -3798,7 +3964,7 @@ export interface operations {
                             ends_at?: string;
                             display_order?: number;
                             target_id?: string | null;
-                            is_target_live?: boolean;
+                            target_state?: string | null;
                             round?: string | null;
                         };
                     };
@@ -4906,6 +5072,7 @@ export interface operations {
                             description?: string;
                             status?: string;
                             pairing_format?: string;
+                            timezone?: string;
                             starts_at?: string;
                             ends_at?: string;
                             max_attendees?: number;
@@ -4978,6 +5145,7 @@ export interface operations {
                             description?: string;
                             status?: string;
                             pairing_format?: string;
+                            timezone?: string;
                             starts_at?: string;
                             ends_at?: string;
                             max_attendees?: number;
@@ -5149,7 +5317,7 @@ export interface operations {
                             ends_at?: string;
                             display_order?: number;
                             target_id?: string | null;
-                            is_target_live?: boolean;
+                            target_state?: string | null;
                             round?: string | null;
                         };
                     };
@@ -5212,6 +5380,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                abbreviation?: string;
                                 is_primary?: boolean;
                             }[];
                             result?: {
@@ -5388,6 +5557,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                abbreviation?: string;
                                 is_primary?: boolean;
                             }[];
                             result?: {
@@ -5488,6 +5658,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                abbreviation?: string;
                                 is_primary?: boolean;
                             }[];
                             result?: {
@@ -5554,6 +5725,7 @@ export interface operations {
                             score_types?: {
                                 slug?: string;
                                 name?: string;
+                                abbreviation?: string;
                                 is_primary?: boolean;
                             }[];
                             result?: {
@@ -5781,6 +5953,148 @@ export interface operations {
                 content: {
                     "application/json": {
                         message?: string;
+                    };
+                };
+            };
+        };
+    };
+    listScoreTypes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            abbreviation?: string;
+                            slug?: string;
+                            sort_direction?: string;
+                            is_derived?: boolean;
+                            is_primary?: boolean;
+                            counts_for_ranking?: boolean;
+                            ranking_order?: number;
+                            win_points?: string;
+                            draw_points?: string;
+                            loss_points?: string;
+                            display_order?: number;
+                            is_scored?: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    replaceTheScoreTypes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description The complete ordered set. Position sets display order, and position among the rows counting for ranking sets ranking order. */
+                    score_types: {
+                        /** @description The Score Type being edited. Leave it out to add a new one. */
+                        id?: number;
+                        /** @description What the column is called. */
+                        name: string;
+                        /** @description The heading shown over the column on a Game and in the Standings. Left out or blank, the platform works one out from the name. */
+                        abbreviation?: string;
+                        /** @description Which way up it ranks: asc where lower is better, desc where higher is. */
+                        sort_direction: string;
+                        /** @description Whether the platform works it out from the result rather than a Player entering it. */
+                        is_derived: boolean;
+                        /** @description Whether it leads a Game listing. At most one may. */
+                        is_primary: boolean;
+                        /** @description Whether it ranks the Standings. */
+                        counts_for_ranking: boolean;
+                        /** @description What a win is worth. Required on a derived column. */
+                        win_points?: number;
+                        /** @description What a draw is worth. Required on a derived column. */
+                        draw_points?: number;
+                        /** @description What a loss is worth. Required on a derived column. */
+                        loss_points?: number;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            abbreviation?: string;
+                            slug?: string;
+                            sort_direction?: string;
+                            is_derived?: boolean;
+                            is_primary?: boolean;
+                            counts_for_ranking?: boolean;
+                            ranking_order?: number;
+                            win_points?: string;
+                            draw_points?: string;
+                            loss_points?: string;
+                            display_order?: number;
+                            is_scored?: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The submitted data failed validation. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            field_name?: string[];
+                        };
                     };
                 };
             };
@@ -6196,6 +6510,140 @@ export interface operations {
             };
         };
     };
+    uploadATeamAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description A square-ish image, at least 128x128, at most 8MB. JPEG, PNG or WebP.
+                     */
+                    avatar: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            allegiance?: string;
+                            avatar?: string;
+                            members?: {
+                                id?: number;
+                                name?: string;
+                                faction?: {
+                                    id?: number;
+                                    name?: string;
+                                };
+                                army_list_locked?: boolean;
+                                clubs?: unknown[];
+                            }[];
+                            checked_in_at?: string | null;
+                            custom_field_responses?: unknown[];
+                            games?: unknown[];
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The submitted data failed validation. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            field_name?: string[];
+                        };
+                    };
+                };
+            };
+        };
+    };
+    removeATeamAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            allegiance?: string;
+                            avatar?: string;
+                            members?: {
+                                id?: number;
+                                name?: string;
+                                faction?: {
+                                    id?: number;
+                                    name?: string;
+                                };
+                                army_list_locked?: boolean;
+                                clubs?: unknown[];
+                            }[];
+                            checked_in_at?: string | null;
+                            custom_field_responses?: unknown[];
+                            games?: unknown[];
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
     addAPlayerToATeam: {
         parameters: {
             query?: never;
@@ -6326,6 +6774,149 @@ export interface operations {
             };
             /** @description The request carries no valid token. */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    amendAnInvitedPlayer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+                /** @description The id of the membership being amended. */
+                membership_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    /** @description The Player's name. */
+                    name?: string;
+                    /** @description The address their invitation is sent to. */
+                    email?: string;
+                    /** @description The Faction this Player brings. */
+                    faction_id?: number;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            allegiance?: string;
+                            members?: {
+                                id?: number;
+                                name?: string;
+                                faction?: {
+                                    id?: number;
+                                    name?: string;
+                                };
+                                army_list_locked?: boolean;
+                                membership_id?: number;
+                                invite_outstanding?: boolean;
+                                clubs?: unknown[];
+                            }[];
+                            checked_in_at?: string | null;
+                            custom_field_responses?: unknown[];
+                            games?: unknown[];
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The Player has an account of their own. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The submitted data failed validation. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            field_name?: string[];
+                        };
+                    };
+                };
+            };
+        };
+    };
+    sendATeamMateTheirInvitationAgain: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+                /** @description The id of the membership being chased. */
+                membership_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The invitation was sent again. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never> | null;
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The Player has an account of their own. */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

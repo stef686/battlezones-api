@@ -27,6 +27,7 @@ import {
 import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
+import BackLink from '@/components/BackLink.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import TextField from '@/components/TextField.vue';
 
@@ -228,11 +229,15 @@ function localMoment(iso: string | null): string {
     />
 
     <template v-else-if="form">
+      <BackLink
+        :to="{ name: 'organise', params: { eventSlug: props.eventSlug } }"
+        testid="back-to-organise"
+      >
+        Back to running the event
+      </BackLink>
+
       <header>
-        <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          {{ event.name }}
-        </p>
-        <h1 class="mt-1 text-2xl font-bold tracking-tight text-foreground">
+        <h1 class="text-2xl font-bold tracking-tight text-foreground">
           Event settings
         </h1>
       </header>

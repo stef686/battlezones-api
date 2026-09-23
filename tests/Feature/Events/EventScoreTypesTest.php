@@ -365,3 +365,78 @@ test('a column games have been scored on cannot be tidied away', function () {
     expect($victoryPoints->refresh()->scores()->count())->toBe(2)
         ->and($event->scoreTypes()->count())->toBe(2);
 });
+
+test('a column carries the heading an organiser wrote for it', function () {
+    $event = pairableEvent();
+    $victoryPoints = $event->scoreTypes()->where('slug', 'victory-points')->firstOrFail();
+
+    $this->actingAs(organiserOf($event))
+        ->putJson(route('events.score-types.replace', ['event' => $event->slug]), [
+            'score_types' => [[
+                'id' => $victoryPoints->id,
+                'name' => 'Victory Points',
+                'abbreviation' => 'VPs',
+                'sort_direction' => 'desc',
+                'is_derived' => false,
+                'is_primary' => true,
+                'counts_for_ranking' => true,
+            ]],
+        ])
+        ->assertSuccessful()
+        ->assertJsonPath('data.0.abbreviation', 'VPs');
+
+    expect($victoryPoints->refresh()->abbreviation)->toBe('VPs');
+});
+
+test('a column left without a heading is given the initials of its name', function () {
+    $event = pairableEvent();
+    $victoryPoints = $event->scoreTypes()->where('slug', 'victory-points')->firstOrFail();
+
+    $this->actingAs(organiserOf($event))
+        ->putJson(route('events.score-types.replace', ['event' => $event->slug]), [
+            'score_types' => [
+                [
+                    'id' => $victoryPoints->id,
+                    'name' => 'Victory Points',
+                    'abbreviation' => '   ',
+                    'sort_direction' => 'desc',
+                    'is_derived' => false,
+                    'is_primary' => true,
+                    'counts_for_ranking' => true,
+                ],
+                [
+                    // A column being added, with nothing said about its
+                    // heading at all.
+                    'name' => 'Sportsmanship',
+                    'sort_direction' => 'desc',
+                    'is_derived' => false,
+                    'is_primary' => false,
+                    'counts_for_ranking' => false,
+                ],
+            ],
+        ])
+        ->assertSuccessful()
+        // A multi-word name gives its initials; a single-word one is cut to
+        // three letters, since one letter says nothing.
+        ->assertJsonPath('data.0.abbreviation', 'VP')
+        ->assertJsonPath('data.1.abbreviation', 'SPO');
+});
+
+test('a heading longer than a table column has room for is refused', function () {
+    $event = pairableEvent();
+    $victoryPoints = $event->scoreTypes()->where('slug', 'victory-points')->firstOrFail();
+
+    $this->actingAs(organiserOf($event))
+        ->putJson(route('events.score-types.replace', ['event' => $event->slug]), [
+            'score_types' => [[
+                'id' => $victoryPoints->id,
+                'name' => 'Victory Points',
+                'abbreviation' => 'Victory Points Total',
+                'sort_direction' => 'desc',
+                'is_derived' => false,
+                'is_primary' => true,
+                'counts_for_ranking' => true,
+            ]],
+        ])
+        ->assertJsonValidationErrors(['score_types.0.abbreviation']);
+});

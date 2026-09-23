@@ -158,10 +158,7 @@ function title(flag: ResultFlag): string {
       </RouterLink>
 
       <header>
-        <p class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          {{ event.name }}
-        </p>
-        <h1 class="mt-1 text-2xl font-bold tracking-tight text-foreground">
+        <h1 class="text-2xl font-bold tracking-tight text-foreground">
           Disputed results
         </h1>
       </header>

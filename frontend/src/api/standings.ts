@@ -24,6 +24,8 @@ export interface Standing {
 export interface StandingColumn {
     slug: string;
     name: string;
+    /** The heading the table shows, chosen by the Organiser. */
+    abbreviation: string;
 }
 
 export function fetchStandings(client: ApiClient, slug: string): Promise<Standing[]> {

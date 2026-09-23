@@ -307,6 +307,7 @@ class EndToEndSeeder extends Seeder
             ['event_id' => $event->getKey(), 'slug' => 'match-points'],
             [
                 'name' => 'Match Points',
+                'abbreviation' => 'MP',
                 'sort_direction' => 'desc',
                 'is_derived' => true,
                 'is_primary' => false,
@@ -322,6 +323,7 @@ class EndToEndSeeder extends Seeder
             ['event_id' => $event->getKey(), 'slug' => 'victory-points'],
             [
                 'name' => 'Victory Points',
+                'abbreviation' => 'VP',
                 'sort_direction' => 'desc',
                 // Victory Points are played for at the table; Match Points
                 // fall out of the result, so this is the number a Game

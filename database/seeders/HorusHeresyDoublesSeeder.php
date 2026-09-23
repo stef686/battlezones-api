@@ -83,6 +83,7 @@ class HorusHeresyDoublesSeeder extends Seeder
             ['event_id' => $event->getKey(), 'slug' => 'match-points'],
             [
                 'name' => 'Match Points',
+                'abbreviation' => 'MP',
                 'sort_direction' => SortDirection::Desc,
                 'is_derived' => true,
                 'is_primary' => false,
@@ -98,6 +99,7 @@ class HorusHeresyDoublesSeeder extends Seeder
             ['event_id' => $event->getKey(), 'slug' => 'victory-points'],
             [
                 'name' => 'Victory Points',
+                'abbreviation' => 'VP',
                 'sort_direction' => SortDirection::Desc,
                 'is_derived' => false,
                 'is_primary' => true,

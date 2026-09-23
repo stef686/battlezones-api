@@ -145,7 +145,10 @@
                     <a href="#events">Events</a>
                 </li>
                                     <ul id="tocify-subheader-events" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="events-GETapi-events">
+                                                    <li class="tocify-item level-2" data-unique="events-GETapi-game-systems">
+                                <a href="#events-GETapi-game-systems">List Game Systems</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events">
                                 <a href="#events-GETapi-events">List Events</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="events-GETapi-events--slug-">
@@ -286,6 +289,12 @@
                                                                                 <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--flags">
                                 <a href="#events-GETapi-events--event_slug--flags">List Flagged Results</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-GETapi-events--event_slug--score-types">
+                                <a href="#events-GETapi-events--event_slug--score-types">List Score Types</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-PUTapi-events--event_slug--score-types">
+                                <a href="#events-PUTapi-events--event_slug--score-types">Replace the Score Types</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="events-POSTapi-events--event_slug--rounds">
                                 <a href="#events-POSTapi-events--event_slug--rounds">Generate the next Round</a>
                             </li>
@@ -313,11 +322,23 @@
                                                                                 <li class="tocify-item level-2" data-unique="events-PATCHapi-events--event_slug--attendees--id-">
                                 <a href="#events-PATCHapi-events--event_slug--attendees--id-">Amend a Team</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-POSTapi-events--event_slug--attendees--attendee_id--avatar">
+                                <a href="#events-POSTapi-events--event_slug--attendees--attendee_id--avatar">Upload a Team Avatar</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-DELETEapi-events--event_slug--attendees--attendee_id--avatar">
+                                <a href="#events-DELETEapi-events--event_slug--attendees--attendee_id--avatar">Remove a Team Avatar</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="events-POSTapi-events--event_slug--attendees--attendee_id--members">
                                 <a href="#events-POSTapi-events--event_slug--attendees--attendee_id--members">Add a Player to a Team</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="events-DELETEapi-events--event_slug--attendees--attendee_id--members--id-">
                                 <a href="#events-DELETEapi-events--event_slug--attendees--attendee_id--members--id-">Remove a Player from a Team</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-">
+                                <a href="#events-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-">Amend an Invited Player</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="events-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite">
+                                <a href="#events-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite">Send a Team Mate Their Invitation Again</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -432,7 +453,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: August 31, 2026</li>
+        <li>Last updated: September 5, 2026</li>
     </ul>
 </div>
 
@@ -1611,14 +1632,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 401,
+        &quot;id&quot;: 415,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -1777,14 +1798,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 402,
+        &quot;id&quot;: 416,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -1968,9 +1989,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 172,
-        &quot;conversation_id&quot;: 403,
-        &quot;user_id&quot;: 1587,
+        &quot;id&quot;: 178,
+        &quot;conversation_id&quot;: 417,
+        &quot;user_id&quot;: 1637,
         &quot;body&quot;: &quot;Animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -1978,7 +1999,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:38Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -2133,14 +2154,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 404,
+        &quot;id&quot;: 418,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -2632,14 +2653,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 405,
+        &quot;id&quot;: 419,
         &quot;is_group&quot;: false,
         &quot;name&quot;: null,
         &quot;participants&quot;: [],
         &quot;is_archived&quot;: false,
         &quot;unread_count&quot;: 0,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -3385,9 +3406,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 173,
-        &quot;conversation_id&quot;: 406,
-        &quot;user_id&quot;: 1588,
+        &quot;id&quot;: 179,
+        &quot;conversation_id&quot;: 420,
+        &quot;user_id&quot;: 1638,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3395,7 +3416,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -3573,9 +3594,9 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 174,
-        &quot;conversation_id&quot;: 407,
-        &quot;user_id&quot;: 1589,
+        &quot;id&quot;: 180,
+        &quot;conversation_id&quot;: 421,
+        &quot;user_id&quot;: 1639,
         &quot;body&quot;: &quot;Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.&quot;,
         &quot;type&quot;: null,
         &quot;is_system&quot;: false,
@@ -3583,7 +3604,7 @@ fetch(url, {
         &quot;is_edited&quot;: false,
         &quot;is_editable&quot;: true,
         &quot;edited_at&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -3871,7 +3892,147 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
     <p>APIs for Events</p>
 
-                                <h2 id="events-GETapi-events">List Events</h2>
+                                <h2 id="events-GETapi-game-systems">List Game Systems</h2>
+
+<p>
+</p>
+
+<p>Every Game System the platform knows, in name order. Public: the Event listing already filters on a Game System slug.</p>
+
+<span id="example-requests-GETapi-game-systems">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/game-systems';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/game-systems"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-game-systems">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 4,
+            &quot;name&quot;: &quot;Horus Heresy&quot;,
+            &quot;slug&quot;: &quot;horus-heresy&quot;
+        },
+        {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Warhammer 40,000&quot;,
+            &quot;slug&quot;: &quot;warhammer-40000&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-game-systems" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-game-systems"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-game-systems"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-game-systems" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-game-systems">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-game-systems" data-method="GET"
+      data-path="api/game-systems"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-game-systems', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-game-systems"
+                    onclick="tryItOut('GETapi-game-systems');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-game-systems"
+                    onclick="cancelTryOut('GETapi-game-systems');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-game-systems"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/game-systems</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-game-systems"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-game-systems"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="events-GETapi-events">List Events</h2>
 
 <p>
 </p>
@@ -3937,14 +4098,15 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 728,
+        &quot;id&quot;: 760,
         &quot;name&quot;: &quot;Eius et animi&quot;,
         &quot;slug&quot;: &quot;eius-et-animi-565&quot;,
         &quot;description&quot;: &quot;Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2027-02-20T05:25:33Z&quot;,
-        &quot;ends_at&quot;: &quot;2027-02-22T05:25:33Z&quot;,
+        &quot;timezone&quot;: &quot;UTC&quot;,
+        &quot;starts_at&quot;: &quot;2026-09-22T04:27:18Z&quot;,
+        &quot;ends_at&quot;: &quot;2026-09-24T04:27:18Z&quot;,
         &quot;max_attendees&quot;: 100,
         &quot;attendee_size&quot;: 1,
         &quot;requires_allegiance&quot;: false,
@@ -3957,8 +4119,8 @@ fetch(url, {
             &quot;country&quot;: &quot;IE&quot;
         },
         &quot;banner&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -4436,17 +4598,17 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 64,
+        &quot;id&quot;: 66,
         &quot;title&quot;: &quot;Fugit deleniti distinctio eum doloremque&quot;,
         &quot;body&quot;: &quot;Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.&quot;,
         &quot;pinned&quot;: false,
-        &quot;published_at&quot;: &quot;2026-08-13T13:26:53Z&quot;,
+        &quot;published_at&quot;: &quot;2026-08-18T12:28:41Z&quot;,
         &quot;author&quot;: {
-            &quot;id&quot;: 1590,
+            &quot;id&quot;: 1640,
             &quot;name&quot;: &quot;Cordia Cummings&quot;
         },
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -4599,9 +4761,10 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 208,
+        &quot;id&quot;: 212,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
+        &quot;avatar&quot;: null,
         &quot;members&quot;: []
     }
 }</code>
@@ -4912,9 +5075,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 209,
+        &quot;id&quot;: 213,
         &quot;name&quot;: &quot;&quot;,
         &quot;allegiance&quot;: null,
+        &quot;avatar&quot;: null,
+        &quot;allegiance_locked&quot;: false,
         &quot;members&quot;: [],
         &quot;checked_in_at&quot;: null,
         &quot;painting_entered&quot;: false,
@@ -5077,14 +5242,14 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 107,
-            &quot;number&quot;: 1,
+            &quot;id&quot;: 111,
+            &quot;number&quot;: 6,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
         },
         {
-            &quot;id&quot;: 108,
-            &quot;number&quot;: 6,
+            &quot;id&quot;: 112,
+            &quot;number&quot;: 5,
             &quot;name&quot;: null,
             &quot;status&quot;: &quot;draft&quot;
         }
@@ -5239,11 +5404,13 @@ fetch(url, {
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
                 &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;abbreviation&quot;: &quot;MP&quot;,
                 &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
                 &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;abbreviation&quot;: &quot;VP&quot;,
                 &quot;is_primary&quot;: true
             }
         ],
@@ -5449,11 +5616,13 @@ fetch(url, {
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
                 &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;abbreviation&quot;: &quot;MP&quot;,
                 &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
                 &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;abbreviation&quot;: &quot;VP&quot;,
                 &quot;is_primary&quot;: true
             }
         ],
@@ -5687,6 +5856,7 @@ fetch(url, {
                     &quot;score_type&quot;: {
                         &quot;id&quot;: 1,
                         &quot;name&quot;: &quot;Match Points&quot;,
+                        &quot;abbreviation&quot;: &quot;MP&quot;,
                         &quot;slug&quot;: &quot;match-points&quot;,
                         &quot;sort_direction&quot;: &quot;desc&quot;
                     }
@@ -6057,13 +6227,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 338,
+        &quot;id&quot;: 350,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&amp;signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&amp;signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373&quot;,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788624000&amp;signature=eeec725b168237ce2309416e9552eecc02a9c9a7787e72d0a555a9e7b9fec319&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788624000&amp;signature=0afbed08da775d7ab38285861da4a880529e8b725b59a59eb4876fa98c1fd925&quot;,
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -6218,7 +6388,7 @@ fetch(url, {
                     &quot;ends_at&quot;: &quot;2026-09-12T12:00:00+00:00&quot;,
                     &quot;display_order&quot;: 0,
                     &quot;target_id&quot;: 4,
-                    &quot;is_target_live&quot;: true,
+                    &quot;target_state&quot;: &quot;live&quot;,
                     &quot;round&quot;: {
                         &quot;id&quot;: 4,
                         &quot;number&quot;: 1,
@@ -8523,7 +8693,7 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 247,
+            &quot;id&quot;: 257,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -8534,7 +8704,7 @@ fetch(url, {
             &quot;my_ballot&quot;: []
         },
         {
-            &quot;id&quot;: 248,
+            &quot;id&quot;: 258,
             &quot;name&quot;: &quot;Best Painted Army&quot;,
             &quot;type&quot;: &quot;painting&quot;,
             &quot;votes_per_player&quot;: 1,
@@ -8708,7 +8878,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 249,
+        &quot;id&quot;: 259,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -8921,7 +9091,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 250,
+        &quot;id&quot;: 260,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -9463,7 +9633,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 251,
+        &quot;id&quot;: 261,
         &quot;name&quot;: &quot;Best Painted Army&quot;,
         &quot;type&quot;: &quot;painting&quot;,
         &quot;votes_per_player&quot;: 1,
@@ -10063,6 +10233,8 @@ $response = $client-&gt;patch(
             'ends_at' =&gt; '2026-09-13T18:00:00+01:00',
             'registration_closes_at' =&gt; '2026-09-05T23:59:00+01:00',
             'max_attendees' =&gt; 32,
+            'game_system_id' =&gt; 4,
+            'attendee_size' =&gt; 2,
         ],
     ]
 );
@@ -10090,7 +10262,9 @@ let body = {
     "starts_at": "2026-09-12T09:00:00+01:00",
     "ends_at": "2026-09-13T18:00:00+01:00",
     "registration_closes_at": "2026-09-05T23:59:00+01:00",
-    "max_attendees": 32
+    "max_attendees": 32,
+    "game_system_id": 4,
+    "attendee_size": 2
 };
 
 fetch(url, {
@@ -10109,28 +10283,29 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 739,
-        &quot;name&quot;: &quot;Quos velit et fugiat&quot;,
-        &quot;slug&quot;: &quot;quos-velit-et-fugiat-76344&quot;,
-        &quot;description&quot;: &quot;Modi deserunt aut ab provident perspiciatis. Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.&quot;,
+        &quot;id&quot;: 771,
+        &quot;name&quot;: &quot;Fugiat sunt nihil&quot;,
+        &quot;slug&quot;: &quot;fugiat-sunt-nihil-80842&quot;,
+        &quot;description&quot;: &quot;Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2026-09-17T11:14:55Z&quot;,
-        &quot;ends_at&quot;: &quot;2026-09-19T11:14:55Z&quot;,
-        &quot;max_attendees&quot;: 82,
+        &quot;timezone&quot;: &quot;UTC&quot;,
+        &quot;starts_at&quot;: &quot;2027-02-12T06:35:13Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-02-14T06:35:13Z&quot;,
+        &quot;max_attendees&quot;: 25,
         &quot;attendee_size&quot;: 1,
         &quot;requires_allegiance&quot;: false,
         &quot;registration_closes_at&quot;: null,
         &quot;is_full&quot;: false,
         &quot;venue&quot;: {
-            &quot;name&quot;: &quot;VonRueden-Leuschke Hall&quot;,
-            &quot;address&quot;: &quot;427 Labadie Curve Suite 170&quot;,
-            &quot;city&quot;: &quot;Lake Micaela&quot;,
-            &quot;country&quot;: &quot;EE&quot;
+            &quot;name&quot;: &quot;Koch PLC Hall&quot;,
+            &quot;address&quot;: &quot;57515 VonRueden Wells Suite 490&quot;,
+            &quot;city&quot;: &quot;Raynormouth&quot;,
+            &quot;country&quot;: &quot;HK&quot;
         },
         &quot;banner&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -10376,24 +10551,36 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>How many parties may enter. Null for no limit, and never fewer than have already entered. Example: <code>32</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>game_system_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="game_system_id"                data-endpoint="PATCHapi-events--slug-"
+               value="4"
+               data-component="body">
+    <br>
+<p>The Game System the Event is played under. Refused once anybody has entered. Example: <code>4</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>attendee_size</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="attendee_size"                data-endpoint="PATCHapi-events--slug-"
+               value="2"
+               data-component="body">
+    <br>
+<p>How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered. Example: <code>2</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>slug</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
                               name="slug"                data-endpoint="PATCHapi-events--slug-"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>attendee_size</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="attendee_size"                data-endpoint="PATCHapi-events--slug-"
                value=""
                data-component="body">
     <br>
@@ -10450,7 +10637,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'banner',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpdjtsk53gie5mc4zHknm', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpu0bgapvvtskvcPMX6kA', 'r')
             ],
         ],
     ]
@@ -10488,14 +10675,15 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 740,
+        &quot;id&quot;: 772,
         &quot;name&quot;: &quot;Nihil accusantium harum&quot;,
         &quot;slug&quot;: &quot;nihil-accusantium-harum-31583&quot;,
         &quot;description&quot;: &quot;Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure. Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2026-12-30T18:36:56Z&quot;,
-        &quot;ends_at&quot;: &quot;2027-01-01T18:36:56Z&quot;,
+        &quot;timezone&quot;: &quot;UTC&quot;,
+        &quot;starts_at&quot;: &quot;2027-03-02T17:38:43Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-03-04T17:38:43Z&quot;,
         &quot;max_attendees&quot;: 100,
         &quot;attendee_size&quot;: 1,
         &quot;requires_allegiance&quot;: false,
@@ -10508,8 +10696,8 @@ fetch(url, {
             &quot;country&quot;: &quot;BO&quot;
         },
         &quot;banner&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -10632,7 +10820,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>A wide image, at least 1200x400, at most 8MB. JPEG, PNG or WebP. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpdjtsk53gie5mc4zHknm</code></p>
+<p>A wide image, at least 1200x400, at most 8MB. JPEG, PNG or WebP. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpu0bgapvvtskvcPMX6kA</code></p>
         </div>
         </form>
 
@@ -10690,14 +10878,15 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 741,
+        &quot;id&quot;: 773,
         &quot;name&quot;: &quot;Modi deserunt aut&quot;,
         &quot;slug&quot;: &quot;modi-deserunt-aut-6749&quot;,
         &quot;description&quot;: &quot;Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.&quot;,
         &quot;status&quot;: &quot;draft&quot;,
         &quot;pairing_format&quot;: &quot;swiss&quot;,
-        &quot;starts_at&quot;: &quot;2026-09-24T00:37:46Z&quot;,
-        &quot;ends_at&quot;: &quot;2026-09-26T00:37:46Z&quot;,
+        &quot;timezone&quot;: &quot;UTC&quot;,
+        &quot;starts_at&quot;: &quot;2027-01-17T23:39:30Z&quot;,
+        &quot;ends_at&quot;: &quot;2027-01-19T23:39:30Z&quot;,
         &quot;max_attendees&quot;: 82,
         &quot;attendee_size&quot;: 1,
         &quot;requires_allegiance&quot;: false,
@@ -10710,8 +10899,8 @@ fetch(url, {
             &quot;country&quot;: &quot;EE&quot;
         },
         &quot;banner&quot;: null,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:39Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:39Z&quot;
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -10882,14 +11071,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 96,
+        &quot;id&quot;: 102,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-09-08T14:49:36+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-09-08T15:49:36+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-09-13T13:51:24+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-09-13T14:51:24+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
-        &quot;is_target_live&quot;: false,
+        &quot;target_state&quot;: null,
         &quot;round&quot;: null
     }
 }</code>
@@ -11346,14 +11535,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 97,
+        &quot;id&quot;: 103,
         &quot;label&quot;: &quot;Awards&quot;,
         &quot;type&quot;: &quot;info&quot;,
-        &quot;starts_at&quot;: &quot;2026-09-08T14:49:36+00:00&quot;,
-        &quot;ends_at&quot;: &quot;2026-09-08T15:49:36+00:00&quot;,
+        &quot;starts_at&quot;: &quot;2026-09-13T13:51:24+00:00&quot;,
+        &quot;ends_at&quot;: &quot;2026-09-13T14:51:24+00:00&quot;,
         &quot;display_order&quot;: 0,
         &quot;target_id&quot;: null,
-        &quot;is_target_live&quot;: false,
+        &quot;target_state&quot;: null,
         &quot;round&quot;: null
     }
 }</code>
@@ -11780,11 +11969,13 @@ fetch(url, {
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
                 &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;abbreviation&quot;: &quot;MP&quot;,
                 &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
                 &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;abbreviation&quot;: &quot;VP&quot;,
                 &quot;is_primary&quot;: true
             }
         ],
@@ -12231,11 +12422,13 @@ fetch(url, {
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
                 &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;abbreviation&quot;: &quot;MP&quot;,
                 &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
                 &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;abbreviation&quot;: &quot;VP&quot;,
                 &quot;is_primary&quot;: true
             }
         ],
@@ -12304,11 +12497,13 @@ fetch(url, {
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
                 &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;abbreviation&quot;: &quot;MP&quot;,
                 &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
                 &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;abbreviation&quot;: &quot;VP&quot;,
                 &quot;is_primary&quot;: true
             }
         ],
@@ -12557,11 +12752,13 @@ fetch(url, {
             {
                 &quot;slug&quot;: &quot;match-points&quot;,
                 &quot;name&quot;: &quot;Match Points&quot;,
+                &quot;abbreviation&quot;: &quot;MP&quot;,
                 &quot;is_primary&quot;: false
             },
             {
                 &quot;slug&quot;: &quot;victory-points&quot;,
                 &quot;name&quot;: &quot;Victory Points&quot;,
+                &quot;abbreviation&quot;: &quot;VP&quot;,
                 &quot;is_primary&quot;: true
             }
         ],
@@ -13303,6 +13500,543 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>The slug of the event. Example: <code>london-grand-tournament</code></p>
             </div>
                     </form>
+
+                    <h2 id="events-GETapi-events--event_slug--score-types">List Score Types</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Organisers only. The columns this Event is scored on, in the order they are shown, with the points behind a derived column and whether any Game has been scored under it yet.</p>
+
+<span id="example-requests-GETapi-events--event_slug--score-types">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/london-grand-tournament/score-types';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/london-grand-tournament/score-types"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-events--event_slug--score-types">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Match Points&quot;,
+            &quot;abbreviation&quot;: &quot;MP&quot;,
+            &quot;slug&quot;: &quot;match-points&quot;,
+            &quot;sort_direction&quot;: &quot;desc&quot;,
+            &quot;is_derived&quot;: true,
+            &quot;is_primary&quot;: false,
+            &quot;counts_for_ranking&quot;: true,
+            &quot;ranking_order&quot;: 1,
+            &quot;win_points&quot;: &quot;3.00&quot;,
+            &quot;draw_points&quot;: &quot;1.00&quot;,
+            &quot;loss_points&quot;: &quot;0.00&quot;,
+            &quot;display_order&quot;: 0,
+            &quot;is_scored&quot;: true
+        }
+    ]
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (401, The request carries no valid token.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-events--event_slug--score-types" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-events--event_slug--score-types"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-events--event_slug--score-types"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-events--event_slug--score-types" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-events--event_slug--score-types">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-events--event_slug--score-types" data-method="GET"
+      data-path="api/events/{event_slug}/score-types"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-events--event_slug--score-types', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-events--event_slug--score-types"
+                    onclick="tryItOut('GETapi-events--event_slug--score-types');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-events--event_slug--score-types"
+                    onclick="cancelTryOut('GETapi-events--event_slug--score-types');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-events--event_slug--score-types"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/events/{event_slug}/score-types</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-events--event_slug--score-types"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-events--event_slug--score-types"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="GETapi-events--event_slug--score-types"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="events-PUTapi-events--event_slug--score-types">Replace the Score Types</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Organisers only. Send the complete ordered set: position sets the display order, and position among the columns counting for ranking sets the ranking order.</p>
+
+<span id="example-requests-PUTapi-events--event_slug--score-types">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/london-grand-tournament/score-types';
+$response = $client-&gt;put(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'score_types' =&gt; [
+                ['id' =&gt; 7, 'name' =&gt; 'Battle Points', 'abbreviation' =&gt; 'BP', 'sort_direction' =&gt; 'desc', 'is_derived' =&gt; false, 'is_primary' =&gt; true, 'counts_for_ranking' =&gt; true, 'win_points' =&gt; 3, 'draw_points' =&gt; 1, 'loss_points' =&gt; 0],
+            ],
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/london-grand-tournament/score-types"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "score_types": [
+        {
+            "id": 7,
+            "name": "Battle Points",
+            "abbreviation": "BP",
+            "sort_direction": "desc",
+            "is_derived": false,
+            "is_primary": true,
+            "counts_for_ranking": true,
+            "win_points": 3,
+            "draw_points": 1,
+            "loss_points": 0
+        }
+    ]
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-events--event_slug--score-types">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 7,
+            &quot;name&quot;: &quot;Match Points&quot;,
+            &quot;abbreviation&quot;: &quot;MP&quot;,
+            &quot;slug&quot;: &quot;match-points&quot;,
+            &quot;sort_direction&quot;: &quot;desc&quot;,
+            &quot;is_derived&quot;: true,
+            &quot;is_primary&quot;: false,
+            &quot;counts_for_ranking&quot;: true,
+            &quot;ranking_order&quot;: 1,
+            &quot;win_points&quot;: &quot;3.00&quot;,
+            &quot;draw_points&quot;: &quot;1.00&quot;,
+            &quot;loss_points&quot;: &quot;0.00&quot;,
+            &quot;display_order&quot;: 0,
+            &quot;is_scored&quot;: true
+        }
+    ]
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (401, The request carries no valid token.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, The submitted data failed validation.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;field_name&quot;: [
+            &quot;The field name field is required.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTapi-events--event_slug--score-types" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-events--event_slug--score-types"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-events--event_slug--score-types"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-events--event_slug--score-types" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-events--event_slug--score-types">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-events--event_slug--score-types" data-method="PUT"
+      data-path="api/events/{event_slug}/score-types"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-events--event_slug--score-types', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-events--event_slug--score-types"
+                    onclick="tryItOut('PUTapi-events--event_slug--score-types');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-events--event_slug--score-types"
+                    onclick="cancelTryOut('PUTapi-events--event_slug--score-types');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-events--event_slug--score-types"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/events/{event_slug}/score-types</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>score_types</code></b>&nbsp;&nbsp;
+<small>object[]</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The complete ordered set. Position sets display order, and position among the rows counting for ranking sets ranking order.</p>
+            </summary>
+                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="score_types.0.id"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="7"
+               data-component="body">
+    <br>
+<p>The Score Type being edited. Leave it out to add a new one. Example: <code>7</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="score_types.0.name"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="Battle Points"
+               data-component="body">
+    <br>
+<p>What the column is called. Example: <code>Battle Points</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>abbreviation</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="score_types.0.abbreviation"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="BP"
+               data-component="body">
+    <br>
+<p>The heading shown over the column on a Game and in the Standings. Left out or blank, the platform works one out from the name. Example: <code>BP</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>sort_direction</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="score_types.0.sort_direction"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="desc"
+               data-component="body">
+    <br>
+<p>Which way up it ranks: asc where lower is better, desc where higher is. Example: <code>desc</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>is_derived</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <label data-endpoint="PUTapi-events--event_slug--score-types" style="display: none">
+            <input type="radio" name="score_types.0.is_derived"
+                   value="true"
+                   data-endpoint="PUTapi-events--event_slug--score-types"
+                   data-component="body"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="PUTapi-events--event_slug--score-types" style="display: none">
+            <input type="radio" name="score_types.0.is_derived"
+                   value="false"
+                   data-endpoint="PUTapi-events--event_slug--score-types"
+                   data-component="body"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Whether the platform works it out from the result rather than a Player entering it. Example: <code>false</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>is_primary</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <label data-endpoint="PUTapi-events--event_slug--score-types" style="display: none">
+            <input type="radio" name="score_types.0.is_primary"
+                   value="true"
+                   data-endpoint="PUTapi-events--event_slug--score-types"
+                   data-component="body"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="PUTapi-events--event_slug--score-types" style="display: none">
+            <input type="radio" name="score_types.0.is_primary"
+                   value="false"
+                   data-endpoint="PUTapi-events--event_slug--score-types"
+                   data-component="body"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Whether it leads a Game listing. At most one may. Example: <code>true</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>counts_for_ranking</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <label data-endpoint="PUTapi-events--event_slug--score-types" style="display: none">
+            <input type="radio" name="score_types.0.counts_for_ranking"
+                   value="true"
+                   data-endpoint="PUTapi-events--event_slug--score-types"
+                   data-component="body"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="PUTapi-events--event_slug--score-types" style="display: none">
+            <input type="radio" name="score_types.0.counts_for_ranking"
+                   value="false"
+                   data-endpoint="PUTapi-events--event_slug--score-types"
+                   data-component="body"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Whether it ranks the Standings. Example: <code>true</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>win_points</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="score_types.0.win_points"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="3"
+               data-component="body">
+    <br>
+<p>What a win is worth. Required on a derived column. Example: <code>3</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>draw_points</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="score_types.0.draw_points"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="1"
+               data-component="body">
+    <br>
+<p>What a draw is worth. Required on a derived column. Example: <code>1</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>loss_points</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="score_types.0.loss_points"                data-endpoint="PUTapi-events--event_slug--score-types"
+               value="0"
+               data-component="body">
+    <br>
+<p>What a loss is worth. Required on a derived column. Example: <code>0</code></p>
+                    </div>
+                                    </details>
+        </div>
+        </form>
 
                     <h2 id="events-POSTapi-events--event_slug--rounds">Generate the next Round</h2>
 
@@ -15328,6 +16062,410 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
+                    <h2 id="events-POSTapi-events--event_slug--attendees--attendee_id--avatar">Upload a Team Avatar</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>The team and its Organisers. A multipart route of its own rather than a field on the Attendee PATCH, because PHP does not populate uploaded files for PATCH bodies. The upload is cropped to a 256x256 WebP square and the original is discarded.</p>
+
+<span id="example-requests-POSTapi-events--event_slug--attendees--attendee_id--avatar">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1/avatar';
+$response = $client-&gt;post(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'multipart/form-data',
+            'Accept' =&gt; 'application/json',
+        ],
+        'multipart' =&gt; [
+            [
+                'name' =&gt; 'avatar',
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phptj4l7g4pjfcm1A1GfZU', 'r')
+            ],
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1/avatar"
+);
+
+const headers = {
+    "Content-Type": "multipart/form-data",
+    "Accept": "application/json",
+};
+
+const body = new FormData();
+body.append('avatar', document.querySelector('input[name="avatar"]').files[0]);
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-events--event_slug--attendees--attendee_id--avatar">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 9,
+        &quot;name&quot;: &quot;Ada and Grace&quot;,
+        &quot;allegiance&quot;: &quot;loyalist&quot;,
+        &quot;avatar&quot;: &quot;https://uploads.example/avatars/9/8f1c&hellip;.webp&quot;,
+        &quot;members&quot;: [
+            {
+                &quot;id&quot;: 12,
+                &quot;name&quot;: &quot;Ada Lovelace&quot;,
+                &quot;faction&quot;: {
+                    &quot;id&quot;: 3,
+                    &quot;name&quot;: &quot;Sons of Horus&quot;
+                },
+                &quot;army_list_locked&quot;: false,
+                &quot;clubs&quot;: []
+            }
+        ],
+        &quot;checked_in_at&quot;: null,
+        &quot;custom_field_responses&quot;: [],
+        &quot;games&quot;: []
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (401, The request carries no valid token.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, The submitted data failed validation.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;field_name&quot;: [
+            &quot;The field name field is required.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-events--event_slug--attendees--attendee_id--avatar" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-events--event_slug--attendees--attendee_id--avatar"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-events--event_slug--attendees--attendee_id--avatar"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-events--event_slug--attendees--attendee_id--avatar" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-events--event_slug--attendees--attendee_id--avatar">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-events--event_slug--attendees--attendee_id--avatar" data-method="POST"
+      data-path="api/events/{event_slug}/attendees/{attendee_id}/avatar"
+      data-authed="1"
+      data-hasfiles="1"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-events--event_slug--attendees--attendee_id--avatar', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-events--event_slug--attendees--attendee_id--avatar"
+                    onclick="tryItOut('POSTapi-events--event_slug--attendees--attendee_id--avatar');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-events--event_slug--attendees--attendee_id--avatar"
+                    onclick="cancelTryOut('POSTapi-events--event_slug--attendees--attendee_id--avatar');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-events--event_slug--attendees--attendee_id--avatar"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/events/{event_slug}/attendees/{attendee_id}/avatar</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--avatar"
+               value="multipart/form-data"
+               data-component="header">
+    <br>
+<p>Example: <code>multipart/form-data</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--avatar"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--avatar"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="attendee_id"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--avatar"
+               value="1"
+               data-component="url">
+    <br>
+<p>The id of the attendee. Example: <code>1</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>avatar</code></b>&nbsp;&nbsp;
+<small>file</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="file" style="display: none"
+                              name="avatar"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--avatar"
+               value=""
+               data-component="body">
+    <br>
+<p>A square-ish image, at least 128x128, at most 8MB. JPEG, PNG or WebP. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phptj4l7g4pjfcm1A1GfZU</code></p>
+        </div>
+        </form>
+
+                    <h2 id="events-DELETEapi-events--event_slug--attendees--attendee_id--avatar">Remove a Team Avatar</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>The team and its Organisers. Deletes the stored square and returns the team to its placeholder.</p>
+
+<span id="example-requests-DELETEapi-events--event_slug--attendees--attendee_id--avatar">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1/avatar';
+$response = $client-&gt;delete(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1/avatar"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-events--event_slug--attendees--attendee_id--avatar">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 9,
+        &quot;name&quot;: &quot;Ada and Grace&quot;,
+        &quot;allegiance&quot;: &quot;loyalist&quot;,
+        &quot;avatar&quot;: &quot;https://uploads.example/avatars/9/8f1c&hellip;.webp&quot;,
+        &quot;members&quot;: [
+            {
+                &quot;id&quot;: 12,
+                &quot;name&quot;: &quot;Ada Lovelace&quot;,
+                &quot;faction&quot;: {
+                    &quot;id&quot;: 3,
+                    &quot;name&quot;: &quot;Sons of Horus&quot;
+                },
+                &quot;army_list_locked&quot;: false,
+                &quot;clubs&quot;: []
+            }
+        ],
+        &quot;checked_in_at&quot;: null,
+        &quot;custom_field_responses&quot;: [],
+        &quot;games&quot;: []
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (401, The request carries no valid token.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEapi-events--event_slug--attendees--attendee_id--avatar" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-events--event_slug--attendees--attendee_id--avatar"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-events--event_slug--attendees--attendee_id--avatar"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-events--event_slug--attendees--attendee_id--avatar" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-events--event_slug--attendees--attendee_id--avatar">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-events--event_slug--attendees--attendee_id--avatar" data-method="DELETE"
+      data-path="api/events/{event_slug}/attendees/{attendee_id}/avatar"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-events--event_slug--attendees--attendee_id--avatar', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-events--event_slug--attendees--attendee_id--avatar"
+                    onclick="tryItOut('DELETEapi-events--event_slug--attendees--attendee_id--avatar');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-events--event_slug--attendees--attendee_id--avatar"
+                    onclick="cancelTryOut('DELETEapi-events--event_slug--attendees--attendee_id--avatar');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-events--event_slug--attendees--attendee_id--avatar"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/events/{event_slug}/attendees/{attendee_id}/avatar</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-events--event_slug--attendees--attendee_id--avatar"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-events--event_slug--attendees--attendee_id--avatar"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="DELETEapi-events--event_slug--attendees--attendee_id--avatar"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="attendee_id"                data-endpoint="DELETEapi-events--event_slug--attendees--attendee_id--avatar"
+               value="1"
+               data-component="url">
+    <br>
+<p>The id of the attendee. Example: <code>1</code></p>
+            </div>
+                    </form>
+
                     <h2 id="events-POSTapi-events--event_slug--attendees--attendee_id--members">Add a Player to a Team</h2>
 
 <p>
@@ -15791,6 +16929,457 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="events-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-">Amend an Invited Player</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>The name, address and Faction of a team mate who has not claimed their account. Refused once they have: their details are then theirs alone. Addressed by membership because the membership is the seat being amended.</p>
+
+<span id="example-requests-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1/members/4';
+$response = $client-&gt;patch(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'Tarik Torgaddon',
+            'email' =&gt; 'tarik@example.com',
+            'faction_id' =&gt; 1,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1/members/4"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "Tarik Torgaddon",
+    "email": "tarik@example.com",
+    "faction_id": 1
+};
+
+fetch(url, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 9,
+        &quot;name&quot;: &quot;Ada and Grace&quot;,
+        &quot;allegiance&quot;: &quot;loyalist&quot;,
+        &quot;members&quot;: [
+            {
+                &quot;id&quot;: 12,
+                &quot;name&quot;: &quot;Ada Lovelace&quot;,
+                &quot;faction&quot;: {
+                    &quot;id&quot;: 3,
+                    &quot;name&quot;: &quot;Sons of Horus&quot;
+                },
+                &quot;army_list_locked&quot;: false,
+                &quot;membership_id&quot;: 4,
+                &quot;invite_outstanding&quot;: true,
+                &quot;clubs&quot;: []
+            }
+        ],
+        &quot;checked_in_at&quot;: null,
+        &quot;custom_field_responses&quot;: [],
+        &quot;games&quot;: []
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (401, The request carries no valid token.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403, The Player has an account of their own.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;That player has claimed their account, so only they can change their details.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, The submitted data failed validation.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;field_name&quot;: [
+            &quot;The field name field is required.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-" data-method="PATCH"
+      data-path="api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+                    onclick="tryItOut('PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+                    onclick="cancelTryOut('PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-purple">PATCH</small>
+            <b><code>api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="attendee_id"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The id of the attendee. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>membership_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="membership_id"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+               value="4"
+               data-component="url">
+    <br>
+<p>The id of the membership being amended. Example: <code>4</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="name"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+               value="Tarik Torgaddon"
+               data-component="body">
+    <br>
+<p>The Player's name. Example: <code>Tarik Torgaddon</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+               value="tarik@example.com"
+               data-component="body">
+    <br>
+<p>The address their invitation is sent to. Example: <code>tarik@example.com</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>faction_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="faction_id"                data-endpoint="PATCHapi-events--event_slug--attendees--attendee_id--members--membership_id-"
+               value="1"
+               data-component="body">
+    <br>
+<p>The Faction this Player brings. Example: <code>1</code></p>
+        </div>
+        </form>
+
+                    <h2 id="events-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite">Send a Team Mate Their Invitation Again</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>A fresh credential to the address already on file. Refused once the Player has claimed their account, which is when they no longer need one.</p>
+
+<span id="example-requests-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite">
+<blockquote>Example request:</blockquote>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://battlezones.test/api/events/london-grand-tournament/attendees/1/members/4/invite';
+$response = $client-&gt;post(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://battlezones.test/api/events/london-grand-tournament/attendees/1/members/4/invite"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite">
+            <blockquote>
+            <p>Example response (200, The invitation was sent again.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;"></code>
+ </pre>
+            <blockquote>
+            <p>Example response (401, The request carries no valid token.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403, The Player has an account of their own.):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;That player has claimed their account, so they no longer need an invitation.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite" data-method="POST"
+      data-path="api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}/invite"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"
+                    onclick="tryItOut('POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"
+                    onclick="cancelTryOut('POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}/invite</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event_slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event_slug"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"
+               value="london-grand-tournament"
+               data-component="url">
+    <br>
+<p>The slug of the event. Example: <code>london-grand-tournament</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>attendee_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="attendee_id"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"
+               value="1"
+               data-component="url">
+    <br>
+<p>The id of the attendee. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>membership_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="membership_id"                data-endpoint="POSTapi-events--event_slug--attendees--attendee_id--members--membership_id--invite"
+               value="4"
+               data-component="url">
+    <br>
+<p>The id of the membership being chased. Example: <code>4</code></p>
+            </div>
+                    </form>
+
                 <h1 id="gallery">Gallery</h1>
 
     <p>APIs for Gallery</p>
@@ -15848,13 +17437,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 333,
+        &quot;id&quot;: 345,
         &quot;name&quot;: &quot;Sunt suscipit doloribus fugiat.&quot;,
         &quot;description&quot;: &quot;Deserunt et error neque recusandae et. Dolorem et ut dicta. Assumenda consequatur ut et sunt quisquam. Repellendus ut eaque alias ratione dolores.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/2b9698b7-206f-39ef-afe7-680996a8a00c.jpg?expires=1788195600&amp;signature=98710ec0affc1877aa87ed253e09c3e0aa41bf6e474ddbe567b945908314d66e&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/b791a78a-bdb6-3c15-a840-a911ad9b9a6e.jpg?expires=1788195600&amp;signature=9ac74d7228bdc92a7b865669d12d3b5f3fd0159a3270f0a1b31f56d2cdb6a16e&quot;,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/2b9698b7-206f-39ef-afe7-680996a8a00c.jpg?expires=1788624000&amp;signature=7f5dbc007a14e4f2ed735a2ec4f9319d3fc52d8572964675f4f4edd23e085b98&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/b791a78a-bdb6-3c15-a840-a911ad9b9a6e.jpg?expires=1788624000&amp;signature=34c66ea4418acf86a5d7fb4ea483c06d03da340b08f0441bc1afa2c3eaadde6c&quot;,
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -15964,7 +17553,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpd3nu1h0thtg11WLc4p2', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpg40o9v4v5d0s6OeRBeW', 'r')
             ],
         ],
     ]
@@ -16004,13 +17593,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 334,
+        &quot;id&quot;: 346,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&amp;signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&amp;signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373&quot;,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788624000&amp;signature=eeec725b168237ce2309416e9552eecc02a9c9a7787e72d0a555a9e7b9fec319&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788624000&amp;signature=0afbed08da775d7ab38285861da4a880529e8b725b59a59eb4876fa98c1fd925&quot;,
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -16123,7 +17712,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpd3nu1h0thtg11WLc4p2</code></p>
+<p>The photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpg40o9v4v5d0s6OeRBeW</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -16192,13 +17781,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 335,
+        &quot;id&quot;: 347,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&amp;signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&amp;signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373&quot;,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788624000&amp;signature=eeec725b168237ce2309416e9552eecc02a9c9a7787e72d0a555a9e7b9fec319&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788624000&amp;signature=0afbed08da775d7ab38285861da4a880529e8b725b59a59eb4876fa98c1fd925&quot;,
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -16321,7 +17910,7 @@ $response = $client-&gt;patch(
             ],
             [
                 'name' =&gt; 'photo',
-                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpal8le6hrgmhmbhkumdp', 'r')
+                'contents' =&gt; fopen('/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php2623rkbgdk8jbtQYbPW', 'r')
             ],
         ],
     ]
@@ -16361,13 +17950,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 336,
+        &quot;id&quot;: 348,
         &quot;name&quot;: &quot;Eius et animi.&quot;,
         &quot;description&quot;: &quot;Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788195600&amp;signature=28a1133216459cc805ec920beb52d558736eb279c166a7f7999100aae86344bd&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788195600&amp;signature=4ce1e17fe800c207dca640d3c902a021b04a6cd625d4687ee019f2c4c583a373&quot;,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788624000&amp;signature=eeec725b168237ce2309416e9552eecc02a9c9a7787e72d0a555a9e7b9fec319&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788624000&amp;signature=0afbed08da775d7ab38285861da4a880529e8b725b59a59eb4876fa98c1fd925&quot;,
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -16493,7 +18082,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/phpal8le6hrgmhmbhkumdp</code></p>
+<p>A replacement photo file (jpg, jpeg, png, or webp, max 10MB). Must be an image. Must not be greater than 10240 kilobytes. Example: <code>/private/var/folders/tv/6pq_d1gn2zvcmbpxs5428yv80000gn/T/php2623rkbgdk8jbtQYbPW</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -16704,13 +18293,13 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 337,
+        &quot;id&quot;: 349,
         &quot;name&quot;: &quot;Fugit deleniti distinctio eum.&quot;,
         &quot;description&quot;: &quot;Aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio.&quot;,
-        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/dc407d02-9b9b-35e5-8d69-87904a6787e3.jpg?expires=1788195600&amp;signature=472c3b40b7508fd1608b2c0b407dc84017aceffc99f2803b82decadc71051fbc&quot;,
-        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/b3dfd3b4-abf6-34e6-9ab5-ef739060a5da.jpg?expires=1788195600&amp;signature=2c13f18b378c36248047217faf47237bbfed6c4bbe3348314e3c5927aea80147&quot;,
-        &quot;created_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;
+        &quot;url&quot;: &quot;http://battlezones.test/uploads/photos/dc407d02-9b9b-35e5-8d69-87904a6787e3.jpg?expires=1788624000&amp;signature=94b2dbd81829358eebd7cd6895d394b1d40c7cb1098aa2589240ae786e71b01f&quot;,
+        &quot;thumbnail_url&quot;: &quot;http://battlezones.test/uploads/photos/thumbs/b3dfd3b4-abf6-34e6-9ab5-ef739060a5da.jpg?expires=1788624000&amp;signature=aa5f8091d75aeb5e99be9aefd3b44ef6bfb64869de878804d3352e3f9cc3f30b&quot;,
+        &quot;created_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;
     }
 }</code>
  </pre>
@@ -17200,8 +18789,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1567,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
+        &quot;id&quot;: 1617,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;NR&quot;,
         &quot;game_systems&quot;: [],
@@ -17769,8 +19358,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1568,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
+        &quot;id&quot;: 1618,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
         &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
         &quot;country&quot;: &quot;MX&quot;,
         &quot;game_systems&quot;: [],
@@ -18533,10 +20122,10 @@ $response = $client-&gt;patch(
         'json' =&gt; [
             'primary_messages' =&gt; ['email'],
             'message_requests' =&gt; ['email'],
-            'event_messages' =&gt; ['email'],
+            'event_messages' =&gt; ['push'],
             'round_live' =&gt; ['push'],
             'result_activity' =&gt; ['push'],
-            'voting_open' =&gt; ['email'],
+            'voting_open' =&gt; ['push'],
         ],
     ]
 );
@@ -18562,7 +20151,7 @@ let body = {
         "email"
     ],
     "event_messages": [
-        "email"
+        "push"
     ],
     "round_live": [
         "push"
@@ -18571,7 +20160,7 @@ let body = {
         "push"
     ],
     "voting_open": [
-        "email"
+        "push"
     ]
 };
 
@@ -19256,12 +20845,12 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 1573,
+            &quot;id&quot;: 1623,
             &quot;public_name&quot;: &quot;Ms. Audra Crooks II&quot;,
             &quot;username&quot;: &quot;breitenberg.gilbert&quot;
         },
         {
-            &quot;id&quot;: 1574,
+            &quot;id&quot;: 1624,
             &quot;public_name&quot;: &quot;Miss Jazlyn Keebler III&quot;,
             &quot;username&quot;: &quot;bauch.marcelo&quot;
         }
@@ -19408,8 +20997,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1575,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
+        &quot;id&quot;: 1625,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
         &quot;public_name&quot;: &quot;Eulalia VonRueden&quot;,
         &quot;country&quot;: &quot;MF&quot;,
         &quot;game_systems&quot;: [],
@@ -19561,8 +21150,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1576,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
+        &quot;id&quot;: 1626,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
         &quot;public_name&quot;: &quot;Akeem Hettinger&quot;,
         &quot;country&quot;: &quot;MR&quot;,
         &quot;game_systems&quot;: [],
@@ -19714,7 +21303,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1577,
+        &quot;id&quot;: 1627,
         &quot;public_name&quot;: &quot;Colt Balistreri&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
@@ -19861,7 +21450,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1578,
+        &quot;id&quot;: 1628,
         &quot;public_name&quot;: &quot;Dr. Alan Green&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false
@@ -20008,8 +21597,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1579,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
+        &quot;id&quot;: 1629,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
         &quot;public_name&quot;: &quot;Fausto Conroy&quot;,
         &quot;country&quot;: &quot;IN&quot;,
         &quot;game_systems&quot;: [],
@@ -20161,8 +21750,8 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1580,
-        &quot;updated_at&quot;: &quot;2026-08-31T15:55:38Z&quot;,
+        &quot;id&quot;: 1630,
+        &quot;updated_at&quot;: &quot;2026-09-05T14:57:27Z&quot;,
         &quot;public_name&quot;: &quot;Garett Runolfsson&quot;,
         &quot;country&quot;: &quot;CD&quot;,
         &quot;game_systems&quot;: [],
@@ -20314,7 +21903,7 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 1581,
+        &quot;id&quot;: 1631,
         &quot;public_name&quot;: &quot;Noemy Klocko&quot;,
         &quot;avatar&quot;: &quot;&quot;,
         &quot;is_following&quot;: false

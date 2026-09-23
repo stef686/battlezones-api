@@ -105,6 +105,17 @@ afterEach(() => {
 });
 
 describe('the event settings screen', () => {
+    it('leads back to the organise hub it hangs off', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        const back = view.get('[data-testid="back-to-organise"]');
+
+        expect(back.attributes('href')).toBe(`/events/${EVENT_SLUG}/organise`);
+    });
+
     it('opens on what the event says it is', async () => {
         stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
 

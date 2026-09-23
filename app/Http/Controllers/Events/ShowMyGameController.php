@@ -26,7 +26,7 @@ class ShowMyGameController extends Controller
         'table_number' => 5,
         'is_bye' => false,
         'round' => ['id' => 4, 'number' => 2, 'name' => 'Round 2'],
-        'score_types' => [['slug' => 'match-points', 'name' => 'Match Points', 'is_primary' => false], ['slug' => 'victory-points', 'name' => 'Victory Points', 'is_primary' => true]],
+        'score_types' => [['slug' => 'match-points', 'name' => 'Match Points', 'abbreviation' => 'MP', 'is_primary' => false], ['slug' => 'victory-points', 'name' => 'Victory Points', 'abbreviation' => 'VP', 'is_primary' => true]],
         'result' => [
             'submitted_at' => '2026-09-12T14:05:00+00:00',
             'submitted_by' => ['id' => 12, 'name' => 'Ada Lovelace'],

@@ -26,6 +26,8 @@ class EventScoreTypeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            // The heading it is shown under on a Game and in the Standings.
+            'abbreviation' => $this->abbreviation,
             // Server-owned: results are submitted against a slug, so it
             // survives a rename rather than travelling with the name.
             'slug' => $this->slug,

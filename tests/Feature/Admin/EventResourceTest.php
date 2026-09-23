@@ -435,6 +435,7 @@ test('can create a score type via relation manager', function () {
     ])
         ->callAction(TestAction::make(CreateAction::class)->table(), [
             'name' => 'Battle Points',
+            'abbreviation' => 'BP',
             'slug' => 'battle-points',
             'sort_direction' => SortDirection::Desc->value,
             'display_order' => 1,
@@ -444,6 +445,7 @@ test('can create a score type via relation manager', function () {
     assertDatabaseHas(EventScoreType::class, [
         'event_id' => $event->id,
         'name' => 'Battle Points',
+        'abbreviation' => 'BP',
         'slug' => 'battle-points',
         'sort_direction' => SortDirection::Desc->value,
         'display_order' => 1,

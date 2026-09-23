@@ -2,6 +2,7 @@
 paths:
   - app/Models/Event.php
   - app/Models/EventScheduleBlock.php
+  - app/Models/EventScoreType.php
 ---
 
 # Models
@@ -19,3 +20,8 @@ Resources always send `is_primary` already resolved, so exactly one column carri
 There is deliberately no stored "finished" status. It would be a second copy of a fact the Event already holds, needing a transition somebody performs and undoes when a Round is withdrawn, and a third `RoundStatus` case would ripple into every `isLive()`/`scopeLive()` check — pairing, standings, the Allegiance freeze, the pulse.
 
 `Event::currentRound()` is memoised per instance, like `openPoll()`, because a schedule asks it once per Round block.
+
+## A Score Type's abbreviation is always stored, never derived by a client
+`event_score_types.abbreviation` is not null and travels on every payload that carries a column (EventScoreTypeResource, SerialisesScoreTypes, EventStandingResource). An Organiser may leave it blank in the request; `ReplaceEventScoreTypes` fills it with `EventScoreType::abbreviate()` — initials of a multi-word name, first three letters of a single-word one.
+
+Do not shorten a name in a client again. `columnLabel` in `frontend/src/api/rounds.ts` keeps that rule only as a fallback for payloads written before the column existed, and takes a stored abbreviation exactly as typed (an Organiser who writes "VPs" means the lower case).

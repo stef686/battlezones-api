@@ -22,6 +22,7 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('score_types', 'object[]', 'The complete ordered set. Position sets display order, and position among the rows counting for ranking sets ranking order.', required: true)]
 #[BodyParam('score_types[].id', 'integer', 'The Score Type being edited. Leave it out to add a new one.', required: false, example: 7)]
 #[BodyParam('score_types[].name', 'string', 'What the column is called.', required: true, example: 'Battle Points')]
+#[BodyParam('score_types[].abbreviation', 'string', 'The heading shown over the column on a Game and in the Standings. Left out or blank, the platform works one out from the name.', required: false, example: 'BP')]
 #[BodyParam('score_types[].sort_direction', 'string', 'Which way up it ranks: asc where lower is better, desc where higher is.', required: true, example: 'desc')]
 #[BodyParam('score_types[].is_derived', 'boolean', 'Whether the platform works it out from the result rather than a Player entering it.', required: true, example: false)]
 #[BodyParam('score_types[].is_primary', 'boolean', 'Whether it leads a Game listing. At most one may.', required: true, example: true)]
@@ -54,6 +55,10 @@ class ReplaceEventScoreTypesRequest extends FormRequest
                 Rule::exists('event_score_types', 'id')->where('event_id', $this->event()->getKey()),
             ],
             'score_types.*.name' => ['required', 'string', 'max:255'],
+            // Optional: an Organiser who does not want to think about it gets
+            // the initials of the name, which is what the clients showed
+            // before the column existed. Short enough to sit over a number.
+            'score_types.*.abbreviation' => ['nullable', 'string', 'max:8'],
             'score_types.*.sort_direction' => ['required', Rule::enum(SortDirection::class)],
             'score_types.*.is_derived' => ['required', 'boolean'],
             'score_types.*.is_primary' => ['required', 'boolean'],

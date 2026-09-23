@@ -23,7 +23,7 @@ class ShowEventRoundController extends Controller
         'number' => 2,
         'name' => 'Round 2',
         'status' => 'live',
-        'score_types' => [['slug' => 'match-points', 'name' => 'Match Points', 'is_primary' => false], ['slug' => 'victory-points', 'name' => 'Victory Points', 'is_primary' => true]],
+        'score_types' => [['slug' => 'match-points', 'name' => 'Match Points', 'abbreviation' => 'MP', 'is_primary' => false], ['slug' => 'victory-points', 'name' => 'Victory Points', 'abbreviation' => 'VP', 'is_primary' => true]],
         'games' => [[
             'id' => 18,
             'table_number' => 5,

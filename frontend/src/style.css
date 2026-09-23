@@ -33,6 +33,9 @@
     --color-traitor: oklch(0.408 0.07 208.6);
     --color-traitor-foreground: oklch(0.99 0 0);
     --color-success: oklch(0.72 0.15 150);
+    /* Amber, held apart from the destructive red: a locked field is not a
+       failure, it is the Event having got under way. */
+    --color-warning: oklch(0.8 0.14 85);
 
     /*
      * The Event header's type sits over a scrim rather than over a surface,
