@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Trash2 } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 
 import { useApiClient } from '@/api';
@@ -147,15 +148,28 @@ async function save(): Promise<void> {
           Team avatar
         </h2>
 
-        <TeamAvatar
-          :name="attendee.name ?? ''"
-          :src="attendee.avatar"
-          size="lg"
-        />
+        <div class="flex items-center gap-3">
+          <TeamAvatar
+            :name="attendee.name ?? ''"
+            :src="attendee.avatar"
+            size="lg"
+          />
+
+          <AppButton
+            v-if="attendee.avatar"
+            data-testid="remove-team-avatar"
+            variant="danger"
+            size="sm"
+            :disabled="avatarBusy"
+            @click="dropAvatar"
+          >
+            <Trash2 class="size-4 shrink-0" />
+            <span class="sr-only">Remove avatar</span>
+          </AppButton>
+        </div>
 
         <p class="text-xs text-muted-foreground">
-          At least 128 by 128, up to 8MB. JPEG, PNG or WebP. It is cropped to a square from the
-          centre, and the original is not kept.
+          At least 128 by 128, up to 8MB. JPEG, PNG or WebP.
         </p>
 
         <input
@@ -174,17 +188,6 @@ async function save(): Promise<void> {
         >
           {{ avatarErrors.join(' ') }}
         </AppAlert>
-
-        <AppButton
-          v-if="attendee.avatar"
-          data-testid="remove-team-avatar"
-          variant="secondary"
-          size="sm"
-          :disabled="avatarBusy"
-          @click="dropAvatar"
-        >
-          {{ avatarBusy ? 'Working…' : 'Remove avatar' }}
-        </AppButton>
       </section>
 
       <form

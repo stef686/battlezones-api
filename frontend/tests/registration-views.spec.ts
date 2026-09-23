@@ -497,7 +497,15 @@ describe('the my team screens', () => {
         expect(upload[1]?.body).toBeInstanceOf(FormData);
         expect((upload[1]?.body as FormData).get('avatar')).toBe(file);
 
-        await view.get('[data-testid="remove-team-avatar"]').trigger('click');
+        const remove = view.get('[data-testid="remove-team-avatar"]');
+
+        // An icon beside the preview, still named for a screen reader.
+        expect(remove.text()).toBe('Remove avatar');
+        expect(remove.find('svg').exists()).toBe(true);
+        expect(remove.element.parentElement?.querySelector('[data-testid="team-avatar"]')).not.toBeNull();
+        expect(view.text()).not.toContain('It is cropped');
+
+        await remove.trigger('click');
         await flushPromises();
 
         expect(fetch.mock.calls.some(([url, init]) => String(url).endsWith('/avatar') && init?.method === 'DELETE')).toBe(true);
