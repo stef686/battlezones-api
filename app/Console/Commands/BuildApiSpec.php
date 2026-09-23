@@ -23,9 +23,9 @@ class BuildApiSpec extends Command
 
     public const COMMITTED_PATH = 'docs/openapi.yaml';
 
-    private const FAKER_SEED = 20260823;
+    public const SCRIBE_PATH = 'storage/app/private/scribe/openapi.yaml';
 
-    private const SCRIBE_PATH = 'storage/app/private/scribe/openapi.yaml';
+    private const FAKER_SEED = 20260823;
 
     public function handle(): int
     {
