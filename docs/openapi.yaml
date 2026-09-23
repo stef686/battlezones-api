@@ -132,6 +132,30 @@ paths:
                 - device_name
                 - password_confirmation
       security: []
+  /api/auth/logout:
+    post:
+      summary: 'Log Out'
+      operationId: logOut
+      description: 'Revoke the token the request was made with'
+      parameters: []
+      responses:
+        204:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+        - Authentication
   /api/auth/refresh:
     post:
       summary: 'Refresh Token'

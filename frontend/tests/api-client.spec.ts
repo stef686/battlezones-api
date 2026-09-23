@@ -74,6 +74,43 @@ describe('authentication', () => {
     });
 });
 
+describe('logout', () => {
+    it('revokes the token on the API and forgets it', async () => {
+        const fetch = stubFetch({ status: 204 });
+        const { client, storage } = clientWith('a-token');
+
+        await client.logout();
+
+        expect(fetch).toHaveBeenCalledWith('https://api.test/api/auth/logout', expect.objectContaining({
+            method: 'POST',
+            headers: expect.objectContaining({ Authorization: 'Bearer a-token' }),
+        }));
+        expect(storage.read()).toBeNull();
+    });
+
+    it('still forgets the token when the API cannot be reached', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
+        const { client, storage } = clientWith('a-token');
+
+        await client.logout();
+
+        expect(storage.read()).toBeNull();
+    });
+
+    it('does not wait forever on an API that never answers', async () => {
+        vi.useFakeTimers();
+        vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})));
+        const { client, storage } = clientWith('a-token');
+
+        const done = client.logout();
+        await vi.advanceTimersByTimeAsync(5_000);
+        await done;
+
+        expect(storage.read()).toBeNull();
+        vi.useRealTimers();
+    });
+});
+
 describe('token refresh', () => {
     it('refreshes once for concurrent 401s rather than racing itself', async () => {
         const fetch = stubFetch(

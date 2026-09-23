@@ -4,6 +4,10 @@ A platform for running tabletop wargaming events — registration, pairings, res
 
 ## Language
 
+**User**:
+The platform account a person signs in with. One User may be a Player in many Events and an Organiser of others; neither is a property of the User itself.
+_Avoid_: Account (in code), member, profile
+
 **Event**:
 A single competition run by an organiser, identified publicly by its slug. Every piece of competition data belongs to exactly one Event.
 _Avoid_: Tournament, comp
@@ -16,10 +20,12 @@ _Except_: Player-facing copy calls a Player's own Attendee "my team" (the nav ch
 **Player**:
 A person taking part in an Event, as a member of exactly one Attendee. Factions and army lists belong to the Player, not the Attendee.
 _Avoid_: Attendee, member, user (a User is the platform account; a Player is that account's presence at an Event)
+_Except_: The account drawer heads the Events a User competes in "Player". That is copy grouping destinations, not a platform-wide role — there is no global Player status and no code should model one.
 
 **Organiser**:
 A Player trusted to run an Event — publishing Rounds, correcting results, opening Polls, and reading tallies. One Organiser leads and may appoint the others. An Organiser may also compete, so their corrections are recorded against their name rather than forbidden.
 _Avoid_: TO, admin (an admin runs the platform; an Organiser runs one Event), host
+_Except_: The account drawer heads the Events a User organises "Organiser". That is copy, not a platform-wide role — every User sees it, and no code should gate on or model a global Organiser status.
 
 **Round**:
 One numbered stage of an Event in which every Attendee plays at most one Game. A Round is Draft while only organisers can see its Games, and Live once Players can. Live is a latch — earlier Rounds stay Live as later ones are published — so the current Round is the highest-numbered Live one.

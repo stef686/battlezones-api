@@ -166,9 +166,9 @@ describe('the standings', () => {
     it('badges the teams that have an avatar, without costing the others their row', async () => {
         const view = await mountStandings();
 
-        expect(view.get('[data-testid="standing-9"] [data-testid="team-avatar"]').attributes('src'))
+        expect(view.get('[data-testid="standing-9"] [data-testid="avatar"]').attributes('src'))
             .toBe('https://uploads.test/badge.webp');
-        expect(view.get('[data-testid="standing-10"] [data-testid="team-avatar-placeholder"]').text()).toBe('WO');
+        expect(view.get('[data-testid="standing-10"] [data-testid="avatar-placeholder"]').text()).toBe('WO');
     });
 
     it('draws the columns the event is scored on, whatever they are', async () => {

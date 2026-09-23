@@ -360,7 +360,7 @@ describe('the my team hub', () => {
 
         // The team as the rest of the Event sees it, above the rows that edit it.
         expect(view.get('[data-testid="team-name"]').text()).toBe('Sons of Terra');
-        expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
+        expect(view.get('[data-testid="avatar-placeholder"]').text()).toBe('ST');
         expect(view.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
 
         expect(view.get('[data-testid="team-details-row"]').text()).toContain('Sons of Terra');
@@ -482,7 +482,7 @@ describe('the my team screens', () => {
         const view = mountView(TeamDetailsView);
         await flushPromises();
 
-        expect(view.get('[data-testid="team-avatar"]').attributes('src')).toBe('https://uploads.test/badge.webp');
+        expect(view.get('[data-testid="avatar"]').attributes('src')).toBe('https://uploads.test/badge.webp');
 
         const input = view.get('[data-testid="team-avatar-input"]');
         const file = new File(['badge'], 'badge.png', { type: 'image/png' });
@@ -502,7 +502,7 @@ describe('the my team screens', () => {
         // An icon beside the preview, still named for a screen reader.
         expect(remove.text()).toBe('Remove avatar');
         expect(remove.find('svg').exists()).toBe(true);
-        expect(remove.element.parentElement?.querySelector('[data-testid="team-avatar"]')).not.toBeNull();
+        expect(remove.element.parentElement?.querySelector('[data-testid="avatar"]')).not.toBeNull();
         expect(view.text()).not.toContain('It is cropped');
 
         await remove.trigger('click');
@@ -527,7 +527,7 @@ describe('the my team screens', () => {
         const view = mountView(TeamDetailsView);
         await flushPromises();
 
-        expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
+        expect(view.get('[data-testid="avatar-placeholder"]').text()).toBe('ST');
         expect(view.find('[data-testid="remove-team-avatar"]').exists()).toBe(false);
 
         const input = view.get('[data-testid="team-avatar-input"]');

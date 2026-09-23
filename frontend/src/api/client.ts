@@ -25,6 +25,9 @@ interface RequestOptions {
 /** Refresh this far before expiry rather than waiting to be told we are late. */
 const REFRESH_MARGIN_MS = 60_000;
 
+/** How long signing out waits on the API before forgetting the token anyway. */
+const LOGOUT_TIMEOUT_MS = 3_000;
+
 export class ApiClient {
     private readonly baseUrl: string;
     private readonly storage: TokenStorage;
@@ -79,6 +82,29 @@ export class ApiClient {
         this.setSession(session);
 
         return session;
+    }
+
+    /**
+     * Revoke this device's token on the API, then forget it here.
+     *
+     * The revoke is best effort. Signing out at a venue with no signal must
+     * still sign the reader out of this device, so the token is forgotten
+     * whatever the API says, and after a short wait if it never answers at
+     * all. It goes out through `send` rather than `request`, because a 401
+     * here means the token is already dead, which is the point, not a session
+     * to refresh or lose.
+     */
+    async logout(): Promise<void> {
+        const token = this.token();
+
+        if (token !== null) {
+            const revoke = this.send('POST', '/api/auth/logout', token, undefined).catch(() => {});
+            const giveUp = new Promise<void>((resolve) => setTimeout(resolve, LOGOUT_TIMEOUT_MS));
+
+            await Promise.race([revoke, giveUp]);
+        }
+
+        this.clearSession();
     }
 
     /**

@@ -9,7 +9,7 @@ import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
 import SelectField from '@/components/SelectField.vue';
-import TeamAvatar from '@/components/TeamAvatar.vue';
+import AppAvatar from '@/components/AppAvatar.vue';
 import TextField from '@/components/TextField.vue';
 import { useMyTeam } from '@/composables/useMyTeam';
 
@@ -149,7 +149,7 @@ async function save(): Promise<void> {
         </h2>
 
         <div class="flex items-center gap-3">
-          <TeamAvatar
+          <AppAvatar
             :name="attendee.name ?? ''"
             :src="attendee.avatar"
             size="lg"

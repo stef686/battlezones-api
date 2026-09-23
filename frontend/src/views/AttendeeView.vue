@@ -13,7 +13,7 @@ import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import TabStrip from '@/components/TabStrip.vue';
-import TeamAvatar from '@/components/TeamAvatar.vue';
+import AppAvatar from '@/components/AppAvatar.vue';
 
 const props = defineProps<{ eventSlug: string; attendeeId: string }>();
 
@@ -131,7 +131,7 @@ async function run(action: () => Promise<unknown>): Promise<void> {
            under it. Big, because there is room and only one team here: this
            is the page that answers "is this them?". -->
       <header class="flex items-center gap-4">
-        <TeamAvatar
+        <AppAvatar
           :name="attendee.name ?? ''"
           :src="attendee.avatar"
           size="lg"

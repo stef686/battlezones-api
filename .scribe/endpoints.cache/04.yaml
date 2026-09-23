@@ -48,7 +48,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":422,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
+        content: '{"data":{"id":429,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-09-23T21:59:19Z","updated_at":"2026-09-23T21:59:19Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -123,7 +123,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":423,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
+        content: '{"data":{"id":430,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-09-23T21:59:19Z","updated_at":"2026-09-23T21:59:19Z"}}'
         headers: []
         description: ''
       -
@@ -178,7 +178,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":181,"conversation_id":424,"user_id":1662,"body":"Animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-09-23T10:42:27Z"}}'
+        content: '{"data":{"id":184,"conversation_id":431,"user_id":1690,"body":"Animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-09-23T21:59:19Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -253,7 +253,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":425,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
+        content: '{"data":{"id":432,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-09-23T21:59:19Z","updated_at":"2026-09-23T21:59:19Z"}}'
         headers: []
         description: ''
       -
@@ -430,7 +430,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":426,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
+        content: '{"data":{"id":433,"is_group":false,"name":null,"participants":[],"is_archived":false,"unread_count":0,"created_at":"2026-09-23T21:59:19Z","updated_at":"2026-09-23T21:59:19Z"}}'
         headers: []
         description: ''
       -
@@ -693,7 +693,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":182,"conversation_id":427,"user_id":1663,"body":"Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-09-23T10:42:27Z"}}'
+        content: '{"data":{"id":185,"conversation_id":434,"user_id":1691,"body":"Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-09-23T21:59:19Z"}}'
         headers: []
         description: ''
       -
@@ -772,7 +772,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":183,"conversation_id":428,"user_id":1664,"body":"Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-09-23T10:42:27Z"}}'
+        content: '{"data":{"id":186,"conversation_id":435,"user_id":1692,"body":"Et animi quos velit et fugiat. Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci.","type":null,"is_system":false,"is_deleted":false,"is_edited":false,"is_editable":true,"edited_at":null,"created_at":"2026-09-23T21:59:19Z"}}'
         headers: []
         description: ''
       -
