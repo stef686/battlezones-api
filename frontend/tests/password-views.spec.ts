@@ -131,6 +131,10 @@ describe('following a reset link', () => {
         // on a phone loses the person it exists for.
         expect(fetch.mock.calls[1]![0]).toBe('https://api.test/api/login/token');
         expect(useSessionStore().viewer?.id).toBe(12);
+
+        // Home is a lazily loaded screen, so the navigation outlives the flush;
+        // left unawaited it lands after the test environment is torn down.
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('event'));
     });
 
     it('shows a spent token against the address, the way the API reports it', async () => {
