@@ -410,6 +410,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/countries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Countries
+         * @description Every country a venue may be in, as an ISO 3166-1 alpha-2 code and the name to show for it, in name order. Public: it is the list a country picker offers.
+         */
+        get: operations["listCountries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events": {
         parameters: {
             query?: never;
@@ -2927,6 +2947,30 @@ export interface operations {
                             id?: number;
                             name?: string;
                             slug?: string;
+                        }[];
+                    };
+                };
+            };
+        };
+    };
+    listCountries: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            code?: string;
+                            name?: string;
                         }[];
                     };
                 };

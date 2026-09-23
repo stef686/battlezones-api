@@ -42,6 +42,43 @@ endpoints:
     custom: []
     httpMethods:
       - GET
+    uri: api/countries
+    metadata:
+      custom: []
+      groupName: Events
+      groupDescription: 'APIs for Events'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Countries'
+      description: 'Every country a venue may be in, as an ISO 3166-1 alpha-2 code and the name to show for it, in name order. Public: it is the list a country picker offers.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"code":"AF","name":"Afghanistan"},{"code":"AX","name":"\u00c5land Islands"}]}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
     uri: api/events
     metadata:
       custom: []
@@ -108,7 +145,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":760,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2026-09-22T04:27:18Z","ends_at":"2026-09-24T04:27:18Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"banner":null,"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
+        content: '{"data":{"id":776,"name":"Eius et animi","slug":"eius-et-animi-565","description":"Sunt nihil accusantium harum mollitia. Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2026-10-10T00:12:18Z","ends_at":"2026-10-12T00:12:18Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"McLaughlin, Leuschke and Bauch Hall","address":"45058 Bailee Rue","city":"South Matildaburgh","country":"IE"},"banner":null,"created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -338,7 +375,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":66,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-08-18T12:28:41Z","author":{"id":1640,"name":"Cordia Cummings"},"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
+        content: '{"data":{"id":67,"title":"Fugit deleniti distinctio eum doloremque","body":"Libero aliquam veniam corporis dolorem mollitia deleniti. Odit quia officia est dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam.\n\nTenetur ratione nemo voluptate accusamus ut et recusandae modi. Ex repellendus assumenda et tenetur ab reiciendis. Perspiciatis deserunt ducimus corrupti et dolores quia. Assumenda odit doloribus repellat officiis corporis nesciunt ut.","pinned":false,"published_at":"2026-09-05T08:13:41Z","author":{"id":1665,"name":"Cordia Cummings"},"created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -399,7 +436,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":212,"name":"","allegiance":null,"avatar":null,"members":[]}}'
+        content: '{"data":{"id":214,"name":"","allegiance":null,"avatar":null,"members":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -509,7 +546,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":213,"name":"","allegiance":null,"avatar":null,"allegiance_locked":false,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
+        content: '{"data":{"id":215,"name":"","allegiance":null,"avatar":null,"allegiance_locked":false,"members":[],"checked_in_at":null,"painting_entered":false,"display_number":null,"custom_field_responses":[],"games":[]}}'
         headers: []
         description: ''
     responseFields: []
@@ -558,7 +595,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":111,"number":6,"name":null,"status":"draft"},{"id":112,"number":5,"name":null,"status":"draft"}]}'
+        content: '{"data":[{"id":113,"number":2,"name":null,"status":"draft"},{"id":114,"number":5,"name":null,"status":"draft"}]}'
         headers: []
         description: ''
     responseFields: []
@@ -895,7 +932,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":350,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1788624000&signature=eeec725b168237ce2309416e9552eecc02a9c9a7787e72d0a555a9e7b9fec319","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1788624000&signature=0afbed08da775d7ab38285861da4a880529e8b725b59a59eb4876fa98c1fd925","created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
+        content: '{"data":{"id":356,"name":"Eius et animi.","description":"Et fugiat sunt nihil accusantium. Mollitia modi deserunt aut ab provident perspiciatis quo. Nostrum aut adipisci quidem nostrum.","url":"http:\/\/battlezones.test\/uploads\/photos\/445bd3f6-8f2c-38cb-aa04-2f4e1edb32bb.jpg?expires=1790164800&signature=cbca6b55268a9f3fcffca958ff7f08ae7ed428fb19386fa79b910a304ade0a1e","thumbnail_url":"http:\/\/battlezones.test\/uploads\/photos\/thumbs\/deea2dce-ea5d-340f-90ce-c06cddd4c879.jpg?expires=1790164800&signature=39d7a0a4ffd24b403dd8be9bc6c0f42f90708bde70921db1ac716e4015b85237","created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -1822,7 +1859,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":257,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":258,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
+        content: '{"data":[{"id":262,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]},{"id":263,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}]}'
         headers: []
         description: ''
       -
@@ -1913,7 +1950,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":259,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":264,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -1986,7 +2023,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":260,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":265,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2187,7 +2224,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":261,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
+        content: '{"data":{"id":266,"name":"Best Painted Army","type":"painting","votes_per_player":1,"opens_at":null,"closes_at":null,"is_open":false,"is_open_for_me":null,"my_ballot":[]}}'
         headers: []
         description: ''
       -
@@ -2617,7 +2654,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":771,"name":"Fugiat sunt nihil","slug":"fugiat-sunt-nihil-80842","description":"Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2027-02-12T06:35:13Z","ends_at":"2027-02-14T06:35:13Z","max_attendees":25,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Koch PLC Hall","address":"57515 VonRueden Wells Suite 490","city":"Raynormouth","country":"HK"},"banner":null,"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
+        content: '{"data":{"id":787,"name":"Fugiat sunt nihil","slug":"fugiat-sunt-nihil-80842","description":"Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2027-03-02T02:20:13Z","ends_at":"2027-03-04T02:20:13Z","max_attendees":25,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Koch PLC Hall","address":"57515 VonRueden Wells Suite 490","city":"Raynormouth","country":"HK"},"banner":null,"created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
         headers: []
         description: ''
       -
@@ -2690,7 +2727,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":772,"name":"Nihil accusantium harum","slug":"nihil-accusantium-harum-31583","description":"Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure. Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2027-03-02T17:38:43Z","ends_at":"2027-03-04T17:38:43Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Leffler-Glover Hall","address":"723 Wisoky Passage","city":"Micaelatown","country":"BO"},"banner":null,"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
+        content: '{"data":{"id":788,"name":"Nihil accusantium harum","slug":"nihil-accusantium-harum-31583","description":"Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure. Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2027-03-20T13:23:43Z","ends_at":"2027-03-22T13:23:43Z","max_attendees":100,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"Leffler-Glover Hall","address":"723 Wisoky Passage","city":"Micaelatown","country":"BO"},"banner":null,"created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
         headers: []
         description: ''
       -
@@ -2751,7 +2788,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":773,"name":"Modi deserunt aut","slug":"modi-deserunt-aut-6749","description":"Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2027-01-17T23:39:30Z","ends_at":"2027-01-19T23:39:30Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"banner":null,"created_at":"2026-09-05T14:57:27Z","updated_at":"2026-09-05T14:57:27Z"}}'
+        content: '{"data":{"id":789,"name":"Modi deserunt aut","slug":"modi-deserunt-aut-6749","description":"Omnis nostrum aut adipisci quidem nostrum qui commodi. Iure odit et et modi ipsum nostrum omnis. Et consequatur aut dolores enim.","status":"draft","pairing_format":"swiss","timezone":"UTC","starts_at":"2027-02-04T19:24:30Z","ends_at":"2027-02-06T19:24:30Z","max_attendees":82,"attendee_size":1,"requires_allegiance":false,"registration_closes_at":null,"is_full":false,"venue":{"name":"VonRueden-Leuschke Hall","address":"427 Labadie Curve Suite 170","city":"Lake Micaela","country":"EE"},"banner":null,"created_at":"2026-09-23T10:42:27Z","updated_at":"2026-09-23T10:42:27Z"}}'
         headers: []
         description: ''
       -
@@ -2878,7 +2915,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":102,"label":"Awards","type":"info","starts_at":"2026-09-13T13:51:24+00:00","ends_at":"2026-09-13T14:51:24+00:00","display_order":0,"target_id":null,"target_state":null,"round":null}}'
+        content: '{"data":{"id":104,"label":"Awards","type":"info","starts_at":"2026-10-01T09:36:24+00:00","ends_at":"2026-10-01T10:36:24+00:00","display_order":0,"target_id":null,"target_state":null,"round":null}}'
         headers: []
         description: ''
       -
@@ -3102,7 +3139,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":103,"label":"Awards","type":"info","starts_at":"2026-09-13T13:51:24+00:00","ends_at":"2026-09-13T14:51:24+00:00","display_order":0,"target_id":null,"target_state":null,"round":null}}'
+        content: '{"data":{"id":105,"label":"Awards","type":"info","starts_at":"2026-10-01T09:36:24+00:00","ends_at":"2026-10-01T10:36:24+00:00","display_order":0,"target_id":null,"target_state":null,"round":null}}'
         headers: []
         description: ''
       -

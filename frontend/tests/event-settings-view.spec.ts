@@ -43,6 +43,16 @@ function eventBody(organise = true, overrides: Record<string, unknown> = {}) {
     };
 }
 
+const COUNTRIES = {
+    status: 200,
+    body: {
+        data: [
+            { code: 'FR', name: 'France' },
+            { code: 'GB', name: 'United Kingdom' },
+        ],
+    },
+};
+
 const NOT_FOUND = { status: 404, body: { message: 'Not Found.' } };
 
 function stubApi(routes: Record<string, { status: number; body?: unknown }>) {
@@ -156,17 +166,43 @@ describe('the event settings screen', () => {
                     errors: { venue_country: ['That is not a country code.'] },
                 },
             },
+            '/api/countries': COUNTRIES,
         });
 
         const view = mountView();
         await flushPromises();
 
-        await view.get('[data-testid="settings-venue-country"]').setValue('GBR');
+        await view.get('[data-testid="settings-venue-country"]').setValue('FR');
         await view.get('[data-testid="settings-save"]').trigger('submit');
         await flushPromises();
 
         expect(view.get('[data-testid="settings-venue-country-error"]').text())
             .toContain('That is not a country code.');
+    });
+
+    it('picks the venue\'s country by name, and sends its code', async () => {
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`PATCH /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            '/api/countries': COUNTRIES,
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        const country = view.get<HTMLSelectElement>('[data-testid="settings-venue-country"]');
+
+        expect(country.element.tagName).toBe('SELECT');
+        expect(country.element.value).toBe('GB');
+        expect(country.findAll('option').map((option) => option.text())).toContain('France');
+
+        await country.setValue('FR');
+        await view.get('[data-testid="settings-save"]').trigger('submit');
+        await flushPromises();
+
+        const patch = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PATCH');
+
+        expect(JSON.parse(String((patch?.[1] as RequestInit).body))).toEqual({ venue_country: 'FR' });
     });
 
     it('leaves places to the format screen', async () => {
@@ -236,7 +272,12 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        await view.get('[data-testid="settings-banner-remove"]').trigger('click');
+        const remove = view.get('[data-testid="settings-banner-remove"]');
+
+        expect(remove.text()).toBe('Remove banner');
+        expect(remove.find('svg').exists()).toBe(true);
+
+        await remove.trigger('click');
         await flushPromises();
 
         expect(fetch.mock.calls.some(([, init]) => (init as RequestInit | undefined)?.method === 'DELETE')).toBe(true);

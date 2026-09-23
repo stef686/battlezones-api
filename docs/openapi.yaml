@@ -1020,6 +1020,32 @@ paths:
       tags:
         - Events
       security: []
+  /api/countries:
+    get:
+      summary: 'List Countries'
+      operationId: listCountries
+      description: 'Every country a venue may be in, as an ISO 3166-1 alpha-2 code and the name to show for it, in name order. Public: it is the list a country picker offers.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        name:
+                          type: string
+      tags:
+        - Events
+      security: []
   /api/events:
     get:
       summary: 'List Events'
