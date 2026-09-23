@@ -658,6 +658,36 @@ describe('the my team screens', () => {
         expect(view.find('[data-testid="partner-saved"]').exists()).toBe(true);
     });
 
+    it('says a new invitation follows only once the address has changed', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: MY_TEAM },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(PartnerView);
+        await flushPromises();
+
+        const email = view.get('[data-testid="partner-email"]');
+        const description = () => (email.attributes('aria-describedby') ?? '')
+            .split(' ')
+            .filter((id) => id !== '')
+            .map((id) => view.find(`[id="${id}"]`).text())
+            .join(' ');
+
+        expect(view.get('[data-testid="partner-state"]').text())
+            .toBe('They have not accepted their invitation, so you can still edit their details.');
+        expect(description()).not.toContain('new invitation');
+
+        await email.setValue('tarik@example.com');
+
+        expect(description()).toContain('A new invitation will be sent to this new email address.');
+
+        await email.setValue('tarik@exmaple.com');
+
+        expect(description()).not.toContain('new invitation');
+    });
+
     it('sends a corrected address, and can send the invitation again', async () => {
         const fetch = stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9/members/42/invite`]: { status: 200 },
