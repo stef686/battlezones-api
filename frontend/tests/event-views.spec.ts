@@ -523,12 +523,12 @@ describe('the attendee list', () => {
         const view = mountView(AttendeesView);
         await flushPromises();
 
-        expect(view.get('[data-testid="attendee-9"]').get('[data-testid="team-avatar"]').attributes('src'))
+        expect(view.get('[data-testid="attendee-9"]').get('[data-testid="avatar"]').attributes('src'))
             .toBe('https://uploads.test/badge.webp');
 
         // The placeholder is the common case, not an error state: it holds the
         // row's shape and carries initials rather than an empty circle.
-        expect(view.get('[data-testid="attendee-10"]').get('[data-testid="team-avatar-placeholder"]').text()).toBe('WO');
+        expect(view.get('[data-testid="attendee-10"]').get('[data-testid="avatar-placeholder"]').text()).toBe('WO');
     });
 
     it('spends no line on a label, and searches from the placeholder alone', async () => {
@@ -728,7 +728,7 @@ describe('the attendee detail', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="attendee-name"]').text()).toBe('Sons of Terra');
-        expect(view.get('[data-testid="team-avatar-placeholder"]').text()).toBe('ST');
+        expect(view.get('[data-testid="avatar-placeholder"]').text()).toBe('ST');
         expect(view.find('[data-testid="allegiance-loyalist"]').exists()).toBe(true);
 
         // One Player at a time, tabbed by name: the tab says who, the panel

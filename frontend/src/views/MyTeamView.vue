@@ -3,7 +3,7 @@ import { computed } from 'vue';
 
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import AppLinkRow from '@/components/AppLinkRow.vue';
-import TeamAvatar from '@/components/TeamAvatar.vue';
+import AppAvatar from '@/components/AppAvatar.vue';
 import { useMyTeam } from '@/composables/useMyTeam';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -47,7 +47,7 @@ const paintingState = computed(() => (attendee.value?.painting_entered === true 
            that edits it: the badge on the left with the name and the side it
            fights for beside it, exactly as the team's own page draws them. -->
       <header class="flex items-center gap-4 pt-5">
-        <TeamAvatar
+        <AppAvatar
           :name="attendee.name ?? ''"
           :src="attendee.avatar"
           size="lg"

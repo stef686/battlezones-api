@@ -37,3 +37,10 @@ Overlay text sits on two scrims (`event-header-scrim-top` / `event-header-scrim-
 The lit tab is scrolled into view on mount and on every route change, because the tabs overflow a phone and a deep link would otherwise land on a nav with nothing visibly selected.
 
 The strip scrolls natively (`overflow-x-auto`, no scroll-snap, no drag handler) and its trailing fade is the `event-nav-fade` utility in `style.css`. It hides only when the Event query errors — it stays through the load, since the five fixed sections do not depend on the Event.
+
+## The avatar slot opens AccountDrawer, and the tab bar shows at every width
+Signed in, the tab bar's avatar slot is a `<button aria-haspopup="dialog">` drawing `AppAvatar` initials. It opens `AccountDrawer`, the only place to log out. That makes the bar load-bearing on desktop too, so it has no `md:hidden` until desktop chrome replaces it (#143).
+
+`AccountDrawer` is a native `<dialog>` opened with `showModal()`. Do not swap it for Preline HSOverlay: the browser owns the focus trap, Esc and the inert page, and Vue owns only `v-model:open`. The Close button carries `autofocus` so that Log out never receives the opening focus. Its sections are the same for every User: "Player" and "Organiser" are copy, not roles (see CONTEXT.md).
+
+Logging out goes through `useLogout`. `ApiClient.logout()` makes a best-effort revoke with a 3s cap, then forgets the token whatever happens. The composable then clears the session and the TanStack Query cache and calls `router.replace` to login. Do not make logout wait on the API. `TeamAvatar` is now `AppAvatar`, with testids `avatar` and `avatar-placeholder`.

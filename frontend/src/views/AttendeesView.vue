@@ -8,7 +8,7 @@ import { ApiError } from '@/api/errors';
 import { fetchAttendees } from '@/api/events';
 import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
-import TeamAvatar from '@/components/TeamAvatar.vue';
+import AppAvatar from '@/components/AppAvatar.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import AppButton from '@/components/AppButton.vue';
 import TextField from '@/components/TextField.vue';
@@ -111,7 +111,7 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
             :data-testid="`attendee-${attendee.id}`"
             class="flex items-center gap-3 px-5 py-3.5 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
           >
-            <TeamAvatar
+            <AppAvatar
               :name="attendee.name"
               :src="attendee.avatar"
             />

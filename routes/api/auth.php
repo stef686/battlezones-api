@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginTokenController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RefreshTokenController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -10,6 +11,8 @@ Route::middleware('throttle:auth')->group(function () {
     Route::post('login/token', LoginTokenController::class)->name('login.token');
     Route::post('register', RegisterController::class)->name('register');
 });
+
+Route::post('auth/logout', LogoutController::class)->name('auth.logout')->middleware('auth:sanctum');
 
 Route::post('auth/refresh', RefreshTokenController::class)->name('auth.refresh')->middleware('throttle:60,1');
 

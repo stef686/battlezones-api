@@ -10,7 +10,7 @@ import { keys } from '@/api/keys';
 import { columnLabel } from '@/api/rounds';
 import { columnsOf, factionsOf, fetchStandings, scoreOf, type Standing, type StandingColumn } from '@/api/standings';
 import StandingMovement from '@/components/StandingMovement.vue';
-import TeamAvatar from '@/components/TeamAvatar.vue';
+import AppAvatar from '@/components/AppAvatar.vue';
 import TextField from '@/components/TextField.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 
@@ -206,7 +206,7 @@ function matchesSearch(standing: Standing): boolean {
                        what it brought — rather than beside the name alone,
                        which left it hanging off one line of a two-line cell. -->
                   <span class="flex min-w-0 items-center gap-2">
-                    <TeamAvatar
+                    <AppAvatar
                       :name="row.standing.attendee.name"
                       :src="row.standing.attendee.avatar"
                     />

@@ -174,6 +174,20 @@ describe('the app shell', () => {
 
         expect(account.attributes('href')).toBeUndefined();
         expect(account.text()).toContain('Ada Lovelace');
+        expect(account.element.tagName).toBe('BUTTON');
+        expect(account.attributes('aria-haspopup')).toBe('dialog');
+        expect(account.attributes('aria-expanded')).toBe('false');
+    });
+
+    it('shows at every width, since it is the only way to the account drawer', async () => {
+        stubEvent();
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        expect(view.get('[data-testid="tab-bar"]').classes().some((name) => name.endsWith(':hidden'))).toBe(false);
     });
 
     it('shows the slots as icons alone, keeping their labels for screen readers', async () => {

@@ -2,12 +2,13 @@
 import { computed } from 'vue';
 
 /**
- * A team's badge, or a placeholder standing in for one.
+ * An avatar — a team's badge or a User's picture — or a placeholder standing
+ * in for one.
  *
- * Most teams never upload an Avatar, so the placeholder is the common case
- * rather than an error state: it keeps every row the same shape and carries
- * the team's initials, which is more use in a list of forty than an empty
- * circle would be. The image is decorative — the name it sits beside is the
+ * Most teams never upload an Avatar, and Users cannot yet, so the placeholder
+ * is the common case rather than an error state: it keeps every row the same
+ * shape and carries the initials, which is more use in a list of forty than
+ * an empty circle would be. The image is decorative — the name it sits beside is the
  * accessible one — so it is hidden from screen readers rather than repeating
  * the row aloud.
  */
@@ -47,13 +48,13 @@ const initials = computed(() => {
     :src="src"
     alt=""
     aria-hidden="true"
-    data-testid="team-avatar"
+    data-testid="avatar"
     :class="classes"
   >
   <span
     v-else
     aria-hidden="true"
-    data-testid="team-avatar-placeholder"
+    data-testid="avatar-placeholder"
     :class="[...classes, 'flex items-center justify-center border border-card-line bg-surface font-semibold text-muted-foreground-1']"
   >{{ initials }}</span>
 </template>

@@ -43,7 +43,7 @@ const eventSlug = computed(() => {
 
     <!-- The tab bar is fixed, so the last card on a long screen needs room to
          clear it rather than sitting underneath. -->
-    <div class="flex-1 pb-20 md:pb-0">
+    <div class="flex-1 pb-20">
       <slot />
     </div>
 
