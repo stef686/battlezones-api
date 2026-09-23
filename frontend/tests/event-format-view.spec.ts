@@ -492,7 +492,7 @@ describe('the event format screen', () => {
         expect(view.get('[data-testid="score-toggle-0"]').attributes('aria-expanded')).toBe('false');
         // Folded, it still says which column it is and how it is scored.
         expect(view.get('[data-testid="score-toggle-0"]').text()).toContain('Match Points');
-        expect(view.get('[data-testid="score-toggle-0"]').text()).toContain('Worked out from the result');
+        expect(view.get('[data-testid="score-toggle-0"]').text()).toContain('Calculated from the result · higher to lower');
 
         await expand(view, 0);
 
@@ -503,6 +503,25 @@ describe('the event format screen', () => {
         await expand(view, 0);
 
         expect(view.find('[data-testid="score-name-0"]').exists()).toBe(false);
+    });
+
+    it('offers how a column is scored and ordered in the words an organiser uses', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`/api/events/${EVENT_SLUG}/score-types`]: { status: 200, body: scoreTypesBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+        await expand(view, 0);
+
+        const labels = (testid: string) => view.findAll(`[data-testid="${testid}"] option`)
+            .map((option) => option.text())
+            .filter((label) => label !== 'Choose one');
+
+        expect(labels('score-source-0')).toEqual(['Game score', 'Calculated from the result']);
+        expect(labels('score-direction-0')).toEqual(['Higher to lower', 'Lower to higher']);
+        expect(view.text()).not.toContain('Shown over the column');
     });
 
     it('opens a column it has just added, since a blank card has nothing to read', async () => {

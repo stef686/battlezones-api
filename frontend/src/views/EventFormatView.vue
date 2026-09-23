@@ -136,13 +136,13 @@ function blankRow(): ScoreRow {
 }
 
 const sourceOptions = [
-  { value: 'entered', label: 'Entered by players' },
-  { value: 'derived', label: 'Worked out from the result' },
+  { value: 'entered', label: 'Game score' },
+  { value: 'derived', label: 'Calculated from the result' },
 ];
 
 const directionOptions = [
-  { value: 'desc', label: 'Higher is better' },
-  { value: 'asc', label: 'Lower is better' },
+  { value: 'desc', label: 'Higher to lower' },
+  { value: 'asc', label: 'Lower to higher' },
 ];
 
 const rows = ref<ScoreRow[] | null>(null);
@@ -234,10 +234,10 @@ function rowRejected(index: number): boolean {
 
 /** What a folded column says about itself, under its name. */
 function summaryOf(row: ScoreRow): string {
-  const source = row.is_derived ? 'Worked out from the result' : 'Entered by players';
-  const direction = row.sort_direction === 'desc' ? 'higher is better' : 'lower is better';
+  const source = sourceOptions.find((option) => option.value === (row.is_derived ? 'derived' : 'entered'));
+  const direction = directionOptions.find((option) => option.value === row.sort_direction);
 
-  return `${source} · ${direction}`;
+  return `${source?.label} · ${direction?.label.toLowerCase()}`;
 }
 
 /**
@@ -634,7 +634,6 @@ async function save(): Promise<void> {
               <TextField
                 v-model="row.abbreviation"
                 label="Abbreviation"
-                hint="Shown over the column on a game and in the standings. Left empty, the initials of the name are used."
                 :testid="`score-abbreviation-${index}`"
                 :errors="rowErrors(index, 'abbreviation')"
               />
