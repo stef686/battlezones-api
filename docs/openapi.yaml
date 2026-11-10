@@ -4,19 +4,26 @@ info:
   description: ''
   version: 1.0.0
 servers:
-  - url: 'https://battlezones.test'
+  -
+    url: 'https://battlezones.test'
 tags:
-  - name: Authentication
+  -
+    name: Authentication
     description: 'APIs for authentication'
-  - name: Conversations
+  -
+    name: Conversations
     description: 'APIs for Conversations'
-  - name: Events
+  -
+    name: Events
     description: 'APIs for Events'
-  - name: Gallery
+  -
+    name: Gallery
     description: 'APIs for Gallery'
-  - name: Reactions
+  -
+    name: Reactions
     description: 'APIs for Reactions'
-  - name: Users
+  -
+    name: Users
     description: 'APIs for Users'
 paths:
   /api/login/token:
