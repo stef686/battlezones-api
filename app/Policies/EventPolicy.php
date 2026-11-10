@@ -10,6 +10,18 @@ use App\Models\User;
 class EventPolicy
 {
     /**
+     * Whether this User may create an Event of their own.
+     *
+     * Claimed accounts only: an unclaimed one expires with the Event it was
+     * invited to, and an Event whose Lead expires has nobody who can appoint
+     * Organisers. Admins are let through so Filament's create action stays.
+     */
+    public function create(User $user): bool
+    {
+        return $user->is_admin || $user->isClaimed();
+    }
+
+    /**
      * Whether this Player may run the Event: publish rounds, correct results,
      * open Polls, and read tallies.
      */

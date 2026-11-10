@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Events;
 
-use App\Enums\SortDirection;
+use App\Http\Requests\Events\Concerns\ValidatesScoreTypeSet;
 use App\Models\Event;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
@@ -32,6 +32,8 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('score_types[].loss_points', 'number', 'What a loss is worth. Required on a derived column.', required: false, example: 0)]
 class ReplaceEventScoreTypesRequest extends FormRequest
 {
+    use ValidatesScoreTypeSet;
+
     public function authorize(): bool
     {
         return $this->user()?->can('organise', $this->event()) === true;
@@ -43,9 +45,7 @@ class ReplaceEventScoreTypesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // An Event scored on nothing has no Standings and nothing for a
-            // Player to enter, so an empty set is a mistake, not a choice.
-            'score_types' => ['required', 'array', 'min:1'],
+            ...$this->scoreTypeSetRules(),
             // Absent on a row being added: a Score Type the Event does not
             // have yet has no id to send.
             'score_types.*.id' => [
@@ -54,20 +54,6 @@ class ReplaceEventScoreTypesRequest extends FormRequest
                 'distinct',
                 Rule::exists('event_score_types', 'id')->where('event_id', $this->event()->getKey()),
             ],
-            'score_types.*.name' => ['required', 'string', 'max:255'],
-            // Optional: an Organiser who does not want to think about it gets
-            // the initials of the name, which is what the clients showed
-            // before the column existed. Short enough to sit over a number.
-            'score_types.*.abbreviation' => ['nullable', 'string', 'max:8'],
-            'score_types.*.sort_direction' => ['required', Rule::enum(SortDirection::class)],
-            'score_types.*.is_derived' => ['required', 'boolean'],
-            'score_types.*.is_primary' => ['required', 'boolean'],
-            'score_types.*.counts_for_ranking' => ['required', 'boolean'],
-            // Only meaningful on a derived column, and required there: see
-            // the after() rules.
-            'score_types.*.win_points' => ['nullable', 'numeric'],
-            'score_types.*.draw_points' => ['nullable', 'numeric'],
-            'score_types.*.loss_points' => ['nullable', 'numeric'],
         ];
     }
 
@@ -84,19 +70,6 @@ class ReplaceEventScoreTypesRequest extends FormRequest
     }
 
     /**
-     * The set as it will be written, in the order it arrived.
-     *
-     * @return list<array<string, mixed>>
-     */
-    public function scoreTypes(): array
-    {
-        /** @var list<array<string, mixed>> $rows */
-        $rows = array_values($this->array('score_types'));
-
-        return $rows;
-    }
-
-    /**
      * Empty when route model binding has not run, which only happens where the
      * docs generator instantiates this request outside a real request cycle.
      */
@@ -105,55 +78,6 @@ class ReplaceEventScoreTypesRequest extends FormRequest
         $event = $this->route('event');
 
         return $event instanceof Event ? $event : new Event();
-    }
-
-    /**
-     * A Game listing has room for one number per team, so at most one column
-     * may claim it. The server still resolves a winner when none is marked.
-     */
-    private function validateOneLeader(Validator $validator): void
-    {
-        if ($validator->errors()->isNotEmpty()) {
-            return;
-        }
-
-        $leaders = array_keys(array_filter(
-            $this->scoreTypes(),
-            fn (array $row): bool => (bool) ($row['is_primary'] ?? false),
-        ));
-
-        foreach (array_slice($leaders, 1) as $index) {
-            $validator->errors()->add(
-                "score_types.{$index}.is_primary",
-                'Only one column can lead a game listing.',
-            );
-        }
-    }
-
-    /**
-     * A derived column is worked out from the result, which cannot be done
-     * without knowing what a win, a draw and a loss are worth.
-     */
-    private function validateDerivedPoints(Validator $validator): void
-    {
-        if ($validator->errors()->isNotEmpty()) {
-            return;
-        }
-
-        foreach ($this->scoreTypes() as $index => $row) {
-            if (($row['is_derived'] ?? false) !== true) {
-                continue;
-            }
-
-            foreach (['win_points', 'draw_points', 'loss_points'] as $field) {
-                if (($row[$field] ?? null) === null) {
-                    $validator->errors()->add(
-                        "score_types.{$index}.{$field}",
-                        'A worked-out column needs its win, draw and loss points.',
-                    );
-                }
-            }
-        }
     }
 
     /**

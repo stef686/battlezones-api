@@ -249,3 +249,35 @@ describe('which screens are drawn inside the app shell', () => {
         expect(router.currentRoute.value.meta.chrome).not.toBe(false);
     });
 });
+
+describe('creating an event', () => {
+    it('is for a signed-in reader, so a guest is sent to login first', async () => {
+        const { router } = routerWithSession(null);
+
+        await router.push('/events/new');
+        await router.isReady();
+
+        expect(router.currentRoute.value.name).toBe('login');
+        expect(router.currentRoute.value.query.redirect).toBe('/events/new');
+    });
+
+    it('opens the wizard for a claimed account, rather than an Event called new', async () => {
+        const { router } = routerWithSession('a-token');
+        signedInAs(true, null);
+
+        await router.push('/events/new');
+        await router.isReady();
+
+        expect(router.currentRoute.value.name).toBe('create-event');
+    });
+
+    it('sends an unclaimed account to Claim, since its Event would outlive it', async () => {
+        const { router } = routerWithSession('a-token');
+        signedInAs(false, { token: 'abc', eventSlug: 'croydon-doubles' });
+
+        await router.push('/events/new');
+        await router.isReady();
+
+        expect(router.currentRoute.value.name).toBe('claim');
+    });
+});
