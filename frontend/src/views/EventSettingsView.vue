@@ -12,11 +12,9 @@
  * this form sat open.
  */
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
-import { Trash2 } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 
 import { useApiClient } from '@/api';
-import { fetchCountries } from '@/api/countries';
 import { ApiError } from '@/api/errors';
 import {
   fetchEvent,
@@ -30,9 +28,12 @@ import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
+import EventBannerField from '@/components/EventBannerField.vue';
+import EventDetailsFields from '@/components/EventDetailsFields.vue';
+import EventVenueFields from '@/components/EventVenueFields.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
-import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
+import type { EventDetails, EventVenue } from '@/lib/event-fields';
 
 const props = defineProps<{ eventSlug: string }>();
 
@@ -52,40 +53,38 @@ const { data: event, isPending } = useQuery({
 const mayOrganise = computed(() => event.value?.viewer?.permissions.organise === true);
 const forbidden = computed(() => event.value !== undefined && !mayOrganise.value);
 
-const { data: countries } = useQuery({
-  queryKey: keys.countries(),
-  queryFn: () => fetchCountries(client),
-  enabled: mayOrganise,
-  staleTime: Infinity,
-  retry: false,
-});
-
-const countryOptions = computed(() => (countries.value ?? [])
-  .map((country) => ({ value: country.code, label: country.name })));
-
 interface Form {
-  name: string;
+  details: EventDetails;
   description: string;
-  venue_name: string;
-  venue_address: string;
-  venue_city: string;
-  venue_country: string;
-  starts_at: string;
-  ends_at: string;
   registration_closes_at: string;
+  venue: EventVenue;
 }
 
 function formOf(loaded: EventSummary): Form {
   return {
-    name: loaded.name,
+    details: {
+      name: loaded.name,
+      starts_at: localMoment(loaded.starts_at),
+      ends_at: localMoment(loaded.ends_at),
+    },
     description: loaded.description ?? '',
-    venue_name: loaded.venue.name ?? '',
-    venue_address: loaded.venue.address ?? '',
-    venue_city: loaded.venue.city ?? '',
-    venue_country: loaded.venue.country ?? '',
-    starts_at: localMoment(loaded.starts_at),
-    ends_at: localMoment(loaded.ends_at),
     registration_closes_at: localMoment(loaded.registration_closes_at),
+    venue: {
+      venue_name: loaded.venue.name ?? '',
+      venue_address: loaded.venue.address ?? '',
+      venue_city: loaded.venue.city ?? '',
+      venue_country: loaded.venue.country ?? '',
+    },
+  };
+}
+
+/** The form as the PATCH names its fields, so the two can be compared field by field. */
+function fieldsOf(edited: Form): EventDetails & EventVenue & Pick<Form, 'description' | 'registration_closes_at'> {
+  return {
+    ...edited.details,
+    ...edited.venue,
+    description: edited.description,
+    registration_closes_at: edited.registration_closes_at,
   };
 }
 
@@ -106,12 +105,12 @@ watch(event, (loaded) => {
 }, { immediate: true });
 
 const changes = computed<EventChanges>(() => {
-  const current = form.value;
-  const original = saved.value;
-
-  if (current === null || original === null) {
+  if (form.value === null || saved.value === null) {
     return {};
   }
+
+  const current = fieldsOf(form.value);
+  const original = fieldsOf(saved.value);
 
   const changed: EventChanges = {};
 
@@ -179,18 +178,10 @@ const bannerBusy = ref(false);
  * pretending otherwise would mean one Save button that sometimes made two
  * requests and could half-succeed.
  */
-async function chooseBanner(payload: Event): Promise<void> {
-  const input = payload.target as HTMLInputElement;
-  const file = input.files?.[0];
-
-  if (file === undefined || bannerBusy.value) {
-    return;
+async function chooseBanner(file: File): Promise<void> {
+  if (!bannerBusy.value) {
+    await withBanner(() => uploadBanner(client, props.eventSlug, file));
   }
-
-  await withBanner(() => uploadBanner(client, props.eventSlug, file));
-
-  // Cleared so choosing the same file twice still fires a change.
-  input.value = '';
 }
 
 async function dropBanner(): Promise<void> {
@@ -271,93 +262,30 @@ function localMoment(iso: string | null): string {
         Saved.
       </AppAlert>
 
-      <section class="flex flex-col gap-3">
-        <h2 class="text-sm font-medium text-foreground">
-          Banner
-        </h2>
-
-        <div
-          v-if="banner"
-          class="relative"
-        >
-          <img
-            :src="banner.large"
-            alt=""
-            data-testid="settings-banner-preview"
-            class="aspect-[3/1] w-full rounded-lg object-cover"
-          >
-
-          <AppButton
-            type="button"
-            variant="danger"
-            size="sm"
-            data-testid="settings-banner-remove"
-            class="absolute end-2 top-2"
-            :disabled="bannerBusy"
-            @click="dropBanner"
-          >
-            <Trash2 class="size-4 shrink-0" />
-            <span class="sr-only">Remove banner</span>
-          </AppButton>
-        </div>
-
-        <p class="text-xs text-muted-foreground">
-          At least 1200 by 400, up to 8MB. JPEG, PNG or WebP.
-        </p>
-
-        <input
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          data-testid="settings-banner"
-          :disabled="bannerBusy"
-          class="block w-full text-sm text-muted-foreground-1 file:me-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground"
-          @change="chooseBanner"
-        >
-
-        <p
-          v-if="errors.banner"
-          data-testid="settings-banner-error"
-          role="alert"
-          class="text-sm text-destructive"
-        >
-          {{ errors.banner.join(' ') }}
-        </p>
-      </section>
+      <EventBannerField
+        :banner="banner"
+        :busy="bannerBusy"
+        :errors="errors"
+        @choose="chooseBanner"
+        @remove="dropBanner"
+      />
 
       <form
         data-testid="settings-save"
         class="flex flex-col gap-5"
         @submit.prevent="save"
       >
-        <TextField
-          v-model="form.name"
-          label="Name"
-          testid="settings-name"
-          :errors="errors.name"
-        />
-
-        <TextField
-          v-model="form.description"
-          label="Description"
-          testid="settings-description"
-          :errors="errors.description"
-        />
-
-        <TextField
-          v-model="form.starts_at"
-          label="Starts"
-          type="datetime-local"
-          testid="settings-starts-at"
-          :errors="errors.starts_at"
-        />
-
-        <TextField
-          v-model="form.ends_at"
-          label="Ends"
-          type="datetime-local"
-          testid="settings-ends-at"
-          :errors="errors.ends_at"
-        />
+        <EventDetailsFields
+          v-model="form.details"
+          :errors="errors"
+        >
+          <TextField
+            v-model="form.description"
+            label="Description"
+            testid="settings-description"
+            :errors="errors.description"
+          />
+        </EventDetailsFields>
 
         <TextField
           v-model="form.registration_closes_at"
@@ -367,34 +295,9 @@ function localMoment(iso: string | null): string {
           :errors="errors.registration_closes_at"
         />
 
-        <TextField
-          v-model="form.venue_name"
-          label="Venue"
-          testid="settings-venue-name"
-          :errors="errors.venue_name"
-        />
-
-        <TextField
-          v-model="form.venue_address"
-          label="Address"
-          testid="settings-venue-address"
-          :errors="errors.venue_address"
-        />
-
-        <TextField
-          v-model="form.venue_city"
-          label="Town or city"
-          testid="settings-venue-city"
-          :errors="errors.venue_city"
-        />
-
-        <SelectField
-          v-model="form.venue_country"
-          label="Country"
-          :options="countryOptions"
-          placeholder="No country"
-          testid="settings-venue-country"
-          :errors="errors.venue_country"
+        <EventVenueFields
+          v-model="form.venue"
+          :errors="errors"
         />
 
         <AppButton

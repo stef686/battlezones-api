@@ -142,13 +142,13 @@ test('an Organiser puts a banner on the event and sees it behind the name', asyn
 
     await expect(page.getByTestId('event-header-banner')).toHaveCount(0);
 
-    await page.getByTestId('settings-banner').setInputFiles({
+    await page.getByTestId('event-banner').setInputFiles({
         name: 'hall.png',
         mimeType: 'image/png',
         buffer: wideImage(),
     });
 
-    await expect(page.getByTestId('settings-banner-preview')).toBeVisible();
+    await expect(page.getByTestId('event-banner-preview')).toBeVisible();
 
     // The header is chrome, so the Banner follows the Organiser onto every
     // Event screen rather than living on the one that uploaded it.
@@ -156,7 +156,7 @@ test('an Organiser puts a banner on the event and sees it behind the name', asyn
     await expect(page.getByTestId('event-header-banner')).toBeVisible();
 
     await page.goto(`/events/${EVENT_SLUG}/organise/settings`);
-    await page.getByTestId('settings-banner-remove').click();
+    await page.getByTestId('event-banner-remove').click();
 
     await expect(page.getByTestId('event-header-banner')).toHaveCount(0);
 });

@@ -1,0 +1,131 @@
+<script setup lang="ts">
+/**
+ * The Banner an Event's header is drawn over, and the means to change it.
+ *
+ * It only says what the Organiser chose; it never uploads. The settings screen
+ * sends a Banner the moment it is chosen, and the create-event wizard holds it
+ * until there is an Event to send it to — so when is the parent's call.
+ *
+ * Type and size are checked here first, against the same limits the API
+ * enforces, so a file that could only be refused is refused without the wait.
+ * Dimensions are left to the API: reading them means decoding the image.
+ */
+import { Trash2 } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
+
+import AppButton from '@/components/AppButton.vue';
+import type { FieldErrors } from '@/lib/event-fields';
+
+const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const MAX_BYTES = 8 * 1024 * 1024;
+
+const props = withDefaults(defineProps<{
+  banner: { large: string; small: string } | null;
+  busy?: boolean;
+  errors?: FieldErrors;
+}>(), {
+  busy: false,
+  errors: () => ({}),
+});
+
+const emit = defineEmits<{
+  choose: [file: File];
+  remove: [];
+}>();
+
+const refused = ref<string | null>(null);
+
+const messages = computed(() => (refused.value === null ? props.errors.banner ?? [] : [refused.value]));
+
+function refusalOf(file: File): string | null {
+  if (!ACCEPTED_TYPES.includes(file.type)) {
+    return 'The banner must be a JPEG, PNG or WebP image.';
+  }
+
+  if (file.size > MAX_BYTES) {
+    return 'The banner must be 8MB or smaller.';
+  }
+
+  return null;
+}
+
+function choose(payload: Event): void {
+  const input = payload.target as HTMLInputElement;
+  const file = input.files?.[0];
+
+  // Cleared so choosing the same file twice still fires a change.
+  input.value = '';
+
+  if (file === undefined || props.busy) {
+    return;
+  }
+
+  refused.value = refusalOf(file);
+
+  if (refused.value === null) {
+    emit('choose', file);
+  }
+}
+
+function remove(): void {
+  if (!props.busy) {
+    refused.value = null;
+    emit('remove');
+  }
+}
+</script>
+
+<template>
+  <section class="flex flex-col gap-3">
+    <h2 class="text-sm font-medium text-foreground">
+      Banner
+    </h2>
+
+    <div
+      v-if="banner"
+      class="relative"
+    >
+      <img
+        :src="banner.large"
+        alt=""
+        data-testid="event-banner-preview"
+        class="aspect-[3/1] w-full rounded-lg object-cover"
+      >
+
+      <AppButton
+        type="button"
+        variant="danger"
+        size="sm"
+        data-testid="event-banner-remove"
+        class="absolute end-2 top-2"
+        :disabled="busy"
+        @click="remove"
+      >
+        <Trash2 class="size-4 shrink-0" />
+        <span class="sr-only">Remove banner</span>
+      </AppButton>
+    </div>
+
+    <p class="text-xs text-muted-foreground">
+      At least 1200 by 400, up to 8MB. JPEG, PNG or WebP.
+    </p>
+
+    <input
+      type="file"
+      :accept="ACCEPTED_TYPES.join(',')"
+      data-testid="event-banner"
+      :disabled="busy"
+      class="block w-full text-sm text-muted-foreground-1 file:me-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground"
+      @change="choose"
+    >
+
+    <p
+      v-if="messages.length > 0"
+      data-testid="event-banner-error"
+      role="alert"
+      class="text-sm text-destructive"
+    >
+      {{ messages.join(' ') }}
+    </p>
+  </section>
+</template>
