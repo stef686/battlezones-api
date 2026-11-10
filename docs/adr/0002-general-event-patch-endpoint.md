@@ -48,6 +48,24 @@ changes: the gate exists precisely so that no migration is needed.
 The Banner is not in the list either: PHP does not populate `$_FILES` for `PATCH` bodies, so it has
 its own multipart route (`POST`/`DELETE /events/{event:slug}/banner`). See ADR 0003.
 
+## Amendment: the timezone is editable until the first Schedule block
+
+Organisers now create their own Events (issue #134), choosing a timezone at creation. Until then
+`timezone` was set only by admins and defaulted to UTC, so a wrong choice had no fix outside
+Filament. `timezone` is now accepted **while the Event has no Schedule blocks**, and `prohibited`
+once it has one, with a message naming the reason.
+
+The line is drawn at the first block because blocks store absolute timestamps and derive their day
+from the Event's timezone: changing the zone under an existing schedule would silently move blocks
+onto different days. Before the first block, nothing is anchored to the old zone. The value must be
+an IANA identifier from `DateTimeZone::listIdentifiers()`.
+
+## Amendment: the Event Colour is always editable
+
+`colour` (the Event Colour, a `#rrggbb` hex or null) is accepted unconditionally. It is
+presentation only: nothing is computed from it, nothing is built against it, and no credential or
+link carries it, so there is no state at which changing it strands anything.
+
 ## Consequences
 
 - **Moving an Event's dates does not move its Schedule blocks.** `EventScheduleBlock` stores

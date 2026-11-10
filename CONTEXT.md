@@ -23,7 +23,7 @@ _Avoid_: Attendee, member, user (a User is the platform account; a Player is tha
 _Except_: The account drawer heads the Events a User competes in "Player". That is copy grouping destinations, not a platform-wide role — there is no global Player status and no code should model one.
 
 **Organiser**:
-A Player trusted to run an Event — publishing Rounds, correcting results, opening Polls, and reading tallies. One Organiser leads and may appoint the others. An Organiser may also compete, so their corrections are recorded against their name rather than forbidden.
+A User trusted to run an Event — publishing Rounds, correcting results, opening Polls, and reading tallies. One Organiser leads and may appoint the others; whoever creates an Event is its lead. An Organiser need not compete; one who does is also a Player in that Event, so their corrections are recorded against their name rather than forbidden.
 _Avoid_: TO, admin (an admin runs the platform; an Organiser runs one Event), host
 _Except_: The account drawer heads the Events a User organises "Organiser". That is copy, not a platform-wide role — every User sees it, and no code should gate on or model a global Organiser status.
 
@@ -82,6 +82,10 @@ _Avoid_: Vote (a Ballot may hold several), selection
 **Banner**:
 The single wide image an Organiser sets to give an Event its own face, shown behind the heading at the top of every Event screen. Not a Photo — it is not in the Gallery, is not attributed to a Player, and cannot be reacted to.
 _Avoid_: Header image, cover, hero, photo
+
+**Event Colour**:
+The single accent colour an Organiser gives an Event, carried by that Event's screens in place of the platform's own. It never replaces colours that carry meaning — Allegiance, success, warning, failure — so an Event's look cannot be mistaken for a state. An Event without one wears the platform colour.
+_Avoid_: Theme, theme colours, brand colour, palette
 
 **Faction**:
 The army or force a Player brings, drawn from the Event's Game System.
