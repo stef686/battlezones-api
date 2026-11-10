@@ -56,7 +56,7 @@ class EventsTable
                     ->label('Game System')
                     ->options(fn () => GameSystem::pluck('name', 'id')->all()),
                 Filter::make('starts_at')
-                    ->schema([
+                    ->form([
                         DatePicker::make('starts_from'),
                         DatePicker::make('starts_until'),
                     ])
