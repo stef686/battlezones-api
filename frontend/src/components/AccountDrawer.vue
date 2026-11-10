@@ -17,8 +17,9 @@
  * is their only way back in, since they have no password to sign in with.
  * The warning does not stand in the way of logging out.
  *
- * The destinations ship visibly inert, as the tab bar's do, until their
- * screens exist.
+ * A destination with somewhere to go is a link that closes the drawer on the
+ * way. The rest ship visibly inert, as the tab bar's do, until their screens
+ * exist.
  */
 import {
     CalendarDays,
@@ -32,7 +33,7 @@ import {
     type LucideIcon,
 } from 'lucide-vue-next';
 import { ref, useId, watch } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, type RouteLocationRaw } from 'vue-router';
 
 import AppAvatar from '@/components/AppAvatar.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -42,6 +43,9 @@ import type { Viewer } from '@/stores/session';
 interface Destination {
     label: string;
     icon: LucideIcon;
+    /** Absent until the screen exists. */
+    to?: RouteLocationRaw;
+    testid?: string;
 }
 
 interface Section {
@@ -64,7 +68,7 @@ const SECTIONS: Section[] = [
         heading: 'Organiser',
         destinations: [
             { label: 'Events', icon: ClipboardList },
-            { label: 'Run an event', icon: CalendarPlus },
+            { label: 'Run an event', icon: CalendarPlus, to: { name: 'create-event' }, testid: 'account-drawer-create-event' },
         ],
     },
     {
@@ -179,8 +183,22 @@ watch(open, (isOpen) => {
               v-for="destination in section.destinations"
               :key="destination.label"
             >
+              <RouterLink
+                v-if="destination.to"
+                :to="destination.to"
+                :data-testid="destination.testid"
+                class="flex items-center gap-3 py-2.5 text-foreground hover:text-primary"
+                @click="open = false"
+              >
+                <component
+                  :is="destination.icon"
+                  class="size-5 shrink-0"
+                />
+                {{ destination.label }}
+              </RouterLink>
               <!-- Not a link and not focusable: there is nowhere to go yet. -->
               <span
+                v-else
                 aria-disabled="true"
                 tabindex="-1"
                 class="flex items-center gap-3 py-2.5 text-muted-foreground opacity-60"

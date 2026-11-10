@@ -48,6 +48,7 @@ use App\Http\Controllers\Events\StoreAttendeeAvatarController;
 use App\Http\Controllers\Events\StoreAttendeeMemberController;
 use App\Http\Controllers\Events\StoreEventAttendeeController;
 use App\Http\Controllers\Events\StoreEventBannerController;
+use App\Http\Controllers\Events\StoreEventController;
 use App\Http\Controllers\Events\StoreEventInviteController;
 use App\Http\Controllers\Events\StoreEventOrganiserController;
 use App\Http\Controllers\Events\StoreEventPollController;
@@ -139,6 +140,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}/painting', UpdatePaintingEntryController::class)
         ->name('events.attendees.painting.update');
 
+    Route::post('events', StoreEventController::class)->name('events.store');
     Route::patch('events/{event:slug}', UpdateEventController::class)->name('events.update');
 
     // Multipart, and so a route of its own: PHP does not populate uploaded

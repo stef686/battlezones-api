@@ -1,0 +1,278 @@
+<script setup lang="ts">
+/**
+ * An Organiser's own Event, made in three steps and sent once.
+ *
+ * Nothing exists until Create is pressed (ADR 0006): the draft lives here, a
+ * step passes only once what it asks for is sound, and Back keeps everything
+ * typed. The server's refusals are mapped back to the step that asked for the
+ * field, so an Organiser is sent to the mistake rather than told about it on
+ * a summary they cannot edit.
+ *
+ * The fields are the same components the settings and format screens edit an
+ * Event with, so an Event reads the same being made as being changed.
+ */
+import { useQuery, useQueryClient } from '@tanstack/vue-query';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { useApiClient } from '@/api';
+import { ApiError } from '@/api/errors';
+import { createEvent } from '@/api/events';
+import { fetchGameSystems } from '@/api/game-systems';
+import { keys } from '@/api/keys';
+import AppAlert from '@/components/AppAlert.vue';
+import AppButton from '@/components/AppButton.vue';
+import EventDetailsFields from '@/components/EventDetailsFields.vue';
+import EventShapeFields from '@/components/EventShapeFields.vue';
+import EventVenueFields from '@/components/EventVenueFields.vue';
+import ScoreTypeListEditor from '@/components/ScoreTypeListEditor.vue';
+import TextField from '@/components/TextField.vue';
+import { errorsUnder, teamSizeLabel, type FieldErrors } from '@/lib/event-fields';
+import {
+  WIZARD_STEPS,
+  blankDraft,
+  firstStepWith,
+  problemsOf,
+  submissionOf,
+  type EventDraft,
+  type WizardStep,
+} from '@/lib/event-wizard';
+import { formatDateRange } from '@/lib/dates';
+import { useToastStore } from '@/stores/toast';
+
+const client = useApiClient();
+const queryClient = useQueryClient();
+const router = useRouter();
+const toasts = useToastStore();
+
+/** The phone's own zone is the best guess at the hall's until it can be chosen. */
+const draft = ref<EventDraft>(blankDraft(Intl.DateTimeFormat().resolvedOptions().timeZone));
+
+const step = ref<WizardStep>('details');
+const stepIndex = computed(() => WIZARD_STEPS.findIndex((candidate) => candidate.id === step.value));
+
+const errors = ref<FieldErrors>({});
+const scoreTypeErrors = computed(() => errorsUnder(errors.value, 'score_types'));
+
+const submitting = ref(false);
+const problem = ref<string | null>(null);
+
+function next(): void {
+  const problems = problemsOf(step.value, draft.value);
+
+  errors.value = problems;
+
+  if (Object.keys(problems).length > 0) {
+    return;
+  }
+
+  step.value = WIZARD_STEPS[stepIndex.value + 1]?.id ?? step.value;
+}
+
+function back(): void {
+  errors.value = {};
+  step.value = WIZARD_STEPS[stepIndex.value - 1]?.id ?? step.value;
+}
+
+async function submit(): Promise<void> {
+  if (submitting.value) {
+    return;
+  }
+
+  submitting.value = true;
+  problem.value = null;
+
+  try {
+    const created = await createEvent(client, submissionOf(draft.value));
+
+    queryClient.setQueryData(keys.event(created.slug), created);
+    toasts.show('Event created');
+
+    // Replaced rather than pushed: Back from the hub must not reopen a
+    // wizard for an Event that already exists.
+    await router.replace({ name: 'organise', params: { eventSlug: created.slug } });
+  } catch (caught) {
+    if (caught instanceof ApiError && caught.kind === 'validation') {
+      errors.value = caught.fields;
+      step.value = firstStepWith(caught.fields);
+    } else {
+      problem.value = caught instanceof ApiError ? caught.message : 'The event could not be created.';
+    }
+  } finally {
+    submitting.value = false;
+  }
+}
+
+const { data: gameSystems } = useQuery({
+  queryKey: keys.gameSystems(),
+  queryFn: () => fetchGameSystems(client),
+  retry: false,
+});
+
+const summary = computed(() => {
+  const { details, venue, shape, scoreTypes } = draft.value;
+  const where = [venue.venue_name, venue.venue_city].filter((part) => part !== '').join(', ');
+  const system = gameSystems.value?.find((candidate) => String(candidate.id) === shape.game_system_id);
+
+  return [
+    { label: 'Name', value: details.name },
+    { label: 'URL', value: `/events/${draft.value.slug}` },
+    { label: 'When', value: `${formatDateRange(details.starts_at, details.ends_at)} (${draft.value.timezone})` },
+    { label: 'Where', value: where === '' ? 'Not set yet' : where },
+    { label: 'Game system', value: system?.name ?? '' },
+    { label: 'Team size', value: teamSizeLabel(Number(shape.attendee_size)) },
+    { label: 'Places', value: shape.max_attendees === '' ? 'No limit' : shape.max_attendees },
+    { label: 'Scoring', value: scoreTypes.map((row) => row.name).join(', ') },
+  ];
+});
+</script>
+
+<template>
+  <main class="mx-auto flex w-full max-w-md flex-col gap-5 p-5">
+    <header class="flex flex-col gap-3">
+      <h1 class="text-2xl font-bold tracking-tight text-foreground">
+        Run an event
+      </h1>
+
+      <ol
+        aria-label="Steps"
+        class="flex gap-2 text-sm"
+      >
+        <li
+          v-for="(candidate, index) in WIZARD_STEPS"
+          :key="candidate.id"
+          :data-testid="`create-step-${candidate.id}`"
+          :aria-current="candidate.id === step ? 'step' : undefined"
+          class="flex-1 border-b-2 pb-1"
+          :class="index <= stepIndex ? 'border-primary text-foreground' : 'border-card-line text-muted-foreground'"
+        >
+          {{ candidate.name }}
+        </li>
+      </ol>
+    </header>
+
+    <AppAlert
+      v-if="problem"
+      tone="error"
+    >
+      {{ problem }}
+    </AppAlert>
+
+    <form
+      class="flex flex-col gap-5"
+      novalidate
+      @submit.prevent="step === 'confirm' ? submit() : next()"
+    >
+      <template v-if="step === 'details'">
+        <EventDetailsFields
+          v-model="draft.details"
+          :errors="errors"
+        >
+          <TextField
+            v-model="draft.slug"
+            label="URL"
+            hint="Lowercase letters, numbers and hyphens."
+            testid="create-slug"
+            :errors="errors.slug"
+          />
+        </EventDetailsFields>
+
+        <p
+          data-testid="create-timezone"
+          class="text-sm text-muted-foreground-1"
+        >
+          Times are in {{ draft.timezone }}.
+        </p>
+
+        <p
+          v-if="errors.timezone"
+          data-testid="create-timezone-error"
+          class="text-sm text-destructive"
+        >
+          {{ errors.timezone.join(' ') }}
+        </p>
+
+        <EventVenueFields
+          v-model="draft.venue"
+          :errors="errors"
+        />
+      </template>
+
+      <template v-else-if="step === 'format'">
+        <EventShapeFields
+          v-model="draft.shape"
+          :errors="errors"
+        />
+
+        <section class="flex flex-col gap-3">
+          <h2 class="text-sm font-semibold text-foreground">
+            Scoring
+          </h2>
+
+          <ScoreTypeListEditor
+            v-model="draft.scoreTypes"
+            :errors="scoreTypeErrors"
+          />
+
+          <p
+            v-if="errors.score_types"
+            data-testid="create-score-types-error"
+            class="text-sm text-destructive"
+          >
+            {{ errors.score_types[0] }}
+          </p>
+        </section>
+      </template>
+
+      <dl
+        v-else
+        data-testid="create-summary"
+        class="flex flex-col divide-y divide-card-divider rounded-lg border border-card-line bg-card"
+      >
+        <div
+          v-for="row in summary"
+          :key="row.label"
+          class="flex justify-between gap-4 px-4 py-3 text-sm"
+        >
+          <dt class="text-muted-foreground-1">
+            {{ row.label }}
+          </dt>
+          <dd class="text-right text-foreground">
+            {{ row.value }}
+          </dd>
+        </div>
+      </dl>
+
+      <div class="flex gap-3">
+        <AppButton
+          v-if="stepIndex > 0"
+          type="button"
+          variant="secondary"
+          data-testid="create-back"
+          @click="back"
+        >
+          Back
+        </AppButton>
+
+        <AppButton
+          v-if="step !== 'confirm'"
+          type="submit"
+          data-testid="create-next"
+          class="flex-1"
+        >
+          Next
+        </AppButton>
+
+        <AppButton
+          v-else
+          type="submit"
+          data-testid="create-submit"
+          class="flex-1"
+          :disabled="submitting"
+        >
+          {{ submitting ? 'Creating…' : 'Create event' }}
+        </AppButton>
+      </div>
+    </form>
+  </main>
+</template>
