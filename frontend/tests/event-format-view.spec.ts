@@ -176,7 +176,7 @@ describe('the event format screen', () => {
         await flushPromises();
 
         expect(view.text()).toContain('Event format');
-        expect(valueOf(view, 'format-max-attendees')).toBe('32');
+        expect(valueOf(view, 'event-max-attendees')).toBe('32');
     });
 
     it('sends only what the organiser changed', async () => {
@@ -188,7 +188,7 @@ describe('the event format screen', () => {
         const view = mountView();
         await flushPromises();
 
-        await view.get('[data-testid="format-max-attendees"]').setValue('24');
+        await view.get('[data-testid="event-max-attendees"]').setValue('24');
         await view.get('[data-testid="format-save"]').trigger('submit');
         await flushPromises();
 
@@ -208,7 +208,7 @@ describe('the event format screen', () => {
         const view = mountView();
         await flushPromises();
 
-        await view.get('[data-testid="format-max-attendees"]').setValue('');
+        await view.get('[data-testid="event-max-attendees"]').setValue('');
         await view.get('[data-testid="format-save"]').trigger('submit');
         await flushPromises();
 
@@ -225,7 +225,7 @@ describe('the event format screen', () => {
 
         expect(view.get('[data-testid="format-save"] button').attributes('disabled')).toBeDefined();
 
-        await view.get('[data-testid="format-max-attendees"]').setValue('24');
+        await view.get('[data-testid="event-max-attendees"]').setValue('24');
 
         expect(view.get('[data-testid="format-save"] button').attributes('disabled')).toBeUndefined();
     });
@@ -245,11 +245,11 @@ describe('the event format screen', () => {
         const view = mountView();
         await flushPromises();
 
-        await view.get('[data-testid="format-max-attendees"]').setValue('2');
+        await view.get('[data-testid="event-max-attendees"]').setValue('2');
         await view.get('[data-testid="format-save"]').trigger('submit');
         await flushPromises();
 
-        expect(view.get('[data-testid="format-max-attendees-error"]').text())
+        expect(view.get('[data-testid="event-max-attendees-error"]').text())
             .toContain('There are already 18 parties entered.');
     });
 
@@ -262,7 +262,7 @@ describe('the event format screen', () => {
         // The same answer as an Event that does not exist: whether someone
         // else's Event has an organiser screen is not this reader's business.
         expect(view.get('[data-testid="missing"]').text()).toContain('Not found');
-        expect(view.find('[data-testid="format-max-attendees"]').exists()).toBe(false);
+        expect(view.find('[data-testid="event-max-attendees"]').exists()).toBe(false);
     });
 
     it('opens the scoring on the columns the event already has, in the order they are shown', async () => {
@@ -274,7 +274,7 @@ describe('the event format screen', () => {
         const view = mountView();
         await flushPromises();
 
-        expect(view.findAll('[data-testid="format-score-type"]')).toHaveLength(2);
+        expect(view.findAll('[data-testid="score-type"]')).toHaveLength(2);
 
         // Folded, each column is its name and how it is scored; the fields
         // are behind the toggle.
@@ -307,7 +307,7 @@ describe('the event format screen', () => {
         const view = mountView();
         await flushPromises();
 
-        expect(view.get('[data-testid="format-no-score-types"]').text()).toContain('No scoring set up yet');
+        expect(view.get('[data-testid="no-score-types"]').text()).toContain('No scoring set up yet');
 
         // An Event with nothing to score on still has to be able to gain a
         // column, so the add control is not hidden with the list.
@@ -327,11 +327,11 @@ describe('the event format screen', () => {
         const view = mountView();
         await flushPromises();
 
-        expect(valueOf(view, 'format-game-system')).toBe('4');
-        expect(valueOf(view, 'format-attendee-size')).toBe('2');
+        expect(valueOf(view, 'event-game-system')).toBe('4');
+        expect(valueOf(view, 'event-attendee-size')).toBe('2');
 
-        await view.get('[data-testid="format-game-system"]').setValue('1');
-        await view.get('[data-testid="format-attendee-size"]').setValue('1');
+        await view.get('[data-testid="event-game-system"]').setValue('1');
+        await view.get('[data-testid="event-attendee-size"]').setValue('1');
         await view.get('[data-testid="format-save"]').trigger('submit');
         await flushPromises();
 
@@ -354,7 +354,7 @@ describe('the event format screen', () => {
 
         expect(view.text()).toContain('Max Attendees');
 
-        await view.get('[data-testid="format-attendee-size"]').setValue('2');
+        await view.get('[data-testid="event-attendee-size"]').setValue('2');
 
         expect(view.text()).toContain('Max Teams');
         expect(view.text()).not.toContain('Max Attendees');
@@ -366,9 +366,9 @@ describe('the event format screen', () => {
         const view = mountView();
         await flushPromises();
 
-        expect(view.get('[data-testid="format-game-system"]').attributes('disabled')).toBeDefined();
-        expect(view.get('[data-testid="format-attendee-size"]').attributes('disabled')).toBeDefined();
-        expect(view.get('[data-testid="format-shape-locked"]').text())
+        expect(view.get('[data-testid="event-game-system"]').attributes('disabled')).toBeDefined();
+        expect(view.get('[data-testid="event-attendee-size"]').attributes('disabled')).toBeDefined();
+        expect(view.get('[data-testid="event-shape-locked"]').text())
             .toContain('Game system and team size are now fixed.');
     });
 
@@ -463,7 +463,7 @@ describe('the event format screen', () => {
 
         // The places field is left half-filled: saving the scoring must not
         // depend on it.
-        await view.get('[data-testid="format-max-attendees"]').setValue('');
+        await view.get('[data-testid="event-max-attendees"]').setValue('');
         await expand(view, 1);
         await view.get('[data-testid="score-ranking-1"]').trigger('click');
         await view.get('[data-testid="format-scoring-save"]').trigger('submit');
@@ -633,7 +633,7 @@ describe('the event format screen', () => {
 
         await expand(view, 0);
 
-        expect(view.get('[data-testid="format-score-type"]').text())
+        expect(view.get('[data-testid="score-type"]').text())
             .toContain('Games have already been scored on this column');
 
         await view.get('[data-testid="score-remove-1"]').trigger('click');

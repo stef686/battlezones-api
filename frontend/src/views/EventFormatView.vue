@@ -10,21 +10,24 @@
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, ref, watch } from 'vue';
 
-import { Check, ChevronDown, ChevronUp, Trash2, TriangleAlert } from 'lucide-vue-next';
-
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent, updateEvent, type EventChanges, type EventSummary } from '@/api/events';
-import { fetchGameSystems } from '@/api/game-systems';
 import { keys } from '@/api/keys';
-import { columnLabel } from '@/api/rounds';
-import { fetchScoreTypes, replaceScoreTypes, type ScoreType, type ScoreTypeChange } from '@/api/score-types';
+import { fetchScoreTypes, replaceScoreTypes } from '@/api/score-types';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
+import EventShapeFields from '@/components/EventShapeFields.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
-import SelectField from '@/components/SelectField.vue';
-import TextField from '@/components/TextField.vue';
+import ScoreTypeListEditor from '@/components/ScoreTypeListEditor.vue';
+import {
+  errorsUnder,
+  scoreTypeChangeOf,
+  scoreTypeRowOf,
+  type EventShape,
+  type ScoreTypeRow,
+} from '@/lib/event-fields';
 
 const props = defineProps<{ eventSlug: string }>();
 
@@ -52,26 +55,6 @@ const forbidden = computed(() => event.value !== undefined && !mayOrganise.value
 const entered = computed(() => event.value?.attendees_count ?? null);
 const shapeLocked = computed(() => entered.value !== 0);
 
-const { data: gameSystems } = useQuery({
-  queryKey: keys.gameSystems(),
-  queryFn: () => fetchGameSystems(client),
-  enabled: computed(() => mayOrganise.value && !shapeLocked.value),
-  retry: false,
-});
-
-const gameSystemOptions = computed(() => (gameSystems.value ?? [])
-  .map((system) => ({ value: String(system.id), label: system.name })));
-
-/** One Player is singles; anything more is a team of that size. */
-const partySizeOptions = Array.from({ length: 8 }, (_, index) => ({
-  value: String(index + 1),
-  label: index === 0 ? 'Singles — one player' : `Teams of ${index + 1}`,
-}));
-
-/**
- * The scoring is read here and edited in a later slice: an Organiser needs to
- * see what their Players will be asked for before they can change it.
- */
 const { data: scoreTypes } = useQuery({
   queryKey: computed(() => keys.scoreTypes(props.eventSlug)),
   queryFn: () => fetchScoreTypes(client, props.eventSlug),
@@ -79,73 +62,7 @@ const { data: scoreTypes } = useQuery({
   retry: false,
 });
 
-/** A Score Type as the screen edits it: points are text while being typed. */
-interface ScoreRow {
-  /** Null on a column being added, which the API creates. */
-  id: number | null;
-  /** Stable for the life of the row, so a reorder does not remount its inputs. */
-  key: string;
-  name: string;
-  /** Blank means the API works one out from the name. */
-  abbreviation: string;
-  sort_direction: 'asc' | 'desc';
-  is_derived: boolean;
-  is_primary: boolean;
-  counts_for_ranking: boolean;
-  win_points: string;
-  draw_points: string;
-  loss_points: string;
-  is_scored: boolean;
-}
-
-function rowOf(scoreType: ScoreType): ScoreRow {
-  return {
-    id: scoreType.id,
-    key: `saved-${scoreType.id}`,
-    name: scoreType.name,
-    abbreviation: scoreType.abbreviation,
-    sort_direction: scoreType.sort_direction,
-    is_derived: scoreType.is_derived,
-    is_primary: scoreType.is_primary,
-    counts_for_ranking: scoreType.counts_for_ranking,
-    win_points: scoreType.win_points ?? '',
-    draw_points: scoreType.draw_points ?? '',
-    loss_points: scoreType.loss_points ?? '',
-    is_scored: scoreType.is_scored,
-  };
-}
-
-let added = 0;
-
-/** A blank column, ready to be named. */
-function blankRow(): ScoreRow {
-  return {
-    id: null,
-    key: `new-${++added}`,
-    name: '',
-    abbreviation: '',
-    sort_direction: 'desc',
-    is_derived: false,
-    is_primary: false,
-    counts_for_ranking: true,
-    win_points: '',
-    draw_points: '',
-    loss_points: '',
-    is_scored: false,
-  };
-}
-
-const sourceOptions = [
-  { value: 'entered', label: 'Game score' },
-  { value: 'derived', label: 'Calculated from the result' },
-];
-
-const directionOptions = [
-  { value: 'desc', label: 'Higher to lower' },
-  { value: 'asc', label: 'Lower to higher' },
-];
-
-const rows = ref<ScoreRow[] | null>(null);
+const rows = ref<ScoreTypeRow[] | null>(null);
 const savedRows = ref<string | null>(null);
 
 watch(scoreTypes, (loaded) => {
@@ -153,136 +70,23 @@ watch(scoreTypes, (loaded) => {
     return;
   }
 
-  // Same rule as the Event fields above: a background refetch never replaces
+  // Same rule as the Event fields below: a background refetch never replaces
   // an edit in progress.
   if (rows.value === null || scoringDirty.value === false) {
-    rows.value = loaded.map(rowOf);
+    rows.value = loaded.map(scoreTypeRowOf);
     savedRows.value = JSON.stringify(rows.value);
   }
 }, { immediate: true });
 
 const scoringDirty = computed(() => rows.value !== null && JSON.stringify(rows.value) !== savedRows.value);
 
-/** Move a row up or down; its new position is its display and ranking order. */
-function move(index: number, by: number): void {
-  const current = rows.value;
-  const target = index + by;
-
-  if (current === null || target < 0 || target >= current.length) {
-    return;
-  }
-
-  const [moved] = current.splice(index, 1);
-
-  if (moved !== undefined) {
-    current.splice(target, 0, moved);
-  }
-}
-
-/**
- * Only one row may lead a Game listing, so claiming it takes it off whoever
- * held it — the API refuses two, and being told off for a toggle you can see
- * is worse than the screen just doing the obvious thing.
- */
-function claimLead(index: number): void {
-  const current = rows.value;
-
-  if (current === null) {
-    return;
-  }
-
-  const claiming = current[index]?.is_primary !== true;
-
-  current.forEach((row, position) => {
-    row.is_primary = claiming && position === index;
-  });
-}
-
-/**
- * The keys of the columns drawn open.
- *
- * An Event's scoring is set up once and read past every time after that, so
- * the set arrives folded and an Organiser opens the one they came for. A
- * column they add is opened for them — it is blank, and there is nothing to
- * read on a card whose fields are all empty. Keys rather than indexes, so
- * folding one and reordering the set does not unfold somebody else.
- */
-const expanded = ref<Set<string>>(new Set());
-
-function toggle(key: string): void {
-  if (expanded.value.has(key)) {
-    expanded.value.delete(key);
-  } else {
-    expanded.value.add(key);
-  }
-
-  expanded.value = new Set(expanded.value);
-}
-
-/**
- * A folded column with something to answer for is unfolded by the screen: a
- * rejected field that cannot be seen is a form that will not save and will not
- * say why.
- */
-function open(index: number, key: string): boolean {
-  return expanded.value.has(key) || rowRejected(index);
-}
-
-function rowRejected(index: number): boolean {
-  return Object.keys(scoringErrors.value).some((field) => field.startsWith(`score_types.${index}.`));
-}
-
-/** What a folded column says about itself, under its name. */
-function summaryOf(row: ScoreRow): string {
-  const source = sourceOptions.find((option) => option.value === (row.is_derived ? 'derived' : 'entered'));
-  const direction = directionOptions.find((option) => option.value === row.sort_direction);
-
-  return `${source?.label} · ${direction?.label.toLowerCase()}`;
-}
-
-/**
- * The heading a folded column says it will be shown under, which is the
- * Organiser's own where they wrote one and the API's answer where they did
- * not — worked out here so the card reads the same before a save as after it.
- */
-function headingOf(row: ScoreRow): string {
-  return columnLabel({ name: row.name, abbreviation: row.abbreviation });
-}
-
-function addRow(): void {
-  const row = blankRow();
-
-  rows.value?.push(row);
-  expanded.value = new Set(expanded.value).add(row.key);
-}
-
-/**
- * Drop a column. Refused on one Games have been scored on: the scores would
- * cascade away with it, taking the Standings computed from them.
- */
-function removeRow(index: number): void {
-  const current = rows.value;
-
-  if (current === null || current[index]?.is_scored === true) {
-    return;
-  }
-
-  current.splice(index, 1);
-}
-
 const savingScoring = ref(false);
 const scoringProblem = ref<string | null>(null);
 const scoringErrors = ref<Record<string, string[]>>({});
 const scoringDone = ref(false);
 
-/** The messages the API keyed to one row's field, if any. */
-function rowErrors(index: number, field: string): string[] {
-  return scoringErrors.value[`score_types.${index}.${field}`] ?? [];
-}
-
-function pointsOf(value: string): number | null {
-  return value === '' ? null : Number(value);
-}
+/** The API keys a row's messages under the body's `score_types`; the editor keys them by row. */
+const rowErrors = computed(() => errorsUnder(scoringErrors.value, 'score_types'));
 
 async function saveScoring(): Promise<void> {
   if (rows.value === null || savingScoring.value) {
@@ -294,24 +98,11 @@ async function saveScoring(): Promise<void> {
   scoringErrors.value = {};
   scoringDone.value = false;
 
-  const payload: ScoreTypeChange[] = rows.value.map((row) => ({
-    id: row.id,
-    name: row.name,
-    abbreviation: row.abbreviation,
-    sort_direction: row.sort_direction,
-    is_derived: row.is_derived,
-    is_primary: row.is_primary,
-    counts_for_ranking: row.counts_for_ranking,
-    win_points: row.is_derived ? pointsOf(row.win_points) : null,
-    draw_points: row.is_derived ? pointsOf(row.draw_points) : null,
-    loss_points: row.is_derived ? pointsOf(row.loss_points) : null,
-  }));
-
   try {
-    const updated = await replaceScoreTypes(client, props.eventSlug, payload);
+    const updated = await replaceScoreTypes(client, props.eventSlug, rows.value.map(scoreTypeChangeOf));
 
     queryClient.setQueryData(keys.scoreTypes(props.eventSlug), updated);
-    rows.value = updated.map(rowOf);
+    rows.value = updated.map(scoreTypeRowOf);
     savedRows.value = JSON.stringify(rows.value);
     scoringDone.value = true;
   } catch (caught) {
@@ -325,13 +116,7 @@ async function saveScoring(): Promise<void> {
   }
 }
 
-interface Form {
-  max_attendees: string;
-  game_system_id: string;
-  attendee_size: string;
-}
-
-function formOf(loaded: EventSummary): Form {
+function formOf(loaded: EventSummary): EventShape {
   return {
     max_attendees: loaded.max_attendees === null ? '' : String(loaded.max_attendees),
     game_system_id: loaded.game_system === null ? '' : String(loaded.game_system.id),
@@ -339,8 +124,8 @@ function formOf(loaded: EventSummary): Form {
   };
 }
 
-const form = ref<Form | null>(null);
-const saved = ref<Form | null>(null);
+const form = ref<EventShape | null>(null);
+const saved = ref<EventShape | null>(null);
 
 watch(event, (loaded) => {
   if (loaded === undefined) {
@@ -383,14 +168,6 @@ const changes = computed<EventChanges>(() => {
 });
 
 const dirty = computed(() => Object.keys(changes.value).length > 0);
-
-/**
- * What a place is called follows the size being chosen, not the size the
- * Event was saved at: an Organiser who has just picked doubles is buying
- * teams from that moment, and a field still counting Attendees reads as the
- * limit meaning something other than it does.
- */
-const placesLabel = computed(() => (Number(form.value?.attendee_size ?? 1) > 1 ? 'Max Teams' : 'Max Attendees'));
 
 const saving = ref(false);
 const problem = ref<string | null>(null);
@@ -475,46 +252,10 @@ async function save(): Promise<void> {
         class="flex flex-col gap-5"
         @submit.prevent="save"
       >
-        <!-- Above the two fields it explains rather than under them: a
-             disabled select says nothing about why it will not open, and a
-             reason read after the reader has already tried is a reason late. -->
-        <AppAlert
-          v-if="shapeLocked"
-          data-testid="format-shape-locked"
-          tone="warning"
-        >
-          <span class="flex items-start gap-x-2">
-            <TriangleAlert class="mt-px size-4 shrink-0" />
-            Game system and team size are now fixed.
-          </span>
-        </AppAlert>
-
-        <SelectField
-          v-model="form.game_system_id"
-          label="Game system"
-          :options="gameSystemOptions"
-          placeholder="Choose a game"
-          :disabled="shapeLocked"
-          testid="format-game-system"
-          :errors="errors.game_system_id"
-        />
-
-        <SelectField
-          v-model="form.attendee_size"
-          label="Team size"
-          :options="partySizeOptions"
-          :disabled="shapeLocked"
-          testid="format-attendee-size"
-          :errors="errors.attendee_size"
-        />
-
-        <TextField
-          v-model="form.max_attendees"
-          :label="placesLabel"
-          inputmode="numeric"
-          hint="Leave empty for no limit."
-          testid="format-max-attendees"
-          :errors="errors.max_attendees"
+        <EventShapeFields
+          v-model="form"
+          :locked="shapeLocked"
+          :errors="errors"
         />
 
         <AppButton
@@ -552,196 +293,10 @@ async function save(): Promise<void> {
           class="flex flex-col gap-4"
           @submit.prevent="saveScoring"
         >
-          <div
-            v-for="(row, index) in rows"
-            :key="row.key"
-            data-testid="format-score-type"
-            class="flex flex-col gap-4 rounded-lg border border-card-line bg-card p-4"
-          >
-            <div class="flex items-start justify-between gap-3">
-              <button
-                type="button"
-                :data-testid="`score-toggle-${index}`"
-                :aria-expanded="open(index, row.key)"
-                :aria-controls="`score-fields-${index}`"
-                class="flex min-w-0 flex-1 items-start gap-x-2 text-left"
-                @click="toggle(row.key)"
-              >
-                <ChevronDown
-                  class="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform"
-                  :class="open(index, row.key) ? '' : '-rotate-90'"
-                />
-                <span class="min-w-0">
-                  <span class="block truncate text-sm font-medium text-foreground">
-                    {{ row.name === '' ? `Column ${index + 1}` : row.name }}
-                    <span
-                      v-if="row.name !== ''"
-                      class="text-muted-foreground-1"
-                    >· {{ headingOf(row) }}</span>
-                  </span>
-                  <span
-                    v-if="!open(index, row.key)"
-                    class="block truncate text-xs text-muted-foreground-1"
-                  >{{ summaryOf(row) }}</span>
-                </span>
-              </button>
-              <div class="flex gap-1">
-                <button
-                  type="button"
-                  :data-testid="`score-up-${index}`"
-                  :disabled="index === 0"
-                  class="rounded-md border border-card-line p-1.5 text-muted-foreground hover:text-foreground disabled:opacity-40"
-                  :aria-label="`Move ${row.name} up`"
-                  @click="move(index, -1)"
-                >
-                  <ChevronUp class="size-4" />
-                </button>
-                <button
-                  type="button"
-                  :data-testid="`score-remove-${index}`"
-                  :disabled="row.is_scored"
-                  class="rounded-md border border-card-line p-1.5 text-muted-foreground hover:text-destructive disabled:opacity-40"
-                  :aria-label="`Remove ${row.name}`"
-                  @click="removeRow(index)"
-                >
-                  <Trash2 class="size-4" />
-                </button>
-                <button
-                  type="button"
-                  :data-testid="`score-down-${index}`"
-                  :disabled="index === rows.length - 1"
-                  class="rounded-md border border-card-line p-1.5 text-muted-foreground hover:text-foreground disabled:opacity-40"
-                  :aria-label="`Move ${row.name} down`"
-                  @click="move(index, 1)"
-                >
-                  <ChevronDown class="size-4" />
-                </button>
-              </div>
-            </div>
-
-            <div
-              v-if="open(index, row.key)"
-              :id="`score-fields-${index}`"
-              class="flex flex-col gap-4"
-            >
-              <TextField
-                v-model="row.name"
-                label="Name"
-                :testid="`score-name-${index}`"
-                :errors="rowErrors(index, 'name')"
-              />
-
-              <TextField
-                v-model="row.abbreviation"
-                label="Abbreviation"
-                :testid="`score-abbreviation-${index}`"
-                :errors="rowErrors(index, 'abbreviation')"
-              />
-
-              <SelectField
-                :model-value="row.is_derived ? 'derived' : 'entered'"
-                label="How it is scored"
-                :options="sourceOptions"
-                :testid="`score-source-${index}`"
-                :errors="rowErrors(index, 'is_derived')"
-                @update:model-value="row.is_derived = $event === 'derived'"
-              />
-
-              <div
-                v-if="row.is_derived"
-                class="grid grid-cols-3 gap-3"
-              >
-                <TextField
-                  v-model="row.win_points"
-                  label="Win"
-                  inputmode="numeric"
-                  :testid="`score-win-${index}`"
-                  :errors="rowErrors(index, 'win_points')"
-                />
-                <TextField
-                  v-model="row.draw_points"
-                  label="Draw"
-                  inputmode="numeric"
-                  :testid="`score-draw-${index}`"
-                  :errors="rowErrors(index, 'draw_points')"
-                />
-                <TextField
-                  v-model="row.loss_points"
-                  label="Loss"
-                  inputmode="numeric"
-                  :testid="`score-loss-${index}`"
-                  :errors="rowErrors(index, 'loss_points')"
-                />
-              </div>
-
-              <SelectField
-                v-model="row.sort_direction"
-                label="Order"
-                :options="directionOptions"
-                :testid="`score-direction-${index}`"
-                :errors="rowErrors(index, 'sort_direction')"
-              />
-
-              <div class="flex flex-col gap-2">
-                <button
-                  type="button"
-                  :data-testid="`score-primary-${index}`"
-                  :aria-pressed="row.is_primary"
-                  class="flex items-center justify-between gap-3 rounded-lg border px-4 py-3 text-left text-sm"
-                  :class="row.is_primary ? 'border-primary text-foreground' : 'border-card-line text-muted-foreground'"
-                  @click="claimLead(index)"
-                >
-                  <span>Show on game listing</span>
-                  <Check
-                    v-if="row.is_primary"
-                    class="size-4 shrink-0"
-                  />
-                </button>
-
-                <button
-                  type="button"
-                  :data-testid="`score-ranking-${index}`"
-                  :aria-pressed="row.counts_for_ranking"
-                  class="flex items-center justify-between gap-3 rounded-lg border px-4 py-3 text-left text-sm"
-                  :class="row.counts_for_ranking ? 'border-primary text-foreground' : 'border-card-line text-muted-foreground'"
-                  @click="row.counts_for_ranking = !row.counts_for_ranking"
-                >
-                  <span>Show in standings</span>
-                  <Check
-                    v-if="row.counts_for_ranking"
-                    class="size-4 shrink-0"
-                  />
-                </button>
-              </div>
-
-              <AppAlert
-                v-if="row.is_scored"
-                tone="warning"
-              >
-                <span class="flex items-start gap-x-2">
-                  <TriangleAlert class="mt-px size-4 shrink-0" />
-                  Games have already been scored on this column.
-                </span>
-              </AppAlert>
-            </div>
-          </div>
-
-          <p
-            v-if="rows.length === 0"
-            data-testid="format-no-score-types"
-            class="text-sm text-muted-foreground-1"
-          >
-            No scoring set up yet.
-          </p>
-
-          <button
-            type="button"
-            data-testid="score-add"
-            class="rounded-lg border border-dashed border-card-line px-4 py-3 text-sm text-muted-foreground hover:text-foreground"
-            @click="addRow"
-          >
-            Add a score
-          </button>
+          <ScoreTypeListEditor
+            v-model="rows"
+            :errors="rowErrors"
+          />
 
           <p
             v-if="scoringErrors.score_types"

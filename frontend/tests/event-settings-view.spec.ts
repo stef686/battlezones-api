@@ -132,8 +132,8 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        expect(valueOf(view, 'settings-name')).toBe('London Grand Tournament');
-        expect(valueOf(view, 'settings-venue-city')).toBe('London');
+        expect(valueOf(view, 'event-name')).toBe('London Grand Tournament');
+        expect(valueOf(view, 'event-venue-city')).toBe('London');
     });
 
     it('sends only what the organiser changed', async () => {
@@ -145,7 +145,7 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        await view.get('[data-testid="settings-name"]').setValue('Croydon Grand Tournament');
+        await view.get('[data-testid="event-name"]').setValue('Croydon Grand Tournament');
         await view.get('[data-testid="settings-save"]').trigger('submit');
         await flushPromises();
 
@@ -172,11 +172,11 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        await view.get('[data-testid="settings-venue-country"]').setValue('FR');
+        await view.get('[data-testid="event-venue-country"]').setValue('FR');
         await view.get('[data-testid="settings-save"]').trigger('submit');
         await flushPromises();
 
-        expect(view.get('[data-testid="settings-venue-country-error"]').text())
+        expect(view.get('[data-testid="event-venue-country-error"]').text())
             .toContain('That is not a country code.');
     });
 
@@ -190,7 +190,7 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        const country = view.get<HTMLSelectElement>('[data-testid="settings-venue-country"]');
+        const country = view.get<HTMLSelectElement>('[data-testid="event-venue-country"]');
 
         expect(country.element.tagName).toBe('SELECT');
         expect(country.element.value).toBe('GB');
@@ -225,7 +225,7 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        const input = view.get<HTMLInputElement>('[data-testid="settings-banner"]');
+        const input = view.get<HTMLInputElement>('[data-testid="event-banner"]');
         const file = new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' });
 
         Object.defineProperty(input.element, 'files', { value: [file] });
@@ -236,7 +236,7 @@ describe('the event settings screen', () => {
 
         expect(upload).toBeDefined();
         expect((upload?.[1] as RequestInit).body).toBeInstanceOf(FormData);
-        expect(view.get<HTMLImageElement>('[data-testid="settings-banner-preview"]').element.src)
+        expect(view.get<HTMLImageElement>('[data-testid="event-banner-preview"]').element.src)
             .toBe('https://cdn.test/l.webp');
     });
 
@@ -252,13 +252,30 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        const input = view.get<HTMLInputElement>('[data-testid="settings-banner"]');
+        const input = view.get<HTMLInputElement>('[data-testid="event-banner"]');
         Object.defineProperty(input.element, 'files', { value: [new File(['bytes'], 'logo.png', { type: 'image/png' })] });
         await input.trigger('change');
         await flushPromises();
 
-        expect(view.get('[data-testid="settings-banner-error"]').text())
+        expect(view.get('[data-testid="event-banner-error"]').text())
             .toContain('at least 1200 pixels wide');
+    });
+
+    it('refuses a banner over the size limit before uploading it', async () => {
+        const fetch = stubApi({ [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        const input = view.get<HTMLInputElement>('[data-testid="event-banner"]');
+        const oversized = new File([new Uint8Array(8 * 1024 * 1024 + 1)], 'hall.jpg', { type: 'image/jpeg' });
+
+        Object.defineProperty(input.element, 'files', { value: [oversized] });
+        await input.trigger('change');
+        await flushPromises();
+
+        expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/banner'))).toBe(false);
+        expect(view.get('[data-testid="event-banner-error"]').text()).toContain('8MB');
     });
 
     it('removes a banner, returning the header to its flat state', async () => {
@@ -272,7 +289,7 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        const remove = view.get('[data-testid="settings-banner-remove"]');
+        const remove = view.get('[data-testid="event-banner-remove"]');
 
         expect(remove.text()).toBe('Remove banner');
         expect(remove.find('svg').exists()).toBe(true);
@@ -281,7 +298,7 @@ describe('the event settings screen', () => {
         await flushPromises();
 
         expect(fetch.mock.calls.some(([, init]) => (init as RequestInit | undefined)?.method === 'DELETE')).toBe(true);
-        expect(view.find('[data-testid="settings-banner-preview"]').exists()).toBe(false);
+        expect(view.find('[data-testid="event-banner-preview"]').exists()).toBe(false);
     });
 
     it('offers nothing to remove when there is no banner', async () => {
@@ -290,7 +307,7 @@ describe('the event settings screen', () => {
         const view = mountView();
         await flushPromises();
 
-        expect(view.find('[data-testid="settings-banner-remove"]').exists()).toBe(false);
+        expect(view.find('[data-testid="event-banner-remove"]').exists()).toBe(false);
     });
 
     it('tells a reader who does not run this event that the page is not there', async () => {
@@ -300,6 +317,6 @@ describe('the event settings screen', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="missing"]').text().toLowerCase()).toContain('not found');
-        expect(view.find('[data-testid="settings-name"]').exists()).toBe(false);
+        expect(view.find('[data-testid="event-name"]').exists()).toBe(false);
     });
 });
