@@ -2,7 +2,8 @@ import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Router } from 'vue-router';
+import { defineComponent } from 'vue';
+import { RouterView, type Router } from 'vue-router';
 
 import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
@@ -11,7 +12,6 @@ import { useSessionStore } from '@/stores/session';
 import { useToastStore } from '@/stores/toast';
 
 import { fakeImages } from './fake-images';
-import CreateEventView from '@/views/CreateEventView.vue';
 
 const GAME_SYSTEMS = {
     status: 200,
@@ -89,13 +89,24 @@ let router: Router;
 let pinia: ReturnType<typeof createPinia>;
 let queryClient: QueryClient;
 
+/**
+ * Every wizard a spec drew, unmounted before the mocks it leans on are put
+ * back: one left mounted keeps its beforeunload listener on the window.
+ */
+const mounted: { unmount: () => void }[] = [];
+
 function mountView() {
     // Attached, because a button only submits the form it sits in once both
     // are in a document — which is how Next and Create reach the wizard.
-    return mount(CreateEventView, {
+    // Drawn by the router, as the app draws it, so its leave guard is live.
+    const view = mount(defineComponent({ components: { RouterView }, template: '<RouterView />' }), {
         attachTo: document.body,
         global: { plugins: [pinia, router, [VueQueryPlugin, { queryClient }]] },
     });
+
+    mounted.push(view);
+
+    return view;
 }
 
 type View = ReturnType<typeof mountView>;
@@ -168,6 +179,7 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
+    mounted.splice(0).forEach((view) => view.unmount());
     document.body.innerHTML = '';
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
@@ -632,5 +644,214 @@ describe('the look step', () => {
         await toConfirmWith(view, null);
 
         expect(view.get('[data-testid="create-summary-look"]').text()).toContain('No banner');
+    });
+});
+
+describe('moving around the wizard', () => {
+    function stepButton(view: View, step: string) {
+        return view.find(`[data-testid="create-step-${step}"] button`);
+    }
+
+    it('lets the organiser jump back to a step already done, but not on to one not yet reached', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(stepButton(view, 'details').exists()).toBe(false);
+        expect(stepButton(view, 'look').exists()).toBe(false);
+
+        await fillDetails(view);
+        await view.get('[data-testid="event-venue-city"]').setValue('Croydon');
+        await next(view);
+        await skipLook(view);
+
+        expect(stepButton(view, 'details').exists()).toBe(true);
+        expect(stepButton(view, 'look').exists()).toBe(true);
+        expect(stepButton(view, 'confirm').exists()).toBe(false);
+
+        await stepButton(view, 'details').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="create-step-details"]').attributes('aria-current')).toBe('step');
+        expect(view.get<HTMLInputElement>('[data-testid="event-name"]').element.value).toBe('Croydon Doubles');
+        expect(view.get<HTMLInputElement>('[data-testid="event-venue-city"]').element.value).toBe('Croydon');
+    });
+
+    it('holds the steps in between to what they ask for when jumping forward again', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+
+        await stepButton(view, 'details').trigger('click');
+        await flushPromises();
+        await view.get('[data-testid="event-name"]').setValue('');
+        await stepButton(view, 'confirm').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="create-step-details"]').attributes('aria-current')).toBe('step');
+        expect(view.get('[data-testid="event-name-error"]').text()).toContain('name');
+    });
+
+    it.each([
+        ['details', 'Croydon Doubles'],
+        ['look', 'No banner'],
+        ['format', 'Horus Heresy'],
+    ])('sums up the %s step on confirm, with an edit link back to it', async (step, shown) => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+
+        expect(view.get(`[data-testid="create-summary-${step}"]`).text()).toContain(shown);
+
+        await view.get(`[data-testid="create-edit-${step}"]`).trigger('click');
+        await flushPromises();
+
+        expect(view.get(`[data-testid="create-step-${step}"]`).attributes('aria-current')).toBe('step');
+    });
+
+    it('says on confirm that the event saves as a draft only its organisers can see', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+
+        expect(view.get('[data-testid="create-draft-note"]').text()).toMatch(/draft.*organisers.*published/i);
+    });
+});
+
+describe('leaving the wizard', () => {
+    const ELSEWHERE = { name: 'login' } as const;
+
+    function leaveDialog(view: View) {
+        return view.get('[data-testid="create-leave"]');
+    }
+
+    it('asks before leaving with changes, and stays put when the organiser cancels', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="event-name"]').setValue('Croydon Doubles');
+        await router.push(ELSEWHERE);
+        await flushPromises();
+
+        expect(router.currentRoute.value.name).toBe('create-event');
+        expect(leaveDialog(view).attributes('open')).toBeDefined();
+
+        await view.get('[data-testid="create-leave-cancel"]').trigger('click');
+        await flushPromises();
+
+        expect(leaveDialog(view).attributes('open')).toBeUndefined();
+        expect(router.currentRoute.value.name).toBe('create-event');
+        expect(view.get<HTMLInputElement>('[data-testid="event-name"]').element.value).toBe('Croydon Doubles');
+    });
+
+    it('leaves where the organiser was going once they confirm', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="event-name"]').setValue('Croydon Doubles');
+        await router.push(ELSEWHERE);
+        await flushPromises();
+        await view.get('[data-testid="create-leave-confirm"]').trigger('click');
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('login'));
+    });
+
+    it('leaves without asking when nothing has been entered', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await router.push(ELSEWHERE);
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('login'));
+        expect(view.find('[data-testid="create-leave"][open]').exists()).toBe(false);
+    });
+});
+
+describe('closing the tab on the wizard', () => {
+    /** Whether the browser would be told to ask before closing or reloading. */
+    function wouldAsk(): boolean {
+        const event = new Event('beforeunload', { cancelable: true });
+
+        window.dispatchEvent(event);
+
+        return event.defaultPrevented;
+    }
+
+    it('asks only once something has been entered', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(wouldAsk()).toBe(false);
+
+        await view.get('[data-testid="event-name"]').setValue('Croydon Doubles');
+
+        expect(wouldAsk()).toBe(true);
+    });
+
+    it('stops asking once the event is created', async () => {
+        stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 201, body: createdBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('organise'));
+        expect(wouldAsk()).toBe(false);
+    });
+
+    it('stops asking once the organiser has chosen to leave', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="event-name"]').setValue('Croydon Doubles');
+        await router.push({ name: 'login' });
+        await flushPromises();
+        await view.get('[data-testid="create-leave-confirm"]').trigger('click');
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('login'));
+        expect(wouldAsk()).toBe(false);
     });
 });

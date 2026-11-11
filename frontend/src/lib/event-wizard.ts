@@ -109,6 +109,15 @@ export function blankDraft(timezone: string, now: Date = new Date()): EventDraft
 }
 
 /**
+ * Whether a draft is still exactly as it started, so leaving it loses nothing.
+ * A Banner is only ever chosen, so holding one is a change in itself.
+ */
+export function isUntouched(draft: EventDraft, blank: EventDraft): boolean {
+    return draft.banner === null
+        && JSON.stringify({ ...draft, banner: null }) === JSON.stringify({ ...blank, banner: null });
+}
+
+/**
  * What stops a step from passing, keyed as the API keys its own refusals, so
  * a message from either lands under the same field.
  */
@@ -122,6 +131,31 @@ export function problemsOf(step: WizardStep, draft: EventDraft, now: Date = new 
     }
 
     return {};
+}
+
+/**
+ * Where a jump from one step to another lands, and what stopped it short. A
+ * jump back always lands; a jump forward stops at the first step on the way
+ * that does not pass, so no step can be skipped by going round it.
+ */
+export function landingOf(
+    from: WizardStep,
+    to: WizardStep,
+    draft: EventDraft,
+    now: Date = new Date(),
+): { step: WizardStep; problems: FieldErrors } {
+    const fromIndex = WIZARD_STEPS.findIndex((step) => step.id === from);
+    const toIndex = WIZARD_STEPS.findIndex((step) => step.id === to);
+
+    for (const { id } of WIZARD_STEPS.slice(fromIndex, toIndex)) {
+        const problems = problemsOf(id, draft, now);
+
+        if (Object.keys(problems).length > 0) {
+            return { step: id, problems };
+        }
+    }
+
+    return { step: to, problems: {} };
 }
 
 /** The step a refused field is asked on, so a 422 can send the Organiser back to it. */
