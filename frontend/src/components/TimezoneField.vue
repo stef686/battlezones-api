@@ -3,9 +3,9 @@
  * The IANA timezone an Event is run in, picked from a list narrowed by a search.
  *
  * Edits a value its parent owns and never writes to the API. The zones are the
- * browser's own (`Intl.supportedValuesOf`), which the API accepts with
- * backward-compatible names included, so a phone that still calls Kolkata
- * "Asia/Calcutta" can send what it reports.
+ * API's own list, read under the shared key, because that is the list it
+ * validates against: a browser's list holds old names (Chrome's "Asia/Calcutta")
+ * the server may refuse.
  *
  * A search box over a native `<select>` rather than a hand-built combobox, for
  * the same reason `SelectField` is native: the platform picker already works
@@ -15,11 +15,15 @@
  * `fixedReason` is the parent's answer to whether the zone can still change;
  * given, the zone is shown disabled with that reason above it and no search.
  */
+import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
 
+import { useApiClient } from '@/api';
+import { keys } from '@/api/keys';
+import { fetchTimezones } from '@/api/timezones';
 import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
-import { timezoneLabel, timezones } from '@/lib/timezones';
+import { timezoneLabel } from '@/lib/timezones';
 
 const props = withDefaults(defineProps<{
   errors?: string[];
@@ -31,11 +35,23 @@ const props = withDefaults(defineProps<{
 
 const model = defineModel<string>({ required: true });
 
+const client = useApiClient();
+
+// Reference data that never changes under a session, and is not needed at
+// all while the zone is fixed.
+const { data: timezones } = useQuery({
+  queryKey: keys.timezones(),
+  queryFn: () => fetchTimezones(client),
+  enabled: computed(() => props.fixedReason === null),
+  staleTime: Infinity,
+  retry: false,
+});
+
 const search = ref('');
 
 const options = computed(() => {
   const needle = search.value.trim().toLowerCase().replace(/[\s_]+/g, ' ');
-  const matching = timezones().filter((zone) => needle === ''
+  const matching = (timezones.value ?? []).filter((zone) => needle === ''
     || zone === model.value
     || timezoneLabel(zone).toLowerCase().includes(needle));
   const zones = matching.includes(model.value) ? matching : [model.value, ...matching];

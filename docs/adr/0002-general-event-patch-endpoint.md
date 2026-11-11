@@ -58,11 +58,11 @@ once it has one, with a message naming the reason.
 The line is drawn at the first block because blocks store absolute timestamps and derive their day
 from the Event's timezone: changing the zone under an existing schedule would silently move blocks
 onto different days. Before the first block, nothing is anchored to the old zone. The value must be
-an IANA identifier from `DateTimeZone::listIdentifiers(DateTimeZone::ALL_WITH_BC)`, on create and
-PATCH alike. The backward-compatible names are accepted because the SPA lists the browser's own
-zones and defaults to the browser's zone, and some browsers still report the old names
-(`Asia/Calcutta` for `Asia/Kolkata`). Each names the same zone, so refusing one would only refuse
-the Organiser's own phone.
+an IANA identifier from `DateTimeZone::listIdentifiers()`, on create and PATCH alike, and
+`GET /timezones` serves that same list for the SPA's picker. The browser's own list is not used:
+browsers take zone names from CLDR, which keeps old names (`Asia/Calcutta` for `Asia/Kolkata`), and
+whether the server knows those depends on how its PHP was packaged (Ubuntu 24.04 moved them to
+`tzdata-legacy`). The wizard maps the browser's zone to its current name before defaulting to it.
 
 ## Amendment: the Event Colour is always editable
 

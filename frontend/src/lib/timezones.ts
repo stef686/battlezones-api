@@ -1,20 +1,48 @@
 /**
- * The timezones an Event can be run in, and how each one reads.
+ * How a timezone reads, and the current name for one a browser reports.
  *
- * The list is the browser's, so it stays as current as the device's own
- * zone data. The API accepts every name in it, the old backward-compatible
- * ones included.
+ * The list an Event's zone is picked from comes from the API (`fetchTimezones`),
+ * because that is the list it validates against.
  */
 
-let zones: string[] | null = null;
-const labels = new Map<string, string>();
+/**
+ * Old names some browsers still report for their own zone, against the names
+ * the IANA database uses now. Browsers take their zone names from CLDR, which
+ * kept these for compatibility; a server's PHP may not know the old ones at
+ * all. Only the wizard's default passes through here — anything picked comes
+ * from the API's own list.
+ */
+const CURRENT_NAMES: Readonly<Record<string, string>> = {
+    'Africa/Asmera': 'Africa/Asmara',
+    'America/Buenos_Aires': 'America/Argentina/Buenos_Aires',
+    'America/Catamarca': 'America/Argentina/Catamarca',
+    'America/Coral_Harbour': 'America/Atikokan',
+    'America/Cordoba': 'America/Argentina/Cordoba',
+    'America/Godthab': 'America/Nuuk',
+    'America/Indianapolis': 'America/Indiana/Indianapolis',
+    'America/Jujuy': 'America/Argentina/Jujuy',
+    'America/Louisville': 'America/Kentucky/Louisville',
+    'America/Mendoza': 'America/Argentina/Mendoza',
+    'Asia/Calcutta': 'Asia/Kolkata',
+    'Asia/Katmandu': 'Asia/Kathmandu',
+    'Asia/Rangoon': 'Asia/Yangon',
+    'Asia/Saigon': 'Asia/Ho_Chi_Minh',
+    'Atlantic/Faeroe': 'Atlantic/Faroe',
+    'Europe/Kiev': 'Europe/Kyiv',
+    'Pacific/Enderbury': 'Pacific/Kanton',
+    'Pacific/Ponape': 'Pacific/Pohnpei',
+    'Pacific/Truk': 'Pacific/Chuuk',
+    'Etc/UTC': 'UTC',
+    'Etc/GMT': 'UTC',
+    GMT: 'UTC',
+};
 
-/** Every IANA zone this browser knows, in its own order. */
-export function timezones(): string[] {
-    zones ??= Intl.supportedValuesOf('timeZone');
-
-    return zones;
+/** The name the IANA database uses now for a zone a browser reported. */
+export function currentZoneName(zone: string): string {
+    return CURRENT_NAMES[zone] ?? zone;
 }
+
+const labels = new Map<string, string>();
 
 /**
  * A zone as a person reads it: the underscores of the identifier turned to
@@ -46,8 +74,8 @@ function labelOf(zone: string): string {
 
         return offset === undefined ? name : `${name} (${offset})`;
     } catch {
-        // A zone this browser does not know, held from elsewhere: shown by
-        // name rather than refusing to draw the field.
+        // A zone newer than this browser's data: shown by name rather than
+        // refusing to draw the field.
         return name;
     }
 }

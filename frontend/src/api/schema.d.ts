@@ -450,6 +450,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/timezones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Timezones
+         * @description Every IANA timezone an Event may be run in, in identifier order. Public: it is the list a timezone picker offers.
+         */
+        get: operations["listTimezones"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events": {
         parameters: {
             query?: never;
@@ -3045,6 +3065,27 @@ export interface operations {
                             code?: string;
                             name?: string;
                         }[];
+                    };
+                };
+            };
+        };
+    };
+    listTimezones: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: string[];
                     };
                 };
             };

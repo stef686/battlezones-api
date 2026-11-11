@@ -19,9 +19,12 @@ import { fakeImages } from './fake-images';
 /** Answers only reads, so a write attempt shows up as a call that is not a GET. */
 function stubReads() {
     const fetch = vi.fn((url: string) => {
-        const body = String(url).endsWith('/api/countries')
+        const path = String(url);
+        const body = path.endsWith('/api/countries')
             ? { data: [{ code: 'FR', name: 'France' }, { code: 'GB', name: 'United Kingdom' }] }
-            : { data: [{ id: 4, name: 'Horus Heresy', slug: 'horus-heresy' }] };
+            : path.endsWith('/api/timezones')
+                ? { data: ['America/New_York', 'Asia/Tokyo', 'Europe/London'] }
+                : { data: [{ id: 4, name: 'Horus Heresy', slug: 'horus-heresy' }] };
 
         return Promise.resolve({ ok: true, status: 200, headers: new Headers(), json: () => Promise.resolve(body) });
     });
@@ -365,9 +368,10 @@ describe('the timezone field', () => {
         return view.findAll('[data-testid="event-timezone"] option').map((option) => option.attributes('value') ?? '');
     }
 
-    it('offers the iana zones, narrowed to what is searched for, and sends nothing', async () => {
+    it('offers the zones the api accepts, narrowed to what is searched for, and sends nothing', async () => {
         const fetch = stubReads();
         const view = mount(TimezoneField, { props: { modelValue: 'Europe/London' }, global: plugins() });
+        await flushPromises();
 
         expect(zonesOf(view)).toEqual(expect.arrayContaining(['Europe/London', 'America/New_York', 'Asia/Tokyo']));
 
@@ -386,6 +390,7 @@ describe('the timezone field', () => {
     it('keeps the chosen zone in the list whatever is searched for, so the select never loses it', async () => {
         stubReads();
         const view = mount(TimezoneField, { props: { modelValue: 'Europe/London' }, global: plugins() });
+        await flushPromises();
 
         await view.get('[data-testid="event-timezone-search"]').setValue('tokyo');
 

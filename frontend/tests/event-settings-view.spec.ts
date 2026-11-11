@@ -370,6 +370,7 @@ describe('the event timezone in settings', () => {
         const fetch = stubApi({
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
             '/api/countries': COUNTRIES,
+            '/api/timezones': { status: 200, body: { data: ['America/New_York', 'Europe/London'] } },
             [`PATCH /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(true, { timezone: 'America/New_York' }) },
         });
 
@@ -390,6 +391,7 @@ describe('the event timezone in settings', () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(true, { timezone_is_fixed: true }) },
             '/api/countries': COUNTRIES,
+            '/api/timezones': { status: 200, body: { data: ['America/New_York', 'Europe/London'] } },
         });
 
         const view = mountView();

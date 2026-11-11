@@ -95,7 +95,7 @@ class UpdateEventRequest extends FormRequest
             // blocks onto other days. Free until the first block exists.
             'timezone' => $this->event()->hasSchedule()
                 ? ['prohibited']
-                : ['sometimes', 'required', 'string', 'timezone:all_with_bc'],
+                : ['sometimes', 'required', 'string', 'timezone:all'],
 
             // Refused loudly rather than quietly dropped, so a caller that
             // tries is told why instead of watching a change not happen.
