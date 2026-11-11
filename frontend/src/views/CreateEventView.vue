@@ -119,10 +119,12 @@ async function submit(): Promise<void> {
 
   try {
     const created = await createEvent(client, submissionOf(draft.value));
-    const { event, bannerFailed } = await withHeldBanner(created);
+    const { event, bannerRefusal } = await withHeldBanner(created);
 
     queryClient.setQueryData(keys.event(event.slug), event);
-    toasts.show(bannerFailed ? 'Event created, but the banner didn\'t upload. Add it in Settings.' : 'Event created');
+    toasts.show(bannerRefusal === null
+      ? 'Event created'
+      : ['Event created, but the banner didn\'t upload.', bannerRefusal, 'Add it in Settings.'].filter(Boolean).join(' '));
 
     // Replaced rather than pushed: Back from the hub must not reopen a
     // wizard for an Event that already exists.
@@ -149,16 +151,28 @@ async function submit(): Promise<void> {
  * The new Event with the held Banner on it, if there is one to upload. A
  * refusal here is the Banner's alone: the Event already exists, so it is
  * reported rather than thrown into the create's own error handling.
+ * `bannerRefusal` is null when nothing went wrong, and otherwise the API's
+ * reason, or an empty string when it gave none.
+ *
+ * Only the Banner is taken from the upload's answer. The Banner route does not
+ * count Attendees, so taking its whole Event would drop the count the 201
+ * carried.
  */
-async function withHeldBanner(created: EventSummary): Promise<{ event: EventSummary; bannerFailed: boolean }> {
+async function withHeldBanner(created: EventSummary): Promise<{ event: EventSummary; bannerRefusal: string | null }> {
   if (draft.value.banner === null) {
-    return { event: created, bannerFailed: false };
+    return { event: created, bannerRefusal: null };
   }
 
   try {
-    return { event: await uploadBanner(client, created.slug, draft.value.banner), bannerFailed: false };
-  } catch {
-    return { event: created, bannerFailed: true };
+    const uploaded = await uploadBanner(client, created.slug, draft.value.banner);
+
+    return { event: { ...created, banner: uploaded.banner }, bannerRefusal: null };
+  } catch (caught) {
+    const reason = caught instanceof ApiError && caught.kind === 'validation'
+      ? caught.fields.banner?.[0] ?? ''
+      : '';
+
+    return { event: created, bannerRefusal: reason };
   }
 }
 
@@ -178,6 +192,7 @@ const summary = computed(() => {
     { label: 'URL', value: `/events/${draft.value.slug}` },
     { label: 'When', value: `${formatDateRange(details.starts_at, details.ends_at)} (${draft.value.timezone})` },
     { label: 'Where', value: where === '' ? 'Not set yet' : where },
+    { label: 'Banner', value: draft.value.banner?.name ?? 'No banner', edit: 'look' as const, testid: 'create-summary-look' },
     { label: 'Game system', value: system?.name ?? '' },
     { label: 'Team size', value: teamSizeLabel(Number(shape.attendee_size)) },
     { label: 'Places', value: shape.max_attendees === '' ? 'No limit' : shape.max_attendees },
@@ -304,31 +319,21 @@ const summary = computed(() => {
         <div
           v-for="row in summary"
           :key="row.label"
-          class="flex justify-between gap-4 px-4 py-3 text-sm"
+          :data-testid="row.testid"
+          class="flex items-center justify-between gap-4 px-4 py-3 text-sm"
         >
           <dt class="text-muted-foreground-1">
             {{ row.label }}
           </dt>
-          <dd class="text-right text-foreground">
-            {{ row.value }}
-          </dd>
-        </div>
-
-        <div
-          data-testid="create-summary-look"
-          class="flex items-center justify-between gap-4 px-4 py-3 text-sm"
-        >
-          <dt class="text-muted-foreground-1">
-            Banner
-          </dt>
-          <dd class="flex items-center gap-3 text-right text-foreground">
-            <span class="truncate">{{ draft.banner?.name ?? 'No banner' }}</span>
+          <dd class="flex min-w-0 items-center gap-3 text-right text-foreground">
+            <span class="truncate">{{ row.value }}</span>
             <AppButton
+              v-if="row.edit"
               type="button"
               variant="ghost"
               size="sm"
-              data-testid="create-edit-look"
-              @click="step = 'look'"
+              :data-testid="`create-edit-${row.edit}`"
+              @click="step = row.edit"
             >
               Edit
             </AppButton>

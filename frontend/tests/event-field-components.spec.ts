@@ -191,7 +191,50 @@ describe('the banner field', () => {
 
         Object.defineProperty(input.element, 'files', { value: [file], configurable: true });
         await input.trigger('change');
+        // Reading an image's size is asynchronous.
+        await flushPromises();
     }
+
+    /** What the browser reports an image to be, once decoded. */
+    function imagesMeasure(width: number, height: number) {
+        const close = vi.fn();
+
+        vi.stubGlobal('createImageBitmap', vi.fn(() => Promise.resolve({ width, height, close })));
+
+        return close;
+    }
+
+    it('refuses an image too small to fill the header, in the words the api would use', async () => {
+        const close = imagesMeasure(512, 512);
+        const view = mount(EventBannerField, { props: { banner: null } });
+
+        await choose(view, new File(['bytes'], 'logo.png', { type: 'image/png' }));
+
+        expect(view.emitted('choose')).toBeUndefined();
+        expect(view.get('[data-testid="event-banner-error"]').text())
+            .toBe('The banner must be at least 1200 by 400 pixels.');
+        expect(close).toHaveBeenCalled();
+    });
+
+    it('passes on an image big enough to fill the header', async () => {
+        imagesMeasure(1600, 534);
+        const view = mount(EventBannerField, { props: { banner: null } });
+        const file = new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' });
+
+        await choose(view, file);
+
+        expect(view.emitted('choose')).toEqual([[file]]);
+    });
+
+    it('leaves the size to the api when the browser cannot read it', async () => {
+        vi.stubGlobal('createImageBitmap', vi.fn(() => Promise.reject(new Error('Cannot decode.'))));
+        const view = mount(EventBannerField, { props: { banner: null } });
+        const file = new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' });
+
+        await choose(view, file);
+
+        expect(view.emitted('choose')).toEqual([[file]]);
+    });
 
     it('says which file was chosen and uploads nothing', async () => {
         const fetch = stubReads();

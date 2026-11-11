@@ -47,6 +47,19 @@ class StoreEventBannerRequest extends FormRequest
     }
 
     /**
+     * The size named outright, so the screen can say what would pass. The SPA
+     * checks the same size before uploading and words it the same way.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'banner.dimensions' => 'The banner must be at least 1200 by 400 pixels.',
+        ];
+    }
+
+    /**
      * Empty when route model binding has not run, which only happens where the
      * docs generator instantiates this request outside a real request cycle.
      */

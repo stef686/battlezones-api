@@ -176,7 +176,7 @@ test('an upload too large for venue wifi, or too small to fill the header, is re
         ->post(route('events.banner.store', ['event' => $event->slug]), [
             'banner' => UploadedFile::fake()->image('logo.png', 512, 512),
         ])
-        ->assertJsonValidationErrors(['banner']);
+        ->assertJsonValidationErrors(['banner' => 'The banner must be at least 1200 by 400 pixels.']);
 
     expect($event->refresh()->banner_path)->toBeNull();
 });
