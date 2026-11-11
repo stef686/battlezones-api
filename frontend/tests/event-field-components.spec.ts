@@ -154,6 +154,19 @@ describe('the event colour field', () => {
         expect(view.get('[data-testid="event-colour-hex-error"]').text()).toContain('#c2410c');
     });
 
+    it('takes an emptied hex to mean the platform colour', async () => {
+        const view = mount(EventColourField, { props: { modelValue: '#2563eb' }, global: plugins() });
+
+        await view.get('[data-testid="event-colour-hex"]').setValue('');
+
+        expect(view.emitted('update:modelValue')?.at(-1)).toEqual([null]);
+        expect(view.find('[data-testid="event-colour-hex-error"]').exists()).toBe(false);
+
+        await view.setProps({ modelValue: null });
+
+        expect(view.get('[data-testid="event-colour-none"]').attributes('aria-pressed')).toBe('true');
+    });
+
     it('goes back to the platform colour', async () => {
         const view = mount(EventColourField, { props: { modelValue: '#2563eb' }, global: plugins() });
 

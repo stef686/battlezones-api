@@ -45,17 +45,20 @@ const PLATFORM_RAMP: Record<EventColourStep, { lightness: number; chroma: number
 };
 
 /**
- * Where the 500 may sit. Below this, primary text sinks into the dark ground;
- * above it, white type on a primary button stops reading.
+ * Where the 500 may sit. Below this, primary text sinks into the dark ground.
+ * The top is the platform's own 500: white type on it is already only just
+ * AA for a small label, so no Event may sit any lighter.
  */
-const ANCHOR_LIGHTNESS = { min: 0.55, max: 0.6 };
+const ANCHOR_LIGHTNESS = { min: 0.55, max: PLATFORM_RAMP[500].lightness };
 
 /**
- * The most colourful a chosen 500 is taken to be. A fully saturated pick
- * would otherwise push the 400 past what most screens can show, and the
- * browser would clip it to a different hue.
+ * The most colourful a chosen 500 is taken to be, before each step is held
+ * inside sRGB on its own (see inGamut()).
  */
 const MAX_ANCHOR_CHROMA = 0.175;
+
+/** How finely a step's chroma is searched down to the gamut edge. */
+const GAMUT_SEARCH_STEPS = 20;
 
 const HEX = /^#[0-9a-f]{6}$/;
 
@@ -102,11 +105,11 @@ export function eventColourScale(hex: string): EventColourScale {
     for (const step of EVENT_COLOUR_STEPS) {
         const platform = PLATFORM_RAMP[step];
 
-        scale[step] = {
+        scale[step] = inGamut({
             lightness: anchor + (platform.lightness - PLATFORM_RAMP[500].lightness),
             chroma: platform.chroma * colourfulness,
             hue: chosen.hue,
-        };
+        });
     }
 
     return scale;
@@ -152,8 +155,69 @@ export function eventColourStyle(hex: string | null): Record<string, string> {
 
 function cssOf(colour: OklchColour): string {
     const lightness = round(colour.lightness * 100, 1);
+    // Rounded down, so rounding can never carry a step back out of gamut.
+    const chroma = Math.floor(colour.chroma * 1000) / 1000;
 
-    return `oklch(${lightness}% ${round(colour.chroma, 3)} ${round(colour.hue, 1)})`;
+    return `oklch(${lightness}% ${chroma} ${round(colour.hue, 1)})`;
+}
+
+/**
+ * A step with its chroma lowered, if it has to be, to the most that sRGB can
+ * show at that lightness and hue. Left alone, the browser clips each channel
+ * on its own, which moves the hue: a light blue tint comes out lilac. Found by
+ * bisection, because the gamut edge has no closed form in OKLCH.
+ */
+function inGamut(colour: OklchColour): OklchColour {
+    if (isDisplayable(colour)) {
+        return colour;
+    }
+
+    let shown = 0;
+    let clipped = colour.chroma;
+
+    for (let attempt = 0; attempt < GAMUT_SEARCH_STEPS; attempt++) {
+        const chroma = (shown + clipped) / 2;
+
+        if (isDisplayable({ ...colour, chroma })) {
+            shown = chroma;
+        } else {
+            clipped = chroma;
+        }
+    }
+
+    return { ...colour, chroma: shown };
+}
+
+function isDisplayable(colour: OklchColour): boolean {
+    return srgbOf(colour).every((channel) => channel >= 0 && channel <= 1);
+}
+
+/**
+ * OKLCH to gamma-encoded sRGB, each channel 0 to 1 when the colour is
+ * displayable and outside that range when it is not. Unclamped on purpose:
+ * how far a channel overshoots is the question being asked.
+ */
+export function srgbOf(colour: OklchColour): [number, number, number] {
+    const radians = colour.hue * Math.PI / 180;
+    const a = colour.chroma * Math.cos(radians);
+    const b = colour.chroma * Math.sin(radians);
+
+    const l = (colour.lightness + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+    const m = (colour.lightness - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+    const s = (colour.lightness - 0.0894841775 * a - 1.291485548 * b) ** 3;
+
+    return [
+        4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+        -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+    ].map(encoded) as [number, number, number];
+}
+
+function encoded(channel: number): number {
+    const magnitude = Math.abs(channel);
+    const value = magnitude <= 0.0031308 ? magnitude * 12.92 : 1.055 * magnitude ** (1 / 2.4) - 0.055;
+
+    return Math.sign(channel) * value;
 }
 
 /**

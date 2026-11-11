@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { EVENT_COLOUR_STEPS, eventColourScale, eventColourStyle, isEventColour } from '@/lib/event-colour';
+import {
+    EVENT_COLOUR_PRESETS,
+    EVENT_COLOUR_STEPS,
+    eventColourScale,
+    eventColourStyle,
+    isEventColour,
+    srgbOf,
+} from '@/lib/event-colour';
 
 describe('an event colour scale', () => {
     it('keeps the hue the organiser chose', () => {
@@ -29,8 +36,8 @@ describe('an event colour scale', () => {
     it('darkens a very light colour so white text still reads on a button', () => {
         const scale = eventColourScale('#fdfcf0');
 
-        expect(scale[500].lightness).toBeLessThanOrEqual(0.6);
-        expect(scale[600].lightness).toBeLessThanOrEqual(0.53);
+        expect(scale[500].lightness).toBeLessThanOrEqual(0.57);
+        expect(scale[600].lightness).toBeLessThanOrEqual(0.5);
     });
 
     it('leaves a colour that already reads well where the organiser put it', () => {
@@ -38,12 +45,33 @@ describe('an event colour scale', () => {
         expect(eventColourScale('#b8611f')[500].lightness).toBeCloseTo(0.57, 1);
     });
 
-    it('holds a vivid colour inside the chroma a screen can show', () => {
-        const scale = eventColourScale('#ff00ff');
+    it('never sits lighter at 500 than the platform does, so white button text keeps its contrast', () => {
+        for (const hex of ['#fdfcf0', '#ffff00', '#00ffff', '#93c5fd']) {
+            expect(eventColourScale(hex)[500].lightness).toBeLessThanOrEqual(0.57);
+        }
+    });
+
+    it.each([
+        ...EVENT_COLOUR_PRESETS.map((preset) => preset.hex),
+        '#ffff00',
+        '#00ffff',
+        '#ff00ff',
+        '#00ff00',
+        '#0000ff',
+        '#ff0000',
+    ])('keeps every step of %s inside what a screen can show, so no step is clipped to another hue', (hex) => {
+        const scale = eventColourScale(hex);
 
         for (const step of EVENT_COLOUR_STEPS) {
-            expect(scale[step].chroma).toBeLessThanOrEqual(0.2);
+            for (const channel of srgbOf(scale[step])) {
+                expect(channel).toBeGreaterThanOrEqual(-0.001);
+                expect(channel).toBeLessThanOrEqual(1.001);
+            }
         }
+    });
+
+    it('keeps as much of the chosen colour as fits, rather than greying it out', () => {
+        expect(eventColourScale('#2563eb')[500].chroma).toBeGreaterThan(0.12);
     });
 });
 

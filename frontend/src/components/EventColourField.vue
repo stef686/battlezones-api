@@ -5,8 +5,9 @@
  * Edits a value its parent owns and never writes to the API, like the other
  * Event fields. A hex is handed back only once it is a whole colour, in the
  * one spelling the API stores (lowercase `#rrggbb`), so a half-typed value
- * never repaints the screen or reaches a save. "Platform colour" hands back
- * null, which is how an Event goes back to looking like every other.
+ * never repaints the screen or reaches a save. "Platform colour", or emptying
+ * the hex, hands back null, which is how an Event goes back to looking like
+ * every other.
  */
 import { Check } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
@@ -35,6 +36,14 @@ const hexErrors = computed(() => (incomplete.value
 
 function type(value: string): void {
   typed.value = value;
+
+  // An emptied hex is the Organiser taking the colour away, exactly as
+  // "Platform colour" does.
+  if (value.trim() === '') {
+    model.value = null;
+
+    return;
+  }
 
   const colour = eventColourOf(value);
 
