@@ -3172,6 +3172,7 @@ export interface operations {
                                 country?: string;
                             };
                             banner?: string | null;
+                            colour?: string | null;
                             created_at?: string;
                             updated_at?: string;
                         };
