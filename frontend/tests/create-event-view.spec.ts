@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent } from 'vue';
 import { RouterView, type Router } from 'vue-router';
 
-import { createApiClient } from '@/api';
+import { createApiClient, useApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
 import { createAppRouter } from '@/router';
 import { useSessionStore } from '@/stores/session';
@@ -780,6 +780,63 @@ describe('leaving the wizard', () => {
         await view.get('[data-testid="create-leave-confirm"]').trigger('click');
 
         await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('login'));
+    });
+
+    it('goes back, rather than forward again, when the leave was the back button', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+        await router.push({ name: 'login' });
+        await router.push({ name: 'create-event' });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="event-name"]').setValue('Croydon Doubles');
+        router.back();
+        await vi.waitFor(() => expect(leaveDialog(view).attributes('open')).toBeDefined());
+        await view.get('[data-testid="create-leave-confirm"]').trigger('click');
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('login'));
+        // Gone back: the wizard is ahead in history rather than pushed behind,
+        // so Back from here cannot reopen it empty.
+        expect(window.history.state.forward).toBe('/events/new');
+    });
+
+    it('lets a logout through without asking, since nothing can be saved once signed out', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="event-name"]').setValue('Croydon Doubles');
+
+        // As useLogout does it: the token is forgotten before the move to login.
+        await useApiClient().logout();
+        await router.replace({ name: 'login' });
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('login'));
+        expect(view.find('[data-testid="create-leave"][open]').exists()).toBe(false);
+    });
+
+    it('lets a lost session send the organiser to sign in without asking', async () => {
+        stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 401, body: { message: 'Unauthenticated.' } },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('login'));
+        expect(view.find('[data-testid="create-leave"][open]').exists()).toBe(false);
     });
 
     it('leaves without asking when nothing has been entered', async () => {

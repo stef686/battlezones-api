@@ -127,8 +127,14 @@ const leaveOpen = ref(false);
 let leavingFor: string | null = null;
 let leaveConfirmed = false;
 
+/**
+ * Signed out — by logging out, or by the session being lost — nothing typed
+ * can be created any more, so asking would only hold the Organiser on a
+ * wizard that cannot submit, and a lost session's move to login would ask
+ * again every time.
+ */
 onBeforeRouteLeave((to) => {
-  if (!hasUnsavedWork.value || leaveConfirmed) {
+  if (!hasUnsavedWork.value || leaveConfirmed || !client.isAuthenticated()) {
     return true;
   }
 
@@ -157,13 +163,24 @@ watch(hasUnsavedWork, (isUnsaved) => {
 
 onBeforeUnmount(() => window.removeEventListener('beforeunload', askBeforeUnload));
 
+/**
+ * Carries on with the navigation that was stopped, without leaving the
+ * abandoned wizard in history for Back to reopen empty. A leave that was the
+ * back button goes back again, since the guard undid that step; any other
+ * takes the wizard's place.
+ */
 async function leave(): Promise<void> {
   if (leavingFor === null) {
     return;
   }
 
   leaveConfirmed = true;
-  await router.push(leavingFor);
+
+  if (leavingFor === router.options.history.state.back) {
+    router.back();
+  } else {
+    await router.replace(leavingFor);
+  }
 }
 
 /** Look asks for nothing, so with nothing chosen moving on is skipping it. */
