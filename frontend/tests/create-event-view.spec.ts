@@ -1026,6 +1026,35 @@ describe('the url', () => {
             expect(view.get('[data-testid="create-slug-error"]').text()).toBe('That URL is already taken.');
         });
 
+        it('clears a refusal once the url it was about has changed', async () => {
+            stubApi({
+                '/api/game-systems': GAME_SYSTEMS,
+                '/api/countries': COUNTRIES,
+                '/api/event-slug-availability': { status: 200, body: { data: { slug: 'x', available: false } } },
+            });
+
+            const view = mountView();
+            await flushPromises();
+
+            await view.get('[data-testid="event-name"]').setValue('Croydon Doubles');
+            await vi.advanceTimersByTimeAsync(1000);
+            await flushPromises();
+            await next(view);
+
+            expect(view.get('[data-testid="create-slug-error"]').text()).toBe('That URL is already taken.');
+
+            // Renaming moves an unedited slug, which is no longer the one refused.
+            await view.get('[data-testid="event-name"]').setValue('Croydon Singles');
+
+            expect(view.find('[data-testid="create-slug-error"]').exists()).toBe(false);
+
+            await view.get('[data-testid="create-slug"]').setValue('new');
+            await next(view);
+            await view.get('[data-testid="create-slug"]').setValue('croydon-27');
+
+            expect(view.find('[data-testid="create-slug-error"]').exists()).toBe(false);
+        });
+
         it('does not ask about a url that could never be used', async () => {
             const fetch = stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
 

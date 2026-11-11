@@ -85,6 +85,17 @@ const eventUrl = computed(() => (draft.value.slug === ''
   : new URL(router.resolve({ name: 'event', params: { eventSlug: draft.value.slug } }).href, window.location.origin).href));
 
 const slugAvailability = useSlugAvailability(() => draft.value.slug);
+
+/**
+ * A refusal is about the slug it was given. Once the slug changes, by hand or
+ * by following the name, that refusal is no longer true of what is in the
+ * field, and leaving it would sit under "available" contradicting it.
+ */
+watch(() => draft.value.slug, () => {
+  if (errors.value.slug !== undefined) {
+    errors.value = Object.fromEntries(Object.entries(errors.value).filter(([field]) => field !== 'slug'));
+  }
+});
 const slugTaken = computed(() => slugAvailability.value === 'taken');
 
 /**

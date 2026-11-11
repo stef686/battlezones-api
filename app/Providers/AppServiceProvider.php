@@ -30,6 +30,13 @@ class AppServiceProvider extends ServiceProvider
 
         // Acting on one: entering with an Invite, claiming it, submitting feedback.
         RateLimiter::for('token-write', fn (Request $request): array => self::tokenLimits($request, 5, 30));
+
+        // Asking whether an Event slug is free answers whether a Draft exists
+        // there, so guessing at speed is capped per account. Per account
+        // rather than per address, so Organisers on one venue wifi do not
+        // share a budget; a debounced wizard stays well under it.
+        RateLimiter::for('slug-check', fn (Request $request): Limit => Limit::perMinute(30)
+            ->by('user:'.$request->user()?->getAuthIdentifier()));
     }
 
     /**
