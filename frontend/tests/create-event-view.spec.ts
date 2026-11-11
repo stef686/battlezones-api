@@ -628,7 +628,8 @@ describe('the look step', () => {
         const labels = view.findAll('[data-testid="create-summary"] dt').map((label) => label.text());
 
         expect(labels.indexOf('Banner')).toBe(labels.indexOf('Where') + 1);
-        expect(labels.indexOf('Game system')).toBe(labels.indexOf('Banner') + 1);
+        expect(labels.indexOf('Colour')).toBe(labels.indexOf('Banner') + 1);
+        expect(labels.indexOf('Game system')).toBe(labels.indexOf('Colour') + 1);
 
         await view.get('[data-testid="create-edit-look"]').trigger('click');
         await flushPromises();
@@ -1258,5 +1259,121 @@ describe('the timezone', () => {
 
         expect(view.get('[data-testid="create-step-details"]').attributes('aria-current')).toBe('step');
         expect(view.get('[data-testid="event-timezone-error"]').text()).toContain('valid timezone');
+    });
+});
+
+describe('the event colour', () => {
+    async function toLook(view: View): Promise<void> {
+        await fillDetails(view);
+        await next(view);
+    }
+
+    function preview(view: View) {
+        return view.get('[data-testid="create-look-preview"]');
+    }
+
+    it('previews the header as it will look, on the flat surface until a banner is chosen', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+        await toLook(view);
+
+        expect(preview(view).get('[data-testid="event-header-name"]').text()).toBe('Croydon Doubles');
+        expect(preview(view).find('[data-testid="event-header-banner"]').exists()).toBe(false);
+        expect(preview(view).attributes('style') ?? '').not.toContain('--primary-500');
+
+        await chooseBanner(view, HALL);
+
+        expect(preview(view).get<HTMLImageElement>('[data-testid="event-header-banner"]').element.src).toMatch(/^blob:image-/);
+    });
+
+    it('wears the chosen colour in the preview, and drops it again for the platform colour', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+        await toLook(view);
+
+        await view.get('[data-testid="event-colour-preset-#c2410c"]').trigger('click');
+
+        expect(preview(view).attributes('style')).toContain('--primary-500');
+
+        await view.get('[data-testid="event-colour-none"]').trigger('click');
+
+        expect(preview(view).attributes('style') ?? '').not.toContain('--primary-500');
+    });
+
+    it('sends the chosen colour, and sums it up on confirm', async () => {
+        const fetch = stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 201, body: createdBody({ colour: '#c2410c' }) },
+        });
+
+        const view = mountView();
+        await flushPromises();
+        await toLook(view);
+        await view.get('[data-testid="event-colour-preset-#c2410c"]').trigger('click');
+
+        expect(view.get('[data-testid="create-next"]').text()).toBe('Next');
+
+        await next(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+
+        expect(view.get('[data-testid="create-summary-look"]').text()).toContain('Ember');
+
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        expect(bodyOf(fetch, 'POST')).toMatchObject({ colour: '#c2410c' });
+        expect(queryClient.getQueryData<{ colour: string | null }>(['events', 'croydon-doubles'])?.colour).toBe('#c2410c');
+    });
+
+    it('sends no colour when the look step is skipped', async () => {
+        const fetch = stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 201, body: createdBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+        await toLook(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+
+        expect(view.get('[data-testid="create-summary-look"]').text()).toContain('Platform colour');
+
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        expect(bodyOf(fetch, 'POST')).toMatchObject({ colour: null });
+    });
+
+    it('sends the organiser back to the look step when the api refuses the colour', async () => {
+        stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': {
+                status: 422,
+                body: { message: 'Invalid.', errors: { colour: ['The colour must be a hex value like #c2410c.'] } },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+        await toLook(view);
+        await view.get('[data-testid="event-colour-preset-#c2410c"]').trigger('click');
+        await next(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="create-step-look"]').attributes('aria-current')).toBe('step');
+        expect(view.text()).toContain('The colour must be a hex value like #c2410c.');
     });
 });

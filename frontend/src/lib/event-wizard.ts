@@ -44,6 +44,8 @@ export interface EventDraft {
      * limits by EventBannerField before it is ever held here.
      */
     banner: File | null;
+    /** The Event Colour as `EventColourField` hands it back: lowercase `#rrggbb`, or null for the platform colour. */
+    colour: string | null;
 }
 
 /** How far ahead a new Event is pencilled in, before the Organiser picks a day. */
@@ -72,6 +74,7 @@ const SHOWN_FIELDS: readonly string[] = [
     'venue_address',
     'venue_city',
     'venue_country',
+    'colour',
     'game_system_id',
     'attendee_size',
     'max_attendees',
@@ -96,6 +99,7 @@ export function blankDraft(timezone: string, now: Date = new Date()): EventDraft
         slug: '',
         timezone,
         banner: null,
+        colour: null,
         venue: { venue_name: '', venue_address: '', venue_city: '', venue_country: '' },
         shape: { game_system_id: '', attendee_size: '1', max_attendees: '' },
         play: { pairing_format: 'swiss', round_count: '', requires_opposed_allegiance: false },
@@ -219,6 +223,10 @@ export function landingOf(
 
 /** The step a refused field is asked on, so a 422 can send the Organiser back to it. */
 export function stepOf(field: string): WizardStep {
+    if (field === 'colour') {
+        return 'look';
+    }
+
     return field === 'game_system_id'
         || field === 'attendee_size'
         || field === 'max_attendees'
@@ -258,6 +266,7 @@ export function submissionOf(draft: EventDraft): NewEvent {
         venue_address: blankToNull(draft.venue.venue_address),
         venue_city: blankToNull(draft.venue.venue_city),
         venue_country: blankToNull(draft.venue.venue_country),
+        colour: draft.colour,
         game_system_id: Number(draft.shape.game_system_id),
         attendee_size: Number(draft.shape.attendee_size),
         max_attendees: draft.shape.max_attendees === '' ? null : Number(draft.shape.max_attendees),

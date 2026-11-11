@@ -31,6 +31,8 @@ Organisers is last, and is the only tab that leaves the Player-facing Event for 
 
 The safe-area inset is on the header, not on `AppShell`'s wrapper: the surface runs under the status bar and only the type clears it, which makes the element taller than the 160px of visible content on a notched device.
 
+What the header looks like is `EventHeaderSurface`; `EventHeader` reads the Event and draws it as the `<header>` with `inset-top`, and the create wizard's `EventLookPreview` draws the same surface (no inset, name as a `<p>` rather than an `<h1>`) inside an `eventColourStyle` scope, as `AppShell` wraps an Event's screens. Change the header's look in the surface, never in a copy, or the preview stops being the header.
+
 Overlay text sits on two scrims (`event-header-scrim-top` / `event-header-scrim-bottom`, both declared in `style.css`) that are present whether or not a Banner is behind them, so `text-event-header-foreground(-muted)` is the single colour rule in every state. Do not swap the overlay's colour based on whether there is an image, and do not pin the header — it scrolls away with the page; only the Event nav pins.
 
 ## The Event nav lights a tab from a route-name map, never from the URL
