@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Events;
 
 use App\Http\Requests\Events\Concerns\ValidatesEventSlug;
+use App\Models\Event;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -15,9 +16,14 @@ class ShowEventSlugAvailabilityRequest extends FormRequest
 {
     use ValidatesEventSlug;
 
+    /**
+     * Only someone who could create an Event at the slug may ask about it.
+     * The answer says whether some Event, possibly a Draft, exists there, so
+     * an account that could never use it gets no answer at all.
+     */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('create', Event::class) === true;
     }
 
     /**

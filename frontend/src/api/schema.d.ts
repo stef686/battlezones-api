@@ -1202,7 +1202,7 @@ export interface paths {
         };
         /**
          * Check an Event slug
-         * @description Signed-in Users only. Whether a new Event could be created at this slug. A slug held by any Event, Drafts included, is taken; nothing else about that Event is said. A malformed or reserved slug is refused with 422, as creating the Event would refuse it.
+         * @description Claimed accounts only, as creating an Event is, and limited to 30 checks a minute per account. Whether a new Event could be created at this slug. A slug held by any Event, Drafts included, is taken; nothing else about that Event is said. A malformed or reserved slug is refused with 422, as creating the Event would refuse it.
          */
         get: operations["checkAnEventSlug"];
         put?: never;

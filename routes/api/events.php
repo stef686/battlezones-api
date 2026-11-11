@@ -143,8 +143,10 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::post('events', StoreEventController::class)->name('events.store');
     // Not under events/: any word there is a slug some Event could hold.
+    // Throttled per account: the answer reveals whether a Draft exists.
     Route::get('event-slug-availability', ShowEventSlugAvailabilityController::class)
-        ->name('event-slugs.availability');
+        ->name('event-slugs.availability')
+        ->middleware('throttle:slug-check');
     Route::patch('events/{event:slug}', UpdateEventController::class)->name('events.update');
 
     // Multipart, and so a route of its own: PHP does not populate uploaded

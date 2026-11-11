@@ -29,3 +29,28 @@ test('a slug the create would refuse is refused here with the same words, not ca
         ->getJson(route('event-slugs.availability', ['slug' => $slug]))
         ->assertJsonValidationErrors(['slug' => $reason]);
 })->with('refused event slugs');
+
+test('an account nobody has claimed cannot ask, since it could never create an event there', function () {
+    $this->actingAs(User::factory()->unclaimed()->create())
+        ->getJson(route('event-slugs.availability', ['slug' => 'croydon-doubles']))
+        ->assertForbidden();
+});
+
+test('one account is limited in how fast it can ask, so drafts cannot be found by guessing at speed', function () {
+    $prober = User::factory()->create();
+
+    for ($i = 0; $i < 30; $i++) {
+        $this->actingAs($prober)
+            ->getJson(route('event-slugs.availability', ['slug' => "guess-{$i}"]))
+            ->assertOk();
+    }
+
+    $this->actingAs($prober)
+        ->getJson(route('event-slugs.availability', ['slug' => 'guess-final']))
+        ->assertTooManyRequests();
+
+    // The budget is the account's, not the venue wifi's.
+    $this->actingAs(User::factory()->create())
+        ->getJson(route('event-slugs.availability', ['slug' => 'croydon-doubles']))
+        ->assertOk();
+});
