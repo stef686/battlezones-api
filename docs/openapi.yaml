@@ -1237,6 +1237,9 @@ paths:
                       banner:
                         type: string
                         nullable: true
+                      colour:
+                        type: string
+                        nullable: true
                       created_at:
                         type: string
                       updated_at:
