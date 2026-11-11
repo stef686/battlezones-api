@@ -7,7 +7,9 @@ use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Create an Event, whole, for the Organiser who will lead it.
@@ -27,11 +29,7 @@ class CreateEvent
     public function execute(User $creator, array $attributes, array $scoreTypes): Event
     {
         return DB::transaction(function () use ($creator, $attributes, $scoreTypes): Event {
-            $event = Event::query()->create([
-                'pairing_format' => PairingFormat::Swiss,
-                ...$attributes,
-                'status' => EventStatus::Draft,
-            ]);
+            $event = $this->createDraft($attributes);
 
             $event->organisers()->attach($creator, ['role' => EventOrganiserRole::Lead->value]);
 
@@ -39,5 +37,28 @@ class CreateEvent
 
             return $event;
         });
+    }
+
+    /**
+     * The Event row itself. Validation checks the slug is free, but two
+     * requests racing for the same one can both pass that check; the loser
+     * hits the unique index, and is told the slug is taken rather than
+     * answered with a 500.
+     *
+     * @param  array<string, mixed>  $attributes
+     *
+     * @throws ValidationException
+     */
+    private function createDraft(array $attributes): Event
+    {
+        try {
+            return Event::query()->create([
+                'pairing_format' => PairingFormat::Swiss,
+                ...$attributes,
+                'status' => EventStatus::Draft,
+            ]);
+        } catch (UniqueConstraintViolationException) {
+            throw ValidationException::withMessages(['slug' => 'That URL is already taken.']);
+        }
     }
 }
