@@ -13,6 +13,7 @@ import { computed } from 'vue';
 
 import EventHeaderSurface from '@/components/EventHeaderSurface.vue';
 import { eventColourStyle } from '@/lib/event-colour';
+import { EVENT_SECTIONS, eventNavChipClass } from '@/lib/event-nav';
 
 const props = withDefaults(defineProps<{
   name: string;
@@ -28,8 +29,8 @@ const props = withDefaults(defineProps<{
 
 const style = computed(() => eventColourStyle(props.colour));
 
-/** The first of the Event nav's tabs, Home lit, as an Event's own screen opens. */
-const tabs = ['Home', 'Rounds', 'Standings', 'Attendees'];
+/** The first of the Event nav's sections, Home lit, as an Event's own screen opens. */
+const sections = EVENT_SECTIONS.slice(0, 4);
 </script>
 
 <template>
@@ -40,19 +41,18 @@ const tabs = ['Home', 'Rounds', 'Standings', 'Attendees'];
   >
     <EventHeaderSurface
       :name="name === '' ? 'Your event' : name"
-      :game-system="gameSystem"
+      :game-system="gameSystem ?? 'Game system'"
       :dates="dates"
       :banner="banner"
     />
 
     <ul class="flex gap-2 border-t border-navbar-line bg-navbar px-4">
       <li
-        v-for="(tab, index) in tabs"
-        :key="tab"
-        class="border-b-2 px-2 py-3 text-sm font-medium whitespace-nowrap"
-        :class="index === 0 ? 'border-primary text-navbar-nav-foreground' : 'border-transparent text-muted-foreground-1'"
+        v-for="(section, index) in sections"
+        :key="section.name"
+        :class="eventNavChipClass(index === 0)"
       >
-        {{ tab }}
+        {{ section.label }}
       </li>
     </ul>
   </div>
