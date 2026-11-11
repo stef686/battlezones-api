@@ -9,6 +9,8 @@ import { InMemoryTokenStorage } from '@/api/token-storage';
 import { createAppRouter } from '@/router';
 import { useSessionStore } from '@/stores/session';
 import { useToastStore } from '@/stores/toast';
+
+import { fakeImages } from './fake-images';
 import CreateEventView from '@/views/CreateEventView.vue';
 
 const GAME_SYSTEMS = {
@@ -131,10 +133,7 @@ async function chooseBanner(view: View, file: File): Promise<void> {
 
 const HALL = new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' });
 
-/** What the browser reports every chosen image to be, once decoded. */
-function imagesMeasure(width: number, height: number): void {
-    vi.stubGlobal('createImageBitmap', vi.fn(() => Promise.resolve({ width, height, close: vi.fn() })));
-}
+let images: ReturnType<typeof fakeImages>;
 
 beforeEach(async () => {
     window.localStorage.clear();
@@ -160,10 +159,9 @@ beforeEach(async () => {
     vi.spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions')
         .mockReturnValue({ timeZone: 'Europe/London' } as Intl.ResolvedDateTimeFormatOptions);
 
-    // jsdom has no object URLs; the wizard previews a held Banner through one.
-    URL.createObjectURL = vi.fn(() => 'blob:hall');
-    URL.revokeObjectURL = vi.fn();
-    imagesMeasure(1600, 534);
+    // jsdom neither decodes images nor makes object URLs, and the wizard
+    // measures a Banner and previews it through one.
+    images = fakeImages();
 
     await router.push('/events/new');
     await router.isReady();
@@ -469,7 +467,7 @@ describe('the look step', () => {
         await next(view);
         await chooseBanner(view, HALL);
 
-        expect(view.get<HTMLImageElement>('[data-testid="event-banner-preview"]').element.src).toBe('blob:hall');
+        expect(view.get<HTMLImageElement>('[data-testid="event-banner-preview"]').element.src).toMatch(/^blob:image-/);
         expect(view.get('[data-testid="create-next"]').text()).toBe('Next');
         expect(fetch.mock.calls.filter(([, init]) => (init as RequestInit | undefined)?.method !== undefined
             && (init as RequestInit).method !== 'GET')).toEqual([]);
@@ -492,7 +490,7 @@ describe('the look step', () => {
 
     it('refuses an image too small for the header before the event exists, rather than after', async () => {
         stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
-        imagesMeasure(512, 512);
+        images.measure(512, 512);
 
         const view = mountView();
         await flushPromises();
@@ -515,10 +513,13 @@ describe('the look step', () => {
         await fillDetails(view);
         await next(view);
         await chooseBanner(view, HALL);
+
+        const preview = view.get<HTMLImageElement>('[data-testid="event-banner-preview"]').element.src;
+
         await view.get('[data-testid="event-banner-remove"]').trigger('click');
 
         expect(view.find('[data-testid="event-banner-preview"]').exists()).toBe(false);
-        expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:hall');
+        expect(URL.revokeObjectURL).toHaveBeenCalledWith(preview);
     });
 
     it('uploads the held banner once the event exists, and says the event was created', async () => {
@@ -619,7 +620,7 @@ describe('the look step', () => {
         await flushPromises();
 
         expect(view.get('[data-testid="create-step-look"]').attributes('aria-current')).toBe('step');
-        expect(view.get<HTMLImageElement>('[data-testid="event-banner-preview"]').element.src).toBe('blob:hall');
+        expect(view.get<HTMLImageElement>('[data-testid="event-banner-preview"]').element.src).toMatch(/^blob:image-/);
     });
 
     it('says when the event will have no banner', async () => {

@@ -9,9 +9,14 @@
  * Type, size and dimensions are checked here first, against the same limits
  * the API enforces, so a file that could only be refused is refused without
  * the wait. That matters most in the create-event wizard, where the upload only
- * happens after the Event exists. Dimensions need the image decoded. A browser
- * that cannot decode it leaves the dimensions to the API rather than refusing
- * a file that might be fine.
+ * happens after the Event exists. Dimensions are read from the image's header
+ * through an `<img>`, which is far lighter than decoding every pixel of a
+ * phone photo. A browser that cannot read it leaves the dimensions to the API
+ * rather than refusing a file that might be fine.
+ *
+ * Measuring takes a moment, so only the latest pick counts: a file chosen
+ * before another, or before the banner was removed, is dropped when its
+ * measurement comes back.
  */
 import { Trash2 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -41,6 +46,9 @@ const emit = defineEmits<{
 
 const refused = ref<string | null>(null);
 
+/** Bumped by every pick and every removal; a measurement from an older one is stale. */
+let latestPick = 0;
+
 const messages = computed(() => (refused.value === null ? props.errors.banner ?? [] : [refused.value]));
 
 async function refusalOf(file: File): Promise<string | null> {
@@ -61,22 +69,29 @@ async function refusalOf(file: File): Promise<string | null> {
   return null;
 }
 
-/** The image's size, or null when this browser cannot decode it. */
-async function dimensionsOf(file: File): Promise<{ width: number; height: number } | null> {
-  if (typeof createImageBitmap !== 'function') {
-    return null;
+/** The image's size, or null when this browser cannot read it. */
+function dimensionsOf(file: File): Promise<{ width: number; height: number } | null> {
+  if (typeof URL.createObjectURL !== 'function') {
+    return Promise.resolve(null);
   }
 
-  try {
-    const bitmap = await createImageBitmap(file);
-    const size = { width: bitmap.width, height: bitmap.height };
+  const url = URL.createObjectURL(file);
 
-    bitmap.close();
+  return new Promise((resolve) => {
+    const image = new Image();
 
-    return size;
-  } catch {
-    return null;
-  }
+    image.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve({ width: image.naturalWidth, height: image.naturalHeight });
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(null);
+    };
+
+    image.src = url;
+  });
 }
 
 async function choose(payload: Event): Promise<void> {
@@ -90,15 +105,23 @@ async function choose(payload: Event): Promise<void> {
     return;
   }
 
-  refused.value = await refusalOf(file);
+  const pick = ++latestPick;
+  const refusal = await refusalOf(file);
 
-  if (refused.value === null) {
+  if (pick !== latestPick) {
+    return;
+  }
+
+  refused.value = refusal;
+
+  if (refusal === null) {
     emit('choose', file);
   }
 }
 
 function remove(): void {
   if (!props.busy) {
+    latestPick++;
     refused.value = null;
     emit('remove');
   }

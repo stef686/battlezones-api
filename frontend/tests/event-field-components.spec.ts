@@ -13,6 +13,8 @@ import EventVenueFields from '@/components/EventVenueFields.vue';
 import ScoreTypeListEditor from '@/components/ScoreTypeListEditor.vue';
 import { blankScoreTypeRow, type ScoreTypeRow } from '@/lib/event-fields';
 
+import { fakeImages } from './fake-images';
+
 /** Answers only reads, so a write attempt shows up as a call that is not a GET. */
 function stubReads() {
     const fetch = vi.fn((url: string) => {
@@ -195,17 +197,17 @@ describe('the banner field', () => {
         await flushPromises();
     }
 
-    /** What the browser reports an image to be, once decoded. */
-    function imagesMeasure(width: number, height: number) {
-        const close = vi.fn();
+    let images: ReturnType<typeof fakeImages>;
 
-        vi.stubGlobal('createImageBitmap', vi.fn(() => Promise.resolve({ width, height, close })));
+    beforeEach(() => {
+        images = fakeImages();
+    });
 
-        return close;
-    }
+    const hall = new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' });
+    const crowd = new File(['bytes'], 'crowd.jpg', { type: 'image/jpeg' });
 
     it('refuses an image too small to fill the header, in the words the api would use', async () => {
-        const close = imagesMeasure(512, 512);
+        images.measure(512, 512);
         const view = mount(EventBannerField, { props: { banner: null } });
 
         await choose(view, new File(['bytes'], 'logo.png', { type: 'image/png' }));
@@ -213,11 +215,48 @@ describe('the banner field', () => {
         expect(view.emitted('choose')).toBeUndefined();
         expect(view.get('[data-testid="event-banner-error"]').text())
             .toBe('The banner must be at least 1200 by 400 pixels.');
-        expect(close).toHaveBeenCalled();
+    });
+
+    it('lets go of the url it measured the image through', async () => {
+        const view = mount(EventBannerField, { props: { banner: null } });
+
+        await choose(view, hall);
+
+        expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:image-1');
+    });
+
+    it('passes on the latest pick when an earlier one finishes measuring after it', async () => {
+        images.hold();
+        const view = mount(EventBannerField, { props: { banner: null } });
+
+        await choose(view, hall);
+        await choose(view, crowd);
+
+        images.finish(1, 1600, 534);
+        await flushPromises();
+        images.finish(0, 1600, 534);
+        await flushPromises();
+
+        expect(view.emitted('choose')).toEqual([[crowd]]);
+    });
+
+    it('does not bring a pick back once the banner has been removed mid-measure', async () => {
+        images.hold();
+        const view = mount(EventBannerField, {
+            props: { banner: { large: 'https://cdn.test/l.webp', small: 'https://cdn.test/s.webp' } },
+        });
+
+        await choose(view, hall);
+        await view.get('[data-testid="event-banner-remove"]').trigger('click');
+
+        images.finish(0, 1600, 534);
+        await flushPromises();
+
+        expect(view.emitted('choose')).toBeUndefined();
+        expect(view.emitted('remove')).toHaveLength(1);
     });
 
     it('passes on an image big enough to fill the header', async () => {
-        imagesMeasure(1600, 534);
         const view = mount(EventBannerField, { props: { banner: null } });
         const file = new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' });
 
@@ -227,7 +266,7 @@ describe('the banner field', () => {
     });
 
     it('leaves the size to the api when the browser cannot read it', async () => {
-        vi.stubGlobal('createImageBitmap', vi.fn(() => Promise.reject(new Error('Cannot decode.'))));
+        images.failToDecode();
         const view = mount(EventBannerField, { props: { banner: null } });
         const file = new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' });
 

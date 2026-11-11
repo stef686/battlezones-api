@@ -326,7 +326,8 @@ const summary = computed(() => {
             {{ row.label }}
           </dt>
           <dd class="flex min-w-0 items-center gap-3 text-right text-foreground">
-            <span class="truncate">{{ row.value }}</span>
+            <!-- Only a file name is cut short: a long name or scoring list wraps. -->
+            <span :class="row.edit ? 'truncate' : 'break-words'">{{ row.value }}</span>
             <AppButton
               v-if="row.edit"
               type="button"
