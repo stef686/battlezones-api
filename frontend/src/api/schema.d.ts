@@ -3139,9 +3139,9 @@ export interface operations {
                     max_attendees?: number;
                     /** @description How Rounds are paired. Only formats that are built are accepted: swiss, for now. It can never be changed. */
                     pairing_format: string;
-                    /** @description How the Event is played. Left out, it runs open-ended and Players need not pick a side. */
+                    /** @description How the Event is played. Left out or null, it runs open-ended and Players need not pick a side. */
                     settings?: {
-                        /** @description How many Rounds the Event runs. Null for open-ended. */
+                        /** @description How many Rounds the Event runs, 1 to 20. Null for open-ended. */
                         round_count?: number;
                         /** @description Whether Players pick a side, and are paired against the other one. */
                         requires_opposed_allegiance?: boolean;

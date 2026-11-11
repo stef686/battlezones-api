@@ -178,10 +178,10 @@ export interface EventChanges {
     attendee_size?: number;
 }
 
-/** An Event as the create wizard sends it, whole. Status is never sent: every Event starts as a Draft. */
 /** How Rounds are paired. Chosen when an Event is created, and never again (ADR 0006). */
 export type PairingFormat = 'swiss' | 'round_robin' | 'knockout' | 'random';
 
+/** An Event as the create wizard sends it, whole. Status is never sent: every Event starts as a Draft. */
 export interface NewEvent {
     name: string;
     /** Permanent from the moment it exists. */

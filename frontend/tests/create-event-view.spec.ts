@@ -1151,17 +1151,17 @@ describe('how the event is played', () => {
         });
     });
 
-    it('will not move on with rounds that are not a whole number', async () => {
+    it.each(['0', '2.5', '21'])('will not move on with %s rounds, which the api would refuse', async (rounds) => {
         stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
 
         const view = mountView();
         await flushPromises();
         await toFormat(view);
-        await view.get('[data-testid="event-round-count"]').setValue('0');
+        await view.get('[data-testid="event-round-count"]').setValue(rounds);
         await next(view);
 
         expect(view.get('[data-testid="create-step-format"]').attributes('aria-current')).toBe('step');
-        expect(view.get('[data-testid="event-round-count-error"]').text()).toContain('whole number');
+        expect(view.get('[data-testid="event-round-count-error"]').text()).toContain('from 1 to 20');
     });
 
     it('sends the organiser back to format when the api refuses the rounds', async () => {
