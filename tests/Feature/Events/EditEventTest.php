@@ -187,3 +187,49 @@ test('an event colour is a six-digit hex', function (string $colour) {
     'not hex' => ['#c2410g'],
     'upper case' => ['#C2410C'],
 ]);
+
+test('an organiser moves an event to another timezone while it has no schedule', function () {
+    $event = Event::factory()->published()->create(['timezone' => 'Europe/London']);
+
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.update', ['event' => $event->slug]), ['timezone' => 'America/New_York'])
+        ->assertOk()
+        ->assertJsonPath('data.timezone', 'America/New_York')
+        ->assertJsonPath('data.timezone_is_fixed', false);
+
+    expect($event->refresh()->timezone)->toBe('America/New_York');
+});
+
+test('the timezone is fixed once a schedule block exists, since every block was written in it', function () {
+    $event = Event::factory()->published()->create(['timezone' => 'Europe/London']);
+    EventScheduleBlock::factory()->for($event)->create();
+    $organiser = organiserOf($event);
+
+    $this->actingAs($organiser)
+        ->getJson(route('events.show', ['event' => $event->slug]))
+        ->assertJsonPath('data.timezone_is_fixed', true);
+
+    $this->actingAs($organiser)
+        ->patchJson(route('events.update', ['event' => $event->slug]), ['timezone' => 'America/New_York'])
+        ->assertJsonValidationErrors(['timezone' => 'schedule is written in it']);
+
+    expect($event->refresh()->timezone)->toBe('Europe/London');
+});
+
+test('a timezone must be an iana identifier', function (string $timezone) {
+    $event = Event::factory()->published()->create();
+
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.update', ['event' => $event->slug]), ['timezone' => $timezone])
+        ->assertJsonValidationErrors(['timezone']);
+})->with(['Croydon/High Street', 'GMT+1', '']);
+
+test('a timezone a browser still reports by its older name is accepted', function () {
+    $event = Event::factory()->published()->create();
+
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.update', ['event' => $event->slug]), ['timezone' => 'Asia/Calcutta'])
+        ->assertOk();
+
+    expect($event->refresh()->timezone)->toBe('Asia/Calcutta');
+});

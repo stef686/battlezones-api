@@ -1188,3 +1188,60 @@ describe('how the event is played', () => {
         expect(view.get('[data-testid="event-round-count-error"]').text()).toContain('whole number of rounds');
     });
 });
+
+describe('the timezone', () => {
+    it('starts on the zone the phone is in, and sends the one the organiser picks', async () => {
+        const fetch = stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 201, body: createdBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get<HTMLSelectElement>('[data-testid="event-timezone"]').element.value).toBe('Europe/London');
+
+        await fillDetails(view);
+        await view.get('[data-testid="event-timezone"]').setValue('America/New_York');
+        await next(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+
+        expect(view.get('[data-testid="create-summary-details"]').text()).toContain('America/New_York');
+
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        // 6 March 2027 is before New York's clocks go forward, so 09:00 there is UTC-5.
+        expect(bodyOf(fetch, 'POST')).toMatchObject({
+            timezone: 'America/New_York',
+            starts_at: '2027-03-06T09:00:00-05:00',
+        });
+    });
+
+    it('puts a refused timezone under the picker on the details step', async () => {
+        stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': {
+                status: 422,
+                body: { message: 'Invalid.', errors: { timezone: ['The timezone field must be a valid timezone.'] } },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+        await fillDetails(view);
+        await next(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="create-step-details"]').attributes('aria-current')).toBe('step');
+        expect(view.get('[data-testid="event-timezone-error"]').text()).toContain('valid timezone');
+    });
+});

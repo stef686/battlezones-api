@@ -3305,6 +3305,8 @@ export interface operations {
                                     manage_organisers: boolean;
                                 };
                             } | null;
+                            /** @description Whether the Event has a Schedule block, which fixes its timezone: every block's day is read in it. */
+                            timezone_is_fixed: boolean;
                         };
                     };
                 };
@@ -3350,6 +3352,8 @@ export interface operations {
                     game_system_id?: number;
                     /** @description How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered. */
                     attendee_size?: number;
+                    /** @description The IANA timezone the venue keeps. Refused once the Event has a Schedule block. */
+                    timezone?: string;
                     slug?: string;
                     status?: string;
                     pairing_format?: string;

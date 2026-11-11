@@ -18,7 +18,8 @@ use Knuckles\Scribe\Attributes\BodyParam;
  * generation rather than presentation. Game System and attendee_size are
  * refused conditionally — only once somebody has entered, because until then
  * nothing has been built at the old party size and no Faction has been chosen
- * against the old Game System. See
+ * against the old Game System. The timezone is refused once a Schedule block
+ * exists, because every block's day is read in it. See
  * docs/adr/0002-general-event-patch-endpoint.md before adding a field.
  */
 #[BodyParam('name', 'string', 'What the Event is called.', required: false, example: 'London Grand Tournament')]
@@ -32,6 +33,7 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('registration_closes_at', 'string', 'When entry closes, as an ISO 8601 timestamp.', required: false, example: '2026-09-05T23:59:00+01:00')]
 #[BodyParam('max_attendees', 'integer', 'How many parties may enter. Null for no limit, and never fewer than have already entered.', required: false, example: 32)]
 #[BodyParam('colour', 'string', 'The Event Colour, as a lowercase #rrggbb hex. Null for the platform colour.', required: false, example: '#c2410c')]
+#[BodyParam('timezone', 'string', 'The IANA timezone the venue keeps. Refused once the Event has a Schedule block.', required: false, example: 'Europe/London')]
 #[BodyParam('game_system_id', 'integer', 'The Game System the Event is played under. Refused once anybody has entered.', required: false, example: 4)]
 #[BodyParam('attendee_size', 'integer', 'How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered.', required: false, example: 2)]
 class UpdateEventRequest extends FormRequest
@@ -88,6 +90,13 @@ class UpdateEventRequest extends FormRequest
                 ? ['prohibited']
                 : ['sometimes', 'integer', 'between:1,8'],
 
+            // Every Schedule block is an absolute moment whose day is read
+            // in this zone, so moving the zone under a schedule would move
+            // blocks onto other days. Free until the first block exists.
+            'timezone' => $this->event()->hasSchedule()
+                ? ['prohibited']
+                : ['sometimes', 'required', 'string', 'timezone:all_with_bc'],
+
             // Refused loudly rather than quietly dropped, so a caller that
             // tries is told why instead of watching a change not happen.
             'slug' => ['prohibited'],
@@ -105,6 +114,7 @@ class UpdateEventRequest extends FormRequest
             'game_system_id.prohibited' => 'The game system cannot change once somebody has entered: their factions belong to the system they entered under.',
             'colour.regex' => 'The colour must be a hex value like #c2410c.',
             'attendee_size.prohibited' => 'The team size cannot change once somebody has entered: every entry was built at the current size.',
+            'timezone.prohibited' => 'The timezone cannot change once the event has a schedule: the schedule is written in it.',
         ];
     }
 

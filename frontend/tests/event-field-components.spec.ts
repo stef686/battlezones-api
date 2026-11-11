@@ -11,6 +11,7 @@ import EventDetailsFields from '@/components/EventDetailsFields.vue';
 import EventShapeFields from '@/components/EventShapeFields.vue';
 import EventVenueFields from '@/components/EventVenueFields.vue';
 import ScoreTypeListEditor from '@/components/ScoreTypeListEditor.vue';
+import TimezoneField from '@/components/TimezoneField.vue';
 import { blankScoreTypeRow, type ScoreTypeRow } from '@/lib/event-fields';
 
 import { fakeImages } from './fake-images';
@@ -356,5 +357,51 @@ describe('the score type editor', () => {
 
         expect(view.get('[data-testid="score-name-1-error"]').text()).toBe('Already taken.');
         expect(view.find('[data-testid="score-name-0"]').exists()).toBe(false);
+    });
+});
+
+describe('the timezone field', () => {
+    function zonesOf(view: ReturnType<typeof mount>): string[] {
+        return view.findAll('[data-testid="event-timezone"] option').map((option) => option.attributes('value') ?? '');
+    }
+
+    it('offers the iana zones, narrowed to what is searched for, and sends nothing', async () => {
+        const fetch = stubReads();
+        const view = mount(TimezoneField, { props: { modelValue: 'Europe/London' }, global: plugins() });
+
+        expect(zonesOf(view)).toEqual(expect.arrayContaining(['Europe/London', 'America/New_York', 'Asia/Tokyo']));
+
+        await view.get('[data-testid="event-timezone-search"]').setValue('new york');
+
+        expect(zonesOf(view)).toContain('America/New_York');
+        expect(zonesOf(view)).not.toContain('Asia/Tokyo');
+
+        await view.get('[data-testid="event-timezone"]').setValue('America/New_York');
+        await flushPromises();
+
+        expect(view.emitted('update:modelValue')).toEqual([['America/New_York']]);
+        expect(writesOf(fetch)).toEqual([]);
+    });
+
+    it('keeps the chosen zone in the list whatever is searched for, so the select never loses it', async () => {
+        stubReads();
+        const view = mount(TimezoneField, { props: { modelValue: 'Europe/London' }, global: plugins() });
+
+        await view.get('[data-testid="event-timezone-search"]').setValue('tokyo');
+
+        expect(zonesOf(view)).toEqual(expect.arrayContaining(['Europe/London', 'Asia/Tokyo']));
+        expect(view.get<HTMLSelectElement>('[data-testid="event-timezone"]').element.value).toBe('Europe/London');
+    });
+
+    it('shows a fixed zone with the reason, and offers nothing to search', () => {
+        stubReads();
+        const view = mount(TimezoneField, {
+            props: { modelValue: 'Europe/London', fixedReason: 'Fixed because the schedule is written in it.' },
+            global: plugins(),
+        });
+
+        expect(view.get<HTMLSelectElement>('[data-testid="event-timezone"]').element.disabled).toBe(true);
+        expect(view.find('[data-testid="event-timezone-search"]').exists()).toBe(false);
+        expect(view.get('[data-testid="event-timezone-fixed"]').text()).toContain('schedule is written in it');
     });
 });

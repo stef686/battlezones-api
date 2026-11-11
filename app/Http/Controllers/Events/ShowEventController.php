@@ -51,11 +51,13 @@ class ShowEventController extends Controller
                 'manage_organisers' => false,
             ],
         ],
+        'timezone_is_fixed' => true,
     ]])]
     #[ResponseField('data.attendee_size', 'integer', 'How many Players make up one party. Two for a doubles Event.')]
     #[ResponseField('data.requires_allegiance', 'boolean', 'Whether a party must declare a side, because this Event pairs across the divide.')]
     #[ResponseField('data.attendees_count', 'integer', 'How many parties have entered. Present where the caller counted them.')]
     #[ResponseField('data.is_full', 'boolean', 'Whether every place has been taken. A null limit is no limit.')]
+    #[ResponseField('data.timezone_is_fixed', 'boolean', 'Whether the Event has a Schedule block, which fixes its timezone: every block\'s day is read in it.')]
     #[ResponseField('data.viewer', 'object', 'What the reader may see and do at this Event. Null for an anonymous request.', nullable: true)]
     #[ResponseField('data.viewer.is_organiser', 'boolean', 'Whether the reader runs this Event.')]
     #[ResponseField('data.viewer.is_lead_organiser', 'boolean', 'Whether the reader leads it, and so may appoint Organisers.')]

@@ -482,6 +482,15 @@ class Event extends Model
     }
 
     /**
+     * Whether any Schedule block has been written in the Event's timezone,
+     * which is what fixes the timezone (ADR 0002 amendment).
+     */
+    public function hasSchedule(): bool
+    {
+        return $this->scheduleBlocks()->exists();
+    }
+
+    /**
      * @return HasMany<EventScheduleBlock, $this>
      */
     public function scheduleBlocks(): HasMany

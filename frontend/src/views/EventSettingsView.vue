@@ -34,6 +34,7 @@ import EventDetailsFields from '@/components/EventDetailsFields.vue';
 import EventVenueFields from '@/components/EventVenueFields.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import TextField from '@/components/TextField.vue';
+import TimezoneField from '@/components/TimezoneField.vue';
 import type { EventDetails, EventVenue } from '@/lib/event-fields';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -60,6 +61,7 @@ interface Form {
   registration_closes_at: string;
   venue: EventVenue;
   colour: string | null;
+  timezone: string;
 }
 
 function formOf(loaded: EventSummary): Form {
@@ -78,6 +80,7 @@ function formOf(loaded: EventSummary): Form {
       venue_country: loaded.venue.country ?? '',
     },
     colour: loaded.colour ?? null,
+    timezone: loaded.timezone,
   };
 }
 
@@ -131,6 +134,10 @@ const changes = computed<EventChanges>(() => {
     changed.colour = form.value.colour;
   }
 
+  if (form.value.timezone !== saved.value.timezone) {
+    changed.timezone = form.value.timezone;
+  }
+
   for (const field of ['starts_at', 'ends_at', 'registration_closes_at'] as const) {
     if (current[field] !== original[field]) {
       changed[field] = current[field] === '' ? null : `${current[field]}:00Z`;
@@ -175,6 +182,16 @@ async function save(): Promise<void> {
     saving.value = false;
   }
 }
+
+/**
+ * Why the timezone can no longer move, once it cannot. Every Schedule block's
+ * day is read in the zone, so the API refuses a new one after the first block
+ * (ADR 0002 amendment); saying so here spares the Organiser finding out from
+ * a refusal.
+ */
+const timezoneFixedReason = computed(() => (event.value?.timezone_is_fixed === true
+  ? 'The timezone is fixed now the event has a schedule: every block\'s time is written in it.'
+  : null));
 
 const banner = computed(() => event.value?.banner ?? null);
 const bannerBusy = ref(false);
@@ -298,6 +315,12 @@ function localMoment(iso: string | null): string {
             :errors="errors.description"
           />
         </EventDetailsFields>
+
+        <TimezoneField
+          v-model="form.timezone"
+          :fixed-reason="timezoneFixedReason"
+          :errors="errors.timezone"
+        />
 
         <TextField
           v-model="form.registration_closes_at"
