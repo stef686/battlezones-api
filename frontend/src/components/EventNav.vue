@@ -27,6 +27,7 @@ import { RouterLink, useRoute } from 'vue-router';
 import { useApiClient } from '@/api';
 import { fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
+import { EVENT_SECTIONS, eventNavChipClass } from '@/lib/event-nav';
 
 const props = defineProps<{ eventSlug: string }>();
 
@@ -66,14 +67,6 @@ const chipOfRoute: Record<string, string> = {
   'event-format': 'organise',
   flags: 'organise',
 };
-
-const sections = [
-  { name: 'event', label: 'Home' },
-  { name: 'rounds', label: 'Rounds' },
-  { name: 'standings', label: 'Standings' },
-  { name: 'attendees', label: 'Attendees' },
-  { name: 'schedule', label: 'Schedule' },
-];
 
 /**
  * An Event nobody may see answers 404, and a nav offering its sections above
@@ -117,7 +110,7 @@ const chips = computed(() => {
   const viewer = event.value?.viewer;
 
   return [
-    ...sections,
+    ...EVENT_SECTIONS,
     ...(viewer?.is_attendee === true ? [{ name: 'my-team', label: 'My team' }] : []),
     ...(viewer?.permissions.organise === true ? [{ name: 'organise', label: 'Organisers' }] : []),
   ];
@@ -144,12 +137,7 @@ const chips = computed(() => {
           :to="{ name: chip.name, params: { eventSlug } }"
           :data-testid="`event-nav-${chip.name}`"
           :aria-current="active === chip.name ? 'page' : undefined"
-          :class="[
-            'block border-b-2 px-2 py-3 text-sm font-medium whitespace-nowrap focus:outline-hidden',
-            active === chip.name
-              ? 'border-primary text-navbar-nav-foreground'
-              : 'border-transparent text-muted-foreground-1 hover:text-navbar-nav-foreground focus:text-navbar-nav-foreground',
-          ]"
+          :class="eventNavChipClass(active === chip.name)"
         >
           {{ chip.label }}
         </RouterLink>

@@ -1288,6 +1288,16 @@ describe('the event colour', () => {
         expect(preview(view).get<HTMLImageElement>('[data-testid="event-header-banner"]').element.src).toMatch(/^blob:image-/);
     });
 
+    it('holds the game system line open before Format is reached, so the header is not shorter than it will be', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+        await toLook(view);
+
+        expect(preview(view).get('[data-testid="event-header-game-system"]').text()).toBe('Game system');
+    });
+
     it('wears the chosen colour in the preview, and drops it again for the platform colour', async () => {
         stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
 
