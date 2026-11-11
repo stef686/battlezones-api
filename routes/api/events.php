@@ -25,6 +25,7 @@ use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
 use App\Http\Controllers\Events\ListGameSystemsController;
 use App\Http\Controllers\Events\ListPollCandidatesController;
+use App\Http\Controllers\Events\ListTimezonesController;
 use App\Http\Controllers\Events\OpenEventPollController;
 use App\Http\Controllers\Events\PublishRoundController;
 use App\Http\Controllers\Events\ReorderEventScheduleController;
@@ -71,6 +72,7 @@ use App\Http\Controllers\Events\UpdatePaintingEntryController;
 
 Route::get('game-systems', ListGameSystemsController::class)->name('game-systems.index');
 Route::get('countries', ListCountriesController::class)->name('countries.index');
+Route::get('timezones', ListTimezonesController::class)->name('timezones.index');
 
 Route::get('events', ListEventsController::class)->name('events.index');
 Route::get('events/{event:slug}', ShowEventController::class)->name('events.show');

@@ -20,6 +20,8 @@ const GAME_SYSTEMS = {
 
 const COUNTRIES = { status: 200, body: { data: [{ code: 'GB', name: 'United Kingdom' }] } };
 
+const TIMEZONES = { status: 200, body: { data: ['America/New_York', 'Asia/Kolkata', 'Europe/London'] } };
+
 function createdBody(overrides: Record<string, unknown> = {}) {
     return {
         data: {
@@ -1194,6 +1196,7 @@ describe('the timezone', () => {
         const fetch = stubApi({
             '/api/game-systems': GAME_SYSTEMS,
             '/api/countries': COUNTRIES,
+            '/api/timezones': TIMEZONES,
             'POST /api/events': { status: 201, body: createdBody() },
         });
 
@@ -1221,10 +1224,22 @@ describe('the timezone', () => {
         });
     });
 
+    it('starts on the current name for a zone the phone reports by an old one', async () => {
+        vi.mocked(Intl.DateTimeFormat.prototype.resolvedOptions)
+            .mockReturnValue({ timeZone: 'Asia/Calcutta' } as Intl.ResolvedDateTimeFormatOptions);
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES, '/api/timezones': TIMEZONES });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get<HTMLSelectElement>('[data-testid="event-timezone"]').element.value).toBe('Asia/Kolkata');
+    });
+
     it('puts a refused timezone under the picker on the details step', async () => {
         stubApi({
             '/api/game-systems': GAME_SYSTEMS,
             '/api/countries': COUNTRIES,
+            '/api/timezones': TIMEZONES,
             'POST /api/events': {
                 status: 422,
                 body: { message: 'Invalid.', errors: { timezone: ['The timezone field must be a valid timezone.'] } },

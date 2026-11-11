@@ -58,6 +58,7 @@ import {
   type WizardStep,
 } from '@/lib/event-wizard';
 import { formatDateRange } from '@/lib/dates';
+import { currentZoneName } from '@/lib/timezones';
 import { useToastStore } from '@/stores/toast';
 
 const client = useApiClient();
@@ -66,7 +67,7 @@ const router = useRouter();
 const toasts = useToastStore();
 
 /** The phone's own zone is the best guess at the hall's, until the Organiser picks another. */
-const blank = blankDraft(Intl.DateTimeFormat().resolvedOptions().timeZone);
+const blank = blankDraft(currentZoneName(Intl.DateTimeFormat().resolvedOptions().timeZone));
 const draft = ref<EventDraft>(structuredClone(blank));
 
 /**

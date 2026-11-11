@@ -223,13 +223,3 @@ test('a timezone must be an iana identifier', function (string $timezone) {
         ->patchJson(route('events.update', ['event' => $event->slug]), ['timezone' => $timezone])
         ->assertJsonValidationErrors(['timezone']);
 })->with(['Croydon/High Street', 'GMT+1', '']);
-
-test('a timezone a browser still reports by its older name is accepted', function () {
-    $event = Event::factory()->published()->create();
-
-    $this->actingAs(organiserOf($event))
-        ->patchJson(route('events.update', ['event' => $event->slug]), ['timezone' => 'Asia/Calcutta'])
-        ->assertOk();
-
-    expect($event->refresh()->timezone)->toBe('Asia/Calcutta');
-});

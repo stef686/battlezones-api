@@ -1078,6 +1078,27 @@ paths:
       tags:
         - Events
       security: []
+  /api/timezones:
+    get:
+      summary: 'List Timezones'
+      operationId: listTimezones
+      description: 'Every IANA timezone an Event may be run in, in identifier order. Public: it is the list a timezone picker offers.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: string
+      tags:
+        - Events
+      security: []
   /api/events:
     get:
       summary: 'List Events'
