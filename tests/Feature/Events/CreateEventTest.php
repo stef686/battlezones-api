@@ -279,3 +279,11 @@ test('a setting the wizard does not ask for is refused rather than stored', func
 
     expect(Event::query()->count())->toBe(0);
 });
+
+test('a timezone a browser still reports by its older name is accepted, since the wizard defaults to it', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), newEvent(['timezone' => 'Asia/Calcutta']))
+        ->assertCreated();
+
+    expect(Event::query()->sole()->timezone)->toBe('Asia/Calcutta');
+});

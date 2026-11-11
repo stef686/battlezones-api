@@ -27,6 +27,11 @@ export interface EventSummary {
     requires_allegiance: boolean;
     /** The wall clock the Event is run on, which every schedule time is in. */
     timezone: string;
+    /**
+     * Whether a Schedule block now holds the timezone in place. Sent with a
+     * single Event read for its viewer, never on a listing.
+     */
+    timezone_is_fixed?: boolean;
     registration_closes_at: string | null;
     attendees_count?: number;
     is_full: boolean;
@@ -172,6 +177,8 @@ export interface EventChanges {
     max_attendees?: number | null;
     /** The Event Colour, editable whatever the Event's state. Null for the platform colour. */
     colour?: string | null;
+    /** An IANA zone. Refused by the API once the Event has a Schedule block. */
+    timezone?: string;
     /** Refused by the API once anybody has entered. */
     game_system_id?: number;
     /** How many Players make an Attendee. Refused once anybody has entered. */

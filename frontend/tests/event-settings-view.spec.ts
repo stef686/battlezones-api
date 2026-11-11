@@ -26,6 +26,8 @@ function eventBody(organise = true, overrides: Record<string, unknown> = {}) {
             max_attendees: 32,
             attendee_size: 2,
             requires_allegiance: true,
+            timezone: 'Europe/London',
+            timezone_is_fixed: false,
             registration_closes_at: null,
             attendees_count: 18,
             is_full: false,
@@ -360,5 +362,40 @@ describe('the event settings screen', () => {
 
         expect(view.get('[data-testid="missing"]').text().toLowerCase()).toContain('not found');
         expect(view.find('[data-testid="event-name"]').exists()).toBe(false);
+    });
+});
+
+describe('the event timezone in settings', () => {
+    it('can be moved while the event has no schedule, sending only the timezone', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            '/api/countries': COUNTRIES,
+            [`PATCH /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(true, { timezone: 'America/New_York' }) },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(valueOf(view, 'event-timezone')).toBe('Europe/London');
+
+        await view.get('[data-testid="event-timezone"]').setValue('America/New_York');
+        await view.get('[data-testid="settings-save"]').trigger('submit');
+        await flushPromises();
+
+        const patch = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PATCH');
+        expect(JSON.parse(String((patch?.[1] as RequestInit).body))).toEqual({ timezone: 'America/New_York' });
+    });
+
+    it('is shown as fixed, with the reason, once the event has a schedule', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(true, { timezone_is_fixed: true }) },
+            '/api/countries': COUNTRIES,
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get<HTMLSelectElement>('[data-testid="event-timezone"]').element.disabled).toBe(true);
+        expect(view.get('[data-testid="event-timezone-fixed"]').text()).toContain('schedule');
     });
 });

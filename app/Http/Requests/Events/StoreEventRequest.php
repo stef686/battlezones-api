@@ -76,7 +76,10 @@ class StoreEventRequest extends FormRequest
             'slug' => [...$this->slugShapeRules(), Rule::unique('events', 'slug')],
             'starts_at' => ['required', 'date', 'after_or_equal:now'],
             'ends_at' => ['required', 'date', 'after_or_equal:starts_at'],
-            'timezone' => ['required', 'string', 'timezone:all'],
+            // With the backward-compatible names: the wizard defaults to the
+            // browser's own zone, and some browsers still report the old ones
+            // ("Asia/Calcutta"). Both name the same zone.
+            'timezone' => ['required', 'string', 'timezone:all_with_bc'],
             'venue_name' => ['nullable', 'string', 'max:255'],
             'venue_address' => ['nullable', 'string', 'max:255'],
             'venue_city' => ['nullable', 'string', 'max:255'],

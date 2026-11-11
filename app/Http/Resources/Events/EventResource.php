@@ -74,7 +74,13 @@ class EventResource extends JsonResource
             'documents' => EventDocumentResource::collection($this->whenLoaded('documents')),
             'created_at' => $this->created_at?->toIso8601ZuluString(),
             'updated_at' => $this->updated_at?->toIso8601ZuluString(),
-            ...($this->withViewer ? ['viewer' => EventViewer::for($this->resource, $request->user('sanctum'))] : []),
+            ...($this->withViewer ? [
+                'viewer' => EventViewer::for($this->resource, $request->user('sanctum')),
+                // Whether a Schedule block now holds the timezone in place, so
+                // Settings can say so before an Organiser tries. On the single
+                // Event only, where it costs one query, never on a listing.
+                'timezone_is_fixed' => $this->resource->hasSchedule(),
+            ] : []),
         ];
     }
 }

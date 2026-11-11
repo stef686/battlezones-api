@@ -1496,12 +1496,16 @@ paths:
                           - attendee_id
                         description: 'What the reader may see and do at this Event. Null for an anonymous request.'
                         nullable: true
+                      timezone_is_fixed:
+                        type: boolean
+                        description: "Whether the Event has a Schedule block, which fixes its timezone: every block's day is read in it."
                     required:
                       - attendee_size
                       - requires_allegiance
                       - attendees_count
                       - is_full
                       - viewer
+                      - timezone_is_fixed
       tags:
         - Events
       security: []
@@ -1644,6 +1648,9 @@ paths:
                 attendee_size:
                   type: integer
                   description: 'How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered.'
+                timezone:
+                  type: string
+                  description: 'The IANA timezone the venue keeps. Refused once the Event has a Schedule block.'
                 slug:
                   type: string
                   description: ''

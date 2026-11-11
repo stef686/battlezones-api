@@ -40,6 +40,7 @@ import EventShapeFields from '@/components/EventShapeFields.vue';
 import EventVenueFields from '@/components/EventVenueFields.vue';
 import ScoreTypeListEditor from '@/components/ScoreTypeListEditor.vue';
 import TextField from '@/components/TextField.vue';
+import TimezoneField from '@/components/TimezoneField.vue';
 import { useSlugAvailability } from '@/composables/useSlugAvailability';
 import { errorsUnder, pairingFormatLabel, teamSizeLabel, type FieldErrors } from '@/lib/event-fields';
 import {
@@ -64,7 +65,7 @@ const queryClient = useQueryClient();
 const router = useRouter();
 const toasts = useToastStore();
 
-/** The phone's own zone is the best guess at the hall's until it can be chosen. */
+/** The phone's own zone is the best guess at the hall's, until the Organiser picks another. */
 const blank = blankDraft(Intl.DateTimeFormat().resolvedOptions().timeZone);
 const draft = ref<EventDraft>(structuredClone(blank));
 
@@ -466,20 +467,10 @@ function roundsLabel(count: number): string {
           />
         </EventDetailsFields>
 
-        <p
-          data-testid="create-timezone"
-          class="text-sm text-muted-foreground-1"
-        >
-          Times are in {{ draft.timezone }}.
-        </p>
-
-        <p
-          v-if="errors.timezone"
-          data-testid="create-timezone-error"
-          class="text-sm text-destructive"
-        >
-          {{ errors.timezone.join(' ') }}
-        </p>
+        <TimezoneField
+          v-model="draft.timezone"
+          :errors="errors.timezone"
+        />
 
         <EventVenueFields
           v-model="draft.venue"
