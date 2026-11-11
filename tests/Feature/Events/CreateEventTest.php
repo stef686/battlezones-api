@@ -148,23 +148,19 @@ test('an event cannot start in the past or end before it starts', function () {
         ->assertJsonValidationErrors(['ends_at' => 'cannot end before it starts']);
 });
 
-test('the url is lowercase letters, numbers and hyphens, and nobody else may hold it', function (string $slug, string $reason) {
-    Event::factory()->create(['slug' => 'taken-already']);
-
+test('the url is lowercase letters, numbers and hyphens, and not a reserved word', function (string $slug, string $reason) {
     $this->actingAs(User::factory()->create())
         ->postJson(route('events.store'), newEvent(['slug' => $slug]))
         ->assertJsonValidationErrors(['slug' => $reason]);
-})->with([
-    'upper case' => ['Croydon', 'lowercase letters, numbers and single hyphens'],
-    'spaces' => ['croydon doubles', 'lowercase letters, numbers and single hyphens'],
-    'leading hyphen' => ['-croydon', 'lowercase letters, numbers and single hyphens'],
-    'trailing hyphen' => ['croydon-', 'lowercase letters, numbers and single hyphens'],
-    'doubled hyphen' => ['croydon--doubles', 'lowercase letters, numbers and single hyphens'],
-    'only hyphens' => ['---', 'lowercase letters, numbers and single hyphens'],
-    'too short' => ['cd', 'between 3 and 60'],
-    'taken' => ['taken-already', 'already taken'],
-    'reserved by the create wizard' => ['new', 'reserved'],
-]);
+})->with('refused event slugs');
+
+test('nobody may hold a url another event already has, even a draft', function () {
+    Event::factory()->draft()->create(['slug' => 'taken-already']);
+
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), newEvent(['slug' => 'taken-already']))
+        ->assertJsonValidationErrors(['slug' => 'already taken']);
+});
 
 test('a slug taken between validation and the write is refused as taken, not a server error', function () {
     Event::factory()->create(['slug' => 'croydon-doubles']);

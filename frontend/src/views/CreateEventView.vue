@@ -39,6 +39,7 @@ import EventShapeFields from '@/components/EventShapeFields.vue';
 import EventVenueFields from '@/components/EventVenueFields.vue';
 import ScoreTypeListEditor from '@/components/ScoreTypeListEditor.vue';
 import TextField from '@/components/TextField.vue';
+import { useSlugAvailability } from '@/composables/useSlugAvailability';
 import { errorsUnder, teamSizeLabel, type FieldErrors } from '@/lib/event-fields';
 import {
   WIZARD_STEPS,
@@ -47,6 +48,8 @@ import {
   isUntouched,
   isShownField,
   landingOf,
+  SLUG_TAKEN,
+  slugFrom,
   problemsOf,
   submissionOf,
   type EventDraft,
@@ -63,6 +66,51 @@ const toasts = useToastStore();
 /** The phone's own zone is the best guess at the hall's until it can be chosen. */
 const blank = blankDraft(Intl.DateTimeFormat().resolvedOptions().timeZone);
 const draft = ref<EventDraft>(structuredClone(blank));
+
+/**
+ * The slug follows the name until the Organiser types one of their own;
+ * from then on it is theirs, and renaming the Event leaves it alone.
+ */
+const slugEdited = ref(false);
+
+watch(() => draft.value.details.name, (name) => {
+  if (!slugEdited.value) {
+    draft.value.slug = slugFrom(name);
+  }
+});
+
+/** Where the Event will be found, in full, so the Organiser sees what they are choosing. */
+const eventUrl = computed(() => (draft.value.slug === ''
+  ? null
+  : new URL(router.resolve({ name: 'event', params: { eventSlug: draft.value.slug } }).href, window.location.origin).href));
+
+const slugAvailability = useSlugAvailability(() => draft.value.slug);
+const slugTaken = computed(() => slugAvailability.value === 'taken');
+
+/**
+ * Said under the field the moment the API answers, rather than waiting for
+ * Next: an Organiser should not have to try a URL to learn it is gone.
+ */
+const slugErrors = computed(() => errors.value.slug ?? (slugTaken.value ? [SLUG_TAKEN] : []));
+
+const slugHint = computed(() => {
+  if (eventUrl.value === null) {
+    return 'Lowercase letters, numbers and hyphens.';
+  }
+
+  const where = `Your event will be at ${eventUrl.value}`;
+
+  if (slugAvailability.value === 'available') {
+    return `${where} — available.`;
+  }
+
+  return slugAvailability.value === 'checking' ? `${where} — checking…` : where;
+});
+
+function editSlug(slug: string): void {
+  slugEdited.value = true;
+  draft.value.slug = slug;
+}
 
 const step = ref<WizardStep>('details');
 const stepIndex = computed(() => WIZARD_STEPS.findIndex((candidate) => candidate.id === step.value));
@@ -187,7 +235,7 @@ async function leave(): Promise<void> {
 const nextLabel = computed(() => (step.value === 'look' && draft.value.banner === null ? 'Skip' : 'Next'));
 
 function next(): void {
-  const problems = problemsOf(step.value, draft.value);
+  const problems = problemsOf(step.value, draft.value, { slugTaken: slugTaken.value });
 
   errors.value = problems;
 
@@ -204,7 +252,7 @@ function next(): void {
  * carried past the step that would have refused it.
  */
 function jumpTo(target: WizardStep): void {
-  const { step: landing, problems } = landingOf(step.value, target, draft.value);
+  const { step: landing, problems } = landingOf(step.value, target, draft.value, { slugTaken: slugTaken.value });
 
   errors.value = problems;
   step.value = landing;
@@ -298,6 +346,9 @@ interface SummaryRow {
   label: string;
   value: string;
   truncate?: boolean;
+  /** Said under the value, for a choice that cannot be undone. */
+  warning?: string;
+  testid?: string;
 }
 
 const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[] }[] => {
@@ -308,7 +359,8 @@ const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[
   const rowsOf: Record<Exclude<WizardStep, 'confirm'>, SummaryRow[]> = {
     details: [
       { label: 'Name', value: details.name },
-      { label: 'URL', value: `/events/${draft.value.slug}` },
+      // The slug is permanent from the moment the Event exists (ADR 0006).
+      { label: 'URL', value: eventUrl.value ?? '', warning: 'Can\'t be changed later', testid: 'create-summary-url' },
       { label: 'When', value: `${formatDateRange(details.starts_at, details.ends_at)} (${draft.value.timezone})` },
       { label: 'Where', value: where === '' ? 'Not set yet' : where },
     ],
@@ -385,11 +437,12 @@ const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[
           :errors="errors"
         >
           <TextField
-            v-model="draft.slug"
+            :model-value="draft.slug"
             label="URL"
-            hint="Lowercase letters, numbers and hyphens."
+            :hint="slugHint"
             testid="create-slug"
-            :errors="errors.slug"
+            :errors="slugErrors"
+            @update:model-value="editSlug"
           />
         </EventDetailsFields>
 
@@ -482,6 +535,7 @@ const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[
             <div
               v-for="row in part.rows"
               :key="row.label"
+              :data-testid="row.testid"
               class="flex items-center justify-between gap-4 px-4 py-3 text-sm"
             >
               <dt class="shrink-0 text-muted-foreground-1">
@@ -492,6 +546,12 @@ const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[
                 :class="row.truncate ? 'truncate' : 'break-words'"
               >
                 {{ row.value }}
+                <span
+                  v-if="row.warning"
+                  class="block text-xs text-warning"
+                >
+                  {{ row.warning }}
+                </span>
               </dd>
             </div>
           </dl>

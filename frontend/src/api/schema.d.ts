@@ -1193,6 +1193,26 @@ export interface paths {
         patch: operations["markAPaintingEntry"];
         trace?: never;
     };
+    "/api/event-slug-availability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Check an Event slug
+         * @description Signed-in Users only. Whether a new Event could be created at this slug. A slug held by any Event, Drafts included, is taken; nothing else about that Event is said. A malformed or reserved slug is refused with 422, as creating the Event would refuse it.
+         */
+        get: operations["checkAnEventSlug"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events/{event_slug}/banner": {
         parameters: {
             query?: never;
@@ -3095,7 +3115,7 @@ export interface operations {
                 "application/json": {
                     /** @description What the Event is called. */
                     name: string;
-                    /** @description The Event's address: lowercase letters and digits, with single hyphens between words, 3 to 60 characters. Not a reserved word such as new. It can never be changed. */
+                    /** @description The Event's address: lowercase letters and digits, with single hyphens between words, 3 to 60 characters. Not a reserved word such as new or create. It can never be changed. */
                     slug: string;
                     /** @description When the Event starts, as an ISO 8601 timestamp. Not in the past. */
                     starts_at: string;
@@ -5256,6 +5276,46 @@ export interface operations {
                         errors?: {
                             field_name?: string[];
                         };
+                    };
+                };
+            };
+        };
+    };
+    checkAnEventSlug: {
+        parameters: {
+            query: {
+                /** @description The slug to check: lowercase letters and digits, with single hyphens between words, 3 to 60 characters, and not a reserved word. Must match the regex /^[a-z0-9]+(?:-[a-z0-9]+)*$/. Must not be one of <code>new</code> or <code>create</code> Must be between 3 and 60 characters. */
+                slug: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @description The slug that was checked. */
+                            slug: string;
+                            /** @description Whether no Event holds it. */
+                            available: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
                     };
                 };
             };

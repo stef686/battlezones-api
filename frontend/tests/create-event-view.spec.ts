@@ -912,3 +912,131 @@ describe('closing the tab on the wizard', () => {
         expect(wouldAsk()).toBe(false);
     });
 });
+
+describe('the url', () => {
+    function slugOf(view: View): string {
+        return view.get<HTMLInputElement>('[data-testid="create-slug"]').element.value;
+    }
+
+    it('fills in from the name until the organiser changes it themselves', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="event-name"]').setValue('Croydon Doubles: Café Edition!');
+
+        expect(slugOf(view)).toBe('croydon-doubles-cafe-edition');
+
+        await view.get('[data-testid="create-slug"]').setValue('croydon-27');
+        await view.get('[data-testid="event-name"]').setValue('Croydon Doubles 2027');
+
+        expect(slugOf(view)).toBe('croydon-27');
+    });
+
+    it('previews the full address the event will be at', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="event-name"]').setValue('Croydon Doubles');
+
+        expect(view.get('[data-testid="create-slug-hint"]').text())
+            .toContain(`${window.location.origin}/events/croydon-doubles`);
+    });
+
+    it('is shown in full on confirm, with a warning that it is for good', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+
+        const url = view.get('[data-testid="create-summary-url"]').text();
+
+        expect(url).toContain(`${window.location.origin}/events/croydon-doubles`);
+        expect(url).toContain('Can\'t be changed later');
+    });
+
+    describe('availability', () => {
+        function checksOf(fetch: ReturnType<typeof stubApi>): string[] {
+            return fetch.mock.calls
+                .map(([url]) => String(url))
+                .filter((url) => url.includes('/api/event-slug-availability'))
+                .map((url) => new URL(url).searchParams.get('slug') ?? '');
+        }
+
+        beforeEach(() => {
+            vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+        });
+
+        afterEach(() => {
+            vi.useRealTimers();
+        });
+
+        it('waits for the organiser to stop typing, then asks once whether the url is free', async () => {
+            const fetch = stubApi({
+                '/api/game-systems': GAME_SYSTEMS,
+                '/api/countries': COUNTRIES,
+                '/api/event-slug-availability': { status: 200, body: { data: { slug: 'croydon-doubles', available: true } } },
+            });
+
+            const view = mountView();
+            await flushPromises();
+
+            await view.get('[data-testid="create-slug"]').setValue('croydon');
+            await vi.advanceTimersByTimeAsync(100);
+            await view.get('[data-testid="create-slug"]').setValue('croydon-doubles');
+            await vi.advanceTimersByTimeAsync(100);
+
+            expect(checksOf(fetch)).toEqual([]);
+
+            await vi.advanceTimersByTimeAsync(1000);
+            await flushPromises();
+
+            expect(checksOf(fetch)).toEqual(['croydon-doubles']);
+            expect(view.get('[data-testid="create-slug-hint"]').text()).toContain('available');
+        });
+
+        it('says straight away when the url is taken, and will not move on until it is changed', async () => {
+            stubApi({
+                '/api/game-systems': GAME_SYSTEMS,
+                '/api/countries': COUNTRIES,
+                '/api/event-slug-availability': { status: 200, body: { data: { slug: 'croydon-doubles', available: false } } },
+            });
+
+            const view = mountView();
+            await flushPromises();
+
+            await fillDetails(view);
+            await vi.advanceTimersByTimeAsync(1000);
+            await flushPromises();
+
+            expect(view.get('[data-testid="create-slug-error"]').text()).toBe('That URL is already taken.');
+
+            await next(view);
+
+            expect(view.get('[data-testid="create-step-details"]').attributes('aria-current')).toBe('step');
+            expect(view.get('[data-testid="create-slug-error"]').text()).toBe('That URL is already taken.');
+        });
+
+        it('does not ask about a url that could never be used', async () => {
+            const fetch = stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+            const view = mountView();
+            await flushPromises();
+
+            await view.get('[data-testid="create-slug"]').setValue('new');
+            await vi.advanceTimersByTimeAsync(1000);
+            await flushPromises();
+
+            expect(checksOf(fetch)).toEqual([]);
+        });
+    });
+});

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Events;
 
 use App\Enums\Country;
+use App\Http\Requests\Events\Concerns\ValidatesEventSlug;
 use App\Http\Requests\Events\Concerns\ValidatesScoreTypeSet;
 use App\Models\Event;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -22,7 +23,7 @@ use Knuckles\Scribe\Attributes\BodyParam;
  * and ask whether PATCH should take it too.
  */
 #[BodyParam('name', 'string', 'What the Event is called.', required: true, example: 'Croydon Doubles')]
-#[BodyParam('slug', 'string', 'The Event\'s address: lowercase letters and digits, with single hyphens between words, 3 to 60 characters. Not a reserved word such as new. It can never be changed.', required: true, example: 'croydon-doubles')]
+#[BodyParam('slug', 'string', 'The Event\'s address: lowercase letters and digits, with single hyphens between words, 3 to 60 characters. Not a reserved word such as new or create. It can never be changed.', required: true, example: 'croydon-doubles')]
 #[BodyParam('starts_at', 'string', 'When the Event starts, as an ISO 8601 timestamp. Not in the past.', required: true, example: '2027-03-06T09:00:00+00:00')]
 #[BodyParam('ends_at', 'string', 'When the Event ends, as an ISO 8601 timestamp. Not before it starts.', required: true, example: '2027-03-07T18:00:00+00:00')]
 #[BodyParam('timezone', 'string', 'The IANA timezone the venue keeps.', required: true, example: 'Europe/London')]
@@ -45,16 +46,8 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('score_types[].loss_points', 'number', 'What a loss is worth. Required on a derived column.', required: false, example: 0)]
 class StoreEventRequest extends FormRequest
 {
+    use ValidatesEventSlug;
     use ValidatesScoreTypeSet;
-
-    /**
-     * Slugs an Event can never hold, because the SPA route they would sit at
-     * is already taken: `/events/new` is the create wizard, declared before
-     * `/events/:eventSlug`, so an Event at that address could never be opened.
-     *
-     * @var list<string>
-     */
-    public const RESERVED_SLUGS = ['new'];
 
     public function authorize(): bool
     {
@@ -68,15 +61,7 @@ class StoreEventRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'slug' => [
-                'required',
-                'string',
-                'between:3,60',
-                // Hyphens only between words: no leading, trailing or doubled ones.
-                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
-                Rule::notIn(self::RESERVED_SLUGS),
-                Rule::unique('events', 'slug'),
-            ],
+            'slug' => [...$this->slugShapeRules(), Rule::unique('events', 'slug')],
             'starts_at' => ['required', 'date', 'after_or_equal:now'],
             'ends_at' => ['required', 'date', 'after_or_equal:starts_at'],
             'timezone' => ['required', 'string', 'timezone:all'],
@@ -104,9 +89,7 @@ class StoreEventRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'slug.regex' => 'The URL may only use lowercase letters, numbers and single hyphens between them.',
-            'slug.not_in' => 'That URL is reserved.',
-            'slug.unique' => 'That URL is already taken.',
+            ...$this->slugMessages(),
             'starts_at.after_or_equal' => 'The event cannot start in the past.',
             'ends_at.after_or_equal' => 'The event cannot end before it starts.',
         ];

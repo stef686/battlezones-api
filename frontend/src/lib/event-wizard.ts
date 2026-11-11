@@ -50,8 +50,11 @@ const DAYS_AHEAD = 7;
 /** The same rules the API holds a slug to: words joined by single hyphens. */
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-/** Slugs whose `/events/<slug>` address an SPA route already holds, as the API reserves them. */
-const RESERVED_SLUGS: readonly string[] = ['new'];
+/** Slugs whose `/events/<slug>` address an SPA route holds or keeps, as the API reserves them. */
+const RESERVED_SLUGS: readonly string[] = ['new', 'create'];
+
+/** The longest slug the API takes. */
+const SLUG_MAX_LENGTH = 60;
 
 /** The top-level fields a wizard step asks for, and so can show a refusal under. */
 const SHOWN_FIELDS: readonly string[] = [
@@ -109,6 +112,22 @@ export function blankDraft(timezone: string, now: Date = new Date()): EventDraft
 }
 
 /**
+ * The slug a name suggests: accents dropped, anything that is not a letter or
+ * digit turned into a single hyphen, and cut to the longest slug the API
+ * takes without leaving a hyphen hanging off the end.
+ */
+export function slugFrom(name: string): string {
+    return name
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+/, '')
+        .slice(0, SLUG_MAX_LENGTH)
+        .replace(/-+$/, '');
+}
+
+/**
  * Whether a draft is still exactly as it started, so leaving it loses nothing.
  * A Banner is only ever chosen, so holding one is a change in itself.
  */
@@ -118,12 +137,44 @@ export function isUntouched(draft: EventDraft, blank: EventDraft): boolean {
 }
 
 /**
+ * What the wizard has learnt beyond the draft itself: the time to hold a
+ * start to, and whether the API has already said the slug is taken.
+ */
+export interface KnownFacts {
+    now?: Date;
+    slugTaken?: boolean;
+}
+
+/** Already held by an Event, as the API words it. */
+export const SLUG_TAKEN = 'That URL is already taken.';
+
+/**
+ * What is wrong with a slug's shape, as the API holds it, or null when the API
+ * could take it. Whether it is free is a question only the API can answer.
+ */
+export function slugProblem(slug: string): string | null {
+    if (slug === '') {
+        return 'Choose a URL for the event.';
+    }
+
+    if (slug.length < 3 || slug.length > SLUG_MAX_LENGTH || !SLUG_PATTERN.test(slug)) {
+        return 'Use 3 to 60 lowercase letters and numbers, with single hyphens between words.';
+    }
+
+    if (RESERVED_SLUGS.includes(slug)) {
+        return 'That URL is reserved.';
+    }
+
+    return null;
+}
+
+/**
  * What stops a step from passing, keyed as the API keys its own refusals, so
  * a message from either lands under the same field.
  */
-export function problemsOf(step: WizardStep, draft: EventDraft, now: Date = new Date()): FieldErrors {
+export function problemsOf(step: WizardStep, draft: EventDraft, known: KnownFacts = {}): FieldErrors {
     if (step === 'details') {
-        return detailsProblems(draft, now);
+        return detailsProblems(draft, known);
     }
 
     if (step === 'format') {
@@ -142,13 +193,13 @@ export function landingOf(
     from: WizardStep,
     to: WizardStep,
     draft: EventDraft,
-    now: Date = new Date(),
+    known: KnownFacts = {},
 ): { step: WizardStep; problems: FieldErrors } {
     const fromIndex = WIZARD_STEPS.findIndex((step) => step.id === from);
     const toIndex = WIZARD_STEPS.findIndex((step) => step.id === to);
 
     for (const { id } of WIZARD_STEPS.slice(fromIndex, toIndex)) {
-        const problems = problemsOf(id, draft, now);
+        const problems = problemsOf(id, draft, known);
 
         if (Object.keys(problems).length > 0) {
             return { step: id, problems };
@@ -204,7 +255,7 @@ export function submissionOf(draft: EventDraft): NewEvent {
     };
 }
 
-function detailsProblems(draft: EventDraft, now: Date): FieldErrors {
+function detailsProblems(draft: EventDraft, { now = new Date(), slugTaken = false }: KnownFacts): FieldErrors {
     const problems: FieldErrors = {};
     const { name, starts_at: startsAt, ends_at: endsAt } = draft.details;
 
@@ -212,12 +263,10 @@ function detailsProblems(draft: EventDraft, now: Date): FieldErrors {
         problems.name = ['Give the event a name.'];
     }
 
-    if (draft.slug === '') {
-        problems.slug = ['Choose a URL for the event.'];
-    } else if (draft.slug.length < 3 || draft.slug.length > 60 || !SLUG_PATTERN.test(draft.slug)) {
-        problems.slug = ['Use 3 to 60 lowercase letters and numbers, with single hyphens between words.'];
-    } else if (RESERVED_SLUGS.includes(draft.slug)) {
-        problems.slug = ['That URL is reserved.'];
+    const slug = slugProblem(draft.slug) ?? (slugTaken ? SLUG_TAKEN : null);
+
+    if (slug !== null) {
+        problems.slug = [slug];
     }
 
     if (startsAt === '') {
