@@ -15,10 +15,15 @@
  * the Event exists and then uploaded to the Banner route; a failed upload
  * never undoes the Event (ADR 0006), the Organiser is told to add it in
  * Settings instead.
+ *
+ * Steps already reached can be jumped to from the step indicator, and each
+ * part of Confirm links back to its own step. Leaving with something entered
+ * asks first — in the app for a navigation, through the browser for closing
+ * or reloading the tab — and stops asking once the Event exists.
  */
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave, useRouter } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
@@ -27,6 +32,7 @@ import { fetchGameSystems } from '@/api/game-systems';
 import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import EventBannerField from '@/components/EventBannerField.vue';
 import EventDetailsFields from '@/components/EventDetailsFields.vue';
 import EventShapeFields from '@/components/EventShapeFields.vue';
@@ -38,7 +44,9 @@ import {
   WIZARD_STEPS,
   blankDraft,
   firstStepWith,
+  isUntouched,
   isShownField,
+  landingOf,
   problemsOf,
   submissionOf,
   type EventDraft,
@@ -53,10 +61,25 @@ const router = useRouter();
 const toasts = useToastStore();
 
 /** The phone's own zone is the best guess at the hall's until it can be chosen. */
-const draft = ref<EventDraft>(blankDraft(Intl.DateTimeFormat().resolvedOptions().timeZone));
+const blank = blankDraft(Intl.DateTimeFormat().resolvedOptions().timeZone);
+const draft = ref<EventDraft>(structuredClone(blank));
 
 const step = ref<WizardStep>('details');
 const stepIndex = computed(() => WIZARD_STEPS.findIndex((candidate) => candidate.id === step.value));
+
+/**
+ * The furthest step the Organiser has got to. Anything up to it can be jumped
+ * to from the step indicator; anything past it has not been asked yet.
+ */
+const furthestIndex = ref(0);
+
+watch(stepIndex, (index) => {
+  furthestIndex.value = Math.max(furthestIndex.value, index);
+});
+
+function isReachable(index: number): boolean {
+  return index <= furthestIndex.value && index !== stepIndex.value;
+}
 
 const errors = ref<FieldErrors>({});
 const scoreTypeErrors = computed(() => errorsUnder(errors.value, 'score_types'));
@@ -89,6 +112,60 @@ const heldBanner = computed(() => (bannerPreview.value === null
   ? null
   : { large: bannerPreview.value, small: bannerPreview.value }));
 
+/**
+ * Whether leaving would throw work away. Nothing typed has nothing to lose,
+ * and once the Event exists everything typed is on it.
+ */
+const isCreated = ref(false);
+const hasUnsavedWork = computed(() => !isCreated.value && !isUntouched(draft.value, blank));
+
+/**
+ * Where the Organiser was going when they were asked whether to leave. Once
+ * they say yes, that same navigation is made again and let through.
+ */
+const leaveOpen = ref(false);
+let leavingFor: string | null = null;
+let leaveConfirmed = false;
+
+onBeforeRouteLeave((to) => {
+  if (!hasUnsavedWork.value || leaveConfirmed) {
+    return true;
+  }
+
+  leavingFor = to.fullPath;
+  leaveOpen.value = true;
+
+  return false;
+});
+
+/**
+ * Closing or reloading the tab is not a navigation the router sees, so the
+ * browser is asked to check instead, for exactly as long as there is work to
+ * lose. Browsers word that question themselves.
+ */
+function askBeforeUnload(event: BeforeUnloadEvent): void {
+  event.preventDefault();
+}
+
+watch(hasUnsavedWork, (isUnsaved) => {
+  if (isUnsaved) {
+    window.addEventListener('beforeunload', askBeforeUnload);
+  } else {
+    window.removeEventListener('beforeunload', askBeforeUnload);
+  }
+});
+
+onBeforeUnmount(() => window.removeEventListener('beforeunload', askBeforeUnload));
+
+async function leave(): Promise<void> {
+  if (leavingFor === null) {
+    return;
+  }
+
+  leaveConfirmed = true;
+  await router.push(leavingFor);
+}
+
 /** Look asks for nothing, so with nothing chosen moving on is skipping it. */
 const nextLabel = computed(() => (step.value === 'look' && draft.value.banner === null ? 'Skip' : 'Next'));
 
@@ -102,6 +179,18 @@ function next(): void {
   }
 
   step.value = WIZARD_STEPS[stepIndex.value + 1]?.id ?? step.value;
+}
+
+/**
+ * Straight to a step already reached. Going forward still holds every step in
+ * between to what it asks for, so a change made after jumping back cannot be
+ * carried past the step that would have refused it.
+ */
+function jumpTo(target: WizardStep): void {
+  const { step: landing, problems } = landingOf(step.value, target, draft.value);
+
+  errors.value = problems;
+  step.value = landing;
 }
 
 function back(): void {
@@ -121,6 +210,7 @@ async function submit(): Promise<void> {
     const created = await createEvent(client, submissionOf(draft.value));
     const { event, bannerRefusal } = await withHeldBanner(created);
 
+    isCreated.value = true;
     queryClient.setQueryData(keys.event(event.slug), event);
     toasts.show(bannerRefusal === null
       ? 'Event created'
@@ -182,22 +272,43 @@ const { data: gameSystems } = useQuery({
   retry: false,
 });
 
-const summary = computed(() => {
+/**
+ * What Confirm reads back, one part per step and in step order, so each part
+ * can send the Organiser back to the step that asked for it. A row marked
+ * `truncate` is a file name, cut short rather than wrapped.
+ */
+interface SummaryRow {
+  label: string;
+  value: string;
+  truncate?: boolean;
+}
+
+const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[] }[] => {
   const { details, venue, shape, scoreTypes } = draft.value;
   const where = [venue.venue_name, venue.venue_city].filter((part) => part !== '').join(', ');
   const system = gameSystems.value?.find((candidate) => String(candidate.id) === shape.game_system_id);
 
-  return [
-    { label: 'Name', value: details.name },
-    { label: 'URL', value: `/events/${draft.value.slug}` },
-    { label: 'When', value: `${formatDateRange(details.starts_at, details.ends_at)} (${draft.value.timezone})` },
-    { label: 'Where', value: where === '' ? 'Not set yet' : where },
-    { label: 'Banner', value: draft.value.banner?.name ?? 'No banner', edit: 'look' as const, testid: 'create-summary-look' },
-    { label: 'Game system', value: system?.name ?? '' },
-    { label: 'Team size', value: teamSizeLabel(Number(shape.attendee_size)) },
-    { label: 'Places', value: shape.max_attendees === '' ? 'No limit' : shape.max_attendees },
-    { label: 'Scoring', value: scoreTypes.map((row) => row.name).join(', ') },
-  ];
+  const rowsOf: Record<Exclude<WizardStep, 'confirm'>, SummaryRow[]> = {
+    details: [
+      { label: 'Name', value: details.name },
+      { label: 'URL', value: `/events/${draft.value.slug}` },
+      { label: 'When', value: `${formatDateRange(details.starts_at, details.ends_at)} (${draft.value.timezone})` },
+      { label: 'Where', value: where === '' ? 'Not set yet' : where },
+    ],
+    look: [
+      { label: 'Banner', value: draft.value.banner?.name ?? 'No banner', truncate: true },
+    ],
+    format: [
+      { label: 'Game system', value: system?.name ?? '' },
+      { label: 'Team size', value: teamSizeLabel(Number(shape.attendee_size)) },
+      { label: 'Places', value: shape.max_attendees === '' ? 'No limit' : shape.max_attendees },
+      { label: 'Scoring', value: scoreTypes.map((row) => row.name).join(', ') },
+    ],
+  };
+
+  return WIZARD_STEPS
+    .filter((candidate) => candidate.id !== 'confirm')
+    .map((candidate) => ({ step: candidate.id, name: candidate.name, rows: rowsOf[candidate.id as keyof typeof rowsOf] }));
 });
 </script>
 
@@ -218,9 +329,22 @@ const summary = computed(() => {
           :data-testid="`create-step-${candidate.id}`"
           :aria-current="candidate.id === step ? 'step' : undefined"
           class="flex-1 border-b-2 pb-1"
-          :class="index <= stepIndex ? 'border-primary text-foreground' : 'border-card-line text-muted-foreground'"
+          :class="[
+            index <= furthestIndex ? 'border-primary text-foreground' : 'border-card-line text-muted-foreground',
+            index === stepIndex ? 'font-semibold' : '',
+          ]"
         >
-          {{ candidate.name }}
+          <button
+            v-if="isReachable(index)"
+            type="button"
+            class="w-full text-left hover:text-primary"
+            @click="jumpTo(candidate.id)"
+          >
+            {{ candidate.name }}
+          </button>
+          <template v-else>
+            {{ candidate.name }}
+          </template>
         </li>
       </ol>
     </header>
@@ -311,36 +435,58 @@ const summary = computed(() => {
         </section>
       </template>
 
-      <dl
+      <div
         v-else
         data-testid="create-summary"
-        class="flex flex-col divide-y divide-card-divider rounded-lg border border-card-line bg-card"
+        class="flex flex-col gap-4"
       >
-        <div
-          v-for="row in summary"
-          :key="row.label"
-          :data-testid="row.testid"
-          class="flex items-center justify-between gap-4 px-4 py-3 text-sm"
+        <section
+          v-for="part in summary"
+          :key="part.step"
+          :data-testid="`create-summary-${part.step}`"
+          class="rounded-lg border border-card-line bg-card"
         >
-          <dt class="text-muted-foreground-1">
-            {{ row.label }}
-          </dt>
-          <dd class="flex min-w-0 items-center gap-3 text-right text-foreground">
-            <!-- Only a file name is cut short: a long name or scoring list wraps. -->
-            <span :class="row.edit ? 'truncate' : 'break-words'">{{ row.value }}</span>
+          <header class="flex items-center justify-between gap-4 border-b border-card-divider py-1 pr-1 pl-4">
+            <h2 class="text-sm font-semibold text-foreground">
+              {{ part.name }}
+            </h2>
             <AppButton
-              v-if="row.edit"
               type="button"
               variant="ghost"
               size="sm"
-              :data-testid="`create-edit-${row.edit}`"
-              @click="step = row.edit"
+              :data-testid="`create-edit-${part.step}`"
+              @click="jumpTo(part.step)"
             >
-              Edit
+              Edit<span class="sr-only"> {{ part.name }}</span>
             </AppButton>
-          </dd>
-        </div>
-      </dl>
+          </header>
+
+          <dl class="flex flex-col divide-y divide-card-divider">
+            <div
+              v-for="row in part.rows"
+              :key="row.label"
+              class="flex items-center justify-between gap-4 px-4 py-3 text-sm"
+            >
+              <dt class="shrink-0 text-muted-foreground-1">
+                {{ row.label }}
+              </dt>
+              <dd
+                class="min-w-0 text-right text-foreground"
+                :class="row.truncate ? 'truncate' : 'break-words'"
+              >
+                {{ row.value }}
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <p
+          data-testid="create-draft-note"
+          class="text-sm text-muted-foreground-1"
+        >
+          Your event is saved as a draft that only its organisers can see until it is published.
+        </p>
+      </div>
 
       <div class="flex gap-3">
         <AppButton
@@ -373,5 +519,16 @@ const summary = computed(() => {
         </AppButton>
       </div>
     </form>
+
+    <ConfirmDialog
+      v-model:open="leaveOpen"
+      title="Leave without creating?"
+      confirm-label="Leave"
+      cancel-label="Keep editing"
+      testid="create-leave"
+      @confirm="leave"
+    >
+      Nothing has been saved yet, so what you've entered will be lost.
+    </ConfirmDialog>
   </main>
 </template>
