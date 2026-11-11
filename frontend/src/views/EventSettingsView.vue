@@ -29,6 +29,7 @@ import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
 import EventBannerField from '@/components/EventBannerField.vue';
+import EventColourField from '@/components/EventColourField.vue';
 import EventDetailsFields from '@/components/EventDetailsFields.vue';
 import EventVenueFields from '@/components/EventVenueFields.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
@@ -58,6 +59,7 @@ interface Form {
   description: string;
   registration_closes_at: string;
   venue: EventVenue;
+  colour: string | null;
 }
 
 function formOf(loaded: EventSummary): Form {
@@ -75,6 +77,7 @@ function formOf(loaded: EventSummary): Form {
       venue_city: loaded.venue.city ?? '',
       venue_country: loaded.venue.country ?? '',
     },
+    colour: loaded.colour ?? null,
   };
 }
 
@@ -122,6 +125,10 @@ const changes = computed<EventChanges>(() => {
     if (current[field] !== original[field]) {
       changed[field] = current[field] === '' ? null : current[field];
     }
+  }
+
+  if (form.value.colour !== saved.value.colour) {
+    changed.colour = form.value.colour;
   }
 
   for (const field of ['starts_at', 'ends_at', 'registration_closes_at'] as const) {
@@ -275,6 +282,11 @@ function localMoment(iso: string | null): string {
         class="flex flex-col gap-5"
         @submit.prevent="save"
       >
+        <EventColourField
+          v-model="form.colour"
+          :errors="errors"
+        />
+
         <EventDetailsFields
           v-model="form.details"
           :errors="errors"

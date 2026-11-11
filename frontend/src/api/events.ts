@@ -32,6 +32,8 @@ export interface EventSummary {
     game_system: { id: number; name: string; slug: string } | null;
     /** Both normalised variants, or null while the header is flat. */
     banner: { large: string; small: string } | null;
+    /** The Event Colour as a lowercase `#rrggbb`, or null for the platform colour. */
+    colour: string | null;
     venue: {
         name: string | null;
         address: string | null;
@@ -167,6 +169,8 @@ export interface EventChanges {
     ends_at?: string | null;
     registration_closes_at?: string | null;
     max_attendees?: number | null;
+    /** The Event Colour, editable whatever the Event's state. Null for the platform colour. */
+    colour?: string | null;
     /** Refused by the API once anybody has entered. */
     game_system_id?: number;
     /** How many Players make an Attendee. Refused once anybody has entered. */

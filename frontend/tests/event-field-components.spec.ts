@@ -6,6 +6,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
 import EventBannerField from '@/components/EventBannerField.vue';
+import EventColourField from '@/components/EventColourField.vue';
 import EventDetailsFields from '@/components/EventDetailsFields.vue';
 import EventShapeFields from '@/components/EventShapeFields.vue';
 import EventVenueFields from '@/components/EventVenueFields.vue';
@@ -115,6 +116,59 @@ describe('the event shape fields', () => {
         await view.get('[data-testid="event-max-attendees"]').setValue('40');
 
         expect(view.emitted('update:modelValue')?.at(-1)).toEqual([{ ...shape, max_attendees: '40' }]);
+    });
+});
+
+describe('the event colour field', () => {
+    it('hands a preset back without sending it', async () => {
+        const fetch = stubReads();
+        const view = mount(EventColourField, { props: { modelValue: null }, global: plugins() });
+
+        await view.get('[data-testid="event-colour-preset-#2563eb"]').trigger('click');
+
+        expect(view.emitted('update:modelValue')?.at(-1)).toEqual(['#2563eb']);
+        expect(writesOf(fetch)).toEqual([]);
+    });
+
+    it('marks the preset the event already wears', () => {
+        const view = mount(EventColourField, { props: { modelValue: '#2563eb' }, global: plugins() });
+
+        expect(view.get('[data-testid="event-colour-preset-#2563eb"]').attributes('aria-pressed')).toBe('true');
+        expect(view.get('[data-testid="event-colour-none"]').attributes('aria-pressed')).toBe('false');
+    });
+
+    it('takes any hex typed in, whatever its case, and stores it the one way the api does', async () => {
+        const view = mount(EventColourField, { props: { modelValue: null }, global: plugins() });
+
+        await view.get('[data-testid="event-colour-hex"]').setValue('#7C3AED');
+
+        expect(view.emitted('update:modelValue')?.at(-1)).toEqual(['#7c3aed']);
+    });
+
+    it('holds back a hex until it is whole, and says what it wants', async () => {
+        const view = mount(EventColourField, { props: { modelValue: '#2563eb' }, global: plugins() });
+
+        await view.get('[data-testid="event-colour-hex"]').setValue('#7c3');
+
+        expect(view.emitted('update:modelValue')).toBeUndefined();
+        expect(view.get('[data-testid="event-colour-hex-error"]').text()).toContain('#c2410c');
+    });
+
+    it('goes back to the platform colour', async () => {
+        const view = mount(EventColourField, { props: { modelValue: '#2563eb' }, global: plugins() });
+
+        await view.get('[data-testid="event-colour-none"]').trigger('click');
+
+        expect(view.emitted('update:modelValue')?.at(-1)).toEqual([null]);
+    });
+
+    it('shows a refusal from the api under the hex', () => {
+        const view = mount(EventColourField, {
+            props: { modelValue: '#2563eb', errors: { colour: ['The colour must be a hex value like #c2410c.'] } },
+            global: plugins(),
+        });
+
+        expect(view.get('[data-testid="event-colour-hex-error"]').text()).toBe('The colour must be a hex value like #c2410c.');
     });
 });
 

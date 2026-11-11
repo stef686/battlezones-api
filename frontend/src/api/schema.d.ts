@@ -3070,6 +3070,7 @@ export interface operations {
                                 country?: string;
                             };
                             banner?: string | null;
+                            colour?: string | null;
                             created_at?: string;
                             updated_at?: string;
                         };
@@ -3187,6 +3188,8 @@ export interface operations {
                     registration_closes_at?: string;
                     /** @description How many parties may enter. Null for no limit, and never fewer than have already entered. */
                     max_attendees?: number;
+                    /** @description The Event Colour, as a lowercase #rrggbb hex. Null for the platform colour. */
+                    colour?: string;
                     /** @description The Game System the Event is played under. Refused once anybody has entered. */
                     game_system_id?: number;
                     /** @description How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered. */
@@ -3226,6 +3229,7 @@ export interface operations {
                                 country?: string;
                             };
                             banner?: string | null;
+                            colour?: string | null;
                             created_at?: string;
                             updated_at?: string;
                         };
@@ -5180,6 +5184,7 @@ export interface operations {
                                 country?: string;
                             };
                             banner?: string | null;
+                            colour?: string | null;
                             created_at?: string;
                             updated_at?: string;
                         };
@@ -5253,6 +5258,7 @@ export interface operations {
                                 country?: string;
                             };
                             banner?: string | null;
+                            colour?: string | null;
                             created_at?: string;
                             updated_at?: string;
                         };

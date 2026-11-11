@@ -416,3 +416,57 @@ describe('the event header', () => {
         expect(header.find('.event-header-scrim-bottom').exists()).toBe(true);
     });
 });
+
+describe('an event colour', () => {
+    function primaryOn(element: { attributes: (name: string) => string | undefined }): string {
+        return element.attributes('style') ?? '';
+    }
+
+    it('paints the event screens, header and nav included, in the colour the organiser chose', async () => {
+        stubEvent(eventBody({ colour: '#2563eb' }));
+        await router.push(`/events/${EVENT_SLUG}/standings`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        const scope = view.get('[data-testid="event-colour-scope"]');
+
+        expect(primaryOn(scope)).toContain('--primary-500: oklch(');
+        expect(scope.find('[data-testid="event-header"]').exists()).toBe(true);
+        expect(scope.find('[data-testid="event-nav"]').exists()).toBe(true);
+        expect(scope.find('[data-testid="screen"]').exists()).toBe(true);
+    });
+
+    it('leaves the tab bar the platform colour, since it is not the event\'s', async () => {
+        stubEvent(eventBody({ colour: '#2563eb' }));
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        expect(view.get('[data-testid="event-colour-scope"]').find('[data-testid="tab-bar"]').exists()).toBe(false);
+    });
+
+    it('changes nothing on an event without one', async () => {
+        stubEvent(eventBody({ colour: null }));
+        await router.push(`/events/${EVENT_SLUG}`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        expect(primaryOn(view.get('[data-testid="event-colour-scope"]'))).not.toContain('--primary');
+    });
+
+    it('changes nothing on a screen that belongs to no event', async () => {
+        await router.push('/login');
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        expect(primaryOn(view.get('[data-testid="event-colour-scope"]'))).not.toContain('--primary');
+    });
+});
