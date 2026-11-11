@@ -5,6 +5,7 @@ namespace App\Http\Requests\Events;
 use App\Casts\EventSettings;
 use App\Enums\Country;
 use App\Enums\PairingFormat;
+use App\Http\Requests\Events\Concerns\ValidatesEventColour;
 use App\Http\Requests\Events\Concerns\ValidatesEventSlug;
 use App\Http\Requests\Events\Concerns\ValidatesScoreTypeSet;
 use App\Models\Event;
@@ -36,6 +37,7 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('game_system_id', 'integer', 'The Game System the Event is played under.', required: true, example: 4)]
 #[BodyParam('attendee_size', 'integer', 'How many Players make up an Attendee: 1 for singles, up to 8.', required: true, example: 2)]
 #[BodyParam('max_attendees', 'integer', 'How many parties may enter. Null for no limit.', required: false, example: 24)]
+#[BodyParam('colour', 'string', 'The Event Colour, as a lowercase #rrggbb hex. Left out or null for the platform colour. Editable later.', required: false, example: '#c2410c')]
 #[BodyParam('pairing_format', 'string', 'How Rounds are paired. Only formats that are built are accepted: swiss, for now. It can never be changed.', required: true, example: 'swiss')]
 #[BodyParam('settings', 'object', 'How the Event is played. Left out or null, it runs open-ended and Players need not pick a side.', required: false)]
 #[BodyParam('settings.round_count', 'integer', 'How many Rounds the Event runs, 1 to 20. Null for open-ended.', required: false, example: 5)]
@@ -52,6 +54,7 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('score_types[].loss_points', 'number', 'What a loss is worth. Required on a derived column.', required: false, example: 0)]
 class StoreEventRequest extends FormRequest
 {
+    use ValidatesEventColour;
     use ValidatesEventSlug;
     use ValidatesScoreTypeSet;
 
@@ -86,6 +89,7 @@ class StoreEventRequest extends FormRequest
             'game_system_id' => ['required', 'integer', Rule::exists('game_systems', 'id')],
             'attendee_size' => ['required', 'integer', 'between:1,8'],
             'max_attendees' => ['nullable', 'integer', 'min:1'],
+            'colour' => $this->colourRules(),
             // Only a built format: anything else would be paired as Swiss
             // without saying so (ADR 0006).
             'pairing_format' => ['required', Rule::enum(PairingFormat::class)->only(PairingFormat::available())],
@@ -113,6 +117,7 @@ class StoreEventRequest extends FormRequest
     {
         return [
             ...$this->slugMessages(),
+            ...$this->colourMessages(),
             'starts_at.after_or_equal' => 'The event cannot start in the past.',
             'ends_at.after_or_equal' => 'The event cannot end before it starts.',
             'pairing_format.Illuminate\\Validation\\Rules\\Enum' => 'Choose a pairing format that is available.',

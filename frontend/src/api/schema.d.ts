@@ -3178,6 +3178,8 @@ export interface operations {
                     attendee_size: number;
                     /** @description How many parties may enter. Null for no limit. */
                     max_attendees?: number;
+                    /** @description The Event Colour, as a lowercase #rrggbb hex. Left out or null for the platform colour. Editable later. */
+                    colour?: string;
                     /** @description How Rounds are paired. Only formats that are built are accepted: swiss, for now. It can never be changed. */
                     pairing_format: string;
                     /** @description How the Event is played. Left out or null, it runs open-ended and Players need not pick a side. */

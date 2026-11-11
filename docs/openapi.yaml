@@ -1335,6 +1335,9 @@ paths:
                 max_attendees:
                   type: integer
                   description: 'How many parties may enter. Null for no limit.'
+                colour:
+                  type: string
+                  description: 'The Event Colour, as a lowercase #rrggbb hex. Left out or null for the platform colour. Editable later.'
                 pairing_format:
                   type: string
                   description: 'How Rounds are paired. Only formats that are built are accepted: swiss, for now. It can never be changed.'

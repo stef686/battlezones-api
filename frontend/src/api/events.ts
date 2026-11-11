@@ -204,6 +204,8 @@ export interface NewEvent {
     game_system_id: number;
     attendee_size: number;
     max_attendees: number | null;
+    /** The Event Colour, lowercase `#rrggbb`. Null for the platform colour. */
+    colour: string | null;
     /** Only a format the API has built. Permanent from the moment it exists. */
     pairing_format: PairingFormat;
     settings: {

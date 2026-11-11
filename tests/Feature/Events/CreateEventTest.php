@@ -279,3 +279,30 @@ test('a setting the wizard does not ask for is refused rather than stored', func
 
     expect(Event::query()->count())->toBe(0);
 });
+
+test('an event is created in the colour the organiser chose', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), newEvent(['colour' => '#c2410c']))
+        ->assertCreated()
+        ->assertJsonPath('data.colour', '#c2410c');
+
+    expect(Event::query()->sole()->colour)->toBe('#c2410c');
+});
+
+test('an event created without a colour wears the platform colour', function (array $submission) {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), $submission)
+        ->assertCreated()
+        ->assertJsonPath('data.colour', null);
+})->with([
+    'colour left out' => fn (): array => newEvent(),
+    'colour sent as null' => fn (): array => newEvent(['colour' => null]),
+]);
+
+test('a colour on create is held to the same six-digit hex as editing it', function (string $colour) {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), newEvent(['colour' => $colour]))
+        ->assertJsonValidationErrors(['colour' => 'hex value like #c2410c']);
+
+    expect(Event::query()->count())->toBe(0);
+})->with(['c2410c', '#C2410C', '#c24', 'orange', '#c2410cff']);

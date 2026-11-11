@@ -34,7 +34,9 @@ import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import EventBannerField from '@/components/EventBannerField.vue';
+import EventColourField from '@/components/EventColourField.vue';
 import EventDetailsFields from '@/components/EventDetailsFields.vue';
+import EventLookPreview from '@/components/EventLookPreview.vue';
 import EventPlayFields from '@/components/EventPlayFields.vue';
 import EventShapeFields from '@/components/EventShapeFields.vue';
 import EventVenueFields from '@/components/EventVenueFields.vue';
@@ -58,6 +60,7 @@ import {
   type WizardStep,
 } from '@/lib/event-wizard';
 import { formatDateRange } from '@/lib/dates';
+import { EVENT_COLOUR_PRESETS } from '@/lib/event-colour';
 import { currentZoneName } from '@/lib/timezones';
 import { useToastStore } from '@/stores/toast';
 
@@ -246,7 +249,7 @@ async function leave(): Promise<void> {
 }
 
 /** Look asks for nothing, so with nothing chosen moving on is skipping it. */
-const nextLabel = computed(() => (step.value === 'look' && draft.value.banner === null ? 'Skip' : 'Next'));
+const nextLabel = computed(() => (step.value === 'look' && draft.value.banner === null && draft.value.colour === null ? 'Skip' : 'Next'));
 
 function next(): void {
   const problems = problemsOf(step.value, draft.value, { slugTaken: slugTaken.value });
@@ -380,6 +383,7 @@ const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[
     ],
     look: [
       { label: 'Banner', value: draft.value.banner?.name ?? 'No banner', truncate: true },
+      { label: 'Colour', value: colourName(draft.value.colour) },
     ],
     format: [
       { label: 'Game system', value: system?.name ?? '' },
@@ -397,6 +401,22 @@ const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[
     .filter((candidate) => candidate.id !== 'confirm')
     .map((candidate) => ({ step: candidate.id, name: candidate.name, rows: rowsOf[candidate.id as keyof typeof rowsOf] }));
 });
+
+/** A preset reads by its name, any other colour by its hex. */
+function colourName(colour: string | null): string {
+  if (colour === null) {
+    return 'Platform colour';
+  }
+
+  const preset = EVENT_COLOUR_PRESETS.find((candidate) => candidate.hex === colour);
+
+  return preset === undefined ? colour : `${preset.name} (${colour})`;
+}
+
+/** What the Look preview reads, from what the Organiser has entered so far. */
+const previewSystem = computed(() => gameSystems.value
+  ?.find((candidate) => String(candidate.id) === draft.value.shape.game_system_id)?.name ?? null);
+const previewDates = computed(() => formatDateRange(draft.value.details.starts_at, draft.value.details.ends_at));
 
 function roundsLabel(count: number): string {
   return count === 1 ? '1 round' : `${count} rounds`;
@@ -481,13 +501,27 @@ function roundsLabel(count: number): string {
 
       <template v-else-if="step === 'look'">
         <p class="text-sm text-muted-foreground-1">
-          Optional. It uploads once the event is created, and can be changed later in Settings.
+          Optional. Both can be changed later in Settings, and the banner uploads once the event is created.
         </p>
+
+        <EventLookPreview
+          data-testid="create-look-preview"
+          :name="draft.details.name"
+          :game-system="previewSystem"
+          :dates="previewDates"
+          :banner="heldBanner"
+          :colour="draft.colour"
+        />
 
         <EventBannerField
           :banner="heldBanner"
           @choose="draft.banner = $event"
           @remove="draft.banner = null"
+        />
+
+        <EventColourField
+          v-model="draft.colour"
+          :errors="errors"
         />
       </template>
 

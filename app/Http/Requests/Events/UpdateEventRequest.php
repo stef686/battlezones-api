@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Events;
 
 use App\Enums\Country;
+use App\Http\Requests\Events\Concerns\ValidatesEventColour;
 use App\Models\Event;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -38,6 +39,8 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('attendee_size', 'integer', 'How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered.', required: false, example: 2)]
 class UpdateEventRequest extends FormRequest
 {
+    use ValidatesEventColour;
+
     /**
      * An Event that is not publicly visible answers 404 to anyone but its
      * Organisers, exactly as reading it does: a 403 would confirm it exists.
@@ -77,7 +80,7 @@ class UpdateEventRequest extends FormRequest
             'max_attendees' => ['sometimes', 'nullable', 'integer', 'min:'.max(1, $this->event()->attendees()->count())],
             // Presentation only, so editable whatever state the Event is in
             // (ADR 0002 amendment).
-            'colour' => ['sometimes', 'nullable', 'string', 'regex:'.Event::COLOUR_PATTERN],
+            'colour' => ['sometimes', ...$this->colourRules()],
 
             // The shape an Event's entries are built at. Free while nobody
             // has entered; refused loudly the moment somebody has, because
@@ -112,7 +115,7 @@ class UpdateEventRequest extends FormRequest
     {
         return [
             'game_system_id.prohibited' => 'The game system cannot change once somebody has entered: their factions belong to the system they entered under.',
-            'colour.regex' => 'The colour must be a hex value like #c2410c.',
+            ...$this->colourMessages(),
             'attendee_size.prohibited' => 'The team size cannot change once somebody has entered: every entry was built at the current size.',
             'timezone.prohibited' => 'The timezone cannot change once the event has a schedule: the schedule is written in it.',
         ];
