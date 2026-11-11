@@ -1069,3 +1069,122 @@ describe('the url', () => {
         });
     });
 });
+
+describe('how the event is played', () => {
+    async function toFormat(view: View): Promise<void> {
+        await fillDetails(view);
+        await next(view);
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+    }
+
+    it('offers every pairing format, but only swiss can be chosen yet', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+        await toFormat(view);
+
+        const formats = ['swiss', 'round_robin', 'knockout', 'random']
+            .map((format) => view.get<HTMLInputElement>(`[data-testid="event-pairing-format-${format}"]`));
+
+        expect(formats.map((format) => format.element.disabled)).toEqual([false, true, true, true]);
+        expect(formats[0]?.element.checked).toBe(true);
+
+        for (const format of ['round_robin', 'knockout', 'random']) {
+            expect(view.get(`[data-testid="event-pairing-format-${format}-option"]`).text()).toContain('Coming soon');
+        }
+
+        expect(view.get('[data-testid="event-pairing-format-swiss-option"]').text()).not.toContain('Coming soon');
+    });
+
+    it('runs open-ended, with nobody picking a side, unless the organiser says otherwise', async () => {
+        const fetch = stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 201, body: createdBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+        await toFormat(view);
+        await next(view);
+
+        const format = view.get('[data-testid="create-summary-format"]').text();
+        expect(format).toContain('Swiss');
+        expect(format).toContain('Open-ended');
+        expect(format).toMatch(/Allegiance\s*No/);
+
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        expect(bodyOf(fetch, 'POST')).toMatchObject({
+            pairing_format: 'swiss',
+            settings: { round_count: null, requires_opposed_allegiance: false },
+        });
+    });
+
+    it('sends the rounds the organiser set, and that players pick a side', async () => {
+        const fetch = stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 201, body: createdBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+        await toFormat(view);
+        await view.get('[data-testid="event-round-count"]').setValue('5');
+        await view.get('[data-testid="event-allegiance"]').setValue(true);
+        await next(view);
+
+        const format = view.get('[data-testid="create-summary-format"]').text();
+        expect(format).toContain('5 rounds');
+        expect(format).toMatch(/Allegiance\s*Players pick a side/);
+
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        expect(bodyOf(fetch, 'POST')).toMatchObject({
+            pairing_format: 'swiss',
+            settings: { round_count: 5, requires_opposed_allegiance: true },
+        });
+    });
+
+    it('will not move on with rounds that are not a whole number', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+        await toFormat(view);
+        await view.get('[data-testid="event-round-count"]').setValue('0');
+        await next(view);
+
+        expect(view.get('[data-testid="create-step-format"]').attributes('aria-current')).toBe('step');
+        expect(view.get('[data-testid="event-round-count-error"]').text()).toContain('whole number');
+    });
+
+    it('sends the organiser back to format when the api refuses the rounds', async () => {
+        stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': {
+                status: 422,
+                body: {
+                    message: 'Invalid.',
+                    errors: { 'settings.round_count': ['Use a whole number of rounds, or leave it empty for open-ended.'] },
+                },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+        await toFormat(view);
+        await next(view);
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="create-step-format"]').attributes('aria-current')).toBe('step');
+        expect(view.get('[data-testid="event-round-count-error"]').text()).toContain('whole number of rounds');
+    });
+});

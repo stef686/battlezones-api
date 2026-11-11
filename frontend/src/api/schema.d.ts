@@ -3137,6 +3137,15 @@ export interface operations {
                     attendee_size: number;
                     /** @description How many parties may enter. Null for no limit. */
                     max_attendees?: number;
+                    /** @description How Rounds are paired. Only formats that are built are accepted: swiss, for now. It can never be changed. */
+                    pairing_format: string;
+                    /** @description How the Event is played. Left out, it runs open-ended and Players need not pick a side. */
+                    settings?: {
+                        /** @description How many Rounds the Event runs. Null for open-ended. */
+                        round_count?: number;
+                        /** @description Whether Players pick a side, and are paired against the other one. */
+                        requires_opposed_allegiance?: boolean;
+                    };
                     /** @description The complete ordered set the Event is scored on, as the Score Types endpoint takes it but with no ids. At least one. */
                     score_types: {
                         /** @description What the column is called. */

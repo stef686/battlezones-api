@@ -4,6 +4,7 @@ use App\Actions\Events\CreateEvent;
 use App\Actions\Events\ReplaceEventScoreTypes;
 use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
+use App\Enums\PairingFormat;
 use App\Models\Event;
 use App\Models\GameSystem;
 use App\Models\User;
@@ -31,6 +32,11 @@ function newEvent(array $overrides = []): array
         'venue_name' => 'The Hall',
         'venue_city' => 'Croydon',
         'venue_country' => 'GB',
+        'pairing_format' => 'swiss',
+        'settings' => [
+            'round_count' => 5,
+            'requires_opposed_allegiance' => true,
+        ],
         'score_types' => [
             [
                 'name' => 'Match Points',
@@ -169,7 +175,7 @@ test('a slug taken between validation and the write is refused as taken, not a s
 
     expect(fn () => app(CreateEvent::class)->execute(
         User::factory()->create(),
-        Arr::except($submission, 'score_types'),
+        Arr::except($submission, ['score_types', 'settings']),
         $submission['score_types'],
     ))->toThrow(ValidationException::class, 'That URL is already taken.');
 
@@ -205,4 +211,65 @@ test('nothing is left behind when the scoring cannot be written', function () {
 
     expect(Event::query()->count())->toBe(0)
         ->and(DB::table('event_organisers')->count())->toBe(0);
+});
+
+test('the event is played the way the organiser chose: swiss, over the rounds they set, with players picking a side', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), newEvent())
+        ->assertCreated()
+        ->assertJsonPath('data.pairing_format', 'swiss')
+        ->assertJsonPath('data.requires_allegiance', true);
+
+    $event = Event::query()->sole();
+
+    expect($event->pairing_format)->toBe(PairingFormat::Swiss)
+        ->and($event->settings->roundCount)->toBe(5)
+        ->and($event->settings->requiresOpposedAllegiance)->toBeTrue();
+});
+
+test('a format that is not built yet is refused, rather than quietly paired as swiss', function (string $format) {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), newEvent(['pairing_format' => $format]))
+        ->assertJsonValidationErrors(['pairing_format' => 'pairing format that is available']);
+
+    expect(Event::query()->count())->toBe(0);
+})->with(['round_robin', 'knockout', 'random', 'chess']);
+
+test('an event must say how it is paired', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), Arr::except(newEvent(), 'pairing_format'))
+        ->assertJsonValidationErrors(['pairing_format']);
+});
+
+test('an event with no round count runs open-ended, and players need not pick a side unless asked', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), newEvent(['settings' => ['round_count' => null]]))
+        ->assertCreated();
+
+    $settings = Event::query()->sole()->settings;
+
+    expect($settings->roundCount)->toBeNull()
+        ->and($settings->requiresOpposedAllegiance)->toBeFalse();
+});
+
+test('an event sent with no settings at all is open-ended too', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), Arr::except(newEvent(), 'settings'))
+        ->assertCreated();
+
+    expect(Event::query()->sole()->settings->roundCount)->toBeNull();
+});
+
+test('a round count is a positive whole number', function (mixed $roundCount) {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), newEvent(['settings' => ['round_count' => $roundCount]]))
+        ->assertJsonValidationErrors(['settings.round_count' => 'whole number of rounds']);
+})->with([0, -1, 2.5, 'five']);
+
+test('a setting the wizard does not ask for is refused rather than stored', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), newEvent(['settings' => ['standings_visible' => true]]))
+        ->assertJsonValidationErrors(['settings']);
+
+    expect(Event::query()->count())->toBe(0);
 });

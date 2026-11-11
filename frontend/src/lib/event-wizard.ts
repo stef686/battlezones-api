@@ -13,6 +13,7 @@ import {
     blankScoreTypeRow,
     scoreTypeChangeOf,
     type EventDetails,
+    type EventPlay,
     type EventShape,
     type EventVenue,
     type FieldErrors,
@@ -35,6 +36,7 @@ export interface EventDraft {
     timezone: string;
     venue: EventVenue;
     shape: EventShape;
+    play: EventPlay;
     scoreTypes: ScoreTypeRow[];
     /**
      * Held in memory, never sent with the Event: it goes to the Banner route
@@ -70,6 +72,8 @@ const SHOWN_FIELDS: readonly string[] = [
     'game_system_id',
     'attendee_size',
     'max_attendees',
+    'pairing_format',
+    'settings.round_count',
     'score_types',
 ];
 
@@ -91,6 +95,7 @@ export function blankDraft(timezone: string, now: Date = new Date()): EventDraft
         banner: null,
         venue: { venue_name: '', venue_address: '', venue_city: '', venue_country: '' },
         shape: { game_system_id: '', attendee_size: '1', max_attendees: '' },
+        play: { pairing_format: 'swiss', round_count: '', requires_opposed_allegiance: false },
         scoreTypes: [
             {
                 ...blankScoreTypeRow(),
@@ -214,6 +219,8 @@ export function stepOf(field: string): WizardStep {
     return field === 'game_system_id'
         || field === 'attendee_size'
         || field === 'max_attendees'
+        || field === 'pairing_format'
+        || field.startsWith('settings.')
         || field === 'score_types'
         || field.startsWith('score_types.')
         ? 'format'
@@ -251,6 +258,11 @@ export function submissionOf(draft: EventDraft): NewEvent {
         game_system_id: Number(draft.shape.game_system_id),
         attendee_size: Number(draft.shape.attendee_size),
         max_attendees: draft.shape.max_attendees === '' ? null : Number(draft.shape.max_attendees),
+        pairing_format: draft.play.pairing_format,
+        settings: {
+            round_count: draft.play.round_count === '' ? null : Number(draft.play.round_count),
+            requires_opposed_allegiance: draft.play.requires_opposed_allegiance,
+        },
         score_types: draft.scoreTypes.map(scoreTypeChangeOf),
     };
 }
@@ -293,6 +305,10 @@ function formatProblems(draft: EventDraft): FieldErrors {
 
     if (draft.shape.max_attendees !== '' && !/^[1-9]\d*$/.test(draft.shape.max_attendees)) {
         problems.max_attendees = ['Use a whole number, or leave it empty for no limit.'];
+    }
+
+    if (draft.play.round_count !== '' && !/^[1-9]\d*$/.test(draft.play.round_count)) {
+        problems['settings.round_count'] = ['Use a whole number of rounds, or leave it empty for open-ended.'];
     }
 
     if (draft.scoreTypes.length === 0) {

@@ -9,6 +9,7 @@
  * datetime-local into an ISO moment and a points field into a number is the
  * sending screen's business, because only it knows the endpoint.
  */
+import type { PairingFormat } from '@/api/events';
 import type { ScoreType, ScoreTypeChange } from '@/api/score-types';
 
 /** Edited by `EventDetailsFields`. Moments are `YYYY-MM-DDTHH:mm`, as a datetime-local input holds them. */
@@ -31,6 +32,31 @@ export interface EventShape {
     game_system_id: string;
     attendee_size: string;
     max_attendees: string;
+}
+
+/**
+ * Every pairing format, in the order they are offered. `available` mirrors
+ * `PairingFormat::isAvailable()` on the API, which refuses the rest: they are
+ * shown as coming soon rather than hidden, so an Organiser looking for one
+ * can see it is on its way.
+ */
+export const PAIRING_FORMATS: readonly { value: PairingFormat; label: string; available: boolean }[] = [
+    { value: 'swiss', label: 'Swiss', available: true },
+    { value: 'round_robin', label: 'Round Robin', available: false },
+    { value: 'knockout', label: 'Knockout', available: false },
+    { value: 'random', label: 'Random', available: false },
+];
+
+/** Edited by `EventPlayFields`. Blank rounds means open-ended. */
+export interface EventPlay {
+    pairing_format: PairingFormat;
+    round_count: string;
+    requires_opposed_allegiance: boolean;
+}
+
+/** How a pairing format reads. */
+export function pairingFormatLabel(format: PairingFormat): string {
+    return PAIRING_FORMATS.find((candidate) => candidate.value === format)?.label ?? format;
 }
 
 /** How a team size reads: one Player is singles, anything more is a team of that size. */
