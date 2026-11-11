@@ -154,3 +154,36 @@ test('a party bigger than a table holds, or a game system that does not exist, i
         ->patchJson(route('events.update', ['event' => $event->slug]), ['attendee_size' => 0])
         ->assertJsonValidationErrors(['attendee_size']);
 });
+
+test('an organiser gives an event its colour, and can take it away again', function () {
+    $event = Event::factory()->published()->create();
+    $organiser = organiserOf($event);
+
+    $this->actingAs($organiser)
+        ->patchJson(route('events.update', ['event' => $event->slug]), ['colour' => '#c2410c'])
+        ->assertSuccessful()
+        ->assertJsonPath('data.colour', '#c2410c');
+
+    expect($event->refresh()->colour)->toBe('#c2410c');
+
+    $this->actingAs($organiser)
+        ->patchJson(route('events.update', ['event' => $event->slug]), ['colour' => null])
+        ->assertSuccessful()
+        ->assertJsonPath('data.colour', null);
+
+    expect($event->refresh()->colour)->toBeNull();
+});
+
+test('an event colour is a six-digit hex', function (string $colour) {
+    $event = Event::factory()->published()->create();
+
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.update', ['event' => $event->slug]), ['colour' => $colour])
+        ->assertJsonValidationErrors(['colour']);
+})->with([
+    'named' => ['orange'],
+    'no hash' => ['c2410c'],
+    'short form' => ['#c40'],
+    'not hex' => ['#c2410g'],
+    'upper case' => ['#C2410C'],
+]);

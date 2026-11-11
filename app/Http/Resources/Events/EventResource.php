@@ -67,6 +67,9 @@ class EventResource extends JsonResource
                 'large' => UploadStorage::url($this->banner_path),
                 'small' => UploadStorage::url($this->banner_small_path ?? $this->banner_path),
             ],
+            // The Event Colour, or null for the platform's. The client builds
+            // the scale it paints with from this one value.
+            'colour' => $this->colour,
             'game_system' => GameSystemResource::make($this->whenLoaded('gameSystem')),
             'documents' => EventDocumentResource::collection($this->whenLoaded('documents')),
             'created_at' => $this->created_at?->toIso8601ZuluString(),

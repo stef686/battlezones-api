@@ -29,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $description
  * @property string|null $banner_path
  * @property string|null $banner_small_path
+ * @property string|null $colour
  * @property EventStatus $status
  * @property PairingFormat $pairing_format
  * @property Carbon $starts_at
@@ -77,6 +78,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Event whereAttendeeSize($value)
  * @method static Builder<static>|Event whereBannerPath($value)
  * @method static Builder<static>|Event whereBannerSmallPath($value)
+ * @method static Builder<static>|Event whereColour($value)
  * @method static Builder<static>|Event whereClubId($value)
  * @method static Builder<static>|Event whereCreatedAt($value)
  * @method static Builder<static>|Event whereDescription($value)
@@ -105,6 +107,12 @@ class Event extends Model
 {
     /** @use HasFactory<EventFactory> */
     use HasFactory;
+
+    /**
+     * What an Event Colour is stored as: a lowercase `#rrggbb` hex. One
+     * spelling per colour, so two Events wearing the same one compare equal.
+     */
+    public const COLOUR_PATTERN = '/^#[0-9a-f]{6}$/';
 
     /**
      * @var array<string, EventPoll|null>
@@ -137,6 +145,7 @@ class Event extends Model
         'description',
         'banner_path',
         'banner_small_path',
+        'colour',
         'status',
         'pairing_format',
         'starts_at',

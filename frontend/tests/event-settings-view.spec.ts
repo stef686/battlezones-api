@@ -156,6 +156,43 @@ describe('the event settings screen', () => {
         expect(view.get('[data-testid="settings-saved"]').text()).toContain('Saved');
     });
 
+    it('gives the event a colour, sending only the colour', async () => {
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+            [`PATCH /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(true, { colour: '#2563eb' }) },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="event-colour-preset-#2563eb"]').trigger('click');
+        await view.get('[data-testid="settings-save"]').trigger('submit');
+        await flushPromises();
+
+        const patch = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PATCH');
+
+        expect(JSON.parse(String((patch?.[1] as RequestInit).body))).toEqual({ colour: '#2563eb' });
+        expect(view.get('[data-testid="event-colour-preset-#2563eb"]').attributes('aria-pressed')).toBe('true');
+    });
+
+    it('takes an event back to the platform colour', async () => {
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(true, { colour: '#2563eb' }) },
+            [`PATCH /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody(true, { colour: null }) },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="event-colour-none"]').trigger('click');
+        await view.get('[data-testid="settings-save"]').trigger('submit');
+        await flushPromises();
+
+        const patch = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PATCH');
+
+        expect(JSON.parse(String((patch?.[1] as RequestInit).body))).toEqual({ colour: null });
+    });
+
     it('puts a rejected field\'s reason under that field', async () => {
         stubApi({
             [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },

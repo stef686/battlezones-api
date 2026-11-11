@@ -1168,6 +1168,9 @@ paths:
                       banner:
                         type: string
                         nullable: true
+                      colour:
+                        type: string
+                        nullable: true
                       created_at:
                         type: string
                       updated_at:
@@ -1544,6 +1547,9 @@ paths:
                       banner:
                         type: string
                         nullable: true
+                      colour:
+                        type: string
+                        nullable: true
                       created_at:
                         type: string
                       updated_at:
@@ -1612,6 +1618,9 @@ paths:
                 max_attendees:
                   type: integer
                   description: 'How many parties may enter. Null for no limit, and never fewer than have already entered.'
+                colour:
+                  type: string
+                  description: 'The Event Colour, as a lowercase #rrggbb hex. Null for the platform colour.'
                 game_system_id:
                   type: integer
                   description: 'The Game System the Event is played under. Refused once anybody has entered.'
@@ -4175,6 +4184,9 @@ paths:
                       banner:
                         type: string
                         nullable: true
+                      colour:
+                        type: string
+                        nullable: true
                       created_at:
                         type: string
                       updated_at:
@@ -4276,6 +4288,9 @@ paths:
                           country:
                             type: string
                       banner:
+                        type: string
+                        nullable: true
+                      colour:
                         type: string
                         nullable: true
                       created_at:

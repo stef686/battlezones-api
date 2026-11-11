@@ -31,6 +31,7 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('ends_at', 'string', 'When the Event ends, as an ISO 8601 timestamp.', required: false, example: '2026-09-13T18:00:00+01:00')]
 #[BodyParam('registration_closes_at', 'string', 'When entry closes, as an ISO 8601 timestamp.', required: false, example: '2026-09-05T23:59:00+01:00')]
 #[BodyParam('max_attendees', 'integer', 'How many parties may enter. Null for no limit, and never fewer than have already entered.', required: false, example: 32)]
+#[BodyParam('colour', 'string', 'The Event Colour, as a lowercase #rrggbb hex. Null for the platform colour.', required: false, example: '#c2410c')]
 #[BodyParam('game_system_id', 'integer', 'The Game System the Event is played under. Refused once anybody has entered.', required: false, example: 4)]
 #[BodyParam('attendee_size', 'integer', 'How many Players make up an Attendee: 1 for singles, up to 8. Refused once anybody has entered.', required: false, example: 2)]
 class UpdateEventRequest extends FormRequest
@@ -72,6 +73,9 @@ class UpdateEventRequest extends FormRequest
             // An Event already fuller than the new cap is a validation failure
             // rather than an accepted over-fill: nobody is being turned out.
             'max_attendees' => ['sometimes', 'nullable', 'integer', 'min:'.max(1, $this->event()->attendees()->count())],
+            // Presentation only, so editable whatever state the Event is in
+            // (ADR 0002 amendment).
+            'colour' => ['sometimes', 'nullable', 'string', 'regex:'.Event::COLOUR_PATTERN],
 
             // The shape an Event's entries are built at. Free while nobody
             // has entered; refused loudly the moment somebody has, because
@@ -99,6 +103,7 @@ class UpdateEventRequest extends FormRequest
     {
         return [
             'game_system_id.prohibited' => 'The game system cannot change once somebody has entered: their factions belong to the system they entered under.',
+            'colour.regex' => 'The colour must be a hex value like #c2410c.',
             'attendee_size.prohibited' => 'The team size cannot change once somebody has entered: every entry was built at the current size.',
         ];
     }

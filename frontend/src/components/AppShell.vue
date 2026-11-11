@@ -12,39 +12,65 @@
  * The header carries the safe-area inset itself rather than taking it from
  * here, so the Event's surface runs under the status bar on a notched device
  * and only the type clears it.
+ *
+ * An Event's screens wear its Event Colour: the header, the nav and the screen
+ * share one scope that swaps the primary ramp for the Event's own. The tab bar
+ * stays outside it, because it is the app's chrome rather than the Event's.
+ * The Event is read from the same cached query the header reads.
  */
+import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
+import { useApiClient } from '@/api';
+import { fetchEvent } from '@/api/events';
+import { keys } from '@/api/keys';
 import AppTabBar from '@/components/AppTabBar.vue';
 import EventHeader from '@/components/EventHeader.vue';
 import EventNav from '@/components/EventNav.vue';
+import { eventColourStyle } from '@/lib/event-colour';
 
 const route = useRoute();
+const client = useApiClient();
 
 const eventSlug = computed(() => {
     const slug = route.params.eventSlug;
 
     return typeof slug === 'string' && slug.length > 0 ? slug : null;
 });
+
+const { data: event } = useQuery({
+    queryKey: computed(() => keys.event(eventSlug.value ?? '')),
+    queryFn: () => fetchEvent(client, eventSlug.value ?? ''),
+    enabled: computed(() => eventSlug.value !== null),
+    retry: false,
+});
+
+const colourStyle = computed(() => eventColourStyle(eventSlug.value === null ? null : event.value?.colour ?? null));
 </script>
 
 <template>
   <div class="flex min-h-screen flex-col bg-background-2">
-    <EventHeader
-      v-if="eventSlug"
-      :event-slug="eventSlug"
-    />
+    <div
+      data-testid="event-colour-scope"
+      class="flex flex-1 flex-col"
+      :style="colourStyle"
+    >
+      <EventHeader
+        v-if="eventSlug"
+        :event-slug="eventSlug"
+      />
 
-    <EventNav
-      v-if="eventSlug"
-      :event-slug="eventSlug"
-    />
+      <EventNav
+        v-if="eventSlug"
+        :event-slug="eventSlug"
+      />
 
-    <!-- The tab bar is fixed, so the last card on a long screen needs room to
-         clear it rather than sitting underneath. -->
-    <div class="flex-1 pb-20">
-      <slot />
+      <!-- The tab bar is fixed, so the last card on a long screen needs room to
+           clear it rather than sitting underneath. -->
+      <div class="flex-1 pb-20">
+        <slot />
+      </div>
     </div>
 
     <AppTabBar />
