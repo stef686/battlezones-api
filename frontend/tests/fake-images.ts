@@ -2,8 +2,10 @@
  * Stand-ins for the browser's image decoding, which jsdom does not do.
  *
  * Installs an `Image` that reports a chosen size when its `src` is set, plus
- * object URLs (jsdom has none). Each object URL is unique, so a spec can tell
- * the preview's URL from the one a size check made and threw away. With
+ * object URLs. Whether jsdom offers those depends on the Node it runs on, so
+ * a spec that picks a Banner must install these rather than rely on it. Each
+ * object URL is unique, so a spec can tell the preview's URL from the one a
+ * size check made and threw away. With
  * `hold()`, decodes wait for `finish()` instead, so a spec can decide the
  * order they settle in.
  */
@@ -55,9 +57,13 @@ export function fakeImages() {
     pending = [];
     created = 0;
 
+    // Stubbed rather than assigned, so `vi.unstubAllGlobals()` puts back
+    // whatever the environment had, and no fake outlives the spec.
     vi.stubGlobal('Image', FakeImage);
-    URL.createObjectURL = vi.fn(() => `blob:image-${++created}`);
-    URL.revokeObjectURL = vi.fn();
+    vi.stubGlobal('URL', class extends URL {
+        static override createObjectURL = vi.fn(() => `blob:image-${++created}`);
+        static override revokeObjectURL = vi.fn();
+    });
 
     return {
         /** Every image decoded from now on measures this. */

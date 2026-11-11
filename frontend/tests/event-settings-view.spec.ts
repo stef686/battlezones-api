@@ -9,6 +9,8 @@ import { InMemoryTokenStorage } from '@/api/token-storage';
 import { createAppRouter } from '@/router';
 import EventSettingsView from '@/views/EventSettingsView.vue';
 
+import { fakeImages } from './fake-images';
+
 const EVENT_SLUG = 'london-grand-tournament';
 
 function eventBody(organise = true, overrides: Record<string, unknown> = {}) {
@@ -95,6 +97,9 @@ function mountView() {
 }
 
 beforeEach(async () => {
+    // A chosen Banner is measured before it is uploaded, and jsdom decodes
+    // no images; left to the environment, the measure never settles.
+    fakeImages();
     window.localStorage.clear();
     pinia = createPinia();
     setActivePinia(pinia);
