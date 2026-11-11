@@ -206,6 +206,18 @@ export function createEvent(client: ApiClient, event: NewEvent): Promise<EventSu
     return client.post<{ data: EventSummary }>('/api/events', event).then((response) => response.data);
 }
 
+/**
+ * Whether a new Event could be created at a slug. Drafts hold slugs too, which
+ * is why this is asked here rather than of the Event route, which answers 404
+ * for a Draft whether or not it exists.
+ */
+export function checkEventSlug(client: ApiClient, slug: string): Promise<{ slug: string; available: boolean }> {
+    const query = new URLSearchParams({ slug });
+
+    return client.get<{ data: { slug: string; available: boolean } }>(`/api/event-slug-availability?${query.toString()}`)
+        .then((response) => response.data);
+}
+
 export function updateEvent(client: ApiClient, slug: string, changes: EventChanges): Promise<EventSummary> {
     return client.patch<{ data: EventSummary }>(eventPath(slug), changes).then((response) => response.data);
 }

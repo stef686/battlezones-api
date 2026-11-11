@@ -41,6 +41,7 @@ use App\Http\Controllers\Events\ShowEventGameController;
 use App\Http\Controllers\Events\ShowEventPollResultsController;
 use App\Http\Controllers\Events\ShowEventPulseController;
 use App\Http\Controllers\Events\ShowEventRoundController;
+use App\Http\Controllers\Events\ShowEventSlugAvailabilityController;
 use App\Http\Controllers\Events\ShowFeedbackFormController;
 use App\Http\Controllers\Events\ShowInviteController;
 use App\Http\Controllers\Events\ShowMyGameController;
@@ -141,6 +142,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.painting.update');
 
     Route::post('events', StoreEventController::class)->name('events.store');
+    // Not under events/: any word there is a slug some Event could hold.
+    Route::get('event-slug-availability', ShowEventSlugAvailabilityController::class)
+        ->name('event-slugs.availability');
     Route::patch('events/{event:slug}', UpdateEventController::class)->name('events.update');
 
     // Multipart, and so a route of its own: PHP does not populate uploaded

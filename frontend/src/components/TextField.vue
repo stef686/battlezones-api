@@ -80,7 +80,8 @@ const describedBy = computed(() => {
     <p
       v-if="hint"
       :id="hintId"
-      class="mt-2 text-sm text-muted-foreground"
+      class="mt-2 text-sm break-all text-muted-foreground"
+      :data-testid="testid ? `${testid}-hint` : undefined"
     >
       {{ hint }}
     </p>

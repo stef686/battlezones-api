@@ -1283,7 +1283,7 @@ paths:
                   description: 'What the Event is called.'
                 slug:
                   type: string
-                  description: "The Event's address: lowercase letters and digits, with single hyphens between words, 3 to 60 characters. Not a reserved word such as new. It can never be changed."
+                  description: "The Event's address: lowercase letters and digits, with single hyphens between words, 3 to 60 characters. Not a reserved word such as new or create. It can never be changed."
                 starts_at:
                   type: string
                   description: 'When the Event starts, as an ISO 8601 timestamp. Not in the past.'
@@ -4127,6 +4127,51 @@ paths:
         required: true
         schema:
           type: integer
+  /api/event-slug-availability:
+    get:
+      summary: 'Check an Event slug'
+      operationId: checkAnEventSlug
+      description: 'Signed-in Users only. Whether a new Event could be created at this slug. A slug held by any Event, Drafts included, is taken; nothing else about that Event is said. A malformed or reserved slug is refused with 422, as creating the Event would refuse it.'
+      parameters:
+        -
+          in: query
+          name: slug
+          description: 'The slug to check: lowercase letters and digits, with single hyphens between words, 3 to 60 characters, and not a reserved word. Must match the regex /^[a-z0-9]+(?:-[a-z0-9]+)*$/. Must not be one of <code>new</code> or <code>create</code> Must be between 3 and 60 characters.'
+          required: true
+          schema:
+            type: string
+            description: 'The slug to check: lowercase letters and digits, with single hyphens between words, 3 to 60 characters, and not a reserved word. Must match the regex /^[a-z0-9]+(?:-[a-z0-9]+)*$/. Must not be one of <code>new</code> or <code>create</code> Must be between 3 and 60 characters.'
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      slug:
+                        type: string
+                        description: 'The slug that was checked.'
+                      available:
+                        type: boolean
+                        description: 'Whether no Event holds it.'
+                    required:
+                      - slug
+                      - available
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+        - Events
   '/api/events/{event_slug}/banner':
     post:
       summary: 'Upload an Event Banner'
