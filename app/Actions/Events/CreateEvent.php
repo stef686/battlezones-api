@@ -4,7 +4,6 @@ namespace App\Actions\Events;
 
 use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
-use App\Enums\PairingFormat;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -16,7 +15,8 @@ use Illuminate\Validation\ValidationException;
  *
  * One transaction, so an Event never exists without a Lead to run it or a
  * scoring set to rank it on (ADR 0006). It is always a Draft: publishing is
- * a transition of its own. Swiss is the only pairing format built so far.
+ * a transition of its own. The pairing format is the caller's to choose, from
+ * the formats that are built; StoreEventRequest holds it to them.
  */
 class CreateEvent
 {
@@ -53,7 +53,6 @@ class CreateEvent
     {
         try {
             return Event::query()->create([
-                'pairing_format' => PairingFormat::Swiss,
                 ...$attributes,
                 'status' => EventStatus::Draft,
             ]);

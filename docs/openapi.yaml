@@ -1314,6 +1314,19 @@ paths:
                 max_attendees:
                   type: integer
                   description: 'How many parties may enter. Null for no limit.'
+                pairing_format:
+                  type: string
+                  description: 'How Rounds are paired. Only formats that are built are accepted: swiss, for now. It can never be changed.'
+                settings:
+                  type: object
+                  description: 'How the Event is played. Left out, it runs open-ended and Players need not pick a side.'
+                  properties:
+                    round_count:
+                      type: integer
+                      description: 'How many Rounds the Event runs. Null for open-ended.'
+                    requires_opposed_allegiance:
+                      type: boolean
+                      description: 'Whether Players pick a side, and are paired against the other one.'
                 score_types:
                   type: array
                   description: 'The complete ordered set the Event is scored on, as the Score Types endpoint takes it but with no ids. At least one.'
@@ -1367,6 +1380,7 @@ paths:
                 - timezone
                 - game_system_id
                 - attendee_size
+                - pairing_format
                 - score_types
   '/api/events/{slug}':
     get:

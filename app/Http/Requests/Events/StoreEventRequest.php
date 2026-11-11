@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Events;
 
+use App\Casts\EventSettings;
 use App\Enums\Country;
+use App\Enums\PairingFormat;
 use App\Http\Requests\Events\Concerns\ValidatesEventSlug;
 use App\Http\Requests\Events\Concerns\ValidatesScoreTypeSet;
 use App\Models\Event;
@@ -34,6 +36,10 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('game_system_id', 'integer', 'The Game System the Event is played under.', required: true, example: 4)]
 #[BodyParam('attendee_size', 'integer', 'How many Players make up an Attendee: 1 for singles, up to 8.', required: true, example: 2)]
 #[BodyParam('max_attendees', 'integer', 'How many parties may enter. Null for no limit.', required: false, example: 24)]
+#[BodyParam('pairing_format', 'string', 'How Rounds are paired. Only formats that are built are accepted: swiss, for now. It can never be changed.', required: true, example: 'swiss')]
+#[BodyParam('settings', 'object', 'How the Event is played. Left out, it runs open-ended and Players need not pick a side.', required: false)]
+#[BodyParam('settings.round_count', 'integer', 'How many Rounds the Event runs. Null for open-ended.', required: false, example: 5)]
+#[BodyParam('settings.requires_opposed_allegiance', 'boolean', 'Whether Players pick a side, and are paired against the other one.', required: false, example: true)]
 #[BodyParam('score_types', 'object[]', 'The complete ordered set the Event is scored on, as the Score Types endpoint takes it but with no ids. At least one.', required: true)]
 #[BodyParam('score_types[].name', 'string', 'What the column is called.', required: true, example: 'Match Points')]
 #[BodyParam('score_types[].abbreviation', 'string', 'The heading shown over the column. Left out or blank, the platform works one out from the name.', required: false, example: 'MP')]
@@ -72,6 +78,15 @@ class StoreEventRequest extends FormRequest
             'game_system_id' => ['required', 'integer', Rule::exists('game_systems', 'id')],
             'attendee_size' => ['required', 'integer', 'between:1,8'],
             'max_attendees' => ['nullable', 'integer', 'min:1'],
+            // Only a built format: anything else would be paired as Swiss
+            // without saying so (ADR 0006).
+            'pairing_format' => ['required', Rule::enum(PairingFormat::class)->only(PairingFormat::available())],
+
+            // Only the settings the wizard asks for. Standings visibility is
+            // a choice made once the Event is running, in Settings.
+            'settings' => ['sometimes', 'array:round_count,requires_opposed_allegiance'],
+            'settings.round_count' => ['nullable', 'integer', 'min:1'],
+            'settings.requires_opposed_allegiance' => ['sometimes', 'boolean'],
 
             ...$this->scoreTypeSetRules(),
             // Every column is new: there is no Event yet for an id to belong to.
@@ -92,6 +107,8 @@ class StoreEventRequest extends FormRequest
             ...$this->slugMessages(),
             'starts_at.after_or_equal' => 'The event cannot start in the past.',
             'ends_at.after_or_equal' => 'The event cannot end before it starts.',
+            'pairing_format.Illuminate\\Validation\\Rules\\Enum' => 'Choose a pairing format that is available.',
+            'settings.round_count' => 'Use a whole number of rounds, or leave it empty for open-ended.',
         ];
     }
 
@@ -107,12 +124,19 @@ class StoreEventRequest extends FormRequest
     }
 
     /**
-     * The Event's own fields, without the scoring set written beside it.
+     * The Event's own fields, without the scoring set written beside it, and
+     * with its settings typed as the Event holds them.
      *
      * @return array<string, mixed>
      */
     public function eventAttributes(): array
     {
-        return $this->safe()->except('score_types');
+        /** @var array<string, mixed> $settings */
+        $settings = $this->validated('settings', []);
+
+        return [
+            ...$this->safe()->except(['score_types', 'settings']),
+            'settings' => EventSettings::fromArray($settings),
+        ];
     }
 }

@@ -179,6 +179,9 @@ export interface EventChanges {
 }
 
 /** An Event as the create wizard sends it, whole. Status is never sent: every Event starts as a Draft. */
+/** How Rounds are paired. Chosen when an Event is created, and never again (ADR 0006). */
+export type PairingFormat = 'swiss' | 'round_robin' | 'knockout' | 'random';
+
 export interface NewEvent {
     name: string;
     /** Permanent from the moment it exists. */
@@ -194,6 +197,13 @@ export interface NewEvent {
     game_system_id: number;
     attendee_size: number;
     max_attendees: number | null;
+    /** Only a format the API has built. Permanent from the moment it exists. */
+    pairing_format: PairingFormat;
+    settings: {
+        /** Null for open-ended. */
+        round_count: number | null;
+        requires_opposed_allegiance: boolean;
+    };
     score_types: ScoreTypeChange[];
 }
 

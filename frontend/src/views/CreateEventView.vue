@@ -35,12 +35,13 @@ import AppButton from '@/components/AppButton.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import EventBannerField from '@/components/EventBannerField.vue';
 import EventDetailsFields from '@/components/EventDetailsFields.vue';
+import EventPlayFields from '@/components/EventPlayFields.vue';
 import EventShapeFields from '@/components/EventShapeFields.vue';
 import EventVenueFields from '@/components/EventVenueFields.vue';
 import ScoreTypeListEditor from '@/components/ScoreTypeListEditor.vue';
 import TextField from '@/components/TextField.vue';
 import { useSlugAvailability } from '@/composables/useSlugAvailability';
-import { errorsUnder, teamSizeLabel, type FieldErrors } from '@/lib/event-fields';
+import { errorsUnder, pairingFormatLabel, teamSizeLabel, type FieldErrors } from '@/lib/event-fields';
 import {
   WIZARD_STEPS,
   blankDraft,
@@ -363,7 +364,7 @@ interface SummaryRow {
 }
 
 const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[] }[] => {
-  const { details, venue, shape, scoreTypes } = draft.value;
+  const { details, venue, shape, play, scoreTypes } = draft.value;
   const where = [venue.venue_name, venue.venue_city].filter((part) => part !== '').join(', ');
   const system = gameSystems.value?.find((candidate) => String(candidate.id) === shape.game_system_id);
 
@@ -382,6 +383,10 @@ const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[
       { label: 'Game system', value: system?.name ?? '' },
       { label: 'Team size', value: teamSizeLabel(Number(shape.attendee_size)) },
       { label: 'Places', value: shape.max_attendees === '' ? 'No limit' : shape.max_attendees },
+      // Permanent, as the slug is: PATCH refuses it (ADR 0002).
+      { label: 'Pairing', value: pairingFormatLabel(play.pairing_format), warning: 'Can\'t be changed later' },
+      { label: 'Rounds', value: play.round_count === '' ? 'Open-ended' : roundsLabel(Number(play.round_count)) },
+      { label: 'Allegiance', value: play.requires_opposed_allegiance ? 'Players pick a side' : 'No' },
       { label: 'Scoring', value: scoreTypes.map((row) => row.name).join(', ') },
     ],
   };
@@ -390,6 +395,10 @@ const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[
     .filter((candidate) => candidate.id !== 'confirm')
     .map((candidate) => ({ step: candidate.id, name: candidate.name, rows: rowsOf[candidate.id as keyof typeof rowsOf] }));
 });
+
+function roundsLabel(count: number): string {
+  return count === 1 ? '1 round' : `${count} rounds`;
+}
 </script>
 
 <template>
@@ -493,6 +502,11 @@ const summary = computed((): { step: WizardStep; name: string; rows: SummaryRow[
       <template v-else-if="step === 'format'">
         <EventShapeFields
           v-model="draft.shape"
+          :errors="errors"
+        />
+
+        <EventPlayFields
+          v-model="draft.play"
           :errors="errors"
         />
 
