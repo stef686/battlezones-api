@@ -78,6 +78,7 @@ const describedBy = computed(() => {
       v-if="hint"
       :id="hintId"
       class="mt-2 text-sm text-muted-foreground"
+      :data-testid="testid ? `${testid}-hint` : undefined"
     >
       {{ hint }}
     </p>

@@ -35,6 +35,7 @@ import EventVenueFields from '@/components/EventVenueFields.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 import TextField from '@/components/TextField.vue';
 import TimezoneField from '@/components/TimezoneField.vue';
+import { reanchored } from '@/lib/dates';
 import type { EventDetails, EventVenue } from '@/lib/event-fields';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -134,13 +135,24 @@ const changes = computed<EventChanges>(() => {
     changed.colour = form.value.colour;
   }
 
-  if (form.value.timezone !== saved.value.timezone) {
-    changed.timezone = form.value.timezone;
-  }
 
   for (const field of ['starts_at', 'ends_at', 'registration_closes_at'] as const) {
     if (current[field] !== original[field]) {
       changed[field] = current[field] === '' ? null : `${current[field]}:00Z`;
+    }
+  }
+
+  // A new zone keeps the Event's own times on the same clock: an Event that
+  // opened at 10:00 in London opens at 10:00 in New York, rather than at
+  // 05:00 because the moment stood still. So every time it has is sent
+  // again, re-anchored, whether or not it was edited.
+  if (form.value.timezone !== saved.value.timezone) {
+    changed.timezone = form.value.timezone;
+
+    for (const field of ['starts_at', 'ends_at', 'registration_closes_at'] as const) {
+      if (current[field] !== '') {
+        changed[field] = reanchored(`${current[field]}:00Z`, saved.value.timezone, form.value.timezone);
+      }
     }
   }
 
@@ -319,6 +331,7 @@ function localMoment(iso: string | null): string {
         <TimezoneField
           v-model="form.timezone"
           :fixed-reason="timezoneFixedReason"
+          hint="Changing it keeps the event's times on the same clock in the new zone."
           :errors="errors.timezone"
         />
 

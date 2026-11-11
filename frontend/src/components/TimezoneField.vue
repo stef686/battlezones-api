@@ -28,9 +28,11 @@ import { timezoneLabel } from '@/lib/timezones';
 const props = withDefaults(defineProps<{
   errors?: string[];
   fixedReason?: string | null;
+  hint?: string;
 }>(), {
   errors: () => [],
   fixedReason: null,
+  hint: 'The event\'s times are in this zone.',
 });
 
 const model = defineModel<string>({ required: true });
@@ -39,13 +41,22 @@ const client = useApiClient();
 
 // Reference data that never changes under a session, and is not needed at
 // all while the zone is fixed.
-const { data: timezones } = useQuery({
+const { data: timezones, isError } = useQuery({
   queryKey: keys.timezones(),
   queryFn: () => fetchTimezones(client),
   enabled: computed(() => props.fixedReason === null),
   staleTime: Infinity,
   retry: false,
 });
+
+/**
+ * A list that failed to load leaves a select holding only the current zone,
+ * which looks like a picker that will not change. Said under the field, with
+ * the field's own refusals.
+ */
+const shownErrors = computed(() => (isError.value
+  ? [...props.errors, 'Timezones could not be loaded. Reload the page to try again.']
+  : props.errors));
 
 const search = ref('');
 
@@ -84,9 +95,9 @@ const options = computed(() => {
       label="Timezone"
       :options="options"
       :disabled="props.fixedReason !== null"
-      hint="The event's times are in this zone."
+      :hint="hint"
       testid="event-timezone"
-      :errors="errors"
+      :errors="shownErrors"
     />
   </div>
 </template>
