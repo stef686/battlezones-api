@@ -55,6 +55,9 @@ const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 /** Slugs whose `/events/<slug>` address an SPA route holds or keeps, as the API reserves them. */
 const RESERVED_SLUGS: readonly string[] = ['new', 'create'];
 
+/** The most Rounds the API takes on an Event, as `StoreEventRequest::MAX_ROUNDS`. */
+const MAX_ROUNDS = 20;
+
 /** The longest slug the API takes. */
 const SLUG_MAX_LENGTH = 60;
 
@@ -307,8 +310,8 @@ function formatProblems(draft: EventDraft): FieldErrors {
         problems.max_attendees = ['Use a whole number, or leave it empty for no limit.'];
     }
 
-    if (draft.play.round_count !== '' && !/^[1-9]\d*$/.test(draft.play.round_count)) {
-        problems['settings.round_count'] = ['Use a whole number of rounds, or leave it empty for open-ended.'];
+    if (draft.play.round_count !== '' && !isRoundCount(draft.play.round_count)) {
+        problems['settings.round_count'] = [`Use a whole number of rounds from 1 to ${MAX_ROUNDS}, or leave it empty for open-ended.`];
     }
 
     if (draft.scoreTypes.length === 0) {
@@ -358,6 +361,10 @@ function dayAfter(date: string, days: number): string {
     const [year = 1970, month = 1, day = 1] = date.split('-').map(Number);
 
     return new Date(Date.UTC(year, month - 1, day + days)).toISOString().slice(0, 10);
+}
+
+function isRoundCount(value: string): boolean {
+    return /^[1-9]\d*$/.test(value) && Number(value) <= MAX_ROUNDS;
 }
 
 function blankToNull(value: string): string | null {

@@ -37,8 +37,8 @@ use Knuckles\Scribe\Attributes\BodyParam;
 #[BodyParam('attendee_size', 'integer', 'How many Players make up an Attendee: 1 for singles, up to 8.', required: true, example: 2)]
 #[BodyParam('max_attendees', 'integer', 'How many parties may enter. Null for no limit.', required: false, example: 24)]
 #[BodyParam('pairing_format', 'string', 'How Rounds are paired. Only formats that are built are accepted: swiss, for now. It can never be changed.', required: true, example: 'swiss')]
-#[BodyParam('settings', 'object', 'How the Event is played. Left out, it runs open-ended and Players need not pick a side.', required: false)]
-#[BodyParam('settings.round_count', 'integer', 'How many Rounds the Event runs. Null for open-ended.', required: false, example: 5)]
+#[BodyParam('settings', 'object', 'How the Event is played. Left out or null, it runs open-ended and Players need not pick a side.', required: false)]
+#[BodyParam('settings.round_count', 'integer', 'How many Rounds the Event runs, 1 to 20. Null for open-ended.', required: false, example: 5)]
 #[BodyParam('settings.requires_opposed_allegiance', 'boolean', 'Whether Players pick a side, and are paired against the other one.', required: false, example: true)]
 #[BodyParam('score_types', 'object[]', 'The complete ordered set the Event is scored on, as the Score Types endpoint takes it but with no ids. At least one.', required: true)]
 #[BodyParam('score_types[].name', 'string', 'What the column is called.', required: true, example: 'Match Points')]
@@ -54,6 +54,12 @@ class StoreEventRequest extends FormRequest
 {
     use ValidatesEventSlug;
     use ValidatesScoreTypeSet;
+
+    /**
+     * More Rounds than any day of play could hold, so a slip of the keyboard
+     * is refused rather than stored. The SPA holds the same ceiling.
+     */
+    public const MAX_ROUNDS = 20;
 
     public function authorize(): bool
     {
@@ -84,8 +90,8 @@ class StoreEventRequest extends FormRequest
 
             // Only the settings the wizard asks for. Standings visibility is
             // a choice made once the Event is running, in Settings.
-            'settings' => ['sometimes', 'array:round_count,requires_opposed_allegiance'],
-            'settings.round_count' => ['nullable', 'integer', 'min:1'],
+            'settings' => ['sometimes', 'nullable', 'array:round_count,requires_opposed_allegiance'],
+            'settings.round_count' => ['nullable', 'integer', 'between:1,'.self::MAX_ROUNDS],
             'settings.requires_opposed_allegiance' => ['sometimes', 'boolean'],
 
             ...$this->scoreTypeSetRules(),
@@ -108,7 +114,7 @@ class StoreEventRequest extends FormRequest
             'starts_at.after_or_equal' => 'The event cannot start in the past.',
             'ends_at.after_or_equal' => 'The event cannot end before it starts.',
             'pairing_format.Illuminate\\Validation\\Rules\\Enum' => 'Choose a pairing format that is available.',
-            'settings.round_count' => 'Use a whole number of rounds, or leave it empty for open-ended.',
+            'settings.round_count' => 'Use a whole number of rounds from 1 to '.self::MAX_ROUNDS.', or leave it empty for open-ended.',
         ];
     }
 
@@ -132,7 +138,7 @@ class StoreEventRequest extends FormRequest
     public function eventAttributes(): array
     {
         /** @var array<string, mixed> $settings */
-        $settings = $this->validated('settings', []);
+        $settings = $this->validated('settings') ?? [];
 
         return [
             ...$this->safe()->except(['score_types', 'settings']),

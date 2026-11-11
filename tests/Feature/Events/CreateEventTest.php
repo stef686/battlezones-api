@@ -252,19 +252,25 @@ test('an event with no round count runs open-ended, and players need not pick a 
         ->and($settings->requiresOpposedAllegiance)->toBeFalse();
 });
 
-test('an event sent with no settings at all is open-ended too', function () {
+test('an event sent with no settings at all is open-ended too', function (array $submission) {
     $this->actingAs(User::factory()->create())
-        ->postJson(route('events.store'), Arr::except(newEvent(), 'settings'))
+        ->postJson(route('events.store'), $submission)
         ->assertCreated();
 
-    expect(Event::query()->sole()->settings->roundCount)->toBeNull();
-});
+    $settings = Event::query()->sole()->settings;
+
+    expect($settings->roundCount)->toBeNull()
+        ->and($settings->requiresOpposedAllegiance)->toBeFalse();
+})->with([
+    'settings left out' => fn (): array => Arr::except(newEvent(), 'settings'),
+    'settings sent as null' => fn (): array => newEvent(['settings' => null]),
+]);
 
 test('a round count is a positive whole number', function (mixed $roundCount) {
     $this->actingAs(User::factory()->create())
         ->postJson(route('events.store'), newEvent(['settings' => ['round_count' => $roundCount]]))
         ->assertJsonValidationErrors(['settings.round_count' => 'whole number of rounds']);
-})->with([0, -1, 2.5, 'five']);
+})->with([0, -1, 2.5, 'five', 21]);
 
 test('a setting the wizard does not ask for is refused rather than stored', function () {
     $this->actingAs(User::factory()->create())
