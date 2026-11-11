@@ -1,12 +1,15 @@
 <?php
 
+use App\Actions\Events\CreateEvent;
 use App\Actions\Events\ReplaceEventScoreTypes;
 use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\GameSystem;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 /**
  * A complete wizard submission, overridable field by field.
@@ -152,11 +155,40 @@ test('the url is lowercase letters, numbers and hyphens, and nobody else may hol
         ->postJson(route('events.store'), newEvent(['slug' => $slug]))
         ->assertJsonValidationErrors(['slug' => $reason]);
 })->with([
-    'upper case' => ['Croydon', 'lowercase letters, numbers and hyphens'],
-    'spaces' => ['croydon doubles', 'lowercase letters, numbers and hyphens'],
+    'upper case' => ['Croydon', 'lowercase letters, numbers and single hyphens'],
+    'spaces' => ['croydon doubles', 'lowercase letters, numbers and single hyphens'],
+    'leading hyphen' => ['-croydon', 'lowercase letters, numbers and single hyphens'],
+    'trailing hyphen' => ['croydon-', 'lowercase letters, numbers and single hyphens'],
+    'doubled hyphen' => ['croydon--doubles', 'lowercase letters, numbers and single hyphens'],
+    'only hyphens' => ['---', 'lowercase letters, numbers and single hyphens'],
     'too short' => ['cd', 'between 3 and 60'],
     'taken' => ['taken-already', 'already taken'],
+    'reserved by the create wizard' => ['new', 'reserved'],
 ]);
+
+test('a slug taken between validation and the write is refused as taken, not a server error', function () {
+    Event::factory()->create(['slug' => 'croydon-doubles']);
+
+    $submission = newEvent();
+
+    expect(fn () => app(CreateEvent::class)->execute(
+        User::factory()->create(),
+        Arr::except($submission, 'score_types'),
+        $submission['score_types'],
+    ))->toThrow(ValidationException::class, 'That URL is already taken.');
+
+    expect(Event::query()->count())->toBe(1);
+});
+
+test('a worked-out column sent with a numeric flag still needs its points', function (mixed $flag) {
+    $submission = newEvent();
+    $submission['score_types'][0]['is_derived'] = $flag;
+    $submission['score_types'][0]['win_points'] = null;
+
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('events.store'), $submission)
+        ->assertJsonValidationErrors(['score_types.0.win_points']);
+})->with([1, '1']);
 
 test('the timezone must be one the venue could keep', function () {
     $this->actingAs(User::factory()->create())

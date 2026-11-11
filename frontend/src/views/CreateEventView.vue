@@ -32,6 +32,7 @@ import {
   WIZARD_STEPS,
   blankDraft,
   firstStepWith,
+  isShownField,
   problemsOf,
   submissionOf,
   type EventDraft,
@@ -95,6 +96,12 @@ async function submit(): Promise<void> {
     if (caught instanceof ApiError && caught.kind === 'validation') {
       errors.value = caught.fields;
       step.value = firstStepWith(caught.fields);
+
+      // A refusal no step shows would leave the Organiser on a step with
+      // nothing to fix, so say it above the form instead.
+      if (!Object.keys(caught.fields).some(isShownField)) {
+        problem.value = caught.message;
+      }
     } else {
       problem.value = caught instanceof ApiError ? caught.message : 'The event could not be created.';
     }
@@ -154,6 +161,7 @@ const summary = computed(() => {
     <AppAlert
       v-if="problem"
       tone="error"
+      data-testid="create-problem"
     >
       {{ problem }}
     </AppAlert>

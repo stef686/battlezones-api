@@ -3094,7 +3094,7 @@ export interface operations {
                 "application/json": {
                     /** @description What the Event is called. */
                     name: string;
-                    /** @description The Event's address: lowercase letters, digits and hyphens, 3 to 60 characters. It can never be changed. */
+                    /** @description The Event's address: lowercase letters and digits, with single hyphens between words, 3 to 60 characters. Not a reserved word such as new. It can never be changed. */
                     slug: string;
                     /** @description When the Event starts, as an ISO 8601 timestamp. Not in the past. */
                     starts_at: string;

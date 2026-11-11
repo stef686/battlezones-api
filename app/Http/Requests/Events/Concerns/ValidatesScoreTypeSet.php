@@ -66,7 +66,7 @@ trait ValidatesScoreTypeSet
 
         $leaders = array_keys(array_filter(
             $this->scoreTypes(),
-            fn (array $row): bool => (bool) ($row['is_primary'] ?? false),
+            fn (array $row): bool => $this->isTrue($row['is_primary'] ?? false),
         ));
 
         foreach (array_slice($leaders, 1) as $index) {
@@ -88,7 +88,7 @@ trait ValidatesScoreTypeSet
         }
 
         foreach ($this->scoreTypes() as $index => $row) {
-            if (($row['is_derived'] ?? false) !== true) {
+            if (! $this->isTrue($row['is_derived'] ?? false)) {
                 continue;
             }
 
@@ -101,5 +101,14 @@ trait ValidatesScoreTypeSet
                 }
             }
         }
+    }
+
+    /**
+     * A flag as the `boolean` rule reads it, so `1` and `"1"` count as true
+     * here exactly as they passed validation as true.
+     */
+    private function isTrue(mixed $value): bool
+    {
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 }

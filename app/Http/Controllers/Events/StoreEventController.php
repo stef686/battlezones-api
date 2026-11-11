@@ -8,6 +8,7 @@ use App\Http\Requests\Events\StoreEventRequest;
 use App\Http\Resources\Events\EventResource;
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
@@ -29,7 +30,8 @@ class StoreEventController extends Controller
 
         $event = $this->createEvent->execute($creator, $request->eventAttributes(), $request->scoreTypes());
 
-        $event->load(['gameSystem', 'documents']);
+        // A brand-new Event has no documents, so there is nothing to query for.
+        $event->load('gameSystem')->setRelation('documents', new Collection());
         $event->loadCount('attendees');
 
         return EventResource::make($event)->withViewer()->response()->setStatusCode(201);

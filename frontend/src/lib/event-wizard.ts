@@ -39,8 +39,31 @@ export interface EventDraft {
 /** How far ahead a new Event is pencilled in, before the Organiser picks a day. */
 const DAYS_AHEAD = 7;
 
-/** The same rule the API holds a slug to. */
-const SLUG_PATTERN = /^[a-z0-9-]{3,60}$/;
+/** The same rules the API holds a slug to: words joined by single hyphens. */
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** Slugs whose `/events/<slug>` address an SPA route already holds, as the API reserves them. */
+const RESERVED_SLUGS: readonly string[] = ['new'];
+
+/** The top-level fields a wizard step asks for, and so can show a refusal under. */
+const SHOWN_FIELDS: readonly string[] = [
+    'name',
+    'slug',
+    'starts_at',
+    'ends_at',
+    'timezone',
+    'venue_name',
+    'venue_address',
+    'venue_city',
+    'venue_country',
+    'game_system_id',
+    'attendee_size',
+    'max_attendees',
+    'score_types',
+];
+
+/** The parts of a scoring row the editor puts a message under. */
+const SHOWN_SCORE_TYPE_FIELD = /^score_types\.\d+\.(name|abbreviation|sort_direction|is_derived|win_points|draw_points|loss_points)$/;
 
 /**
  * A blank Event, pencilled in a week from today and run 09:00–18:00 in the
@@ -103,6 +126,15 @@ export function stepOf(field: string): WizardStep {
         : 'details';
 }
 
+/**
+ * Whether a refused field has somewhere on the wizard to say so. A refusal of
+ * anything else (a field no step asks for) would otherwise send the Organiser
+ * to a step with no message on it.
+ */
+export function isShownField(field: string): boolean {
+    return SHOWN_FIELDS.includes(field) || SHOWN_SCORE_TYPE_FIELD.test(field);
+}
+
 /** The first step, in wizard order, holding any of these refusals. */
 export function firstStepWith(errors: FieldErrors): WizardStep {
     const steps = new Set(Object.keys(errors).map(stepOf));
@@ -139,8 +171,10 @@ function detailsProblems(draft: EventDraft, now: Date): FieldErrors {
 
     if (draft.slug === '') {
         problems.slug = ['Choose a URL for the event.'];
-    } else if (!SLUG_PATTERN.test(draft.slug)) {
-        problems.slug = ['Use 3 to 60 lowercase letters, numbers and hyphens.'];
+    } else if (draft.slug.length < 3 || draft.slug.length > 60 || !SLUG_PATTERN.test(draft.slug)) {
+        problems.slug = ['Use 3 to 60 lowercase letters and numbers, with single hyphens between words.'];
+    } else if (RESERVED_SLUGS.includes(draft.slug)) {
+        problems.slug = ['That URL is reserved.'];
     }
 
     if (startsAt === '') {

@@ -207,6 +207,25 @@ describe('creating an event', () => {
         expect(view.get('[data-testid="event-game-system-error"]').text()).toContain('game system');
     });
 
+    it.each([
+        ['croydon--doubles', '3 to 60'],
+        ['-croydon', '3 to 60'],
+        ['croydon-', '3 to 60'],
+        ['new', 'reserved'],
+    ])('refuses the url %s before the server has to', async (slug, reason) => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await view.get('[data-testid="create-slug"]').setValue(slug);
+        await next(view);
+
+        expect(view.get('[data-testid="create-step-details"]').attributes('aria-current')).toBe('step');
+        expect(view.get('[data-testid="create-slug-error"]').text()).toContain(reason);
+    });
+
     it('refuses a start that has already been, before the server has to', async () => {
         stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
 
@@ -326,5 +345,28 @@ describe('creating an event', () => {
 
         expect(view.get('[data-testid="create-step-format"]').attributes('aria-current')).toBe('step');
         expect(view.get('[data-testid="score-name-1-error"]').text()).toBe('That name is too long.');
+    });
+
+    it('says what was refused above the form when no step has a field to show it under', async () => {
+        stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': {
+                status: 422,
+                body: { message: 'The status field is prohibited.', errors: { status: ['The status field is prohibited.'] } },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="create-problem"]').text()).toBe('The status field is prohibited.');
     });
 });
