@@ -123,3 +123,31 @@ export function eventTimestamp(date: string, time: string, timeZone: string): st
 export function dayInZone(iso: string, timeZone: string): string {
     return new Date(iso).toLocaleDateString('en-CA', { timeZone });
 }
+
+/** The wall clock a moment reads in a zone, as a datetime-local input holds it: `YYYY-MM-DDTHH:mm`. */
+export function wallClockIn(iso: string, timeZone: string): string {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23',
+    }).formatToParts(new Date(iso));
+    const part = (type: Intl.DateTimeFormatPartTypes): string => parts.find((candidate) => candidate.type === type)?.value ?? '';
+
+    return `${part('year')}-${part('month')}-${part('day')}T${part('hour')}:${part('minute')}`;
+}
+
+/**
+ * The moment that reads, in one zone, what another moment read in the zone
+ * before it: 10:00 in London becomes 10:00 in New York. What moving an
+ * Event's zone does to its own times, because the hall still opens when the
+ * Organiser said it would.
+ */
+export function reanchored(iso: string, from: string, to: string): string {
+    const [date = '', time = ''] = wallClockIn(iso, from).split('T');
+
+    return eventTimestamp(date, time, to);
+}

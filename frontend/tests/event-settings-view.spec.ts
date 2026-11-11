@@ -366,7 +366,7 @@ describe('the event settings screen', () => {
 });
 
 describe('the event timezone in settings', () => {
-    it('can be moved while the event has no schedule, sending only the timezone', async () => {
+    it('can be moved while the event has no schedule, keeping its times on the same clock in the new zone', async () => {
         const fetch = stubApi({
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
             '/api/countries': COUNTRIES,
@@ -380,11 +380,19 @@ describe('the event timezone in settings', () => {
         expect(valueOf(view, 'event-timezone')).toBe('Europe/London');
 
         await view.get('[data-testid="event-timezone"]').setValue('America/New_York');
+
+        expect(view.get('[data-testid="event-timezone-hint"]').text()).toContain('same clock');
         await view.get('[data-testid="settings-save"]').trigger('submit');
         await flushPromises();
 
         const patch = fetch.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === 'PATCH');
-        expect(JSON.parse(String((patch?.[1] as RequestInit).body))).toEqual({ timezone: 'America/New_York' });
+        // 09:00Z is 10:00 in London in September; the hall still opens at
+        // 10:00, now New York's. Entry has no close, so there is none to move.
+        expect(JSON.parse(String((patch?.[1] as RequestInit).body))).toEqual({
+            timezone: 'America/New_York',
+            starts_at: '2026-09-12T10:00:00-04:00',
+            ends_at: '2026-09-13T19:00:00-04:00',
+        });
     });
 
     it('is shown as fixed, with the reason, once the event has a schedule', async () => {

@@ -398,6 +398,19 @@ describe('the timezone field', () => {
         expect(view.get<HTMLSelectElement>('[data-testid="event-timezone"]').element.value).toBe('Europe/London');
     });
 
+    it('says so when the zones could not be loaded, rather than offering a picker that cannot change', async () => {
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({
+            ok: false,
+            status: 500,
+            headers: new Headers(),
+            json: () => Promise.resolve({ message: 'Server Error' }),
+        })));
+        const view = mount(TimezoneField, { props: { modelValue: 'Europe/London' }, global: plugins() });
+        await flushPromises();
+
+        expect(view.get('[data-testid="event-timezone-error"]').text()).toContain('could not be loaded');
+    });
+
     it('shows a fixed zone with the reason, and offers nothing to search', () => {
         stubReads();
         const view = mount(TimezoneField, {
