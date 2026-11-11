@@ -6,9 +6,12 @@
  * sends a Banner the moment it is chosen, and the create-event wizard holds it
  * until there is an Event to send it to — so when is the parent's call.
  *
- * Type and size are checked here first, against the same limits the API
- * enforces, so a file that could only be refused is refused without the wait.
- * Dimensions are left to the API: reading them means decoding the image.
+ * Type, size and dimensions are checked here first, against the same limits
+ * the API enforces, so a file that could only be refused is refused without
+ * the wait. That matters most in the create-event wizard, where the upload only
+ * happens after the Event exists. Dimensions need the image decoded. A browser
+ * that cannot decode it leaves the dimensions to the API rather than refusing
+ * a file that might be fine.
  */
 import { Trash2 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -18,6 +21,9 @@ import type { FieldErrors } from '@/lib/event-fields';
 
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_BYTES = 8 * 1024 * 1024;
+/** The smallest the API accepts (`StoreEventBannerRequest`), so the header is never upscaled. */
+const MIN_WIDTH = 1200;
+const MIN_HEIGHT = 400;
 
 const props = withDefaults(defineProps<{
   banner: { large: string; small: string } | null;
@@ -37,7 +43,7 @@ const refused = ref<string | null>(null);
 
 const messages = computed(() => (refused.value === null ? props.errors.banner ?? [] : [refused.value]));
 
-function refusalOf(file: File): string | null {
+async function refusalOf(file: File): Promise<string | null> {
   if (!ACCEPTED_TYPES.includes(file.type)) {
     return 'The banner must be a JPEG, PNG or WebP image.';
   }
@@ -46,10 +52,34 @@ function refusalOf(file: File): string | null {
     return 'The banner must be 8MB or smaller.';
   }
 
+  const size = await dimensionsOf(file);
+
+  if (size !== null && (size.width < MIN_WIDTH || size.height < MIN_HEIGHT)) {
+    return `The banner must be at least ${MIN_WIDTH} by ${MIN_HEIGHT} pixels.`;
+  }
+
   return null;
 }
 
-function choose(payload: Event): void {
+/** The image's size, or null when this browser cannot decode it. */
+async function dimensionsOf(file: File): Promise<{ width: number; height: number } | null> {
+  if (typeof createImageBitmap !== 'function') {
+    return null;
+  }
+
+  try {
+    const bitmap = await createImageBitmap(file);
+    const size = { width: bitmap.width, height: bitmap.height };
+
+    bitmap.close();
+
+    return size;
+  } catch {
+    return null;
+  }
+}
+
+async function choose(payload: Event): Promise<void> {
   const input = payload.target as HTMLInputElement;
   const file = input.files?.[0];
 
@@ -60,7 +90,7 @@ function choose(payload: Event): void {
     return;
   }
 
-  refused.value = refusalOf(file);
+  refused.value = await refusalOf(file);
 
   if (refused.value === null) {
     emit('choose', file);
