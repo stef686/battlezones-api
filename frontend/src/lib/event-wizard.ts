@@ -19,10 +19,12 @@ import {
     type ScoreTypeRow,
 } from '@/lib/event-fields';
 
-export type WizardStep = 'details' | 'format' | 'confirm';
+export type WizardStep = 'details' | 'look' | 'format' | 'confirm';
 
 export const WIZARD_STEPS: { id: WizardStep; name: string }[] = [
     { id: 'details', name: 'Details' },
+    // Optional as a whole: nothing on it is required, so Next always passes.
+    { id: 'look', name: 'Look' },
     { id: 'format', name: 'Format' },
     { id: 'confirm', name: 'Confirm' },
 ];
@@ -34,6 +36,12 @@ export interface EventDraft {
     venue: EventVenue;
     shape: EventShape;
     scoreTypes: ScoreTypeRow[];
+    /**
+     * Held in memory, never sent with the Event: it goes to the Banner route
+     * once the Event exists (ADR 0003, ADR 0006). Checked against the upload
+     * limits by EventBannerField before it is ever held here.
+     */
+    banner: File | null;
 }
 
 /** How far ahead a new Event is pencilled in, before the Organiser picks a day. */
@@ -77,6 +85,7 @@ export function blankDraft(timezone: string, now: Date = new Date()): EventDraft
         details: { name: '', starts_at: `${day}T09:00`, ends_at: `${day}T18:00` },
         slug: '',
         timezone,
+        banner: null,
         venue: { venue_name: '', venue_address: '', venue_city: '', venue_country: '' },
         shape: { game_system_id: '', attendee_size: '1', max_attendees: '' },
         scoreTypes: [

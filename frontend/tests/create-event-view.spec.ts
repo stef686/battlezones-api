@@ -18,7 +18,7 @@ const GAME_SYSTEMS = {
 
 const COUNTRIES = { status: 200, body: { data: [{ code: 'GB', name: 'United Kingdom' }] } };
 
-function createdBody() {
+function createdBody(overrides: Record<string, unknown> = {}) {
     return {
         data: {
             id: 9,
@@ -46,6 +46,7 @@ function createdBody() {
                 attendee_id: null,
                 permissions: { organise: true, register: true, manage_organisers: true },
             },
+            ...overrides,
         },
     };
 }
@@ -113,6 +114,23 @@ async function next(view: View): Promise<void> {
     await flushPromises();
 }
 
+/** Past the Look step without choosing anything, which is all it asks. */
+async function skipLook(view: View): Promise<void> {
+    expect(view.get('[data-testid="create-step-look"]').attributes('aria-current')).toBe('step');
+
+    await next(view);
+}
+
+async function chooseBanner(view: View, file: File): Promise<void> {
+    const input = view.get<HTMLInputElement>('[data-testid="event-banner"]');
+
+    Object.defineProperty(input.element, 'files', { value: [file], configurable: true });
+    await input.trigger('change');
+    await flushPromises();
+}
+
+const HALL = new File(['bytes'], 'hall.jpg', { type: 'image/jpeg' });
+
 beforeEach(async () => {
     window.localStorage.clear();
     pinia = createPinia();
@@ -137,6 +155,10 @@ beforeEach(async () => {
     vi.spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions')
         .mockReturnValue({ timeZone: 'Europe/London' } as Intl.ResolvedDateTimeFormatOptions);
 
+    // jsdom has no object URLs; the wizard previews a held Banner through one.
+    URL.createObjectURL = vi.fn(() => 'blob:hall');
+    URL.revokeObjectURL = vi.fn();
+
     await router.push('/events/new');
     await router.isReady();
 });
@@ -148,7 +170,7 @@ afterEach(() => {
 });
 
 describe('creating an event', () => {
-    it('steps through details, format and confirm, then lands the organiser on the event they now lead', async () => {
+    it('steps through details, look, format and confirm, then lands the organiser on the event they now lead', async () => {
         const fetch = stubApi({
             '/api/game-systems': GAME_SYSTEMS,
             '/api/countries': COUNTRIES,
@@ -160,6 +182,7 @@ describe('creating an event', () => {
 
         await fillDetails(view);
         await next(view);
+        await skipLook(view);
 
         await view.get('[data-testid="event-game-system"]').setValue('4');
         await view.get('[data-testid="event-attendee-size"]').setValue('2');
@@ -201,6 +224,7 @@ describe('creating an event', () => {
 
         await fillDetails(view);
         await next(view);
+        await skipLook(view);
         await next(view);
 
         expect(view.get('[data-testid="create-step-format"]').attributes('aria-current')).toBe('step');
@@ -267,6 +291,7 @@ describe('creating an event', () => {
 
         await fillDetails(view);
         await next(view);
+        await skipLook(view);
 
         expect(view.findAll('[data-testid="score-type"]').map((row) => row.text()))
             .toEqual([expect.stringContaining('Match Points'), expect.stringContaining('Victory Points')]);
@@ -313,6 +338,7 @@ describe('creating an event', () => {
 
         await fillDetails(view);
         await next(view);
+        await skipLook(view);
         await view.get('[data-testid="event-game-system"]').setValue('4');
         await next(view);
         await view.get('[data-testid="create-submit"]').trigger('click');
@@ -338,6 +364,7 @@ describe('creating an event', () => {
 
         await fillDetails(view);
         await next(view);
+        await skipLook(view);
         await view.get('[data-testid="event-game-system"]').setValue('4');
         await next(view);
         await view.get('[data-testid="create-submit"]').trigger('click');
@@ -362,11 +389,193 @@ describe('creating an event', () => {
 
         await fillDetails(view);
         await next(view);
+        await skipLook(view);
         await view.get('[data-testid="event-game-system"]').setValue('4');
         await next(view);
         await view.get('[data-testid="create-submit"]').trigger('click');
         await flushPromises();
 
         expect(view.get('[data-testid="create-problem"]').text()).toBe('The status field is prohibited.');
+    });
+});
+
+describe('the look step', () => {
+    /** Details filled, the Banner chosen on Look, and on to Confirm. */
+    async function toConfirmWith(view: View, banner: File | null): Promise<void> {
+        await fillDetails(view);
+        await next(view);
+
+        if (banner !== null) {
+            await chooseBanner(view, banner);
+        }
+
+        await next(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+    }
+
+    function uploadsOf(fetch: ReturnType<typeof stubApi>) {
+        return fetch.mock.calls.filter(([url]) => String(url).endsWith('/banner'));
+    }
+
+    it('comes second, between details and format', () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+
+        expect(view.findAll('[data-testid^="create-step-"]').map((item) => item.text()))
+            .toEqual(['Details', 'Look', 'Format', 'Confirm']);
+    });
+
+    it('can be skipped entirely, and nothing is uploaded for an event without a banner', async () => {
+        const fetch = stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 201, body: createdBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+
+        expect(view.get('[data-testid="create-next"]').text()).toBe('Skip');
+
+        await skipLook(view);
+        await view.get('[data-testid="event-game-system"]').setValue('4');
+        await next(view);
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        expect(uploadsOf(fetch)).toEqual([]);
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('organise'));
+        expect(useToastStore().message).toBe('Event created');
+    });
+
+    it('previews a chosen banner and holds it, sending nothing until the event exists', async () => {
+        const fetch = stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await chooseBanner(view, HALL);
+
+        expect(view.get<HTMLImageElement>('[data-testid="event-banner-preview"]').element.src).toBe('blob:hall');
+        expect(view.get('[data-testid="create-next"]').text()).toBe('Next');
+        expect(fetch.mock.calls.filter(([, init]) => (init as RequestInit | undefined)?.method !== undefined
+            && (init as RequestInit).method !== 'GET')).toEqual([]);
+    });
+
+    it('refuses a file the api would refuse, and never holds it', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await chooseBanner(view, new File(['<svg/>'], 'logo.svg', { type: 'image/svg+xml' }));
+
+        expect(view.get('[data-testid="event-banner-error"]').text()).toContain('JPEG, PNG or WebP');
+        expect(view.find('[data-testid="event-banner-preview"]').exists()).toBe(false);
+        expect(view.get('[data-testid="create-next"]').text()).toBe('Skip');
+    });
+
+    it('lets a held banner go again before anything is sent', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await fillDetails(view);
+        await next(view);
+        await chooseBanner(view, HALL);
+        await view.get('[data-testid="event-banner-remove"]').trigger('click');
+
+        expect(view.find('[data-testid="event-banner-preview"]').exists()).toBe(false);
+        expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:hall');
+    });
+
+    it('uploads the held banner once the event exists, and says the event was created', async () => {
+        const bannered = createdBody({ banner: { large: 'https://cdn.test/l.webp', small: 'https://cdn.test/s.webp' } });
+        const fetch = stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 201, body: createdBody() },
+            'POST /api/events/croydon-doubles/banner': { status: 200, body: bannered },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await toConfirmWith(view, HALL);
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        const uploads = uploadsOf(fetch);
+        const body = (uploads[0]?.[1] as RequestInit | undefined)?.body;
+
+        expect(uploads).toHaveLength(1);
+        expect(body).toBeInstanceOf(FormData);
+        expect((body as FormData).get('banner')).toBe(HALL);
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('organise'));
+        expect(useToastStore().message).toBe('Event created');
+        expect(queryClient.getQueryData<{ banner: unknown }>(['events', 'croydon-doubles'])?.banner)
+            .toEqual({ large: 'https://cdn.test/l.webp', small: 'https://cdn.test/s.webp' });
+    });
+
+    it('keeps the event when the banner fails to upload, and says where to add it', async () => {
+        stubApi({
+            '/api/game-systems': GAME_SYSTEMS,
+            '/api/countries': COUNTRIES,
+            'POST /api/events': { status: 201, body: createdBody() },
+            'POST /api/events/croydon-doubles/banner': {
+                status: 422,
+                body: { message: 'Invalid.', errors: { banner: ['The banner must be at least 1200 pixels wide.'] } },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await toConfirmWith(view, HALL);
+        await view.get('[data-testid="create-submit"]').trigger('click');
+        await flushPromises();
+
+        await vi.waitFor(() => expect(router.currentRoute.value.name).toBe('organise'));
+        expect(router.currentRoute.value.params.eventSlug).toBe('croydon-doubles');
+        expect(useToastStore().message).toBe('Event created, but the banner didn\'t upload. Add it in Settings.');
+    });
+
+    it('sums up the look on the confirm step, with a way back to change it', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await toConfirmWith(view, HALL);
+
+        expect(view.get('[data-testid="create-summary-look"]').text()).toContain('hall.jpg');
+
+        await view.get('[data-testid="create-edit-look"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="create-step-look"]').attributes('aria-current')).toBe('step');
+        expect(view.get<HTMLImageElement>('[data-testid="event-banner-preview"]').element.src).toBe('blob:hall');
+    });
+
+    it('says when the event will have no banner', async () => {
+        stubApi({ '/api/game-systems': GAME_SYSTEMS, '/api/countries': COUNTRIES });
+
+        const view = mountView();
+        await flushPromises();
+
+        await toConfirmWith(view, null);
+
+        expect(view.get('[data-testid="create-summary-look"]').text()).toContain('No banner');
     });
 });

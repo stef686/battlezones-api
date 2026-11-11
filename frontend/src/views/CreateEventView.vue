@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * An Organiser's own Event, made in three steps and sent once.
+ * An Organiser's own Event, made in four steps and sent once.
  *
  * Nothing exists until Create is pressed (ADR 0006): the draft lives here, a
  * step passes only once what it asks for is sound, and Back keeps everything
@@ -10,18 +10,24 @@
  *
  * The fields are the same components the settings and format screens edit an
  * Event with, so an Event reads the same being made as being changed.
+ *
+ * The Banner is the one thing not sent with the Event. It is held here until
+ * the Event exists and then uploaded to the Banner route; a failed upload
+ * never undoes the Event (ADR 0006), the Organiser is told to add it in
+ * Settings instead.
  */
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { createEvent } from '@/api/events';
+import { createEvent, uploadBanner, type EventSummary } from '@/api/events';
 import { fetchGameSystems } from '@/api/game-systems';
 import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
+import EventBannerField from '@/components/EventBannerField.vue';
 import EventDetailsFields from '@/components/EventDetailsFields.vue';
 import EventShapeFields from '@/components/EventShapeFields.vue';
 import EventVenueFields from '@/components/EventVenueFields.vue';
@@ -58,6 +64,34 @@ const scoreTypeErrors = computed(() => errorsUnder(errors.value, 'score_types'))
 const submitting = ref(false);
 const problem = ref<string | null>(null);
 
+/**
+ * A local URL for the held Banner, so it can be previewed before anything is
+ * uploaded. Revoked whenever the file changes or the wizard goes away, since
+ * the browser keeps the file alive for as long as the URL exists.
+ */
+const bannerPreview = ref<string | null>(null);
+
+watch(() => draft.value.banner, (file) => {
+  revokeBannerPreview();
+  bannerPreview.value = file === null ? null : URL.createObjectURL(file);
+});
+
+onBeforeUnmount(revokeBannerPreview);
+
+function revokeBannerPreview(): void {
+  if (bannerPreview.value !== null) {
+    URL.revokeObjectURL(bannerPreview.value);
+    bannerPreview.value = null;
+  }
+}
+
+const heldBanner = computed(() => (bannerPreview.value === null
+  ? null
+  : { large: bannerPreview.value, small: bannerPreview.value }));
+
+/** Look asks for nothing, so with nothing chosen moving on is skipping it. */
+const nextLabel = computed(() => (step.value === 'look' && draft.value.banner === null ? 'Skip' : 'Next'));
+
 function next(): void {
   const problems = problemsOf(step.value, draft.value);
 
@@ -85,9 +119,10 @@ async function submit(): Promise<void> {
 
   try {
     const created = await createEvent(client, submissionOf(draft.value));
+    const { event, bannerFailed } = await withHeldBanner(created);
 
-    queryClient.setQueryData(keys.event(created.slug), created);
-    toasts.show('Event created');
+    queryClient.setQueryData(keys.event(event.slug), event);
+    toasts.show(bannerFailed ? 'Event created, but the banner didn\'t upload. Add it in Settings.' : 'Event created');
 
     // Replaced rather than pushed: Back from the hub must not reopen a
     // wizard for an Event that already exists.
@@ -107,6 +142,23 @@ async function submit(): Promise<void> {
     }
   } finally {
     submitting.value = false;
+  }
+}
+
+/**
+ * The new Event with the held Banner on it, if there is one to upload. A
+ * refusal here is the Banner's alone: the Event already exists, so it is
+ * reported rather than thrown into the create's own error handling.
+ */
+async function withHeldBanner(created: EventSummary): Promise<{ event: EventSummary; bannerFailed: boolean }> {
+  if (draft.value.banner === null) {
+    return { event: created, bannerFailed: false };
+  }
+
+  try {
+    return { event: await uploadBanner(client, created.slug, draft.value.banner), bannerFailed: false };
+  } catch {
+    return { event: created, bannerFailed: true };
   }
 }
 
@@ -206,6 +258,18 @@ const summary = computed(() => {
         />
       </template>
 
+      <template v-else-if="step === 'look'">
+        <p class="text-sm text-muted-foreground-1">
+          Optional. It uploads once the event is created, and can be changed later in Settings.
+        </p>
+
+        <EventBannerField
+          :banner="heldBanner"
+          @choose="draft.banner = $event"
+          @remove="draft.banner = null"
+        />
+      </template>
+
       <template v-else-if="step === 'format'">
         <EventShapeFields
           v-model="draft.shape"
@@ -249,6 +313,27 @@ const summary = computed(() => {
             {{ row.value }}
           </dd>
         </div>
+
+        <div
+          data-testid="create-summary-look"
+          class="flex items-center justify-between gap-4 px-4 py-3 text-sm"
+        >
+          <dt class="text-muted-foreground-1">
+            Banner
+          </dt>
+          <dd class="flex items-center gap-3 text-right text-foreground">
+            <span class="truncate">{{ draft.banner?.name ?? 'No banner' }}</span>
+            <AppButton
+              type="button"
+              variant="ghost"
+              size="sm"
+              data-testid="create-edit-look"
+              @click="step = 'look'"
+            >
+              Edit
+            </AppButton>
+          </dd>
+        </div>
       </dl>
 
       <div class="flex gap-3">
@@ -268,7 +353,7 @@ const summary = computed(() => {
           data-testid="create-next"
           class="flex-1"
         >
-          Next
+          {{ nextLabel }}
         </AppButton>
 
         <AppButton
