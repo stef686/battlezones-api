@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "engines": {
-        "node": ">=20.19"
+        "node": ">=22.4"
     },
     "scripts": {
         "dev": "vite",
@@ -13,8 +13,8 @@
         "lint": "eslint . --max-warnings 0",
         "lint:fix": "eslint . --fix",
         "typecheck": "vue-tsc --build",
-        "test": "vitest run",
-        "test:watch": "vitest",
+        "test": "NODE_OPTIONS=--no-experimental-webstorage vitest run",
+        "test:watch": "NODE_OPTIONS=--no-experimental-webstorage vitest",
         "types:generate": "openapi-typescript ../docs/openapi.yaml --output src/api/schema.d.ts",
         "types:check": "npm run types:generate && git diff --exit-code -- src/api/schema.d.ts",
         "check:secrets": "node scripts/check-bundle-secrets.mjs dist",

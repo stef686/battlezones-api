@@ -3,6 +3,7 @@ import { computed, onMounted } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
 
 import AppShell from '@/components/AppShell.vue';
+import AppToast from '@/components/AppToast.vue';
 import ClaimPrompt from '@/components/ClaimPrompt.vue';
 import UpdateBanner from '@/components/UpdateBanner.vue';
 import { useServiceWorker } from '@/composables/useServiceWorker';
@@ -29,6 +30,8 @@ onMounted(() => {
     <RouterView />
   </AppShell>
   <RouterView v-else />
+
+  <AppToast />
 
   <UpdateBanner
     :available="updateAvailable"

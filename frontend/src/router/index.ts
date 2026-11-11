@@ -80,6 +80,13 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true, unclaimed: true, chrome: false },
     },
     {
+        // Signed in and claimed: the guard sends a guest to login and an
+        // unclaimed account to Claim, since `new` is no Event of theirs.
+        path: '/events/new',
+        name: 'create-event',
+        component: () => import('@/views/CreateEventView.vue'),
+    },
+    {
         path: '/events/:eventSlug',
         name: 'event',
         component: () => import('@/views/EventView.vue'),

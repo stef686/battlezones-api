@@ -1,4 +1,5 @@
 import type { ApiClient } from './client';
+import type { ScoreTypeChange } from './score-types';
 
 export interface EventViewer {
     is_organiser: boolean;
@@ -175,6 +176,34 @@ export interface EventChanges {
     game_system_id?: number;
     /** How many Players make an Attendee. Refused once anybody has entered. */
     attendee_size?: number;
+}
+
+/** An Event as the create wizard sends it, whole. Status is never sent: every Event starts as a Draft. */
+export interface NewEvent {
+    name: string;
+    /** Permanent from the moment it exists. */
+    slug: string;
+    starts_at: string;
+    ends_at: string;
+    /** The IANA zone the venue keeps. */
+    timezone: string;
+    venue_name: string | null;
+    venue_address: string | null;
+    venue_city: string | null;
+    venue_country: string | null;
+    game_system_id: number;
+    attendee_size: number;
+    max_attendees: number | null;
+    score_types: ScoreTypeChange[];
+}
+
+/**
+ * Create an Event, with the caller as its Lead Organiser and the Score Types
+ * it is ranked on, in one request. A Banner goes up afterwards on its own
+ * route, because a JSON body carries no file.
+ */
+export function createEvent(client: ApiClient, event: NewEvent): Promise<EventSummary> {
+    return client.post<{ data: EventSummary }>('/api/events', event).then((response) => response.data);
 }
 
 export function updateEvent(client: ApiClient, slug: string, changes: EventChanges): Promise<EventSummary> {

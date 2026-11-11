@@ -33,6 +33,11 @@ export interface EventShape {
     max_attendees: string;
 }
 
+/** How a team size reads: one Player is singles, anything more is a team of that size. */
+export function teamSizeLabel(size: number): string {
+    return size === 1 ? 'Singles — one player' : `Teams of ${size}`;
+}
+
 /** The messages a component shows, keyed by the field names of the shape it edits. */
 export type FieldErrors = Record<string, string[]>;
 

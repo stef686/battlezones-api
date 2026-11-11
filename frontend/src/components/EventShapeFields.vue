@@ -19,7 +19,7 @@ import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
-import type { EventShape, FieldErrors } from '@/lib/event-fields';
+import { teamSizeLabel, type EventShape, type FieldErrors } from '@/lib/event-fields';
 
 const props = withDefaults(defineProps<{
   locked?: boolean;
@@ -47,10 +47,9 @@ const { data: gameSystems } = useQuery({
 const gameSystemOptions = computed(() => (gameSystems.value ?? [])
   .map((system) => ({ value: String(system.id), label: system.name })));
 
-/** One Player is singles; anything more is a team of that size. */
 const partySizeOptions = Array.from({ length: 8 }, (_, index) => ({
   value: String(index + 1),
-  label: index === 0 ? 'Singles — one player' : `Teams of ${index + 1}`,
+  label: teamSizeLabel(index + 1),
 }));
 
 /**

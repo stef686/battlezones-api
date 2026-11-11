@@ -155,12 +155,31 @@ describe('the account drawer', () => {
         signIn();
 
         const view = await openDrawer();
+        const inert = view.findAll('[data-testid="account-drawer-section"] li > *')
+            .filter((item) => item.text() !== 'Run an event');
 
-        for (const item of view.findAll('[data-testid="account-drawer-section"] li > *')) {
+        expect(inert).toHaveLength(6);
+
+        for (const item of inert) {
             expect(item.attributes('aria-disabled')).toBe('true');
             expect(item.attributes('href')).toBeUndefined();
             expect(item.attributes('tabindex')).toBe('-1');
         }
+    });
+
+    it('leads to creating an event, and closes on the way there', async () => {
+        signIn();
+
+        const view = await openDrawer();
+        const run = view.get('[data-testid="account-drawer-create-event"]');
+
+        expect(run.attributes('href')).toBe('/events/new');
+        expect(run.attributes('aria-disabled')).toBeUndefined();
+
+        await run.trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="account-drawer"]').attributes('open')).toBeUndefined();
     });
 
     it('logs out: revokes the token, forgets the viewer and what was read for them, and lands on sign in', async () => {

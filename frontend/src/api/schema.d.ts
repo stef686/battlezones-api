@@ -463,7 +463,11 @@ export interface paths {
          */
         get: operations["listEvents"];
         put?: never;
-        post?: never;
+        /**
+         * Create an Event
+         * @description Claimed accounts only. Creates the Event as a Draft, with the caller as its Lead Organiser and the Score Types it is ranked on, in one go. Upload a Banner afterwards through the Banner endpoint.
+         */
+        post: operations["createAnEvent"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3073,6 +3077,128 @@ export interface operations {
                             colour?: string | null;
                             created_at?: string;
                             updated_at?: string;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    createAnEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description What the Event is called. */
+                    name: string;
+                    /** @description The Event's address: lowercase letters and digits, with single hyphens between words, 3 to 60 characters. Not a reserved word such as new. It can never be changed. */
+                    slug: string;
+                    /** @description When the Event starts, as an ISO 8601 timestamp. Not in the past. */
+                    starts_at: string;
+                    /** @description When the Event ends, as an ISO 8601 timestamp. Not before it starts. */
+                    ends_at: string;
+                    /** @description The IANA timezone the venue keeps. */
+                    timezone: string;
+                    /** @description The venue. */
+                    venue_name?: string;
+                    /** @description Street address of the venue. */
+                    venue_address?: string;
+                    /** @description Town or city of the venue. */
+                    venue_city?: string;
+                    /** @description Two-letter country code of the venue. */
+                    venue_country?: string;
+                    /** @description The Game System the Event is played under. */
+                    game_system_id: number;
+                    /** @description How many Players make up an Attendee: 1 for singles, up to 8. */
+                    attendee_size: number;
+                    /** @description How many parties may enter. Null for no limit. */
+                    max_attendees?: number;
+                    /** @description The complete ordered set the Event is scored on, as the Score Types endpoint takes it but with no ids. At least one. */
+                    score_types: {
+                        /** @description What the column is called. */
+                        name: string;
+                        /** @description The heading shown over the column. Left out or blank, the platform works one out from the name. */
+                        abbreviation?: string;
+                        /** @description Which way up it ranks: asc where lower is better, desc where higher is. */
+                        sort_direction: string;
+                        /** @description Whether the platform works it out from the result rather than a Player entering it. */
+                        is_derived: boolean;
+                        /** @description Whether it leads a Game listing. At most one may. */
+                        is_primary: boolean;
+                        /** @description Whether it ranks the Standings. */
+                        counts_for_ranking: boolean;
+                        /** @description What a win is worth. Required on a derived column. */
+                        win_points?: number;
+                        /** @description What a draw is worth. Required on a derived column. */
+                        draw_points?: number;
+                        /** @description What a loss is worth. Required on a derived column. */
+                        loss_points?: number;
+                        id?: string;
+                    }[];
+                    status?: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            slug?: string;
+                            description?: string;
+                            status?: string;
+                            pairing_format?: string;
+                            timezone?: string;
+                            starts_at?: string;
+                            ends_at?: string;
+                            max_attendees?: number;
+                            attendee_size?: number;
+                            requires_allegiance?: boolean;
+                            registration_closes_at?: string | null;
+                            is_full?: boolean;
+                            venue?: {
+                                name?: string;
+                                address?: string;
+                                city?: string;
+                                country?: string;
+                            };
+                            banner?: string | null;
+                            created_at?: string;
+                            updated_at?: string;
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The submitted data failed validation. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            field_name?: string[];
                         };
                     };
                 };
@@ -6122,8 +6248,6 @@ export interface operations {
                 "application/json": {
                     /** @description The complete ordered set. Position sets display order, and position among the rows counting for ranking sets ranking order. */
                     score_types: {
-                        /** @description The Score Type being edited. Leave it out to add a new one. */
-                        id?: number;
                         /** @description What the column is called. */
                         name: string;
                         /** @description The heading shown over the column on a Game and in the Standings. Left out or blank, the platform works one out from the name. */
@@ -6142,6 +6266,8 @@ export interface operations {
                         draw_points?: number;
                         /** @description What a loss is worth. Required on a derived column. */
                         loss_points?: number;
+                        /** @description The Score Type being edited. Leave it out to add a new one. */
+                        id?: number;
                     }[];
                 };
             };
