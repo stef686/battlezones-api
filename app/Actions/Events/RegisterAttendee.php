@@ -32,7 +32,7 @@ class RegisterAttendee
         ?string $name = null,
         ?Allegiance $allegiance = null,
     ): EventAttendee {
-        $event->ensureAcceptsEntries();
+        $event->ensureIsNotDraft();
 
         return DB::transaction(function () use ($event, $players, $registeredBy, $name, $allegiance): EventAttendee {
             // Inside the transaction and counted fresh: the policy check that

@@ -1765,7 +1765,7 @@ export interface paths {
         put?: never;
         /**
          * Send a Team Mate Their Invitation Again
-         * @description A fresh credential to the address already on file. Refused once the Player has claimed their account, which is when they no longer need one.
+         * @description A fresh credential to the address already on file. Refused once the Player has claimed their account, which is when they no longer need one, and while the Event is a Draft (422 "Publish the event first.").
          */
         post: operations["sendATeamMateTheirInvitationAgain"];
         delete?: never;

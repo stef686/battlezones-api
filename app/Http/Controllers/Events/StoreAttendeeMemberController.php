@@ -52,9 +52,11 @@ class StoreAttendeeMemberController extends Controller
         EventAttendee $attendee,
         EnrolPlayer $enrolPlayer,
     ): JsonResponse {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('changeMembers', $attendee);
 
-        $event->ensureAcceptsEntries();
+        $event->ensureIsNotDraft();
 
         /** @var array{name?: string|null, email: string, faction_id?: int|null, army_list?: string|null} $player */
         $player = $request->validated();

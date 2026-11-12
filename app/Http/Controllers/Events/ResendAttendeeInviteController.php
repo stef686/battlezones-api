@@ -23,7 +23,7 @@ class ResendAttendeeInviteController extends Controller
 {
     #[Endpoint(
         'Send a Team Mate Their Invitation Again',
-        'A fresh credential to the address already on file. Refused once the Player has claimed their account, which is when they no longer need one.'
+        'A fresh credential to the address already on file. Refused once the Player has claimed their account, which is when they no longer need one, and while the Event is a Draft (422 "Publish the event first.").'
     )]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
@@ -37,6 +37,8 @@ class ResendAttendeeInviteController extends Controller
         EventAttendeeMembership $membership,
         SendEventInvite $sendEventInvite,
     ): JsonResponse {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('changeMembers', $attendee);
 
         abort_if(
