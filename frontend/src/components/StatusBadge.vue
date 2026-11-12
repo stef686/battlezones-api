@@ -6,15 +6,18 @@
  * of the thing it is on.
  *
  * Classes passed in merge onto the pill, so a placement (the Event header's
- * margin and its backing over a Banner) stays with the caller.
+ * margin and its backing over a Banner) stays with the caller. `sm` is for a
+ * cramped cell — a Standings row on a phone — where the full pill would take
+ * the width the text beside it needs.
  */
-withDefaults(defineProps<{ as?: 'span' | 'p' }>(), { as: 'span' });
+withDefaults(defineProps<{ as?: 'span' | 'p'; size?: 'md' | 'sm' }>(), { as: 'span', size: 'md' });
 </script>
 
 <template>
   <component
     :is="as"
-    class="inline-flex shrink-0 items-center rounded-full border border-warning/40 px-2.5 py-0.5 text-xs font-medium text-warning"
+    class="inline-flex shrink-0 items-center rounded-full border border-warning/40 font-medium text-warning"
+    :class="size === 'sm' ? 'px-1.5 text-2xs' : 'px-2.5 py-0.5 text-xs'"
   >
     <slot />
   </component>
