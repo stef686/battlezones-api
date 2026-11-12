@@ -47,6 +47,13 @@ const submitted = computed(() => game.value?.result.submitted_at !== null);
  */
 const isBye = computed(() => game.value?.is_bye === true);
 
+/**
+ * Results open once the Event is under way, and not before: an Organiser
+ * playing in their own Event can read their pairing early, but the API
+ * refuses a result until it is Active, so the form would only fail.
+ */
+const resultsOpen = computed(() => event.value?.status === 'active' || event.value?.status === 'completed');
+
 const myScore = ref<number | null>(null);
 const theirScore = ref<number | null>(null);
 const submitting = ref(false);
@@ -181,8 +188,16 @@ async function submit(): Promise<void> {
         </RouterLink>
       </section>
 
+      <p
+        v-if="!resultsOpen && !isBye"
+        data-testid="results-not-open"
+        class="text-sm text-muted-foreground-1"
+      >
+        Results can be entered once the event is under way.
+      </p>
+
       <form
-        v-if="!submitted && !isBye"
+        v-else-if="!submitted && !isBye"
         class="flex flex-col gap-4 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
         novalidate
         @submit.prevent="submit"
