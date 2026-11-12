@@ -24,3 +24,8 @@ The membership id reaches the SPA as `membership_id` on the detail resource's me
 `POST /events/{event:slug}/publish` (PublishEventController → `App\Actions\Events\PublishEvent`) takes a Draft to Published; `status` stays `prohibited` on the Event PATCH (ADR 0002). It 404s for anyone `isVisibleTo()` refuses, then authorises `EventPolicy::publish` — the Lead Organiser, plus admins for Filament. The action refuses a non-Draft under `status`, and otherwise names *every* unmet precondition at once under the field that fixes it (`venue_name`, `venue_city`, `ends_at` already past), so one attempt says everything in the way.
 
 The organise hub's `PublishEventCard` lists the same checks before the button is pressed, from `publishChecklist` in `frontend/src/lib/publishing.ts`. That is a mirror, not the rule: add a precondition to the action and the checklist together. `viewer.permissions.publish` is sent on the single Event only.
+
+## A Draft takes nobody in, and every way in asks the Event
+Nobody enters, is added to, or is invited into a Draft. `Event::ensureAcceptsEntries()` throws `EventIsDraft`, which renders itself as 422 "Publish the event first." It is called from `RegisterAttendee` and `SendEventInvite` (so registering, inviting a Captain, resending and partner invites are all covered) and from StoreAttendeeMemberController. A new way into an Event must call it too — do not re-check `status` by hand.
+
+Registering and inviting first 404 anyone `isVisibleTo()` refuses, so only an Organiser ever sees the 422: telling a stranger to publish an Event would confirm it exists.

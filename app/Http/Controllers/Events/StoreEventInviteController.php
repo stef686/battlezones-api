@@ -20,7 +20,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Authenticated]
 class StoreEventInviteController extends Controller
 {
-    #[Endpoint('Invite a Captain', 'Organisers only. Emails a time-limited credential for this Event.')]
+    #[Endpoint('Invite a Captain', 'Organisers only. Emails a time-limited credential for this Event. Refused with 422 "Publish the event first." while the Event is a Draft.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(status: 201, content: ['data' => [
         'id' => 7,
@@ -43,6 +43,8 @@ class StoreEventInviteController extends Controller
         Event $event,
         SendEventInvite $sendEventInvite,
     ): JsonResponse {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('organise', $event);
 
         $invite = $sendEventInvite->handle(

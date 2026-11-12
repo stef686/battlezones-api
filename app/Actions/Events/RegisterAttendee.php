@@ -32,6 +32,8 @@ class RegisterAttendee
         ?string $name = null,
         ?Allegiance $allegiance = null,
     ): EventAttendee {
+        $event->ensureAcceptsEntries();
+
         return DB::transaction(function () use ($event, $players, $registeredBy, $name, $allegiance): EventAttendee {
             // Inside the transaction and counted fresh: the policy check that
             // let this request through happened before the last place may have

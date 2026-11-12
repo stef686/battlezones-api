@@ -9,6 +9,7 @@ use App\Enums\EventStatus;
 use App\Enums\PairingFormat;
 use App\Enums\PollType;
 use App\Enums\RegistrationMode;
+use App\Exceptions\EventIsDraft;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -360,6 +361,19 @@ class Event extends Model
     public function isVisibleTo(?User $user): bool
     {
         return $this->status->isPubliclyVisible() || $this->isOrganisedBy($user);
+    }
+
+    /**
+     * A Draft is being set up, so nobody may enter it, be added to it, or be
+     * invited into it until it is published. Every way in calls this first.
+     *
+     * @throws EventIsDraft
+     */
+    public function ensureAcceptsEntries(): void
+    {
+        if ($this->status === EventStatus::Draft) {
+            throw new EventIsDraft();
+        }
     }
 
     public function isLedBy(User $user): bool

@@ -20,7 +20,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Authenticated]
 class StoreAttendeeMemberController extends Controller
 {
-    #[Endpoint('Add a Player to a Team', 'Invites the Player if they have no account yet. Closed to members once registration closes; Organisers are never blocked.')]
+    #[Endpoint('Add a Player to a Team', 'Invites the Player if they have no account yet. Closed to members once registration closes; Organisers are never blocked by that, but nobody is added while the Event is a Draft (422 "Publish the event first.").')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
     #[Response(status: 201, content: ['data' => [
@@ -53,6 +53,8 @@ class StoreAttendeeMemberController extends Controller
         EnrolPlayer $enrolPlayer,
     ): JsonResponse {
         Gate::authorize('changeMembers', $attendee);
+
+        $event->ensureAcceptsEntries();
 
         /** @var array{name?: string|null, email: string, faction_id?: int|null, army_list?: string|null} $player */
         $player = $request->validated();

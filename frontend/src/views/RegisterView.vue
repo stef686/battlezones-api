@@ -118,11 +118,13 @@ async function submit(): Promise<void> {
   } catch (caught) {
     failure.value = caught instanceof ApiError ? caught : null;
 
-    // A 409 here means the last place went while this form was open, which is
-    // a different thing from anything the form got wrong.
-    problem.value = failure.value === null || failure.value.kind === 'validation'
-      ? null
-      : failure.value.message;
+    // A 409 here means the last place went while this form was open, and a
+    // 422 naming no field means the Event itself refused — a Draft, which
+    // only its Organisers can reach this form for. Neither is anything the
+    // form got wrong, so neither belongs against a field.
+    const blamesAField = failure.value?.kind === 'validation' && Object.keys(failure.value.fields).length > 0;
+
+    problem.value = failure.value === null || blamesAField ? null : failure.value.message;
   } finally {
     submitting.value = false;
   }
