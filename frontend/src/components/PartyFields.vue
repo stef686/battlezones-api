@@ -9,6 +9,8 @@
  * is entering it. An Organiser fills in every row — they need not be playing —
  * and may record each Player's army list as they take the entry.
  */
+import { computed } from 'vue';
+
 import type { Allegiance } from '@/api/events';
 import SelectField from '@/components/SelectField.vue';
 import TextField from '@/components/TextField.vue';
@@ -40,7 +42,7 @@ const ALLEGIANCES: { value: Allegiance; label: string }[] = [
   { value: 'traitor', label: 'Traitor' },
 ];
 
-const organising = props.voice === 'organiser';
+const organising = computed(() => props.voice === 'organiser');
 
 function fieldErrors(field: string): string[] {
   return props.errors[field] ?? [];
@@ -48,7 +50,7 @@ function fieldErrors(field: string): string[] {
 
 /** The registering Player's own row, which is theirs and not editable. */
 function isOwnRow(index: number): boolean {
-  return !organising && index === 0;
+  return !organising.value && index === 0;
 }
 </script>
 
@@ -122,27 +124,15 @@ function isOwnRow(index: number): boolean {
       :errors="fieldErrors(`players.${index}.faction_id`)"
     />
 
-    <div v-if="organising">
-      <label
-        :for="`player-${index}-army-list`"
-        class="mb-2 block text-sm font-medium text-foreground"
-      >Army list</label>
-      <textarea
-        :id="`player-${index}-army-list`"
-        v-model="player.armyList"
-        :data-testid="`player-${index}-army-list`"
-        rows="6"
-        placeholder="Optional. Detachments, units, wargear…"
-        class="block w-full rounded-lg border border-border bg-background-2 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden"
-      />
-      <p
-        v-for="message in fieldErrors(`players.${index}.army_list`)"
-        :key="message"
-        class="mt-2 text-xs text-destructive"
-      >
-        {{ message }}
-      </p>
-    </div>
+    <TextField
+      v-if="organising"
+      v-model="player.armyList"
+      label="Army list"
+      :rows="6"
+      placeholder="Optional. Detachments, units, wargear…"
+      :testid="`player-${index}-army-list`"
+      :errors="fieldErrors(`players.${index}.army_list`)"
+    />
   </section>
 
   <p

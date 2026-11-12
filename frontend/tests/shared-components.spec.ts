@@ -5,6 +5,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import AuthCard from '@/components/AuthCard.vue';
+import TextField from '@/components/TextField.vue';
 
 function router() {
     return createRouter({
@@ -85,5 +86,32 @@ describe('the auth card', () => {
 
         expect(bare.findAll('.border-t')).toHaveLength(0);
         expect(footed.findAll('.border-t')).toHaveLength(1);
+    });
+});
+
+describe('the text field', () => {
+    it('becomes a labelled textarea given rows, with its errors still announced', () => {
+        const view = mount(TextField, {
+            props: {
+                modelValue: '',
+                label: 'Army list',
+                rows: 6,
+                testid: 'army-list',
+                hint: 'Optional.',
+                errors: ['The army list is too long.'],
+            },
+        });
+
+        const area = view.get('textarea[data-testid="army-list"]');
+        const label = view.get('label');
+
+        expect(area.attributes('rows')).toBe('6');
+        expect(label.attributes('for')).toBe(area.attributes('id'));
+        expect(area.attributes('aria-invalid')).toBe('true');
+
+        const describedBy = (area.attributes('aria-describedby') ?? '').split(' ');
+        expect(describedBy).toContain(view.get('[data-testid="army-list-error"]').attributes('id'));
+        expect(describedBy).toContain(view.get('[data-testid="army-list-hint"]').attributes('id'));
+        expect(view.find('input').exists()).toBe(false);
     });
 });
