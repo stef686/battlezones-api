@@ -691,6 +691,49 @@ describe('a Player looking up what they will face', () => {
     });
 });
 
+describe('an organiser playing before the event is under way', () => {
+    it('sees their game, but is told results open later rather than offered a form the API refuses', async () => {
+        const game = {
+            data: {
+                id: 18,
+                table_number: 5,
+                is_bye: false,
+                round: { id: 4, number: 1, name: 'Round 1' },
+                result: { submitted_at: null, edited_at: null, is_flagged: false },
+                attendees: [
+                    { id: 9, name: 'Mine', members: [], scores: {} },
+                    { id: 10, name: 'Theirs', members: [], scores: {} },
+                ],
+            },
+        };
+
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/my-game`]: { status: 200, body: game },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody('published') },
+        });
+
+        const early = mountView(MyGameView);
+        await flushPromises();
+
+        expect(early.get('[data-testid="opponent"]').text()).toBe('Theirs');
+        expect(early.find('[data-testid="submit-result"]').exists()).toBe(false);
+        expect(early.get('[data-testid="results-not-open"]').text()).toContain('once the event is under way');
+
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/my-game`]: { status: 200, body: game },
+            [`/api/events/${EVENT_SLUG}/pulse`]: { status: 200, body: PULSE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody('active') },
+        });
+
+        queryClient.clear();
+        const underWay = mountView(MyGameView);
+        await flushPromises();
+
+        expect(underWay.find('[data-testid="submit-result"]').exists()).toBe(true);
+        expect(underWay.find('[data-testid="results-not-open"]').exists()).toBe(false);
+    });
+});
+
 describe('a Player who disagrees with the result', () => {
     function submittedGame(overrides: Record<string, unknown> = {}) {
         return {

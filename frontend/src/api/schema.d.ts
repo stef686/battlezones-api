@@ -689,7 +689,7 @@ export interface paths {
         };
         /**
          * Show Event Game
-         * @description Game detail with full score breakdown and army lists. Games in a Draft round are visible to Organisers only.
+         * @description Game detail with full score breakdown and army lists. Before the Event is Active or Completed, only its Organisers can read its Games; anyone else gets a 404. Games in a Draft round are visible to Organisers only.
          */
         get: operations["showEventGame"];
         put?: never;

@@ -80,3 +80,19 @@ test('the Rounds of an Event under way are visible without asking who organises 
     expect($event->hasRoundsVisibleTo($stranger))->toBeTrue()
         ->and(DB::getQueryLog())->toBeEmpty();
 });
+
+test('whether a User organises the Event is asked of the database once, however many rules ask it', function () {
+    $event = Event::factory()->published()->create();
+    $organiser = coOrganiserOf($event);
+
+    DB::enableQueryLog();
+
+    expect($event->hasRoundsVisibleTo($organiser))->toBeTrue()
+        ->and($event->isOrganisedBy($organiser))->toBeTrue()
+        ->and($event->isOrganisedBy(User::factory()->create()))->toBeFalse();
+
+    $organiserQueries = collect(DB::getQueryLog())
+        ->filter(fn (array $query): bool => str_contains($query['query'], 'event_organisers'));
+
+    expect($organiserQueries)->toHaveCount(2);
+});

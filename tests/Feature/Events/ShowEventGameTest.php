@@ -186,7 +186,7 @@ test('it returns a game in a draft round to organisers', function () {
         ->assertSuccessful();
 });
 
-test('an organiser reads a game of their own hidden event', function (EventStatus $status) {
+test('an organiser reads a game of their own event before it is under way', function (EventStatus $status) {
     $event = Event::factory()->create(['status' => $status]);
     $game = Game::factory()->for(Round::factory()->for($event)->live())->create();
 
@@ -194,13 +194,22 @@ test('an organiser reads a game of their own hidden event', function (EventStatu
         ->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
         ->assertOk()
         ->assertJsonPath('data.id', $game->id);
-})->with('hidden event statuses');
+})->with('statuses before rounds are public');
 
-test('its own players still cannot read a game of a hidden event', function (EventStatus $status) {
+test('its own players still cannot read a game before the event is under way', function (EventStatus $status) {
     $event = Event::factory()->create(['status' => $status]);
     $game = Game::factory()->for(Round::factory()->for($event)->live())->create();
 
     $this->actingAs(playerOf($event))
         ->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
         ->assertNotFound();
-})->with('hidden event statuses');
+})->with('statuses before rounds are public');
+
+test('a guest cannot read the pairings of a published event one game at a time', function () {
+    // A Game hangs off a Round: where the Round 404s, so does the Game.
+    $event = Event::factory()->published()->create();
+    $game = Game::factory()->for(Round::factory()->for($event)->live())->create();
+
+    $this->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
+        ->assertNotFound();
+});

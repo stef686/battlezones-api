@@ -15,7 +15,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Group('Events', 'APIs for Events')]
 class ShowEventGameController extends Controller
 {
-    #[Endpoint('Show Event Game', 'Game detail with full score breakdown and army lists. Games in a Draft round are visible to Organisers only.')]
+    #[Endpoint('Show Event Game', 'Game detail with full score breakdown and army lists. Before the Event is Active or Completed, only its Organisers can read its Games; anyone else gets a 404. Games in a Draft round are visible to Organisers only.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('id', 'integer', 'The id of the game.', example: 1)]
     #[Response(['data' => [
@@ -41,12 +41,17 @@ class ShowEventGameController extends Controller
     ]])]
     public function __invoke(Request $request, Event $event, Game $game): GameDetailResource
     {
-        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
+        $viewer = $request->user('sanctum');
+
+        // A Game hangs off a Round, so it follows the Round rule, which is
+        // narrower than the Event's own: a Published Event is public, but its
+        // pairings are not until it is under way.
+        abort_unless($event->hasRoundsVisibleTo($viewer), 404);
 
         $game->load(['round.event.scoreTypes', 'attendees.memberships.user', 'attendees.memberships.faction', 'scores.scoreType', 'submittedBy', 'editedBy', 'openResultFlag']);
 
         abort_unless($game->round->event_id === $event->id, 404);
-        abort_if($game->round->isDraft() && ! $event->isOrganisedBy($request->user('sanctum')), 404);
+        abort_if($game->round->isDraft() && ! $event->isOrganisedBy($viewer), 404);
 
         return GameDetailResource::make($game);
     }

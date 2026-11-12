@@ -136,6 +136,17 @@ class Event extends Model
     private bool $currentRoundLoaded = false;
 
     /**
+     * Whether each User asked about organises this Event, keyed by their id.
+     * A request asks it of several rules in turn (can the Event be seen, can
+     * its Rounds, is this Round a Draft they may read), and the answer is one
+     * fact about the request. Held per instance, like the memos above: adding
+     * or removing an Organiser is read back on a fresh model.
+     *
+     * @var array<int, bool>
+     */
+    private array $organisedBy = [];
+
+    /**
      * @var list<string>
      */
     protected $fillable = [
@@ -349,7 +360,11 @@ class Event extends Model
      */
     public function isOrganisedBy(?User $user): bool
     {
-        return $user !== null && $this->organisers()->whereKey($user->getKey())->exists();
+        if ($user === null) {
+            return false;
+        }
+
+        return $this->organisedBy[$user->getKey()] ??= $this->organisers()->whereKey($user->getKey())->exists();
     }
 
     /**
