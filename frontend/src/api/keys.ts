@@ -11,6 +11,7 @@ export const keys = {
     gameSystems: () => ['game-systems'] as const,
     countries: () => ['countries'] as const,
     timezones: () => ['timezones'] as const,
+    organisedEvents: () => ['organised-events'] as const,
     event: (slug: string) => ['events', slug] as const,
     pulse: (slug: string) => ['events', slug, 'pulse'] as const,
     schedule: (slug: string) => ['events', slug, 'schedule'] as const,

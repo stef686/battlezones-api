@@ -281,3 +281,25 @@ describe('creating an event', () => {
         expect(router.currentRoute.value.name).toBe('claim');
     });
 });
+
+describe('the events a viewer organises', () => {
+    it('is for a signed-in reader, so a guest is sent to login first', async () => {
+        const { router } = routerWithSession(null);
+
+        await router.push('/organising');
+        await router.isReady();
+
+        expect(router.currentRoute.value.name).toBe('login');
+        expect(router.currentRoute.value.query.redirect).toBe('/organising');
+    });
+
+    it('sends an unclaimed account to Claim, since it names no Event of theirs', async () => {
+        const { router } = routerWithSession('a-token');
+        signedInAs(false, { token: 'abc', eventSlug: 'croydon-doubles' });
+
+        await router.push('/organising');
+        await router.isReady();
+
+        expect(router.currentRoute.value.name).toBe('claim');
+    });
+});

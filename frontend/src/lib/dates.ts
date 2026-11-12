@@ -1,8 +1,13 @@
 /**
  * Dates as a Player reads them on a phone: short, local, and without a year
  * unless the Event actually crosses one.
+ *
+ * Pass the Event's `timeZone` to read them on the hall's clock rather than
+ * the phone's: an Event starting at 09:00 in Auckland starts the day before
+ * in London, and a list of somebody's Events should name the day they are
+ * held on.
  */
-export function formatDateRange(start: string | null, end: string | null): string {
+export function formatDateRange(start: string | null, end: string | null, timeZone?: string): string {
     if (start === null) {
         return '';
     }
@@ -14,31 +19,44 @@ export function formatDateRange(start: string | null, end: string | null): strin
         return '';
     }
 
-    if (to === null || Number.isNaN(to.getTime()) || sameDay(from, to)) {
-        return full(from);
+    const zone = timeZone === undefined ? {} : { timeZone };
+
+    if (to === null || Number.isNaN(to.getTime()) || sameDay(from, to, zone)) {
+        return full(from, zone);
     }
 
-    return `${sameMonth(from, to) ? day(from) : short(from)} – ${full(to)}`;
+    return `${sameMonth(from, to, zone) ? day(from, zone) : short(from, zone)} – ${full(to, zone)}`;
 }
 
-function sameDay(a: Date, b: Date): boolean {
-    return a.toDateString() === b.toDateString();
+type Zone = { timeZone?: string };
+
+/** Year, month and day as they read on that clock, for comparing two dates. */
+function calendar(date: Date, zone: Zone, fields: Intl.DateTimeFormatOptions): string {
+    return date.toLocaleDateString('en-CA', { ...zone, ...fields });
 }
 
-function sameMonth(a: Date, b: Date): boolean {
-    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
+function sameDay(a: Date, b: Date, zone: Zone): boolean {
+    const fields = { year: 'numeric', month: '2-digit', day: '2-digit' } as const;
+
+    return calendar(a, zone, fields) === calendar(b, zone, fields);
 }
 
-function day(date: Date): string {
-    return date.toLocaleDateString(undefined, { day: 'numeric' });
+function sameMonth(a: Date, b: Date, zone: Zone): boolean {
+    const fields = { year: 'numeric', month: '2-digit' } as const;
+
+    return calendar(a, zone, fields) === calendar(b, zone, fields);
 }
 
-function short(date: Date): string {
-    return date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+function day(date: Date, zone: Zone): string {
+    return date.toLocaleDateString(undefined, { ...zone, day: 'numeric' });
 }
 
-function full(date: Date): string {
-    return date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+function short(date: Date, zone: Zone): string {
+    return date.toLocaleDateString(undefined, { ...zone, day: 'numeric', month: 'short' });
+}
+
+function full(date: Date, zone: Zone): string {
+    return date.toLocaleDateString(undefined, { ...zone, weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 /**

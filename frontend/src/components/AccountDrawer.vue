@@ -67,7 +67,7 @@ const SECTIONS: Section[] = [
     {
         heading: 'Organiser',
         destinations: [
-            { label: 'Events', icon: ClipboardList },
+            { label: 'Events', icon: ClipboardList, to: { name: 'organising' }, testid: 'account-drawer-organising' },
             { label: 'Run an event', icon: CalendarPlus, to: { name: 'create-event' }, testid: 'account-drawer-create-event' },
         ],
     },

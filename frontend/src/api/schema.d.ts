@@ -1213,6 +1213,26 @@ export interface paths {
         patch: operations["markAPaintingEntry"];
         trace?: never;
     };
+    "/api/organised-events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the Events I Organise
+         * @description Every Event the viewer is an Organiser of, lead or co-Organiser, in every status including Draft and Cancelled. Ordered by start, not paginated, and with no viewer block.
+         */
+        get: operations["listTheEventsIOrganise"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/event-slug-availability": {
         parameters: {
             query?: never;
@@ -5357,6 +5377,63 @@ export interface operations {
                         errors?: {
                             field_name?: string[];
                         };
+                    };
+                };
+            };
+        };
+    };
+    listTheEventsIOrganise: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            slug?: string;
+                            description?: string;
+                            status?: string;
+                            pairing_format?: string;
+                            timezone?: string;
+                            starts_at?: string;
+                            ends_at?: string;
+                            max_attendees?: number;
+                            attendee_size?: number;
+                            requires_allegiance?: boolean;
+                            registration_closes_at?: string | null;
+                            is_full?: boolean;
+                            venue?: {
+                                name?: string;
+                                address?: string;
+                                city?: string;
+                                country?: string;
+                            };
+                            banner?: string | null;
+                            colour?: string | null;
+                            created_at?: string;
+                            updated_at?: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
                     };
                 };
             };
