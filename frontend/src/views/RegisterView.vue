@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useApiClient } from '@/api';
@@ -9,8 +9,7 @@ import { fetchEvent, fetchFactions, registerAttendee, type Allegiance, type Play
 import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
-import SelectField from '@/components/SelectField.vue';
-import TextField from '@/components/TextField.vue';
+import PartyFields, { type PartyPlayer } from '@/components/PartyFields.vue';
 import { useSessionStore } from '@/stores/session';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -37,11 +36,6 @@ const factionOptions = computed(() => (factions.value ?? []).map((faction) => ({
   label: faction.name,
 })));
 
-const ALLEGIANCES: { value: Allegiance; label: string }[] = [
-  { value: 'loyalist', label: 'Loyalist' },
-  { value: 'traitor', label: 'Traitor' },
-];
-
 const partyName = ref('');
 const allegiance = ref('');
 
@@ -50,18 +44,19 @@ const allegiance = ref('');
  * address is not editable: registering a party is entering it, and the API
  * refuses a registration its registrant is not part of.
  */
-const players = reactive<{ name: string; email: string; factionId: string }[]>([]);
+const players = ref<PartyPlayer[]>([]);
 
 watch([event, () => session.viewer], () => {
-  if (event.value === undefined || session.viewer === null || players.length > 0) {
+  if (event.value === undefined || session.viewer === null || players.value.length > 0) {
     return;
   }
 
-  players.push({ name: '', email: session.viewer.email, factionId: '' });
-
-  for (let index = 1; index < event.value.attendee_size; index += 1) {
-    players.push({ name: '', email: '', factionId: '' });
-  }
+  players.value = Array.from({ length: event.value.attendee_size }, (_, index) => ({
+    name: '',
+    email: index === 0 ? session.viewer?.email ?? '' : '',
+    factionId: '',
+    armyList: '',
+  }));
 }, { immediate: true });
 
 /** Already entered: there is nothing to register, so show them their team. */
@@ -87,16 +82,12 @@ const submitting = ref(false);
 const problem = ref<string | null>(null);
 const failure = ref<ApiError | null>(null);
 
-function fieldErrors(field: string): string[] {
-  return failure.value?.fields[field] ?? [];
-}
-
 async function submit(): Promise<void> {
   submitting.value = true;
   problem.value = null;
   failure.value = null;
 
-  const entries: PlayerEntry[] = players.map((player) => ({
+  const entries: PlayerEntry[] = players.value.map((player) => ({
     name: player.name,
     email: player.email,
     faction_id: player.factionId === '' ? null : Number(player.factionId),
@@ -183,84 +174,15 @@ async function submit(): Promise<void> {
         novalidate
         @submit.prevent="submit"
       >
-        <section class="flex flex-col gap-4">
-          <TextField
-            v-model="partyName"
-            label="Team name"
-            testid="party-name"
-            hint="Optional. Left blank, your names are used."
-            :errors="fieldErrors('name')"
-          />
-
-          <SelectField
-            v-if="event.requires_allegiance"
-            v-model="allegiance"
-            label="Allegiance"
-            placeholder="Choose a side"
-            testid="allegiance"
-            :options="ALLEGIANCES"
-            hint="This event pairs Loyalist against Traitor."
-            :errors="fieldErrors('allegiance')"
-          />
-        </section>
-
-        <section
-          v-for="(player, index) in players"
-          :key="index"
-          class="flex flex-col gap-4 rounded-xl border border-card-line bg-card p-5 shadow-2xs"
-          :data-testid="`player-${index}`"
-        >
-          <h2 class="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-            {{ index === 0 ? 'You' : `Player ${index + 1}` }}
-          </h2>
-
-          <template v-if="index === 0">
-            <p
-              data-testid="my-email"
-              class="text-sm text-foreground"
-            >
-              {{ player.email }}
-            </p>
-          </template>
-
-          <template v-else>
-            <TextField
-              v-model="player.name"
-              label="Their name"
-              :testid="`player-${index}-name`"
-              :errors="fieldErrors(`players.${index}.name`)"
-            />
-
-            <TextField
-              v-model="player.email"
-              label="Their email"
-              type="email"
-              inputmode="email"
-              :testid="`player-${index}-email`"
-              hint="They get their own invitation — they do not share yours."
-              :errors="fieldErrors(`players.${index}.email`)"
-            />
-          </template>
-
-          <SelectField
-            v-model="player.factionId"
-            label="Faction"
-            placeholder="Not decided yet"
-            :testid="`player-${index}-faction`"
-            :options="factionOptions"
-            :errors="fieldErrors(`players.${index}.faction_id`)"
-          />
-        </section>
-
-        <p
-          v-for="message in fieldErrors('players')"
-          :key="message"
-          data-testid="players-error"
-          role="alert"
-          class="text-sm text-destructive"
-        >
-          {{ message }}
-        </p>
+        <PartyFields
+          v-model:name="partyName"
+          v-model:allegiance="allegiance"
+          v-model:players="players"
+          voice="player"
+          :requires-allegiance="event.requires_allegiance"
+          :faction-options="factionOptions"
+          :errors="failure?.fields"
+        />
 
         <p
           v-if="problem"

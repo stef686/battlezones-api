@@ -172,6 +172,8 @@ export interface PlayerEntry {
     name?: string | null;
     email: string;
     faction_id?: number | null;
+    /** Taken with the entry by an Organiser; a Player submits theirs later. */
+    army_list?: string | null;
 }
 
 export interface RegistrationDetails {
@@ -366,6 +368,7 @@ export function registerAttendee(client: ApiClient, slug: string, details: Regis
             ...(player.name === undefined || player.name === null || player.name === '' ? {} : { name: player.name }),
             email: player.email,
             ...(player.faction_id === undefined || player.faction_id === null ? {} : { faction_id: player.faction_id }),
+            ...(player.army_list === undefined || player.army_list === null || player.army_list === '' ? {} : { army_list: player.army_list }),
         })),
     }).then((response) => response.data);
 }

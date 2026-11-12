@@ -528,6 +528,41 @@ describe('the schedule', () => {
 });
 
 describe('the attendee list', () => {
+    it('gives an organiser a way to add an attendee, and nobody else', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees`]: { status: 200, body: ATTENDEES },
+            [`/api/events/${EVENT_SLUG}`]: {
+                status: 200,
+                body: eventBody({
+                    viewer: {
+                        is_organiser: true,
+                        is_lead_organiser: false,
+                        is_attendee: false,
+                        attendee_id: null,
+                        permissions: { organise: true, register: false, manage_organisers: false },
+                    },
+                }),
+            },
+        });
+
+        const organiser = mountView(AttendeesView);
+        await flushPromises();
+
+        expect(organiser.get('[data-testid="add-attendee"]').attributes('href'))
+            .toBe(`/events/${EVENT_SLUG}/attendees/new`);
+
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees`]: { status: 200, body: ATTENDEES },
+            [`/api/events/other/attendees`]: { status: 200, body: ATTENDEES },
+            [`/api/events/other`]: { status: 200, body: eventBody({ slug: 'other' }) },
+        });
+
+        const player = mountView(AttendeesView, { eventSlug: 'other' });
+        await flushPromises();
+
+        expect(player.find('[data-testid="add-attendee"]').exists()).toBe(false);
+    });
+
     it('shows each team with its allegiance and its players', async () => {
         stubApi({ [`/api/events/${EVENT_SLUG}/attendees`]: { status: 200, body: ATTENDEES } });
 
