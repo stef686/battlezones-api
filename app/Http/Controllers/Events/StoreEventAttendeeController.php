@@ -21,7 +21,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Authenticated]
 class StoreEventAttendeeController extends Controller
 {
-    #[Endpoint('Register a Team', 'Enters a party for the Event, inviting any Player who has no account yet.')]
+    #[Endpoint('Register a Team', 'Enters a party for the Event, inviting any Player who has no account yet. A Draft is 404 to anyone but its Organisers, and 422 "Publish the event first." to them.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(status: 201, content: ['data' => [
         'id' => 9,
@@ -52,6 +52,8 @@ class StoreEventAttendeeController extends Controller
         Event $event,
         RegisterAttendee $registerAttendee,
     ): JsonResponse {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('register', $event);
 
         /** @var list<array{name?: string|null, email: string, faction_id?: int|null, army_list?: string|null}> $players */

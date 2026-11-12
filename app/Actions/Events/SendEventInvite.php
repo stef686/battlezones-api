@@ -29,6 +29,8 @@ class SendEventInvite
         ?EventAttendee $attendee = null,
         ?User $invitedBy = null,
     ): EventInvite {
+        $event->ensureAcceptsEntries();
+
         $user = $this->findOrCreateAccount($email, $name);
 
         // A claimed account already has a way in of its owner's choosing, so

@@ -260,6 +260,24 @@ describe('registering a team', () => {
         expect(router.currentRoute.value.name).toBe('register');
     });
 
+    it('tells an organiser entering somebody into a draft to publish it first', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees`]: { status: 422, body: { message: 'Publish the event first.' } },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() },
+        });
+
+        const view = mountView(RegisterView);
+        await flushPromises();
+
+        await view.get('[data-testid="player-1-email"]').setValue('tarik@example.com');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        expect(view.get('[data-testid="register-problem"]').text()).toBe('Publish the event first.');
+        expect(router.currentRoute.value.name).toBe('register');
+    });
+
     it('shows a rejected partner address against that Player\'s field', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/attendees`]: {

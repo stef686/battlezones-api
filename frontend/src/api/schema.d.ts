@@ -562,7 +562,7 @@ export interface paths {
         put?: never;
         /**
          * Register a Team
-         * @description Enters a party for the Event, inviting any Player who has no account yet.
+         * @description Enters a party for the Event, inviting any Player who has no account yet. A Draft is 404 to anyone but its Organisers, and 422 "Publish the event first." to them.
          */
         post: operations["registerATeam"];
         delete?: never;
@@ -958,7 +958,7 @@ export interface paths {
         put?: never;
         /**
          * Invite a Captain
-         * @description Organisers only. Emails a time-limited credential for this Event.
+         * @description Organisers only. Emails a time-limited credential for this Event. Refused with 422 "Publish the event first." while the Event is a Draft.
          */
         post: operations["inviteACaptain"];
         delete?: never;
@@ -1684,7 +1684,7 @@ export interface paths {
         put?: never;
         /**
          * Add a Player to a Team
-         * @description Invites the Player if they have no account yet. Closed to members once registration closes; Organisers are never blocked.
+         * @description Invites the Player if they have no account yet. Closed to members once registration closes; Organisers are never blocked by that, but nobody is added while the Event is a Draft (422 "Publish the event first.").
          */
         post: operations["addAPlayerToATeam"];
         delete?: never;

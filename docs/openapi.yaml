@@ -1788,7 +1788,7 @@ paths:
     post:
       summary: 'Register a Team'
       operationId: registerATeam
-      description: 'Enters a party for the Event, inviting any Player who has no account yet.'
+      description: 'Enters a party for the Event, inviting any Player who has no account yet. A Draft is 404 to anyone but its Organisers, and 422 "Publish the event first." to them.'
       parameters: []
       responses:
         201:
@@ -3348,7 +3348,7 @@ paths:
     post:
       summary: 'Invite a Captain'
       operationId: inviteACaptain
-      description: 'Organisers only. Emails a time-limited credential for this Event.'
+      description: 'Organisers only. Emails a time-limited credential for this Event. Refused with 422 "Publish the event first." while the Event is a Draft.'
       parameters: []
       responses:
         201:
@@ -6472,7 +6472,7 @@ paths:
     post:
       summary: 'Add a Player to a Team'
       operationId: addAPlayerToATeam
-      description: 'Invites the Player if they have no account yet. Closed to members once registration closes; Organisers are never blocked.'
+      description: 'Invites the Player if they have no account yet. Closed to members once registration closes; Organisers are never blocked by that, but nobody is added while the Event is a Draft (422 "Publish the event first.").'
       parameters: []
       responses:
         201:
