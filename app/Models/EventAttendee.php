@@ -144,6 +144,23 @@ class EventAttendee extends Model
     }
 
     /**
+     * Load everything EventAttendeeDetailResource reads, in one place so the
+     * endpoints answering with the detail cannot drift apart — and so the
+     * Games, which `has_been_paired` is read from, are always among them.
+     */
+    public function loadForDetail(): static
+    {
+        return $this->load([
+            'memberships.user.clubs',
+            'memberships.faction',
+            'customFieldResponses.field',
+            'games.round',
+            'games.attendees.memberships.user',
+            'games.scores.scoreType',
+        ]);
+    }
+
+    /**
      * Whether an Organiser has marked this team as having left the Event.
      *
      * A Dropped team is not paired in any Round generated afterwards, and

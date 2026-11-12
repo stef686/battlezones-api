@@ -153,6 +153,11 @@ export interface Attendee {
     has_been_paired?: boolean;
     /** When an Organiser marked the team as having left; null while it is in. */
     dropped_at?: string | null;
+    /**
+     * Whether a Draft Round already pairs the team. A Drop leaves that
+     * pairing as it is, so the Organiser is told before dropping.
+     */
+    paired_in_draft_round?: boolean;
     members: AttendeeMember[];
     checked_in_at: string | null;
     /** Whether this army is on the display table for the painting vote. */

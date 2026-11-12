@@ -23,7 +23,7 @@ class ShowEventAttendeeController extends Controller
     {
         abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
 
-        $attendee->load(['memberships.user.clubs', 'memberships.faction', 'customFieldResponses.field', 'games.round', 'games.attendees.memberships.user', 'games.scores.scoreType']);
+        $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee);
     }

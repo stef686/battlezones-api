@@ -168,9 +168,8 @@ async function drop(): Promise<void> {
     dropping.value = false;
   }
 
-  // The list and the Standings mark a Dropped team, so both are behind.
+  // The Attendee lists carry `dropped_at`, so every page of them is behind.
   void queryClient.invalidateQueries({ queryKey: keys.allAttendees(props.eventSlug) });
-  void queryClient.invalidateQueries({ queryKey: keys.standings(props.eventSlug) });
 }
 </script>
 
@@ -275,7 +274,18 @@ async function drop(): Promise<void> {
           testid="drop-attendee-confirm"
           @confirm="drop"
         >
-          They won't be paired in later rounds. Results so far stand.
+          <p>They won't be paired in later rounds. Results so far stand.</p>
+
+          <!-- A Drop does not reach into a Round already drafted, and there
+               is no taking them out of it yet: said now, not discovered when
+               the Round is published with an empty chair in it. -->
+          <p
+            v-if="attendee.paired_in_draft_round"
+            data-testid="drop-attendee-draft-round"
+            class="mt-2"
+          >
+            They are still paired in the round being drafted, and dropping them won't change that.
+          </p>
         </ConfirmDialog>
 
         <AppButton

@@ -51,7 +51,7 @@ class UpdateMyFactionController extends Controller
 
         $attendee = $membership->attendee()->firstOrFail();
 
-        $attendee->load(['memberships.user.clubs', 'memberships.faction', 'customFieldResponses.field', 'games.round', 'games.attendees.memberships.user']);
+        $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee);
     }

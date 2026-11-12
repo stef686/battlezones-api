@@ -297,3 +297,20 @@ test('it says when the team was dropped', function () {
         ->assertSuccessful()
         ->assertJsonPath('data.dropped_at', '2026-09-12T13:05:00Z');
 });
+
+test('it says whether the team sits in a draft round, which a drop does not take it out of', function () {
+    $event = Event::factory()->published()->create();
+    $drafted = EventAttendee::factory()->for($event)->withMember()->create();
+    $played = EventAttendee::factory()->for($event)->withMember()->create();
+    Game::factory()->for(Round::factory()->for($event)->create(['number' => 2]))->create()->attendees()->attach($drafted);
+    Game::factory()->for(Round::factory()->for($event)->live()->create(['number' => 1]))->create()->attendees()->attach($played);
+
+    $read = fn (EventAttendee $attendee) => $this
+        ->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+        ->assertSuccessful()
+        ->json('data.paired_in_draft_round');
+
+    expect($read($drafted))->toBeTrue()
+        ->and($read($played))->toBeFalse();
+});
