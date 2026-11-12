@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Enums\PollType;
 use App\Models\Event;
 use App\Models\EventPoll;
@@ -158,3 +159,20 @@ test('the pulse 404s for an Event nobody may see', function () {
 
     $this->getJson(route('events.pulse', $event))->assertNotFound();
 });
+
+test('an organiser reads the pulse of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.pulse', $event))
+        ->assertOk()
+        ->assertJsonStructure(['data' => ['current_round', 'rounds', 'standings', 'polls']]);
+})->with('hidden event statuses');
+
+test('its own players still cannot read the pulse of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.pulse', $event))
+        ->assertNotFound();
+})->with('hidden event statuses');

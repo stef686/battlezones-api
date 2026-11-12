@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\EventOrganiserRole;
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScoreType;
@@ -184,3 +185,22 @@ test('it returns a game in a draft round to organisers', function () {
         ->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
         ->assertSuccessful();
 });
+
+test('an organiser reads a game of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $game = Game::factory()->for(Round::factory()->for($event)->live())->create();
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
+        ->assertOk()
+        ->assertJsonPath('data.id', $game->id);
+})->with('hidden event statuses');
+
+test('its own players still cannot read a game of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $game = Game::factory()->for(Round::factory()->for($event)->live())->create();
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.games.show', ['event' => $event->slug, 'game' => $game->id]))
+        ->assertNotFound();
+})->with('hidden event statuses');

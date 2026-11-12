@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Events\FactionResource;
 use App\Models\Event;
 use App\Models\Faction;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
@@ -21,9 +22,9 @@ class ListEventFactionsController extends Controller
         ['id' => 3, 'name' => 'Sons of Horus', 'slug' => 'sons-of-horus'],
         ['id' => 4, 'name' => 'Imperial Fists', 'slug' => 'imperial-fists'],
     ]])]
-    public function __invoke(Event $event): AnonymousResourceCollection
+    public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
-        abort_unless($event->status->isPubliclyVisible(), 404);
+        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
 
         // Read from the Event rather than the game system directly: a Player
         // choosing a Faction is choosing within the Event they are entering,

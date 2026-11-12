@@ -41,7 +41,7 @@ class ShowEventGameController extends Controller
     ]])]
     public function __invoke(Request $request, Event $event, Game $game): GameDetailResource
     {
-        abort_unless($event->status->isPubliclyVisible(), 404);
+        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
 
         $game->load(['round.event.scoreTypes', 'attendees.memberships.user', 'attendees.memberships.faction', 'scores.scoreType', 'submittedBy', 'editedBy', 'openResultFlag']);
 

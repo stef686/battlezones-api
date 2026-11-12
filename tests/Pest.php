@@ -112,3 +112,26 @@ function organiserOf(Event $event): User
 
     return $organiser;
 }
+
+/**
+ * A co-Organiser of this Event: the one with the least say, so the one a
+ * read has to let in if any Organiser is to be let in.
+ */
+function coOrganiserOf(Event $event): User
+{
+    $colleague = User::factory()->create();
+    $event->organisers()->attach($colleague, ['role' => EventOrganiserRole::Organiser->value]);
+
+    return $colleague;
+}
+
+/**
+ * A Player entered in this Event, on a team of their own.
+ */
+function playerOf(Event $event): User
+{
+    $player = User::factory()->create();
+    EventAttendee::factory()->for($event)->withMember($player)->create();
+
+    return $player;
+}

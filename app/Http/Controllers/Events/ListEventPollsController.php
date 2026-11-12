@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Events\EventPollResource;
 use App\Models\Event;
 use App\Models\EventPoll;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
@@ -20,9 +21,9 @@ class ListEventPollsController extends Controller
     #[Endpoint('List Polls', "The Event's Polls and whether each is open. Tallies are not here, and are never readable by Players.")]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[ResponseFromApiResource(EventPollResource::class, model: EventPoll::class, collection: true)]
-    public function __invoke(Event $event): AnonymousResourceCollection
+    public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
-        abort_unless($event->status->isPubliclyVisible(), 404);
+        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
 
         return EventPollResource::collection($event->polls()->orderBy('id')->get());
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventScheduleBlock;
 use App\Models\Round;
@@ -241,3 +242,22 @@ test('the schedule is not readable for a draft event', function () {
     $this->getJson(route('events.schedule.index', ['event' => $event->slug]))
         ->assertNotFound();
 });
+
+test('an organiser reads the schedule of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $block = EventScheduleBlock::factory()->for($event)->create();
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.schedule.index', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonPath('data.0.blocks.0.id', $block->id);
+})->with('hidden event statuses');
+
+test('its own players still cannot read the schedule of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $block = EventScheduleBlock::factory()->for($event)->create();
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.schedule.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');

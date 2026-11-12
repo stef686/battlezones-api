@@ -15,11 +15,11 @@ use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 #[Group('Events', 'APIs for Events')]
 class ListEventUpdatesController extends Controller
 {
-    #[Endpoint('List Event Updates', 'List updates for a publicly visible event, pinned first then most recent.')]
+    #[Endpoint('List Event Updates', 'List updates for an event, pinned first then most recent. A Draft or Cancelled Event answers 404 to everyone but its Organisers.')]
     #[ResponseFromApiResource(EventUpdateResource::class, model: EventUpdate::class, paginate: 15)]
     public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
-        abort_unless($event->status->isPubliclyVisible(), 404);
+        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
 
         $updates = $event->updates()
             ->with(['author', 'attachments'])

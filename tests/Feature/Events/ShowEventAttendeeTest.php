@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\CustomFieldType;
+use App\Enums\EventStatus;
 use App\Models\Club;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -253,3 +254,22 @@ test('it does not leak custom field responses from other attendees', function ()
         ->assertSuccessful()
         ->assertJsonPath('data.custom_field_responses', []);
 });
+
+test('an organiser reads an attendee of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $attendee = EventAttendee::factory()->for($event)->withMember(User::factory()->create())->create();
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+        ->assertOk()
+        ->assertJsonPath('data.id', $attendee->id);
+})->with('hidden event statuses');
+
+test('its own players still cannot read an attendee of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $attendee = EventAttendee::factory()->for($event)->withMember(User::factory()->create())->create();
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+        ->assertNotFound();
+})->with('hidden event statuses');

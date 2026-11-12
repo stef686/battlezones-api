@@ -34,7 +34,7 @@ class ListEventScheduleController extends Controller
     ]]])]
     public function __invoke(Request $request, Event $event): JsonResponse
     {
-        abort_unless($event->status->isPubliclyVisible(), 404);
+        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
 
         $blocks = $event->scheduleBlocks()
             ->with('round')

@@ -17,12 +17,12 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Group('Events', 'APIs for Events')]
 class ListEventAttendeesController extends Controller
 {
-    #[Endpoint('List Event Attendees', 'Paginated list of attendees for a publicly visible event.')]
+    #[Endpoint('List Event Attendees', 'Paginated list of attendees for an event. A Draft or Cancelled Event answers 404 to everyone but its Organisers.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[ResponseFromApiResource(EventAttendeeResource::class, model: EventAttendee::class, paginate: 15)]
     public function __invoke(ListEventAttendeesRequest $request, Event $event): AnonymousResourceCollection
     {
-        abort_unless($event->status->isPubliclyVisible(), 404);
+        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
 
         $attendees = $event->attendees()
             ->with(['memberships.user.clubs', 'memberships.faction'])
