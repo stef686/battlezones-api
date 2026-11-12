@@ -246,6 +246,20 @@ describe('the attendee edit screen', () => {
         expect(push).toHaveBeenCalledWith({ name: 'attendees', params: { eventSlug: EVENT_SLUG } });
     });
 
+    it('asks about an unnamed team without naming it null', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: { data: { ...ATTENDEE.data, name: null } } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="delete-attendee"]').trigger('click');
+
+        expect(view.get('[data-testid="delete-attendee-confirm"] h2').text()).toBe('Delete this team?');
+    });
+
     it('offers no delete once the team has been paired', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: { data: { ...ATTENDEE.data, has_been_paired: true } } },
