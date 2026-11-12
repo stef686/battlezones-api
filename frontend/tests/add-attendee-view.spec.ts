@@ -167,6 +167,19 @@ describe('the add attendee screen', () => {
         expect(view.get('[data-testid="player-1-email-error"]').text()).toContain('already entered');
     });
 
+    it('says when the factions could not be read, rather than offering none', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 500, body: { message: 'Server Error' } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="factions-error"]').text()).toContain('factions could not be loaded');
+        expect(view.find('form').exists()).toBe(true);
+    });
+
     it('is not there for a reader who does not run the event', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },

@@ -7,6 +7,7 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { fetchEvent, fetchFactions, registerAttendee, type Allegiance } from '@/api/events';
 import { keys } from '@/api/keys';
+import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
@@ -30,7 +31,7 @@ const { data: event, error: eventError } = useQuery({
  */
 const mayOrganise = computed(() => event.value?.viewer?.permissions.organise === true);
 
-const { data: factions } = useQuery({
+const { data: factions, error: factionsError } = useQuery({
   queryKey: computed(() => keys.factions(props.eventSlug)),
   queryFn: () => fetchFactions(client, props.eventSlug),
   enabled: mayOrganise,
@@ -140,6 +141,17 @@ async function submit(): Promise<void> {
 
       <!-- Full or closed does not stop an Organiser, and adding mid-Event is
            allowed: a late arrival joins from the next Round on zero. -->
+      <!-- Said rather than left to the pickers: a failed read would otherwise
+           offer every Player nothing but "Not decided yet", which reads as an
+           Event with no Factions. The party can still be added without. -->
+      <AppAlert
+        v-if="factionsError"
+        data-testid="factions-error"
+        tone="error"
+      >
+        The factions could not be loaded, so none can be chosen yet. You can still add the team; its Players can choose their factions later.
+      </AppAlert>
+
       <form
         class="flex flex-col gap-6"
         novalidate

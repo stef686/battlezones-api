@@ -15,6 +15,10 @@
  * single field whose placeholder already says what it is does not need a line
  * of a phone viewport spent repeating it, but an input with no accessible
  * name says nothing to a screen reader. A placeholder is not a label.
+ *
+ * `rows` makes it a textarea of that height, wired exactly as the input is,
+ * so a long answer — an army list — gets the same label, hint and error
+ * announcement rather than a hand-rolled copy that forgets one of them.
  */
 import { computed, useId } from 'vue';
 
@@ -28,6 +32,7 @@ const props = withDefaults(defineProps<{
   testid?: string;
   errors?: string[];
   hint?: string | null;
+  rows?: number;
 }>(), {
   type: 'text',
   placeholder: undefined,
@@ -37,6 +42,7 @@ const props = withDefaults(defineProps<{
   testid: undefined,
   errors: () => [],
   hint: null,
+  rows: undefined,
 });
 
 const model = defineModel<string>({ required: true });
@@ -52,6 +58,13 @@ const describedBy = computed(() => {
 
   return ids.length > 0 ? ids.join(' ') : undefined;
 });
+
+const controlClass = computed(() => [
+  'block w-full rounded-lg border bg-background-2 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-hidden disabled:pointer-events-none disabled:opacity-50',
+  invalid.value
+    ? 'border-destructive focus:border-destructive focus:ring-1 focus:ring-destructive'
+    : 'border-border focus:border-primary focus:ring-1 focus:ring-primary',
+]);
 </script>
 
 <template>
@@ -61,7 +74,20 @@ const describedBy = computed(() => {
       :class="labelHidden ? 'sr-only' : 'mb-2 block text-sm font-medium text-foreground'"
     >{{ label }}</label>
 
+    <textarea
+      v-if="rows"
+      :id="fieldId"
+      v-model="model"
+      :rows="rows"
+      :placeholder="placeholder"
+      :data-testid="testid"
+      :aria-invalid="invalid"
+      :aria-describedby="describedBy"
+      :class="controlClass"
+    />
+
     <input
+      v-else
       :id="fieldId"
       v-model="model"
       :type="type"
@@ -71,10 +97,7 @@ const describedBy = computed(() => {
       :data-testid="testid"
       :aria-invalid="invalid"
       :aria-describedby="describedBy"
-      class="block w-full rounded-lg border bg-background-2 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-hidden disabled:pointer-events-none disabled:opacity-50"
-      :class="invalid
-        ? 'border-destructive focus:border-destructive focus:ring-1 focus:ring-destructive'
-        : 'border-border focus:border-primary focus:ring-1 focus:ring-primary'"
+      :class="controlClass"
     >
 
     <p
