@@ -69,4 +69,16 @@ class EventPolicy
     {
         return $event->isLedBy($user);
     }
+
+    /**
+     * Whether this User may take the Event from Draft to Published.
+     *
+     * The Lead alone: putting an Event in front of Players is the Lead's
+     * call, not a co-Organiser's. Admins are let through so that Filament,
+     * which checks every ability a policy defines, keeps its repair path.
+     */
+    public function publish(User $user, Event $event): bool
+    {
+        return $user->is_admin || $event->isLedBy($user);
+    }
 }

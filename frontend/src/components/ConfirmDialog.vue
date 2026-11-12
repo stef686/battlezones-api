@@ -17,10 +17,13 @@ withDefaults(defineProps<{
   title: string;
   confirmLabel: string;
   cancelLabel?: string;
+  /** Danger by default; a question about something that is not destructive asks in primary. */
+  confirmVariant?: 'primary' | 'danger';
   /** Names the dialog and, suffixed `-confirm` and `-cancel`, its buttons. */
   testid: string;
 }>(), {
   cancelLabel: 'Cancel',
+  confirmVariant: 'danger',
 });
 
 const emit = defineEmits<{ confirm: [] }>();
@@ -77,7 +80,7 @@ function confirm(): void {
           {{ cancelLabel }}
         </AppButton>
         <AppButton
-          variant="danger"
+          :variant="confirmVariant"
           :data-testid="`${testid}-confirm`"
           @click="confirm"
         >

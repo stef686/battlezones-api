@@ -27,6 +27,7 @@ use App\Http\Controllers\Events\ListGameSystemsController;
 use App\Http\Controllers\Events\ListPollCandidatesController;
 use App\Http\Controllers\Events\ListTimezonesController;
 use App\Http\Controllers\Events\OpenEventPollController;
+use App\Http\Controllers\Events\PublishEventController;
 use App\Http\Controllers\Events\PublishRoundController;
 use App\Http\Controllers\Events\ReorderEventScheduleController;
 use App\Http\Controllers\Events\ReplaceBallotController;
@@ -150,6 +151,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('event-slugs.availability')
         ->middleware('throttle:slug-check');
     Route::patch('events/{event:slug}', UpdateEventController::class)->name('events.update');
+    Route::post('events/{event:slug}/publish', PublishEventController::class)->name('events.publish');
 
     // Multipart, and so a route of its own: PHP does not populate uploaded
     // files for a PATCH body. See docs/adr/0003.
