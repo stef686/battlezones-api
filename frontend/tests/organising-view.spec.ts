@@ -106,7 +106,12 @@ describe('the events a viewer organises', () => {
         const row = (await mountView()).get('[data-testid="organised-event"]');
 
         expect(row.text()).toContain('Nottingham');
-        expect(row.get('[data-testid="organised-event-dates"]').text()).toMatch(/12.*13 Sept?.*2026/);
+        // In the reader's own locale, so only the parts every locale shows.
+        const dates = row.get('[data-testid="organised-event-dates"]').text();
+
+        expect(dates).toContain('12');
+        expect(dates).toContain('13');
+        expect(dates).toContain('2026');
     });
 
     it('reads the dates on the event\'s own clock, not the phone\'s', async () => {
