@@ -450,8 +450,8 @@ describe('taking the event back to draft', () => {
         expect(view.find('[data-testid="unpublish-event"]').exists()).toBe(false);
     });
 
-    it('says why the api refused', async () => {
-        stubApi({
+    it('says why the api refused, and stops offering what the api will keep refusing', async () => {
+        const routes: Record<string, { status: number; body?: unknown }> = {
             [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: unpublishable() },
             [`DELETE /api/events/${EVENT_SLUG}/publish`]: {
                 status: 422,
@@ -460,15 +460,20 @@ describe('taking the event back to draft', () => {
                     errors: { status: ['People have entered or been invited — cancel the event instead.'] },
                 },
             },
-        });
+        };
+        stubApi(routes);
 
         const view = mountView();
         await flushPromises();
+
+        // Somebody entered since the screen read the Event.
+        routes[`GET /api/events/${EVENT_SLUG}`] = { status: 200, body: eventBody() };
 
         await view.get('[data-testid="unpublish-event"]').trigger('click');
         await view.get('[data-testid="unpublish-event-confirm-confirm"]').trigger('click');
         await flushPromises();
 
         expect(view.get('[data-testid="unpublish-event-error"]').text()).toContain('cancel the event instead');
+        expect(view.find('[data-testid="unpublish-event"]').exists()).toBe(false);
     });
 });

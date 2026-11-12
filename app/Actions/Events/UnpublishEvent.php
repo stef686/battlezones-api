@@ -17,9 +17,9 @@ use Illuminate\Validation\ValidationException;
  * is in, cancelling is the way out.
  *
  * The write is conditional on the row still being Published with nobody in
- * it, which is the whole race guard: an entry or an Invite landing between
- * the check and the write leaves nothing to update, and the loser is told
- * why.
+ * it, which is the whole rule and its race guard: an entry or an Invite
+ * landing after the Event was read leaves nothing to update, and the caller
+ * is told why from what the row then holds.
  */
 class UnpublishEvent
 {
@@ -39,14 +39,8 @@ class UnpublishEvent
      */
     public function execute(Event $event): void
     {
-        if ($event->status !== EventStatus::Published) {
-            throw self::notPublished();
-        }
-
-        if ($this->hasAnyoneIn($event)) {
-            throw self::someoneIsIn();
-        }
-
+        // No check ahead of the write: the conditional update is the rule, and
+        // a refusal is told apart afterwards from what the row now holds.
         $unpublished = Event::query()
             ->whereKey($event->getKey())
             ->where('status', EventStatus::Published)
@@ -63,10 +57,18 @@ class UnpublishEvent
         $event->refresh();
     }
 
+    /**
+     * Reads a loaded `attendees_count` when the caller has one, as
+     * `Event::isFull()` does, so the single Event read pays only for the
+     * Invite lookup.
+     */
     private function hasAnyoneIn(Event $event): bool
     {
-        return $event->attendees()->exists()
-            || $event->invites()->outstanding()->exists();
+        $hasAttendee = $event->attendees_count !== null
+            ? $event->attendees_count > 0
+            : $event->attendees()->exists();
+
+        return $hasAttendee || $event->invites()->outstanding()->exists();
     }
 
     private static function notPublished(): ValidationException
