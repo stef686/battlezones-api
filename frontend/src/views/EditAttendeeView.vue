@@ -121,23 +121,24 @@ async function remove(): Promise<void> {
 
   try {
     await deleteAttendee(client, props.eventSlug, Number(props.attendeeId));
-
-    // Forgotten rather than refetched: the team is gone, and asking after it
-    // again would only answer "not found". Everything that counted or named
-    // it is behind now.
-    queryClient.removeQueries({ queryKey: attendeeKey.value });
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: keys.allAttendees(props.eventSlug) }),
-      queryClient.invalidateQueries({ queryKey: keys.standings(props.eventSlug) }),
-      queryClient.invalidateQueries({ queryKey: keys.event(props.eventSlug), exact: true }),
-    ]);
-
-    await router.push({ name: 'attendees', params: { eventSlug: props.eventSlug } });
   } catch (caught) {
     deleteFailure.value = caught instanceof Error ? caught.message : 'That could not be deleted.';
+
+    return;
   } finally {
     deleting.value = false;
   }
+
+  // Outside the try on purpose: once the delete has landed, nothing that
+  // goes wrong tidying up may report the team as not deleted. Its own read is
+  // forgotten rather than refetched, since asking after a deleted team only
+  // answers "not found"; everything that counted or named it is refreshed.
+  queryClient.removeQueries({ queryKey: attendeeKey.value });
+  void queryClient.invalidateQueries({ queryKey: keys.allAttendees(props.eventSlug) });
+  void queryClient.invalidateQueries({ queryKey: keys.standings(props.eventSlug) });
+  void queryClient.invalidateQueries({ queryKey: keys.event(props.eventSlug), exact: true });
+
+  await router.push({ name: 'attendees', params: { eventSlug: props.eventSlug } });
 }
 </script>
 
@@ -233,7 +234,7 @@ async function remove(): Promise<void> {
 
         <ConfirmDialog
           v-model:open="confirmingDelete"
-          :title="`Delete ${attendee.name}?`"
+          :title="`Delete ${attendee.name || 'this team'}?`"
           confirm-label="Delete"
           testid="delete-attendee-confirm"
           @confirm="remove"

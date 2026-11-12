@@ -29,7 +29,20 @@ class GenerateRoundPairings
         private readonly StoreGameScores $storeGameScores,
     ) {}
 
+    /**
+     * One transaction from reading the field to writing the Games, with the
+     * field read under a shared lock. An Attendee deleted while this runs
+     * would otherwise be paired from a stale read and fail its foreign key on
+     * insert; locked, the delete waits for this Round to commit and is then
+     * refused because the Attendee has been paired, or commits first and is
+     * simply not in the field this reads.
+     */
     public function execute(Event $event): Round
+    {
+        return DB::transaction(fn (): Round => $this->pair($event));
+    }
+
+    private function pair(Event $event): Round
     {
         $roundNumber = $this->nextRoundNumber($event);
 
@@ -160,7 +173,7 @@ class GenerateRoundPairings
      */
     private function rankAttendees(Event $event, Collection $rankingScoreTypes, array $totals): Collection
     {
-        $attendees = $event->attendees()->orderBy('id')->get();
+        $attendees = $event->attendees()->orderBy('id')->sharedLock()->get();
 
         $keys = [];
 
@@ -439,33 +452,31 @@ class GenerateRoundPairings
         usort($pairs, fn (array $a, array $b): int => min($positionOf[$a[0]->id], $positionOf[$a[1]->id])
             <=> min($positionOf[$b[0]->id], $positionOf[$b[1]->id]));
 
-        return DB::transaction(function () use ($event, $roundNumber, $pairs, $byes): Round {
-            $round = $event->rounds()->create([
-                'number' => $roundNumber,
-                'status' => RoundStatus::Draft,
+        $round = $event->rounds()->create([
+            'number' => $roundNumber,
+            'status' => RoundStatus::Draft,
+        ]);
+
+        foreach ($pairs as $index => [$home, $away]) {
+            $game = $round->games()->create([
+                'table_number' => $index + 1,
+                'is_bye' => false,
             ]);
 
-            foreach ($pairs as $index => [$home, $away]) {
-                $game = $round->games()->create([
-                    'table_number' => $index + 1,
-                    'is_bye' => false,
-                ]);
+            $game->attendees()->attach([$home->id, $away->id]);
+        }
 
-                $game->attendees()->attach([$home->id, $away->id]);
-            }
+        foreach ($byes as $attendee) {
+            $game = $round->games()->create([
+                'table_number' => null,
+                'is_bye' => true,
+            ]);
 
-            foreach ($byes as $attendee) {
-                $game = $round->games()->create([
-                    'table_number' => null,
-                    'is_bye' => true,
-                ]);
+            $game->attendees()->attach($attendee->id);
 
-                $game->attendees()->attach($attendee->id);
+            $this->storeGameScores->awardByeWin($game);
+        }
 
-                $this->storeGameScores->awardByeWin($game);
-            }
-
-            return $round;
-        });
+        return $round;
     }
 }

@@ -399,7 +399,6 @@ export function uploadTeamAvatar(client: ApiClient, slug: string, attendeeId: nu
         .then((response) => response.data);
 }
 
-/** Take the Avatar off, returning the team to its placeholder. */
 /**
  * Remove a never-paired Attendee from the Event outright, with its Invites
  * and ballots. Refused with 422 once it has been paired.
@@ -408,6 +407,7 @@ export function deleteAttendee(client: ApiClient, slug: string, attendeeId: numb
     return client.delete<null>(`${eventPath(slug)}/attendees/${attendeeId}`).then(() => undefined);
 }
 
+/** Take the Avatar off, returning the team to its placeholder. */
 export function removeTeamAvatar(client: ApiClient, slug: string, attendeeId: number): Promise<Attendee> {
     return client.delete<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/avatar`)
         .then((response) => response.data);

@@ -28,9 +28,10 @@ class DeleteAttendee
     public function execute(EventAttendee $attendee): void
     {
         DB::transaction(function () use ($attendee): void {
-            // Locked so a Round being paired at the same moment waits: adding
-            // this Attendee to a Game checks this row, and the check cannot
-            // land between the question and the delete.
+            // Locked against GenerateRoundPairings, which reads its field
+            // under a shared lock in the same transaction as it writes the
+            // Games: whichever goes second waits for the other to commit, so
+            // a Round can never be paired with an Attendee deleted under it.
             $refused = EventAttendee::query()
                 ->whereKey($attendee->getKey())
                 ->lockForUpdate()
