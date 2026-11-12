@@ -24,7 +24,7 @@ import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
 
 import { useApiClient } from '@/api';
-import { fetchEvent } from '@/api/events';
+import { type EventStatus, fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import EventHeaderSurface from '@/components/EventHeaderSurface.vue';
 import { formatDateRange } from '@/lib/dates';
@@ -39,7 +39,7 @@ const { data: event } = useQuery({
   retry: false,
 });
 
-const hiddenNotices: Record<string, string> = {
+const hiddenNotices: Partial<Record<EventStatus, string>> = {
   draft: 'Draft — only Organisers can see this event',
   cancelled: 'Cancelled — only Organisers can see this event',
 };

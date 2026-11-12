@@ -13,12 +13,15 @@ export interface EventViewer {
     };
 }
 
+/** Where an Event is in its life. Draft and Cancelled are seen only by its Organisers. */
+export type EventStatus = 'draft' | 'published' | 'active' | 'completed' | 'cancelled';
+
 export interface EventSummary {
     id: number;
     name: string;
     slug: string;
     description: string | null;
-    status: string;
+    status: EventStatus;
     starts_at: string | null;
     ends_at: string | null;
     max_attendees: number | null;
