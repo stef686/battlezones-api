@@ -55,6 +55,13 @@ export interface EventSummary {
     viewer: EventViewer | null;
 }
 
+/**
+ * A row of the Events the viewer organises. The listing carries no viewer
+ * block and no documents: every row is the viewer's to run, and the row
+ * leads to the hub, which reads the Event in full.
+ */
+export type OrganisedEvent = Omit<EventSummary, 'viewer' | 'documents' | 'timezone_is_fixed'>;
+
 export interface EventDocument {
     id: number;
     name: string;
@@ -278,6 +285,11 @@ export function removeBanner(client: ApiClient, slug: string): Promise<EventSumm
 
 export function fetchEvent(client: ApiClient, slug: string): Promise<EventSummary> {
     return client.get<{ data: EventSummary }>(eventPath(slug)).then((response) => response.data);
+}
+
+/** Every Event the viewer runs, in every status, ordered by start. */
+export function fetchOrganisedEvents(client: ApiClient): Promise<OrganisedEvent[]> {
+    return client.get<{ data: OrganisedEvent[] }>('/api/organised-events').then((response) => response.data);
 }
 
 export function fetchSchedule(client: ApiClient, slug: string): Promise<ScheduleDay[]> {

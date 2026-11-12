@@ -24,6 +24,7 @@ use App\Http\Controllers\Events\ListEventScoreTypesController;
 use App\Http\Controllers\Events\ListEventStandingsController;
 use App\Http\Controllers\Events\ListEventUpdatesController;
 use App\Http\Controllers\Events\ListGameSystemsController;
+use App\Http\Controllers\Events\ListOrganisedEventsController;
 use App\Http\Controllers\Events\ListPollCandidatesController;
 use App\Http\Controllers\Events\ListTimezonesController;
 use App\Http\Controllers\Events\OpenEventPollController;
@@ -144,6 +145,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}/painting', UpdatePaintingEntryController::class)
         ->name('events.attendees.painting.update');
 
+    Route::get('organised-events', ListOrganisedEventsController::class)->name('organised-events.index');
     Route::post('events', StoreEventController::class)->name('events.store');
     // Not under events/: any word there is a slug some Event could hold.
     // Throttled per account: the answer reveals whether a Draft exists.

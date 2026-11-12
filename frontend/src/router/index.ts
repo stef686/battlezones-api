@@ -80,6 +80,14 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true, unclaimed: true, chrome: false },
     },
     {
+        // Top-level rather than under /events/, where any word could be a
+        // slug. Signed in and claimed: it names no Event, so the guard sends
+        // an unclaimed account to Claim.
+        path: '/organising',
+        name: 'organising',
+        component: () => import('@/views/OrganisingView.vue'),
+    },
+    {
         // Signed in and claimed: the guard sends a guest to login and an
         // unclaimed account to Claim, since `new` is no Event of theirs.
         path: '/events/new',
