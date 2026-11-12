@@ -21,6 +21,7 @@ import { useApiClient } from '@/api';
 import { type EventStatus, fetchOrganisedEvents, type OrganisedEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import AppButton from '@/components/AppButton.vue';
+import StatusBadge from '@/components/StatusBadge.vue';
 import { formatDateRange } from '@/lib/dates';
 
 const client = useApiClient();
@@ -102,11 +103,12 @@ function dates(event: OrganisedEvent): string {
                 data-testid="organised-event-name"
                 class="truncate text-base font-semibold text-foreground"
               >{{ event.name }}</span>
-              <span
+              <StatusBadge
                 v-if="BADGES[event.status]"
                 data-testid="organised-event-status"
-                class="shrink-0 rounded-full border border-warning/40 px-2.5 py-0.5 text-xs font-medium text-warning"
-              >{{ BADGES[event.status] }}</span>
+              >
+                {{ BADGES[event.status] }}
+              </StatusBadge>
             </span>
             <span
               data-testid="organised-event-dates"

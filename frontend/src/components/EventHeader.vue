@@ -27,6 +27,7 @@ import { useApiClient } from '@/api';
 import { type EventStatus, fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import EventHeaderSurface from '@/components/EventHeaderSurface.vue';
+import StatusBadge from '@/components/StatusBadge.vue';
 import { formatDateRange } from '@/lib/dates';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -64,12 +65,13 @@ const dates = computed(() => formatDateRange(event.value?.starts_at ?? null, eve
       v-if="visibilityNotice"
       #notice
     >
-      <p
+      <StatusBadge
+        as="p"
         data-testid="event-header-visibility"
-        class="mb-2 self-start rounded-full border border-warning/40 bg-background-2/80 px-2.5 py-0.5 text-xs font-medium text-warning"
+        class="mb-2 self-start bg-background-2/80"
       >
         {{ visibilityNotice }}
-      </p>
+      </StatusBadge>
     </template>
   </EventHeaderSurface>
 </template>

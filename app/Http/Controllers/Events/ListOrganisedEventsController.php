@@ -34,6 +34,7 @@ class ListOrganisedEventsController extends Controller
             // `is_full` on every row would otherwise be a count per Event.
             ->withCount('attendees')
             ->orderBy('starts_at')
+            ->orderBy('events.id')
             ->get();
 
         return EventResource::collection($events);
