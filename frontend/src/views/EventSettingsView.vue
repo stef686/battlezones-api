@@ -270,6 +270,10 @@ async function unpublish(): Promise<void> {
       ? (caught.fields['status']?.[0] ?? caught.message)
       : 'The event could not be unpublished.';
 
+    // A refusal means the Event changed since it was read — somebody entered
+    // or was invited — so the permission that offered the button is stale.
+    void queryClient.invalidateQueries({ queryKey: keys.event(props.eventSlug), exact: true });
+
     return;
   } finally {
     unpublishing.value = false;
