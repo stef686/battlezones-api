@@ -7,6 +7,7 @@ import type { Router } from 'vue-router';
 import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
 import { createAppRouter } from '@/router';
+import { useSessionStore } from '@/stores/session';
 import OrganisingView from '@/views/OrganisingView.vue';
 
 function organised(overrides: Record<string, unknown> = {}) {
@@ -61,7 +62,12 @@ async function mountView() {
     return view;
 }
 
+/** Before every fixture's dates, unless a test moves it: they all read as upcoming. */
+const NOW = new Date('2026-09-01T12:00:00Z');
+
 beforeEach(async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
     pinia = createPinia();
     setActivePinia(pinia);
     queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
@@ -72,12 +78,23 @@ beforeEach(async () => {
     storage.write('a-token');
     createApiClient(router, { baseUrl: 'https://api.test', storage });
 
+    // Signed in and claimed, so the guard lets the list's own route through.
+    useSessionStore().viewer = {
+        id: 4,
+        public_name: 'Ada Lovelace',
+        email: 'ada@example.test',
+        is_claimed: true,
+        email_verified: true,
+        unread_notifications_count: 0,
+    };
+
     await router.push('/login');
     await router.isReady();
 });
 
 afterEach(() => {
     vi.unstubAllGlobals();
+    vi.useRealTimers();
 });
 
 describe('the events a viewer organises', () => {
@@ -160,5 +177,88 @@ describe('the events a viewer organises', () => {
 
         expect(view.find('[data-testid="organising-problem"]').exists()).toBe(true);
         expect(view.find('[data-testid="organising-empty"]').exists()).toBe(false);
+    });
+});
+
+/** One event on each side of now, and none under way. */
+const UPCOMING_AND_PAST = [
+    organised({ id: 1, name: 'Croydon Doubles', slug: 'croydon-doubles', starts_at: '2026-10-03T08:00:00Z', ends_at: '2026-10-03T17:00:00Z' }),
+    organised({ id: 2, name: 'Summer Slam', slug: 'summer-slam', status: 'draft', starts_at: '2026-07-04T08:00:00Z', ends_at: '2026-07-04T17:00:00Z' }),
+];
+
+function namesIn(view: Awaited<ReturnType<typeof mountView>>, tab: string): string[] {
+    return view.get(`[data-testid="organising-panel-${tab}"]`).findAll('[data-testid="organised-event-name"]').map((name) => name.text());
+}
+
+describe('the tabs over the events a viewer organises', () => {
+    it('opens on the first tab with anything in it, and greys out the empty ones', async () => {
+        stubApi(200, { data: UPCOMING_AND_PAST });
+
+        const view = await mountView();
+
+        expect(view.findAll('[role="tab"]').map((tab) => tab.text())).toEqual(['Happening now', 'Upcoming', 'Past']);
+        expect(view.get('[data-testid="organising-tab-happening-now"]').attributes('aria-disabled')).toBe('true');
+        expect(view.get('[data-testid="organising-tab-upcoming"]').attributes('aria-selected')).toBe('true');
+        expect(namesIn(view, 'upcoming')).toEqual(['Croydon Doubles']);
+    });
+
+    it('keeps a draft in the tab its dates put it in, still badged', async () => {
+        stubApi(200, { data: UPCOMING_AND_PAST });
+
+        const view = await mountView();
+        await view.get('[data-testid="organising-tab-past"]').trigger('click');
+        await flushPromises();
+
+        expect(namesIn(view, 'past')).toEqual(['Summer Slam']);
+        expect(view.get('[data-testid="organising-panel-past"] [data-testid="organised-event-status"]').text()).toBe('Draft');
+    });
+
+    it('puts the open tab in the address, so coming back to the list reopens it', async () => {
+        stubApi(200, { data: UPCOMING_AND_PAST });
+
+        await router.push('/organising');
+        const view = await mountView();
+
+        await view.get('[data-testid="organising-tab-past"]').trigger('click');
+        await vi.waitFor(() => expect(router.currentRoute.value.query.tab).toBe('past'));
+
+        await router.push('/events/summer-slam/organise');
+        router.back();
+
+        await vi.waitFor(() => expect(router.currentRoute.value.fullPath).toBe('/organising?tab=past'));
+    });
+
+    it('opens the tab the address names', async () => {
+        stubApi(200, { data: UPCOMING_AND_PAST });
+
+        await router.push('/organising?tab=past');
+        const view = await mountView();
+
+        expect(view.get('[data-testid="organising-tab-past"]').attributes('aria-selected')).toBe('true');
+    });
+
+    it('falls back to the first tab with anything in it when the address names an empty or unknown tab', async () => {
+        stubApi(200, { data: UPCOMING_AND_PAST });
+
+        for (const named of ['happening-now', 'tomorrow']) {
+            await router.push(`/organising?tab=${named}`);
+            const view = await mountView();
+
+            expect(view.get('[data-testid="organising-tab-upcoming"]').attributes('aria-selected')).toBe('true');
+
+            view.unmount();
+        }
+    });
+
+    it('shows three greyed tabs above the invitation to run an event when there is nothing at all', async () => {
+        stubApi(200, { data: [] });
+
+        const view = await mountView();
+
+        const tabs = view.findAll('[role="tab"]');
+
+        expect(tabs).toHaveLength(3);
+        expect(tabs.every((tab) => tab.attributes('aria-disabled') === 'true')).toBe(true);
+        expect(view.get('[data-testid="organising-empty"]').text()).toContain('You\'re not organising any events yet');
     });
 });

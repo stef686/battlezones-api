@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends { id: number | string; name: string }">
+<script setup lang="ts" generic="T extends { id: number | string; name: string; disabled?: boolean }">
 import { computed } from 'vue';
 
 /**
@@ -9,9 +9,14 @@ import { computed } from 'vue';
  * reader arrow keys, a single tab stop, and the roles that tie each tab to
  * the panel it opens. Written once, that is a thing that either works
  * everywhere or is broken everywhere.
+ *
+ * A tab can be `disabled` where what it stands for is empty, so a row of tabs
+ * keeps its shape rather than shifting as tabs come and go: it stays in the
+ * strip, greyed and `aria-disabled`, ignores clicks, and the keys step over
+ * it. With every tab disabled the model can be -1, and no panel is open.
  */
 const props = defineProps<{
-  /** What the tabs stand for. The `name` is the tab's label. */
+  /** What the tabs stand for. The `name` is the tab's label; `disabled` greys one out. */
   items: T[];
   /** Names the tablist for a screen reader, which sees no heading above it. */
   label: string;
@@ -25,16 +30,24 @@ const open = computed<T | null>(() => props.items[selected.value] ?? null);
 
 /**
  * Move between tabs on the arrow keys, which is what a tablist owes a reader
- * who is not using a pointer. The ends wrap, so neither arrow ever dead-ends.
+ * who is not using a pointer. The ends wrap, so neither arrow ever dead-ends,
+ * and a disabled tab is stepped over as if it were not there.
  */
 function onKeydown(event: KeyboardEvent): void {
-  const last = props.items.length - 1;
+  const enabled = props.items.flatMap((item, index) => (item.disabled === true ? [] : [index]));
+
+  if (enabled.length === 0) {
+    return;
+  }
+
+  const after = enabled.find((index) => index > selected.value) ?? enabled[0];
+  const before = [...enabled].reverse().find((index) => index < selected.value) ?? enabled[enabled.length - 1];
 
   const target = {
-    ArrowRight: selected.value === last ? 0 : selected.value + 1,
-    ArrowLeft: selected.value === 0 ? last : selected.value - 1,
-    Home: 0,
-    End: last,
+    ArrowRight: after,
+    ArrowLeft: before,
+    Home: enabled[0],
+    End: enabled[enabled.length - 1],
   }[event.key];
 
   if (target === undefined) {
@@ -44,6 +57,12 @@ function onKeydown(event: KeyboardEvent): void {
   event.preventDefault();
   selected.value = target;
   document.getElementById(tabId(props.items[target] as T))?.focus();
+}
+
+function choose(index: number): void {
+  if (props.items[index]?.disabled !== true) {
+    selected.value = index;
+  }
 }
 
 function tabId(item: { id: number | string }): string {
@@ -82,13 +101,16 @@ function panelId(item: { id: number | string }): string {
         :data-testid="tabId(item)"
         :aria-selected="index === selected"
         :aria-controls="panelId(item)"
+        :aria-disabled="item.disabled === true ? 'true' : undefined"
         :tabindex="index === selected ? 0 : -1"
         :title="item.name"
         class="min-w-0 flex-1 truncate border-b-2 px-3 py-2 text-sm font-medium focus:outline-hidden"
         :class="index === selected
           ? 'border-primary text-foreground'
-          : 'border-transparent text-muted-foreground-1 hover:text-foreground focus:text-foreground'"
-        @click="selected = index"
+          : item.disabled === true
+            ? 'cursor-default border-transparent text-muted-foreground opacity-50'
+            : 'border-transparent text-muted-foreground-1 hover:text-foreground focus:text-foreground'"
+        @click="choose(index)"
       >
         {{ item.name }}
       </button>
