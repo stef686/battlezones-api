@@ -5,6 +5,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import AuthCard from '@/components/AuthCard.vue';
+import TabStrip from '@/components/TabStrip.vue';
 import TextField from '@/components/TextField.vue';
 
 function router() {
@@ -113,5 +114,77 @@ describe('the text field', () => {
         expect(describedBy).toContain(view.get('[data-testid="army-list-error"]').attributes('id'));
         expect(describedBy).toContain(view.get('[data-testid="army-list-hint"]').attributes('id'));
         expect(view.find('input').exists()).toBe(false);
+    });
+});
+
+describe('the tab strip', () => {
+    const ITEMS = [
+        { id: 'a', name: 'First' },
+        { id: 'b', name: 'Second', disabled: true },
+        { id: 'c', name: 'Third' },
+        { id: 'd', name: 'Fourth', disabled: true },
+    ];
+
+    function mountStrip(selected = 0) {
+        return mount(TabStrip as never, ({
+            props: {
+                items: ITEMS,
+                label: 'Things',
+                idPrefix: 'things',
+                modelValue: selected,
+                'onUpdate:modelValue': () => undefined,
+            },
+            attachTo: document.body,
+        }) as never);
+    }
+
+    function emitted(strip: ReturnType<typeof mountStrip>): number[] {
+        return (strip.emitted('update:modelValue') ?? []).map(([index]) => index as number);
+    }
+
+    it('marks a disabled tab as such, and ignores a click on it', async () => {
+        const strip = mountStrip();
+        const second = strip.get('[data-testid="things-tab-b"]');
+
+        expect(second.attributes('aria-disabled')).toBe('true');
+        expect(strip.get('[data-testid="things-tab-a"]').attributes('aria-disabled')).toBeUndefined();
+
+        await second.trigger('click');
+
+        expect(emitted(strip)).toEqual([]);
+    });
+
+    it('steps over disabled tabs on the arrow keys, Home and End', async () => {
+        const strip = mountStrip();
+        const tabs = strip.get('[role="tablist"]');
+
+        await tabs.trigger('keydown', { key: 'ArrowRight' });
+        await tabs.trigger('keydown', { key: 'ArrowLeft' });
+        await tabs.trigger('keydown', { key: 'End' });
+
+        expect(emitted(strip)).toEqual([2, 2, 2]);
+
+        strip.unmount();
+    });
+
+    it('wraps past disabled tabs at either end', async () => {
+        const strip = mountStrip(2);
+        const tabs = strip.get('[role="tablist"]');
+
+        await tabs.trigger('keydown', { key: 'ArrowRight' });
+        await tabs.trigger('keydown', { key: 'Home' });
+
+        expect(emitted(strip)).toEqual([0, 0]);
+
+        strip.unmount();
+    });
+
+    it('opens no panel when every tab is disabled', () => {
+        const strip = mount(TabStrip as never, ({
+            props: { items: ITEMS.map((item) => ({ ...item, disabled: true })), label: 'Things', idPrefix: 'things', modelValue: -1 },
+        }) as never);
+
+        expect(strip.find('[role="tabpanel"]').exists()).toBe(false);
+        expect(strip.findAll('[aria-selected="true"]')).toHaveLength(0);
     });
 });
