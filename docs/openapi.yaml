@@ -4435,6 +4435,83 @@ paths:
                     type: string
       tags:
         - Events
+    delete:
+      summary: 'Unpublish an Event'
+      operationId: unpublishAnEvent
+      description: 'Lead Organiser only. Takes a Published Event back to Draft, undoing a publish made too early. Refused with 422 for anything but a Published Event, and once anybody has entered or an Invite is outstanding: cancel the Event instead.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      slug:
+                        type: string
+                      description:
+                        type: string
+                      status:
+                        type: string
+                      pairing_format:
+                        type: string
+                      timezone:
+                        type: string
+                      starts_at:
+                        type: string
+                      ends_at:
+                        type: string
+                      max_attendees:
+                        type: integer
+                      attendee_size:
+                        type: integer
+                      requires_allegiance:
+                        type: boolean
+                      registration_closes_at:
+                        type: string
+                        nullable: true
+                      is_full:
+                        type: boolean
+                      venue:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          address:
+                            type: string
+                          city:
+                            type: string
+                          country:
+                            type: string
+                      banner:
+                        type: string
+                        nullable: true
+                      colour:
+                        type: string
+                        nullable: true
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+        - Events
     parameters:
       -
         in: path

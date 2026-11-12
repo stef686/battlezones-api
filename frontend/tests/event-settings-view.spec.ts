@@ -409,3 +409,66 @@ describe('the event timezone in settings', () => {
         expect(view.get('[data-testid="event-timezone-fixed"]').text()).toContain('schedule');
     });
 });
+
+/** A Published Event its Lead may still take back to Draft. */
+function unpublishable(overrides: Record<string, unknown> = {}) {
+    const body = eventBody(true, overrides);
+    body.data.viewer.permissions = { ...body.data.viewer.permissions, unpublish: true } as typeof body.data.viewer.permissions;
+
+    return body;
+}
+
+describe('taking the event back to draft', () => {
+    it('is offered only where the api says the event can go back', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: eventBody() } });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="unpublish-event"]').exists()).toBe(false);
+    });
+
+    it('goes back to draft once the lead confirms, and the event reads as a draft again', async () => {
+        const fetch = stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: unpublishable() },
+            [`DELETE /api/events/${EVENT_SLUG}/publish`]: { status: 200, body: eventBody(true, { status: 'draft' }) },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="unpublish-event"]').trigger('click');
+        expect(view.get('[data-testid="unpublish-event-confirm"] h2').text()).toBe('Unpublish London Grand Tournament?');
+        expect(fetch.mock.calls.some(([, init]) => (init as RequestInit | undefined)?.method === 'DELETE')).toBe(false);
+
+        await view.get('[data-testid="unpublish-event-confirm-confirm"]').trigger('click');
+        await flushPromises();
+
+        expect(fetch.mock.calls.some(([url, init]) => String(url).endsWith(`/api/events/${EVENT_SLUG}/publish`)
+            && (init as RequestInit | undefined)?.method === 'DELETE')).toBe(true);
+        expect(queryClient.getQueryData<{ status: string }>(['events', EVENT_SLUG])?.status).toBe('draft');
+        expect(view.find('[data-testid="unpublish-event"]').exists()).toBe(false);
+    });
+
+    it('says why the api refused', async () => {
+        stubApi({
+            [`GET /api/events/${EVENT_SLUG}`]: { status: 200, body: unpublishable() },
+            [`DELETE /api/events/${EVENT_SLUG}/publish`]: {
+                status: 422,
+                body: {
+                    message: 'People have entered or been invited — cancel the event instead.',
+                    errors: { status: ['People have entered or been invited — cancel the event instead.'] },
+                },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="unpublish-event"]').trigger('click');
+        await view.get('[data-testid="unpublish-event-confirm-confirm"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="unpublish-event-error"]').text()).toContain('cancel the event instead');
+    });
+});

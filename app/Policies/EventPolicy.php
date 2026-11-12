@@ -81,4 +81,16 @@ class EventPolicy
     {
         return $user->is_admin || $event->isLedBy($user);
     }
+
+    /**
+     * Whether this User may take a Published Event back to Draft.
+     *
+     * The Lead's alone, as publishing is: it undoes their call. Whether the
+     * Event can still go back — nobody in, nobody invited — is the action's
+     * rule and a 422, not this one. Admins are let through for Filament.
+     */
+    public function unpublish(User $user, Event $event): bool
+    {
+        return $user->is_admin || $event->isLedBy($user);
+    }
 }

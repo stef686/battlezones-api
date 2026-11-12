@@ -12,6 +12,12 @@ export interface EventViewer {
         manage_organisers: boolean;
         /** Take a Draft to Published: the Lead Organiser's alone. Sent on a single Event read only. */
         publish?: boolean;
+        /**
+         * Whether the Event can go back to Draft right now: the Lead's call,
+         * and only while nobody has entered or been invited. Sent on a single
+         * Event read only.
+         */
+        unpublish?: boolean;
     };
 }
 
@@ -278,6 +284,17 @@ export function updateEvent(client: ApiClient, slug: string, changes: EventChang
  */
 export function publishEvent(client: ApiClient, slug: string): Promise<EventSummary> {
     return client.post<{ data: EventSummary }>(`${eventPath(slug)}/publish`).then((response) => response.data);
+}
+
+/**
+ * Take a Published Event back to Draft, undoing a publish made too early.
+ *
+ * The reverse of `publishEvent`, on the same path. The API refuses once
+ * anybody has entered or an Invite is outstanding, when cancelling is the
+ * way out instead.
+ */
+export function unpublishEvent(client: ApiClient, slug: string): Promise<EventSummary> {
+    return client.delete<{ data: EventSummary }>(`${eventPath(slug)}/publish`).then((response) => response.data);
 }
 
 /**

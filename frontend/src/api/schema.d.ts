@@ -1274,7 +1274,11 @@ export interface paths {
          * @description Lead Organiser only. Takes a Draft to Published, so Players can find and enter it. Refused with 422 for anything but a Draft, and for each thing publishing needs that is missing: a venue name, a venue city, and an Event that has not already ended.
          */
         post: operations["publishAnEvent"];
-        delete?: never;
+        /**
+         * Unpublish an Event
+         * @description Lead Organiser only. Takes a Published Event back to Draft, undoing a publish made too early. Refused with 422 for anything but a Published Event, and once anybody has entered or an Invite is outstanding: cancel the Event instead.
+         */
+        delete: operations["unpublishAnEvent"];
         options?: never;
         head?: never;
         patch?: never;
@@ -5568,6 +5572,66 @@ export interface operations {
         };
     };
     publishAnEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            slug?: string;
+                            description?: string;
+                            status?: string;
+                            pairing_format?: string;
+                            timezone?: string;
+                            starts_at?: string;
+                            ends_at?: string;
+                            max_attendees?: number;
+                            attendee_size?: number;
+                            requires_allegiance?: boolean;
+                            registration_closes_at?: string | null;
+                            is_full?: boolean;
+                            venue?: {
+                                name?: string;
+                                address?: string;
+                                city?: string;
+                                country?: string;
+                            };
+                            banner?: string | null;
+                            colour?: string | null;
+                            created_at?: string;
+                            updated_at?: string;
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    unpublishAnEvent: {
         parameters: {
             query?: never;
             header?: never;

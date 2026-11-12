@@ -19,6 +19,7 @@ import { ApiError } from '@/api/errors';
 import {
   fetchEvent,
   removeBanner,
+  unpublishEvent,
   updateEvent,
   uploadBanner,
   type EventChanges,
@@ -28,6 +29,7 @@ import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import EventBannerField from '@/components/EventBannerField.vue';
 import EventColourField from '@/components/EventColourField.vue';
 import EventDetailsFields from '@/components/EventDetailsFields.vue';
@@ -245,6 +247,38 @@ async function withBanner(change: () => Promise<EventSummary>): Promise<void> {
 }
 
 /**
+ * Undoing a publish made too early. Offered only while the API says the Event
+ * could go back — to its Lead, before anybody has entered or been invited —
+ * because once anybody is in, cancelling is the way out instead.
+ */
+const mayUnpublish = computed(() => event.value?.viewer?.permissions.unpublish === true);
+
+const confirmingUnpublish = ref(false);
+const unpublishing = ref(false);
+const unpublishFailure = ref<string | null>(null);
+
+async function unpublish(): Promise<void> {
+  unpublishing.value = true;
+  unpublishFailure.value = null;
+
+  try {
+    // The Event as it now reads, viewer and all: the header's Draft notice
+    // and the hub's Publish card come back from this alone.
+    queryClient.setQueryData(keys.event(props.eventSlug), await unpublishEvent(client, props.eventSlug));
+  } catch (caught) {
+    unpublishFailure.value = caught instanceof ApiError
+      ? (caught.fields['status']?.[0] ?? caught.message)
+      : 'The event could not be unpublished.';
+
+    return;
+  } finally {
+    unpublishing.value = false;
+  }
+
+  void queryClient.invalidateQueries({ queryKey: keys.organisedEvents() });
+}
+
+/**
  * The API keeps these in UTC and a datetime-local input has no zone of its
  * own, so the stored moment is shown exactly as stored and handed back the
  * same way. Anything cleverer would move an Event by an hour on the day the
@@ -356,6 +390,43 @@ function localMoment(iso: string | null): string {
           {{ saving ? 'Saving…' : 'Save settings' }}
         </AppButton>
       </form>
+
+      <section
+        v-if="mayUnpublish"
+        class="flex flex-col gap-3 border-t border-card-divider pt-5"
+      >
+        <p class="text-sm text-muted-foreground-1">
+          Published too early? Nobody has entered or been invited yet, so it can go back to being a draft.
+        </p>
+
+        <AppButton
+          data-testid="unpublish-event"
+          variant="secondary"
+          block
+          :disabled="unpublishing"
+          @click="confirmingUnpublish = true"
+        >
+          Unpublish
+        </AppButton>
+
+        <ConfirmDialog
+          v-model:open="confirmingUnpublish"
+          :title="`Unpublish ${event?.name}?`"
+          confirm-label="Unpublish"
+          testid="unpublish-event-confirm"
+          @confirm="unpublish"
+        >
+          Players will no longer be able to find or enter it until it is published again.
+        </ConfirmDialog>
+      </section>
+
+      <AppAlert
+        v-if="unpublishFailure"
+        data-testid="unpublish-event-error"
+        tone="error"
+      >
+        {{ unpublishFailure }}
+      </AppAlert>
     </template>
   </main>
 </template>

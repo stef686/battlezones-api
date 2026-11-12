@@ -422,6 +422,14 @@ class Event extends Model
     }
 
     /**
+     * @return HasMany<EventInvite, $this>
+     */
+    public function invites(): HasMany
+    {
+        return $this->hasMany(EventInvite::class);
+    }
+
+    /**
      * Whether play has started as far as the Players are concerned.
      *
      * Anything a pairing depends on freezes here: changing it afterwards would

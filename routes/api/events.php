@@ -65,6 +65,7 @@ use App\Http\Controllers\Events\SubmitFeedbackController;
 use App\Http\Controllers\Events\SwapRoundPairingsController;
 use App\Http\Controllers\Events\UndropEventAttendeeController;
 use App\Http\Controllers\Events\UnlockArmyListController;
+use App\Http\Controllers\Events\UnpublishEventController;
 use App\Http\Controllers\Events\UnpublishRoundController;
 use App\Http\Controllers\Events\UpdateArmyListController;
 use App\Http\Controllers\Events\UpdateAttendeeMemberController;
@@ -157,6 +158,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->middleware('throttle:slug-check');
     Route::patch('events/{event:slug}', UpdateEventController::class)->name('events.update');
     Route::post('events/{event:slug}/publish', PublishEventController::class)->name('events.publish');
+    Route::delete('events/{event:slug}/publish', UnpublishEventController::class)->name('events.unpublish');
 
     // Multipart, and so a route of its own: PHP does not populate uploaded
     // files for a PATCH body. See docs/adr/0003.
