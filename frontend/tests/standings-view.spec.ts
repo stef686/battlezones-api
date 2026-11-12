@@ -163,6 +163,19 @@ describe('the standings', () => {
         expect(view.get('[data-testid="standing-11"] [data-testid="match-points"]').text()).toBe('—');
     });
 
+    it('marks a dropped team where its results put it, without hiding or moving it', async () => {
+        const view = await mountStandings({
+            ...STANDINGS,
+            data: STANDINGS.data.map((row) => row.attendee.id === 9
+                ? { ...row, attendee: { ...row.attendee, dropped_at: '2026-09-12T13:05:00Z' } }
+                : row),
+        });
+
+        expect(names(view)).toEqual(['Sons of Terra', 'The Warmaster\'s Own', 'Terran Reserve']);
+        expect(view.get('[data-testid="standing-9"] [data-testid="dropped-9"]').text()).toBe('Dropped');
+        expect(view.find('[data-testid="dropped-10"]').exists()).toBe(false);
+    });
+
     it('badges the teams that have an avatar, without costing the others their row', async () => {
         const view = await mountStandings();
 

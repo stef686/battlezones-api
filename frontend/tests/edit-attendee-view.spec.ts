@@ -306,6 +306,8 @@ describe('the attendee edit screen', () => {
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
         });
 
+        queryClient.setQueryData(keys.standings(EVENT_SLUG), []);
+
         const view = mountView();
         await flushPromises();
 
@@ -329,6 +331,8 @@ describe('the attendee edit screen', () => {
         const drop = fetch.mock.calls.find(([url]) => String(url).endsWith('/attendees/9/drop'));
         expect(drop?.[1]?.method).toBe('POST');
         expect(view.find('[data-testid="drop-attendee"]').exists()).toBe(false);
+        // The Standings mark a Dropped team, so they are behind too.
+        expect(queryClient.getQueryState(keys.standings(EVENT_SLUG))?.isInvalidated).toBe(true);
     });
 
     it('warns that a drop leaves a draft round pairing the team as it is', async () => {

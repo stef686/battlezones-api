@@ -2626,6 +2626,12 @@ paths:
                               type: integer
                             name:
                               type: string
+                            avatar:
+                              type: string
+                              nullable: true
+                            dropped_at:
+                              type: string
+                              nullable: true
                             members:
                               type: array
                               items:

@@ -563,6 +563,21 @@ describe('the attendee list', () => {
         expect(player.find('[data-testid="add-attendee"]').exists()).toBe(false);
     });
 
+    it('marks a dropped team on its row, and leaves the rest unmarked', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees`]: {
+                status: 200,
+                body: { ...ATTENDEES, data: ATTENDEES.data.map((row) => (row.id === 10 ? { ...row, dropped_at: '2026-09-12T13:05:00Z' } : row)) },
+            },
+        });
+
+        const view = mountView(AttendeesView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="attendee-10"] [data-testid="dropped-10"]').text()).toBe('Dropped');
+        expect(view.find('[data-testid="dropped-9"]').exists()).toBe(false);
+    });
+
     it('shows each team with its allegiance and its players', async () => {
         stubApi({ [`/api/events/${EVENT_SLUG}/attendees`]: { status: 200, body: ATTENDEES } });
 

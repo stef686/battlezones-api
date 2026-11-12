@@ -168,8 +168,9 @@ async function drop(): Promise<void> {
     dropping.value = false;
   }
 
-  // The Attendee lists carry `dropped_at`, so every page of them is behind.
+  // The Attendee lists and the Standings both mark a Dropped team.
   void queryClient.invalidateQueries({ queryKey: keys.allAttendees(props.eventSlug) });
+  void queryClient.invalidateQueries({ queryKey: keys.standings(props.eventSlug) });
 }
 </script>
 
