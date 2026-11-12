@@ -17,7 +17,7 @@
 import { computed, ref, watch } from 'vue';
 
 import { useApiClient } from '@/api';
-import { ApiError } from '@/api/errors';
+import { formFailure, type FormFailure } from '@/api/errors';
 import { amendMember, removeMember, resendMemberInvite, type AttendeeMember } from '@/api/events';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -46,16 +46,44 @@ const testid = computed(() => `member-${props.member.membership_id}`);
 
 const invited = computed(() => props.member.invite_outstanding === true);
 
+interface PlayerDetails {
+  name: string;
+  email: string;
+  factionId: string;
+}
+
 const name = ref('');
 const email = ref('');
 const factionId = ref('');
 
-// Mirrors what the API last returned, so a correction made elsewhere wins on
-// the next read rather than being overwritten by a stale form.
+const form = computed<PlayerDetails>(() => ({ name: name.value, email: email.value, factionId: factionId.value }));
+
+function sameDetails(left: PlayerDetails | null, right: PlayerDetails): boolean {
+  return left !== null && left.name === right.name && left.email === right.email && left.factionId === right.factionId;
+}
+
+/**
+ * What the form was last filled with from the API. The team is reread after
+ * every change to any of its Players, and on window focus, so a reread must
+ * not wipe what an Organiser is half-way through typing: the form follows the
+ * API only while it still holds what the API last said.
+ */
+let seeded: PlayerDetails | null = null;
+
 watch(() => props.member, (player) => {
-  name.value = player.name;
-  email.value = player.email ?? '';
-  factionId.value = player.faction === null ? '' : String(player.faction.id);
+  const latest = {
+    name: player.name,
+    email: player.email ?? '',
+    factionId: player.faction === null ? '' : String(player.faction.id),
+  };
+
+  if (seeded === null || sameDetails(seeded, form.value)) {
+    name.value = latest.name;
+    email.value = latest.email;
+    factionId.value = latest.factionId;
+  }
+
+  seeded = latest;
 }, { immediate: true });
 
 /**
@@ -66,41 +94,59 @@ watch(() => props.member, (player) => {
 const addressChanged = computed(() => props.member.email !== undefined
   && email.value.trim().toLowerCase() !== props.member.email.toLowerCase());
 
-const saving = ref(false);
-const saved = ref(false);
-const failure = ref<ApiError | null>(null);
+/**
+ * What one request here last reported. Field messages sit under their
+ * fields; anything else is said once, including a failure that never reached
+ * the API, which would otherwise fail without a word.
+ */
+const failure = ref<FormFailure | null>(null);
 
 function fieldErrors(field: string): string[] {
   return failure.value?.fields[field] ?? [];
 }
+
+const saving = ref(false);
+
+/**
+ * What was last saved, so "Saved." describes the form only while the form
+ * still holds it: a keystroke afterwards is a change nobody has saved yet.
+ */
+const savedAs = ref<PlayerDetails | null>(null);
+const saved = computed(() => sameDetails(savedAs.value, form.value));
+
+const resending = ref(false);
+const resent = ref(false);
 
 async function save(): Promise<void> {
   if (props.member.membership_id === undefined) {
     return;
   }
 
+  const submitted = form.value;
+
   saving.value = true;
-  saved.value = false;
+  savedAs.value = null;
+  resent.value = false;
   failure.value = null;
 
   try {
     await amendMember(client, props.eventSlug, props.attendeeId, props.member.membership_id, {
-      name: name.value,
-      email: email.value,
-      faction_id: factionId.value === '' ? null : Number(factionId.value),
+      name: submitted.name,
+      email: submitted.email,
+      faction_id: submitted.factionId === '' ? null : Number(submitted.factionId),
     });
 
-    saved.value = true;
+    // The form now holds what the API holds, so the reread that follows may
+    // replace it with the API's own spelling of it.
+    seeded = submitted;
+    savedAs.value = submitted;
     emit('changed');
   } catch (caught) {
-    failure.value = caught instanceof ApiError ? caught : null;
+    failure.value = formFailure(caught, 'Their details could not be saved.');
   } finally {
     saving.value = false;
   }
 }
-
-const resending = ref(false);
-const resent = ref(false);
 
 /** A fresh invitation to the address on file, for a Player who never answered the first. */
 async function resend(): Promise<void> {
@@ -110,13 +156,14 @@ async function resend(): Promise<void> {
 
   resending.value = true;
   resent.value = false;
+  savedAs.value = null;
   failure.value = null;
 
   try {
     await resendMemberInvite(client, props.eventSlug, props.attendeeId, props.member.membership_id);
     resent.value = true;
   } catch (caught) {
-    failure.value = caught instanceof ApiError ? caught : null;
+    failure.value = formFailure(caught, 'The invitation could not be sent.');
   } finally {
     resending.value = false;
   }
@@ -187,7 +234,7 @@ async function remove(): Promise<void> {
       />
 
       <AppAlert
-        v-if="failure && failure.kind !== 'validation'"
+        v-if="failure?.message"
         :data-testid="`${testid}-error`"
         tone="error"
       >

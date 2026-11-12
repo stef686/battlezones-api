@@ -317,7 +317,7 @@ async function changeDrop(change: () => Promise<Attendee>, fallback: string): Pr
 
         <AttendeePlayerCard
           v-for="member in attendee.members"
-          :key="member.membership_id ?? member.id"
+          :key="member.membership_id"
           :event-slug="props.eventSlug"
           :attendee-id="attendee.id"
           :member="member"

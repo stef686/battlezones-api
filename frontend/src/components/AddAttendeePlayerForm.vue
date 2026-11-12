@@ -11,7 +11,7 @@
 import { ref } from 'vue';
 
 import { useApiClient } from '@/api';
-import { ApiError } from '@/api/errors';
+import { formFailure, type FormFailure } from '@/api/errors';
 import { addMember } from '@/api/events';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -33,7 +33,12 @@ const email = ref('');
 const factionId = ref('');
 
 const adding = ref(false);
-const failure = ref<ApiError | null>(null);
+/**
+ * What the last attempt reported. Field messages sit under their fields;
+ * anything else is said once, including a failure that never reached the
+ * API, which would otherwise fail without a word.
+ */
+const failure = ref<FormFailure | null>(null);
 
 function fieldErrors(field: string): string[] {
   return failure.value?.fields[field] ?? [];
@@ -50,7 +55,7 @@ async function add(): Promise<void> {
       faction_id: factionId.value === '' ? null : Number(factionId.value),
     });
   } catch (caught) {
-    failure.value = caught instanceof ApiError ? caught : null;
+    failure.value = formFailure(caught, 'They could not be added.');
 
     return;
   } finally {
@@ -102,7 +107,7 @@ async function add(): Promise<void> {
     />
 
     <AppAlert
-      v-if="failure && failure.kind !== 'validation'"
+      v-if="failure?.message"
       data-testid="add-player-error"
       tone="error"
     >
