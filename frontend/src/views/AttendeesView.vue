@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { Plus } from 'lucide-vue-next';
 import { useQuery, keepPreviousData } from '@tanstack/vue-query';
 import { computed, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { fetchAttendees } from '@/api/events';
+import { fetchAttendees, fetchEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import AppAvatar from '@/components/AppAvatar.vue';
@@ -16,6 +17,15 @@ import TextField from '@/components/TextField.vue';
 const props = defineProps<{ eventSlug: string }>();
 
 const client = useApiClient();
+
+const { data: event } = useQuery({
+  queryKey: computed(() => keys.event(props.eventSlug)),
+  queryFn: () => fetchEvent(client, props.eventSlug),
+  retry: false,
+});
+
+/** Offered on the permission the API sent: a reader who does not run the Event is not sent the way in. */
+const mayOrganise = computed(() => event.value?.viewer?.permissions.organise === true);
 
 const search = ref('');
 const page = ref(1);
@@ -59,14 +69,28 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
            this is one field on a screen whose whole job is the list beneath
            it, and it says the same thing in one line rather than three. The
            label is still there for a screen reader, just not on screen. -->
-      <TextField
-        v-model="search"
-        label="Search by team, player, club or faction"
-        label-hidden
-        type="search"
-        placeholder="Search by team, player, club or faction…"
-        testid="attendee-search"
-      />
+      <div class="flex items-end gap-2">
+        <TextField
+          v-model="search"
+          class="min-w-0 flex-1"
+          label="Search by team, player, club or faction"
+          label-hidden
+          type="search"
+          placeholder="Search by team, player, club or faction…"
+          testid="attendee-search"
+        />
+
+        <AppButton
+          v-if="mayOrganise"
+          :to="{ name: 'attendee-add', params: { eventSlug: props.eventSlug } }"
+          data-testid="add-attendee"
+          variant="secondary"
+          class="shrink-0"
+        >
+          <Plus class="size-4 shrink-0" />
+          Add
+        </AppButton>
+      </div>
 
       <p
         v-if="isPending"

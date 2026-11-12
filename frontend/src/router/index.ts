@@ -116,6 +116,13 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true },
     },
     {
+        // A fixed segment, so it outranks the Attendee id beside it.
+        path: '/events/:eventSlug/attendees/new',
+        name: 'attendee-add',
+        component: () => import('@/views/AddAttendeeView.vue'),
+        props: true,
+    },
+    {
         path: '/events/:eventSlug/attendees/:attendeeId',
         name: 'attendee',
         component: () => import('@/views/AttendeeView.vue'),
