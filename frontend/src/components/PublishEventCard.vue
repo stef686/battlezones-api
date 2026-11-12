@@ -36,18 +36,29 @@ const ready = computed(() => checks.value.every((check) => check.met));
 
 const confirming = ref(false);
 const publishing = ref(false);
-const problem = ref<string | null>(null);
+/**
+ * Every reason the API gave, one per line. A refusal naming several fields
+ * comes with Laravel's "(and 2 more errors)" summary, which says there is
+ * more without saying what.
+ */
+const problems = ref<string[]>([]);
 
 async function publish(): Promise<void> {
   publishing.value = true;
-  problem.value = null;
+  problems.value = [];
 
   try {
     const published = await publishEvent(client, props.event.slug);
 
     queryClient.setQueryData(keys.event(props.event.slug), published);
   } catch (caught) {
-    problem.value = caught instanceof ApiError ? caught.message : 'The event could not be published.';
+    const fieldMessages = caught instanceof ApiError ? Object.values(caught.fields).flat() : [];
+
+    if (fieldMessages.length > 0) {
+      problems.value = fieldMessages;
+    } else {
+      problems.value = [caught instanceof ApiError ? caught.message : 'The event could not be published.'];
+    }
   } finally {
     publishing.value = false;
   }
@@ -118,11 +129,18 @@ async function publish(): Promise<void> {
     </p>
 
     <AppAlert
-      v-if="problem"
+      v-if="problems.length > 0"
       data-testid="publish-problem"
       tone="error"
     >
-      {{ problem }}
+      <ul class="flex flex-col gap-1">
+        <li
+          v-for="message in problems"
+          :key="message"
+        >
+          {{ message }}
+        </li>
+      </ul>
     </AppAlert>
 
     <ConfirmDialog

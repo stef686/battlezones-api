@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Events\PublishEvent;
 use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
 use App\Enums\RegistrationMode;
@@ -7,6 +8,7 @@ use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\ValidationException;
 
 /**
  * A Draft with everything publishing asks of it.
@@ -142,3 +144,15 @@ test('the event tells its reader whether they may publish it', function (EventOr
     'the lead' => [EventOrganiserRole::Lead, true],
     'a co-organiser' => [EventOrganiserRole::Organiser, false],
 ]);
+
+test('an event that stopped being a draft since it was read is not published over', function () {
+    $event = publishableDraft();
+
+    // Another request cancelled it between this one reading it and writing.
+    Event::query()->whereKey($event->getKey())->update(['status' => EventStatus::Cancelled]);
+
+    expect(fn () => app(PublishEvent::class)->execute($event))
+        ->toThrow(ValidationException::class, 'Only a draft event can be published.');
+
+    expect($event->fresh()->status)->toBe(EventStatus::Cancelled);
+});

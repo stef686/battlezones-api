@@ -429,11 +429,17 @@ describe('publishing a draft', () => {
         expect(view.get('[data-testid="publish-card"]').text()).toContain('Only the lead organiser can publish');
     });
 
-    it('says why the api refused, and leaves the draft as it was', async () => {
+    it('says everything the api refused it for, and leaves the draft as it was', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/publish`]: {
                 status: 422,
-                body: { message: 'Name the venue before publishing.', errors: { venue_name: ['Name the venue before publishing.'] } },
+                body: {
+                    message: 'Name the venue before publishing. (and 1 more error)',
+                    errors: {
+                        venue_name: ['Name the venue before publishing.'],
+                        venue_city: ['Say which town or city the venue is in before publishing.'],
+                    },
+                },
             },
             [`/api/events/${EVENT_SLUG}`]: { status: 200, body: draftBody() },
         });
@@ -445,7 +451,12 @@ describe('publishing a draft', () => {
         await view.get('[data-testid="publish-confirm-confirm"]').trigger('click');
         await flushPromises();
 
-        expect(view.get('[data-testid="publish-problem"]').text()).toContain('Name the venue before publishing.');
+        const problems = view.get('[data-testid="publish-problem"]').findAll('li').map((item) => item.text());
+        expect(problems).toEqual([
+            'Name the venue before publishing.',
+            'Say which town or city the venue is in before publishing.',
+        ]);
+        expect(view.get('[data-testid="publish-problem"]').text()).not.toContain('more error');
         expect(view.find('[data-testid="publish-card"]').exists()).toBe(true);
     });
 
