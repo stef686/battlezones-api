@@ -25,6 +25,8 @@ The membership id reaches the SPA as `membership_id` on the detail resource's me
 
 The organise hub's `PublishEventCard` lists the same checks before the button is pressed, from `publishChecklist` in `frontend/src/lib/publishing.ts`. That is a mirror, not the rule: add a precondition to the action and the checklist together. `viewer.permissions.publish` is sent on the single Event only.
 
+Unpublishing is the reverse on the same path, `DELETE /events/{event:slug}/publish` (UnpublishEventController → `App\Actions\Events\UnpublishEvent`), authorised by `EventPolicy::unpublish` (Lead, plus admins). It takes Published back to Draft only while the Event has no Attendee and no outstanding Invite — the first way in is the line, not the status — and refuses everything else under `status`. The write is conditional on the row still being Published with nobody in it, which is the race guard. `viewer.permissions.unpublish` folds the state into the permission (`UnpublishEvent::allows`), so Settings offers the control only where the endpoint would take it.
+
 ## A Draft takes nobody in, and every way in asks the Event
 Nobody enters, is added to, or is invited into a Draft. `Event::ensureIsNotDraft()` throws `EventIsDraft`, which renders itself as 422 "Publish the event first." It is called from `RegisterAttendee` and `SendEventInvite` (so registering, inviting a Captain, resending and partner invites are all covered) and from StoreAttendeeMemberController. Every one of those routes 404s anyone `Event::isVisibleTo()` refuses before it authorises, so only Organisers ever see the 422. A new way into an Event must do both — do not re-check `status` by hand.
 

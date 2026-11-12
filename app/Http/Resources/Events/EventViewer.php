@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Events;
 
+use App\Actions\Events\UnpublishEvent;
 use App\Enums\EventOrganiserRole;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -45,6 +46,12 @@ class EventViewer
                 'register' => Gate::forUser($user)->allows('register', $event),
                 'manage_organisers' => Gate::forUser($user)->allows('manageOrganisers', $event),
                 'publish' => Gate::forUser($user)->allows('publish', $event),
+                // Whether the Event can go back to Draft right now, not merely
+                // whether this reader is the one who may: Settings offers the
+                // control only where the endpoint would take it. The policy is
+                // asked first, so nobody else pays for the entry lookups.
+                'unpublish' => Gate::forUser($user)->allows('unpublish', $event)
+                    && app(UnpublishEvent::class)->allows($event),
             ],
         ];
     }
