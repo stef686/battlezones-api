@@ -15,6 +15,8 @@ Preline's class strings are a dozen utilities long, which is how a codebase grow
 
 - `ConfirmDialog` — a yes/no question that must be answered before anything happens (the create wizard's "Leave without creating?"). A native `<dialog>` opened with `showModal()`, as `AccountDrawer` is; `v-model:open`, `title`, `confirm-label`, optional `cancel-label`, a default slot for the explanation, and `@confirm`. Cancel takes the opening focus. The confirm button is `danger` unless `confirm-variant="primary"` says the question is not destructive (publishing an Event). Do not reach for `window.confirm` or a Preline overlay.
 
+- `StatusBadge` — the warning-toned pill naming a status an Organiser must be told about (Draft, Cancelled): the Event header's notice and the organised-events rows. Placement classes pass through (`class="mb-2 self-start"`); `as="p"` where it stands as its own line. Do not retype the pill's classes on a third screen.
+
 - `TabStrip` — a row of tabs and the panel under it, used by the Game screen (the two sides of the table) and the Attendee screen (the Players in a team). It owns the roles, the arrow keys and the single tab stop a tablist owes a reader, and takes `items` (anything with `id` and `name`), an `aria-label`, and an `id-prefix` that names every tab and panel testid. Do not hand-roll a second tablist; two implementations means one of them is quietly broken for the keyboard.
 
 A raw `<button>` is right only for a selection toggle that carries `aria-pressed` and its own selected styling (rating pickers, poll picks, pairing swap). Chrome (the tab bar) is `AppShell` + `AppTabBar` and is applied in `App.vue` from `meta.chrome`, never by a view.

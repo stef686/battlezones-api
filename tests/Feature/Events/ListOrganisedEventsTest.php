@@ -96,3 +96,19 @@ test('a long list costs the same queries as a short one, game system included', 
 
     expect(count(DB::getQueryLog()))->toBe($few);
 });
+
+test('events starting together keep one order, the order they were made in', function () {
+    $organiser = User::factory()->create();
+
+    $made = collect(range(1, 4))->map(function () use ($organiser): Event {
+        $event = Event::factory()->create(['starts_at' => '2026-09-12 09:00:00', 'ends_at' => '2026-09-12 18:00:00']);
+        $event->organisers()->attach($organiser, ['role' => EventOrganiserRole::Lead->value]);
+
+        return $event;
+    });
+
+    $this->actingAs($organiser)
+        ->getJson(route('organised-events.index'))
+        ->assertOk()
+        ->assertJsonPath('data.*.id', $made->pluck('id')->all());
+});
