@@ -7,6 +7,7 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { amendAttendee, deleteAttendee, dropAttendee, fetchAttendee, fetchEvent, undropAttendee, type Allegiance, type Attendee } from '@/api/events';
 import { keys } from '@/api/keys';
+import { fetchRounds, roundTitle } from '@/api/rounds';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import AttendeeDetailsFields from '@/components/AttendeeDetailsFields.vue';
@@ -151,27 +152,51 @@ const mayDrop = computed(() => attendee.value?.has_been_paired === true && !atte
 /** A Dropped team offers only the way back, and asks nothing: undoing is not destructive. */
 const mayUndrop = computed(() => Boolean(attendee.value?.dropped_at));
 
+// Read only where it can matter, and from the same cache the Rounds tab uses.
+// An Organiser is sent Draft Rounds, marked as drafts.
+const { data: rounds } = useQuery({
+  queryKey: computed(() => keys.rounds(props.eventSlug)),
+  queryFn: () => fetchRounds(client, props.eventSlug),
+  enabled: mayUndrop,
+  retry: false,
+});
+
+/**
+ * A Round already drafted without this team, which an Undrop does not reach
+ * into: the team rejoins from the Round after it. Said beside the button
+ * rather than asked, because Undrop takes no confirmation, and not refused,
+ * because until a Draft Round can be discarded (#196) refusing would leave
+ * the team out with no way back in.
+ */
+const draftedWithout = computed(() => {
+  if (attendee.value?.paired_in_draft_round === true) {
+    return null;
+  }
+
+  return (rounds.value ?? []).find((round) => round.status === 'draft') ?? null;
+});
+
 const confirmingDrop = ref(false);
 const dropping = ref(false);
 const dropFailure = ref<string | null>(null);
 
 function drop(): Promise<void> {
-  return changeDrop(() => dropAttendee(client, props.eventSlug, Number(props.attendeeId)));
+  return changeDrop(() => dropAttendee(client, props.eventSlug, Number(props.attendeeId)), 'That could not be dropped.');
 }
 
 function undrop(): Promise<void> {
-  return changeDrop(() => undropAttendee(client, props.eventSlug, Number(props.attendeeId)));
+  return changeDrop(() => undropAttendee(client, props.eventSlug, Number(props.attendeeId)), 'That could not be undropped.');
 }
 
 /** Drop and Undrop are one switch, so they share its busy state and its one place to fail. */
-async function changeDrop(change: () => Promise<Attendee>): Promise<void> {
+async function changeDrop(change: () => Promise<Attendee>, fallback: string): Promise<void> {
   dropping.value = true;
   dropFailure.value = null;
 
   try {
     queryClient.setQueryData(attendeeKey.value, await change());
   } catch (caught) {
-    dropFailure.value = caught instanceof Error ? caught.message : 'That could not be changed.';
+    dropFailure.value = caught instanceof Error ? caught.message : fallback;
 
     return;
   } finally {
@@ -267,6 +292,14 @@ async function changeDrop(change: () => Promise<Attendee>): Promise<void> {
         >
           Undrop
         </AppButton>
+
+        <p
+          v-if="mayUndrop && draftedWithout"
+          data-testid="undrop-draft-round"
+          class="text-sm text-muted-foreground-1"
+        >
+          {{ roundTitle(draftedWithout) }} is being drafted without them, so they will be paired from the round after it.
+        </p>
 
         <AppButton
           v-if="mayDrop"
