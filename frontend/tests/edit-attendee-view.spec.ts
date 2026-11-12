@@ -376,4 +376,57 @@ describe('the attendee edit screen', () => {
         expect(dropped.find('[data-testid="drop-attendee"]').exists()).toBe(false);
         expect(dropped.find('[data-testid="delete-attendee"]').exists()).toBe(false);
     });
+
+    it('offers undrop in place of drop on a dropped team, and undrops without asking', async () => {
+        const DROPPED = { data: { ...ATTENDEE.data, has_been_paired: true, dropped_at: '2026-09-12T13:05:00Z' } };
+        const BACK = { data: { ...DROPPED.data, dropped_at: null } };
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: DROPPED },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="drop-attendee"]').exists()).toBe(false);
+
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/drop`]: { status: 200, body: BACK },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: BACK },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        await view.get('[data-testid="undrop-attendee"]').trigger('click');
+        await flushPromises();
+
+        const undrop = fetch.mock.calls.find(([url]) => String(url).endsWith('/attendees/9/drop'));
+        expect(undrop?.[1]?.method).toBe('DELETE');
+        expect(view.find('[data-testid="undrop-attendee"]').exists()).toBe(false);
+        expect(view.find('[data-testid="drop-attendee"]').exists()).toBe(true);
+    });
+
+    it('says why an undrop was refused', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, has_been_paired: true, dropped_at: '2026-09-12T13:05:00Z' } },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/drop`]: {
+                status: 422,
+                body: { message: 'This team has not been dropped.', errors: { attendee: ['This team has not been dropped.'] } },
+            },
+        });
+
+        await view.get('[data-testid="undrop-attendee"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="drop-attendee-error"]').text()).toContain('has not been dropped');
+    });
 });

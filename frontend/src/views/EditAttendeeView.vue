@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { amendAttendee, deleteAttendee, dropAttendee, fetchAttendee, fetchEvent, type Allegiance } from '@/api/events';
+import { amendAttendee, deleteAttendee, dropAttendee, fetchAttendee, fetchEvent, undropAttendee, type Allegiance, type Attendee } from '@/api/events';
 import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -148,20 +148,30 @@ async function remove(): Promise<void> {
  */
 const mayDrop = computed(() => attendee.value?.has_been_paired === true && !attendee.value.dropped_at);
 
+/** A Dropped team offers only the way back, and asks nothing: undoing is not destructive. */
+const mayUndrop = computed(() => Boolean(attendee.value?.dropped_at));
+
 const confirmingDrop = ref(false);
 const dropping = ref(false);
 const dropFailure = ref<string | null>(null);
 
-async function drop(): Promise<void> {
+function drop(): Promise<void> {
+  return changeDrop(() => dropAttendee(client, props.eventSlug, Number(props.attendeeId)));
+}
+
+function undrop(): Promise<void> {
+  return changeDrop(() => undropAttendee(client, props.eventSlug, Number(props.attendeeId)));
+}
+
+/** Drop and Undrop are one switch, so they share its busy state and its one place to fail. */
+async function changeDrop(change: () => Promise<Attendee>): Promise<void> {
   dropping.value = true;
   dropFailure.value = null;
 
   try {
-    const dropped = await dropAttendee(client, props.eventSlug, Number(props.attendeeId));
-
-    queryClient.setQueryData(attendeeKey.value, dropped);
+    queryClient.setQueryData(attendeeKey.value, await change());
   } catch (caught) {
-    dropFailure.value = caught instanceof Error ? caught.message : 'That could not be dropped.';
+    dropFailure.value = caught instanceof Error ? caught.message : 'That could not be changed.';
 
     return;
   } finally {
@@ -242,11 +252,22 @@ async function drop(): Promise<void> {
       </form>
 
       <section
-        v-if="mayDelete || mayDrop"
+        v-if="mayDelete || mayDrop || mayUndrop"
         class="flex flex-col gap-3 border-t border-card-divider pt-5"
       >
-        <!-- One way out of the Event at a time: Delete until the team has
-             been paired, Drop afterwards. -->
+        <!-- One button at a time: Delete until the team has been paired,
+             Drop afterwards, and Undrop once it has been Dropped. -->
+        <AppButton
+          v-if="mayUndrop"
+          data-testid="undrop-attendee"
+          variant="secondary"
+          block
+          :disabled="dropping"
+          @click="undrop"
+        >
+          Undrop
+        </AppButton>
+
         <AppButton
           v-if="mayDrop"
           data-testid="drop-attendee"

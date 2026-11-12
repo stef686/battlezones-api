@@ -426,6 +426,12 @@ export function dropAttendee(client: ApiClient, slug: string, attendeeId: number
         .then((response) => response.data);
 }
 
+/** Take a Drop back: the Attendee is paired again from the next Round generated. */
+export function undropAttendee(client: ApiClient, slug: string, attendeeId: number): Promise<Attendee> {
+    return client.delete<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/drop`)
+        .then((response) => response.data);
+}
+
 /** Take the Avatar off, returning the team to its placeholder. */
 export function removeTeamAvatar(client: ApiClient, slug: string, attendeeId: number): Promise<Attendee> {
     return client.delete<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/avatar`)

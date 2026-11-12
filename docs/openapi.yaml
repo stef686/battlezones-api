@@ -6517,6 +6517,94 @@ paths:
                           type: string
       tags:
         - Events
+    delete:
+      summary: 'Undrop a Team'
+      operationId: undropATeam
+      description: 'Organisers only. Clears a Drop, so the Attendee is paired again from the next Round generated. An Attendee that is not Dropped is refused with 422.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      allegiance:
+                        type: string
+                      avatar:
+                        type: string
+                        nullable: true
+                      allegiance_locked:
+                        type: boolean
+                      has_been_paired:
+                        type: boolean
+                      dropped_at:
+                        type: string
+                        nullable: true
+                      paired_in_draft_round:
+                        type: boolean
+                      members:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            faction:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                            army_list_locked:
+                              type: boolean
+                            clubs:
+                              type: array
+                      checked_in_at:
+                        type: string
+                        nullable: true
+                      custom_field_responses:
+                        type: array
+                      games:
+                        type: array
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    properties:
+                      attendee:
+                        type: array
+                        items:
+                          type: string
+      tags:
+        - Events
     parameters:
       -
         in: path
