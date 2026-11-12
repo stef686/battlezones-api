@@ -659,4 +659,72 @@ describe('the players on the attendee edit screen', () => {
         expect(view.get('[data-testid="member-4"]').text()).toContain('only they can change their details');
         expect(view.find('[data-testid="member-4-form"]').exists()).toBe(false);
     });
+
+    it('keeps what is typed into one player when the team is reread', async () => {
+        const ada = { ...PARTY.data.members[0], invite_outstanding: true, email: 'ada@example.com' };
+        const routes: Record<string, { status: number; body?: unknown }> = {
+            ...partyRoutes({ data: { ...PARTY.data, members: [ada, PARTY.data.members[1]] } }),
+            [`/attendees/9/members/5`]: { status: 200, body: PARTY },
+        };
+        stubApi(routes);
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="member-4-name"]').setValue('Ada King');
+
+        // Somebody else changed Ada's faction meanwhile, so the reread brings her back changed.
+        routes[`/api/events/${EVENT_SLUG}/attendees/9`] = {
+            status: 200,
+            body: { data: { ...PARTY.data, members: [{ ...ada, faction: { id: 7, name: 'Sons of Horus' } }, PARTY.data.members[1]] } },
+        };
+
+        await view.get('[data-testid="member-5-form"]').trigger('submit');
+        await flushPromises();
+
+        expect((view.get('[data-testid="member-4-name"]').element as HTMLInputElement).value).toBe('Ada King');
+    });
+
+    it('stops saying a player is saved once their details are changed again', async () => {
+        stubApi({
+            ...partyRoutes(),
+            [`/attendees/9/members/5`]: { status: 200, body: PARTY },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="member-5-name"]').setValue('Grace Hopper');
+        await view.get('[data-testid="member-5-form"]').trigger('submit');
+        await flushPromises();
+        expect(view.find('[data-testid="member-5-saved"]').exists()).toBe(true);
+
+        await view.get('[data-testid="member-5-name"]').setValue('Grace Brewster');
+        expect(view.find('[data-testid="member-5-saved"]').exists()).toBe(false);
+    });
+
+    it('says only what happened last, saved or resent', async () => {
+        stubApi({
+            ...partyRoutes(),
+            [`/attendees/9/members/5`]: { status: 200, body: PARTY },
+            [`/attendees/9/members/5/invite`]: { status: 201, body: {} },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="member-5-form"]').trigger('submit');
+        await flushPromises();
+        await view.get('[data-testid="member-5-resend"]').trigger('click');
+        await flushPromises();
+
+        expect(view.find('[data-testid="member-5-resent"]').exists()).toBe(true);
+        expect(view.find('[data-testid="member-5-saved"]').exists()).toBe(false);
+
+        await view.get('[data-testid="member-5-form"]').trigger('submit');
+        await flushPromises();
+
+        expect(view.find('[data-testid="member-5-saved"]').exists()).toBe(true);
+        expect(view.find('[data-testid="member-5-resent"]').exists()).toBe(false);
+    });
 });

@@ -156,3 +156,23 @@ export function normaliseNetworkFailure(cause: unknown): ApiError {
         body: cause,
     });
 }
+
+/** What a form says about its last failed request. */
+export interface FormFailure {
+    /** Said once above the button; null where every message belongs under a field. */
+    message: string | null;
+    fields: Record<string, string[]>;
+}
+
+/**
+ * A caught failure as a form shows it: validation messages under their
+ * fields, anything else said once. Something that is not an ApiError at all
+ * still gets the fallback, rather than the form failing without a word.
+ */
+export function formFailure(caught: unknown, fallback: string): FormFailure {
+    if (!(caught instanceof ApiError)) {
+        return { message: fallback, fields: {} };
+    }
+
+    return { message: caught.kind === 'validation' ? null : caught.message, fields: caught.fields };
+}
