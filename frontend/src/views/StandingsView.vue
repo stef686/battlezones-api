@@ -217,33 +217,39 @@ function matchesSearch(standing: Standing): boolean {
                            up: it is what a reader is scanning for, and the
                            numbers and the Factions are what it is read
                            against. -->
-                      <!-- A Dropped team keeps its row and its rank: its
-                           results still count for everyone it played, so it
-                           is marked rather than hidden or moved. -->
-                      <span class="flex min-w-0 items-center gap-1.5">
-                        <span
-                          :data-testid="`name-${row.standing.attendee.id}`"
-                          class="block truncate text-xs"
-                        >{{ row.standing.attendee.name }}</span>
-                        <StatusBadge
-                          v-if="row.standing.attendee.dropped_at"
-                          :data-testid="`dropped-${row.standing.attendee.id}`"
-                        >
-                          Dropped
-                        </StatusBadge>
-                      </span>
+                      <span
+                        :data-testid="`name-${row.standing.attendee.id}`"
+                        class="block truncate text-xs"
+                      >{{ row.standing.attendee.name }}</span>
 
                       <!-- Under the name and in grey, because it qualifies the
                            team rather than identifying it: two teams called
                            something forgettable are told apart by what they
                            brought. Truncated on its own line so a doubles pair
                            cannot push the scores off a phone. -->
+                      <!-- A Dropped team keeps its row and its rank: its
+                           results still count for everyone it played, so it
+                           is marked rather than hidden or moved. The mark
+                           sits on this line, not beside the name, so the
+                           name keeps the width a phone has for it. -->
                       <span
-                        v-if="row.factions !== ''"
-                        :data-testid="`factions-${row.standing.attendee.id}`"
-                        class="block truncate text-muted-foreground"
+                        v-if="row.factions !== '' || row.standing.attendee.dropped_at"
+                        class="flex min-w-0 items-center gap-1.5"
                       >
-                        {{ row.factions }}
+                        <StatusBadge
+                          v-if="row.standing.attendee.dropped_at"
+                          :data-testid="`dropped-${row.standing.attendee.id}`"
+                          size="sm"
+                        >
+                          Dropped
+                        </StatusBadge>
+                        <span
+                          v-if="row.factions !== ''"
+                          :data-testid="`factions-${row.standing.attendee.id}`"
+                          class="block truncate text-muted-foreground"
+                        >
+                          {{ row.factions }}
+                        </span>
                       </span>
                     </span>
                   </span>
