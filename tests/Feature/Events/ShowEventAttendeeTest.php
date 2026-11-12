@@ -273,3 +273,18 @@ test('its own players still cannot read an attendee of a hidden event', function
         ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
         ->assertNotFound();
 })->with('hidden event statuses');
+
+test('it says whether the team has been paired, a draft round included, so the right removal is offered', function () {
+    $event = Event::factory()->published()->create();
+    $paired = EventAttendee::factory()->for($event)->withMember()->create();
+    $unpaired = EventAttendee::factory()->for($event)->withMember()->create();
+    Game::factory()->for(Round::factory()->for($event)->create(['number' => 1]))->create()->attendees()->attach($paired);
+
+    $read = fn (EventAttendee $attendee) => $this
+        ->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+        ->assertSuccessful()
+        ->json('data.has_been_paired');
+
+    expect($read($paired))->toBeTrue()
+        ->and($read($unpaired))->toBeFalse();
+});

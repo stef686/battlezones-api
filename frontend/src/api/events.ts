@@ -146,6 +146,11 @@ export interface Attendee {
     avatar?: string | null;
     /** Whether the Event has begun, which is what freezes the side it fights for. */
     allegiance_locked?: boolean;
+    /**
+     * Whether the team is in any Game, Draft Rounds included: until then an
+     * Organiser deletes it, afterwards they drop it. Sent on the detail only.
+     */
+    has_been_paired?: boolean;
     members: AttendeeMember[];
     checked_in_at: string | null;
     /** Whether this army is on the display table for the painting vote. */
@@ -395,6 +400,14 @@ export function uploadTeamAvatar(client: ApiClient, slug: string, attendeeId: nu
 }
 
 /** Take the Avatar off, returning the team to its placeholder. */
+/**
+ * Remove a never-paired Attendee from the Event outright, with its Invites
+ * and ballots. Refused with 422 once it has been paired.
+ */
+export function deleteAttendee(client: ApiClient, slug: string, attendeeId: number): Promise<void> {
+    return client.delete<null>(`${eventPath(slug)}/attendees/${attendeeId}`).then(() => undefined);
+}
+
 export function removeTeamAvatar(client: ApiClient, slug: string, attendeeId: number): Promise<Attendee> {
     return client.delete<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/avatar`)
         .then((response) => response.data);

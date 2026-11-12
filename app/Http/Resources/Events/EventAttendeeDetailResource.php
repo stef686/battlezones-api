@@ -33,6 +33,10 @@ class EventAttendeeDetailResource extends JsonResource
             // form can close the field instead of letting a Player choose and
             // then be refused.
             'allegiance_locked' => $this->event->hasLiveRound(),
+            // Whether this team is in any Game, Draft Rounds included: the
+            // line between deleting it and dropping it. Read off the Games
+            // already loaded below, so it costs nothing.
+            'has_been_paired' => $this->games->isNotEmpty(),
             'members' => $this->serialiseMembers($this->resource, withArmyList: true, withClubs: true, withInviteState: true),
             'checked_in_at' => $this->checked_in_at?->toIso8601ZuluString(),
             // Whether this army is on the display table, and the number it

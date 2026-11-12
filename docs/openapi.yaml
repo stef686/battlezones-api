@@ -2025,6 +2025,8 @@ paths:
                         nullable: true
                       allegiance_locked:
                         type: boolean
+                      has_been_paired:
+                        type: boolean
                       members:
                         type: array
                       checked_in_at:
@@ -2178,6 +2180,46 @@ paths:
                 allegiance:
                   type: string
                   description: 'The side the party fights for. Frozen once a Round is Live.'
+    delete:
+      summary: 'Delete a Team'
+      operationId: deleteATeam
+      description: 'Organisers only. Removes an Attendee that has never been in a Game, Draft Rounds included; a paired Attendee is refused with 422 and should be Dropped instead.'
+      parameters: []
+      responses:
+        204:
+          description: 'The Attendee was deleted.'
+          content:
+            application/json:
+              schema:
+                type: object
+                nullable: true
+        401:
+          description: 'The request carries no valid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    properties:
+                      attendee:
+                        type: array
+                        items:
+                          type: string
+      tags:
+        - Events
     parameters:
       -
         in: path
