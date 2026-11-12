@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\EventOrganiserRole;
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScoreType;
@@ -235,3 +236,11 @@ test('correcting a flagged result moves the standings and empties the queue', fu
         ->assertSuccessful()
         ->assertJsonCount(0, 'data');
 });
+
+test('a non-organiser cannot find the flagged results of a hidden event, rather than being refused it', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.flags.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');

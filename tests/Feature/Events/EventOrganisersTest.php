@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\EventOrganiserRole;
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\User;
 
@@ -119,3 +120,11 @@ test('organisers are listed to organisers only', function () {
         ->getJson(route('events.organisers.index', ['event' => $event->slug]))
         ->assertForbidden();
 });
+
+test('a non-organiser cannot find the organisers of a hidden event, rather than being refused it', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.organisers.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');

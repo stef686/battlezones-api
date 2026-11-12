@@ -21,9 +21,9 @@ class ListEventGalleryController extends Controller
     #[ResponseFromApiResource(PhotoResource::class, model: Photo::class, paginate: 15)]
     public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
-        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
-
         $user = $request->user('sanctum');
+
+        abort_unless($event->isVisibleTo($user), 404);
 
         $photos = $event->photos()
             ->when($user, fn ($query) => $query->withReactionData($user->id), fn ($query) => $query->withCount('reactions'))

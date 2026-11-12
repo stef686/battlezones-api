@@ -2,6 +2,7 @@
 
 use App\Actions\Events\OpenFavouriteOpponentVoting;
 use App\Actions\Events\StoreGameScores;
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventPoll;
@@ -228,3 +229,21 @@ test('the told-already check is one query for the whole team', function () {
         Notification::assertSentToTimes($player, VotingOpenNotification::class, 1);
     }
 });
+
+test('an organiser reads the candidates of a poll in their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $poll = EventPoll::factory()->for($event)->create();
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.polls.candidates', ['event' => $event->slug, 'poll' => $poll->id]))
+        ->assertOk();
+})->with('hidden event statuses');
+
+test('its own players still cannot read the candidates of a poll in a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $poll = EventPoll::factory()->for($event)->create();
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.polls.candidates', ['event' => $event->slug, 'poll' => $poll->id]))
+        ->assertNotFound();
+})->with('hidden event statuses');

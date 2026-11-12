@@ -23,6 +23,8 @@ class ListEventOrganisersController extends Controller
     #[Response(['data' => [['id' => 12, 'name' => 'Ada Lovelace', 'role' => 'lead']]])]
     public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('organise', $event);
 
         return EventOrganiserResource::collection($event->organisers()->orderBy('users.name')->get());

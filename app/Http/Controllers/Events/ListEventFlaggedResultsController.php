@@ -7,6 +7,7 @@ use App\Http\Resources\Events\GameResultFlagResource;
 use App\Models\Event;
 use App\Models\GameResultFlag;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
@@ -37,8 +38,10 @@ class ListEventFlaggedResultsController extends Controller
         'resolved_at' => null,
         'resolved_by' => null,
     ]]])]
-    public function __invoke(Event $event): AnonymousResourceCollection
+    public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('organise', $event);
 
         $flags = GameResultFlag::query()

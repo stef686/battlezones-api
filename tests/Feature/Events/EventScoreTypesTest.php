@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScoreType;
@@ -440,3 +441,11 @@ test('a heading longer than a table column has room for is refused', function ()
         ])
         ->assertJsonValidationErrors(['score_types.0.abbreviation']);
 });
+
+test('a non-organiser cannot find the score types of a hidden event, rather than being refused it', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.score-types.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');
