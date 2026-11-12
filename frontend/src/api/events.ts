@@ -490,6 +490,16 @@ export function resendMemberInvite(
     return client.post(`${eventPath(slug)}/attendees/${attendeeId}/members/${membershipId}/invite`, {});
 }
 
+/**
+ * Take a Player out of a team.
+ *
+ * Addressed by the Player rather than the seat, as the API's route is. Their
+ * account is left alone; only their place in this team goes.
+ */
+export function removeMember(client: ApiClient, slug: string, attendeeId: number, userId: number): Promise<void> {
+    return client.delete<null>(`${eventPath(slug)}/attendees/${attendeeId}/members/${userId}`).then(() => undefined);
+}
+
 function eventPath(slug: string): string {
     return `/api/events/${encodeURIComponent(slug)}`;
 }
