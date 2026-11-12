@@ -24,6 +24,7 @@ class EventAttendeeResource extends JsonResource
             'name' => $this->displayName(),
             'allegiance' => $this->allegiance?->value,
             'avatar' => $this->avatarUrl(),
+            'dropped_at' => $this->dropped_at?->toIso8601ZuluString(),
             'members' => $this->serialiseMembers($this->resource, withClubs: true),
         ];
     }

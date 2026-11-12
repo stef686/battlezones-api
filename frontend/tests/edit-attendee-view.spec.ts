@@ -297,4 +297,64 @@ describe('the attendee edit screen', () => {
 
         expect(view.get('[data-testid="delete-attendee-error"]').text()).toContain('Drop it instead');
     });
+
+    it('drops a team that has been paired, once the organiser confirms', async () => {
+        const PAIRED = { data: { ...ATTENDEE.data, has_been_paired: true, dropped_at: null } };
+        const DROPPED = { data: { ...PAIRED.data, dropped_at: '2026-09-12T13:05:00Z' } };
+        let fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: PAIRED },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="drop-attendee"]').trigger('click');
+
+        const dialog = view.get('[data-testid="drop-attendee-confirm"]');
+        expect(dialog.get('h2').text()).toBe('Drop Sons of Terra?');
+        expect(dialog.text()).toContain('They won\'t be paired in later rounds. Results so far stand.');
+        expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/drop'))).toBe(false);
+
+        fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/drop`]: { status: 200, body: DROPPED },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: DROPPED },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        await view.get('[data-testid="drop-attendee-confirm-confirm"]').trigger('click');
+        await flushPromises();
+
+        const drop = fetch.mock.calls.find(([url]) => String(url).endsWith('/attendees/9/drop'));
+        expect(drop?.[1]?.method).toBe('POST');
+        expect(view.find('[data-testid="drop-attendee"]').exists()).toBe(false);
+    });
+
+    it('offers no drop before the team has been paired, nor once it has been dropped', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const unpaired = mountView();
+        await flushPromises();
+
+        expect(unpaired.find('[data-testid="drop-attendee"]').exists()).toBe(false);
+
+        unpaired.unmount();
+        queryClient.clear();
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, has_been_paired: true, dropped_at: '2026-09-12T13:05:00Z' } },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const dropped = mountView();
+        await flushPromises();
+
+        expect(dropped.find('[data-testid="drop-attendee"]').exists()).toBe(false);
+        expect(dropped.find('[data-testid="delete-attendee"]').exists()).toBe(false);
+    });
 });

@@ -37,6 +37,7 @@ class EventAttendeeDetailResource extends JsonResource
             // line between deleting it and dropping it. Read off the Games
             // already loaded below, so it costs nothing.
             'has_been_paired' => $this->games->isNotEmpty(),
+            'dropped_at' => $this->dropped_at?->toIso8601ZuluString(),
             'members' => $this->serialiseMembers($this->resource, withArmyList: true, withClubs: true, withInviteState: true),
             'checked_in_at' => $this->checked_in_at?->toIso8601ZuluString(),
             // Whether this army is on the display table, and the number it

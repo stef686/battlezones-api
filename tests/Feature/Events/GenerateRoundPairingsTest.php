@@ -186,6 +186,23 @@ test('the bye skips an attendee who has already had one', function () {
     expect($bye->attendees->pluck('id')->all())->toBe([$l2->id]);
 });
 
+test('a dropped attendee is left out of the next round, and an odd field left behind takes a bye', function () {
+    $event = pairableEvent();
+    [$a, $b, $c, $d] = attendeesFor($event, 4)->all();
+
+    playRound($event, 1, [[$a, 20, $b, 10], [$c, 20, $d, 10]]);
+
+    $d->forceFill(['dropped_at' => now()])->save();
+
+    $round = generatePairings($event);
+    $paired = $round->games()->with('attendees')->get()->flatMap->attendees->pluck('id');
+    $bye = $round->games()->where('is_bye', true)->with('attendees')->sole();
+
+    expect($paired)->not->toContain($d->id)
+        ->and($paired->sort()->values()->all())->toBe([$a->id, $b->id, $c->id])
+        ->and($bye->attendees)->toHaveCount(1);
+});
+
 test('generation is blocked while a result is missing from the current round', function () {
     $event = pairableEvent(['requires_opposed_allegiance' => true]);
     [$l1, $l2] = attendeesFor($event, 2, Allegiance::Loyalist)->all();

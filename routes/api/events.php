@@ -8,6 +8,7 @@ use App\Http\Controllers\Events\DeleteEventAttendeeController;
 use App\Http\Controllers\Events\DeleteEventBannerController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
 use App\Http\Controllers\Events\DeleteEventScheduleBlockController;
+use App\Http\Controllers\Events\DropEventAttendeeController;
 use App\Http\Controllers\Events\ExportEventFeedbackController;
 use App\Http\Controllers\Events\FlagGameResultController;
 use App\Http\Controllers\Events\GenerateRoundController;
@@ -216,6 +217,10 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.update');
     Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}', DeleteEventAttendeeController::class)
         ->name('events.attendees.destroy');
+    // A transition with its own endpoint rather than a field on the Attendee
+    // PATCH, which the team's own Players can reach.
+    Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/drop', DropEventAttendeeController::class)
+        ->name('events.attendees.drop');
     // Its own multipart routes rather than a field on the Attendee PATCH,
     // exactly as the Banner is: PHP does not populate uploaded files for a
     // PATCH body.

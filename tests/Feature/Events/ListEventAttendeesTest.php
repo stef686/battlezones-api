@@ -172,3 +172,16 @@ test('its own players still cannot read the attendees of a hidden event', functi
         ->getJson(route('events.attendees.index', ['event' => $event->slug]))
         ->assertNotFound();
 })->with('hidden event statuses');
+
+test('it says when a team was dropped, and null for a team still in', function () {
+    $event = Event::factory()->published()->create();
+    $dropped = EventAttendee::factory()->for($event)->withMember()->create(['dropped_at' => '2026-09-12 13:05:00']);
+    $staying = EventAttendee::factory()->for($event)->withMember()->create();
+
+    $rows = collect($this->getJson(route('events.attendees.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->json('data'))->keyBy('id');
+
+    expect($rows[$dropped->id]['dropped_at'])->toBe('2026-09-12T13:05:00Z')
+        ->and($rows[$staying->id]['dropped_at'])->toBeNull();
+});

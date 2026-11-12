@@ -35,6 +35,17 @@ class EventAttendeePolicy
     }
 
     /**
+     * Whether this User may mark the Attendee as having left the Event.
+     *
+     * Its Organisers only: a Player cannot drop themselves (see Drop in
+     * CONTEXT.md). Admins too, or Filament loses the action.
+     */
+    public function drop(User $user, EventAttendee $attendee): bool
+    {
+        return $user->is_admin || $attendee->event->isOrganisedBy($user);
+    }
+
+    /**
      * Whether this Player may read the party's army lists.
      *
      * Lists are competitive information, so reading one costs attendance at

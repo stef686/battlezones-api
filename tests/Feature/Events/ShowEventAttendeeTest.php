@@ -288,3 +288,12 @@ test('it says whether the team has been paired, a draft round included, so the r
     expect($read($paired))->toBeTrue()
         ->and($read($unpaired))->toBeFalse();
 });
+
+test('it says when the team was dropped', function () {
+    $event = Event::factory()->published()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember()->create(['dropped_at' => '2026-09-12 13:05:00']);
+
+    $this->getJson(route('events.attendees.show', ['event' => $event->slug, 'attendee' => $attendee->id]))
+        ->assertSuccessful()
+        ->assertJsonPath('data.dropped_at', '2026-09-12T13:05:00Z');
+});

@@ -12,6 +12,7 @@ import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import AppButton from '@/components/AppButton.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
+import StatusBadge from '@/components/StatusBadge.vue';
 import TabStrip from '@/components/TabStrip.vue';
 import AppAvatar from '@/components/AppAvatar.vue';
 
@@ -145,6 +146,14 @@ async function run(action: () => Promise<unknown>): Promise<void> {
             {{ attendee.name }}
           </h1>
           <AllegianceBadge :allegiance="attendee.allegiance" />
+          <!-- Said to everyone, not only the Organisers: an opponent
+               looking the team up should know it has left. -->
+          <StatusBadge
+            v-if="attendee.dropped_at"
+            data-testid="attendee-dropped"
+          >
+            Dropped
+          </StatusBadge>
         </div>
 
         <!-- Offered on the permission the API sent: a reader who does not
