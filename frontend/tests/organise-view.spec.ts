@@ -342,3 +342,119 @@ describe('disputed results from the organiser screen', () => {
         expect(view.get('[data-testid="flags-link"]').text()).toContain('Disputed results');
     });
 });
+
+describe('publishing a draft', () => {
+    /** A Draft with a venue, a month away, read by its Lead unless told otherwise. */
+    function draftBody(overrides: Record<string, unknown> = {}, permissions: Record<string, boolean> = {}) {
+        const body = eventBody();
+        const inAMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
+        return {
+            data: {
+                ...body.data,
+                status: 'draft',
+                starts_at: inAMonth,
+                ends_at: inAMonth,
+                venue: { name: 'The Hall', address: null, city: 'Croydon', country: 'GB' },
+                ...overrides,
+                viewer: {
+                    ...body.data.viewer,
+                    permissions: { ...body.data.viewer.permissions, publish: true, ...permissions },
+                },
+            },
+        };
+    }
+
+    it('lets the lead publish once everything it needs is there, after asking', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/publish`]: { status: 200, body: draftBody({ status: 'published' }) },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: draftBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        const card = view.get('[data-testid="publish-card"]');
+        expect(card.findAll('[data-testid^="publish-check-"][data-met="true"]')).toHaveLength(3);
+
+        await view.get('[data-testid="publish-button"]').trigger('click');
+
+        const dialog = view.get('[data-testid="publish-confirm"]');
+        expect(dialog.get('h2').text()).toBe('Publish London Grand Tournament?');
+        expect(dialog.text()).toContain('Players will be able to find and enter it.');
+
+        await view.get('[data-testid="publish-confirm-confirm"]').trigger('click');
+        await flushPromises();
+
+        const publish = fetch.mock.calls.find(([url]) => String(url).endsWith('/publish'));
+        expect(publish?.[1]?.method).toBe('POST');
+        expect(view.find('[data-testid="publish-card"]').exists()).toBe(false);
+    });
+
+    it('holds the button until every check passes, pointing at where each is fixed', async () => {
+        const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+        stubApi({
+            [`/api/events/${EVENT_SLUG}`]: {
+                status: 200,
+                body: draftBody({
+                    starts_at: yesterday,
+                    ends_at: yesterday,
+                    venue: { name: 'The Hall', address: null, city: null, country: null },
+                }),
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="publish-check-venue_name"]').attributes('data-met')).toBe('true');
+
+        for (const unmet of ['venue_city', 'ends_at']) {
+            const check = view.get(`[data-testid="publish-check-${unmet}"]`);
+            expect(check.attributes('data-met')).toBe('false');
+            expect(check.get('a').attributes('href')).toBe(`/events/${EVENT_SLUG}/organise/settings`);
+        }
+
+        expect(view.get('[data-testid="publish-button"]').attributes('disabled')).toBeDefined();
+    });
+
+    it('tells a co-organiser that publishing is the lead\'s', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: draftBody({}, { publish: false }) } });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="publish-button"]').attributes('disabled')).toBeDefined();
+        expect(view.get('[data-testid="publish-card"]').text()).toContain('Only the lead organiser can publish');
+    });
+
+    it('says why the api refused, and leaves the draft as it was', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/publish`]: {
+                status: 422,
+                body: { message: 'Name the venue before publishing.', errors: { venue_name: ['Name the venue before publishing.'] } },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: draftBody() },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="publish-button"]').trigger('click');
+        await view.get('[data-testid="publish-confirm-confirm"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="publish-problem"]').text()).toContain('Name the venue before publishing.');
+        expect(view.find('[data-testid="publish-card"]').exists()).toBe(true);
+    });
+
+    it('is not there once the event is published', async () => {
+        stubApi({ [`/api/events/${EVENT_SLUG}`]: { status: 200, body: draftBody({ status: 'published' }) } });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="publish-card"]').exists()).toBe(false);
+    });
+});

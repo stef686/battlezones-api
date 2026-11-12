@@ -13,6 +13,7 @@ import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import AppLinkRow from '@/components/AppLinkRow.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
+import PublishEventCard from '@/components/PublishEventCard.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -185,12 +186,22 @@ const byes = computed(() => (liveDetail.value?.games ?? []).filter((game) => gam
         Run the event
       </h1>
 
+      <!-- Until it is published nobody else can find the Event, so getting
+           it out of Draft is the first thing on the hub while it is one. -->
+      <PublishEventCard
+        v-if="event.status === 'draft'"
+        :event="event"
+      />
+
       <!-- Settings are touched once before an Event and pairings every ten
            minutes during it, so they are linked from here rather than run
            from here. Edge to edge as a list group, the way My team reads: a
            way through to other screens, not panels beside the running of the
            Round below them. -->
-      <ul class="-mx-5 -mt-5 divide-y divide-card-divider border-b border-t border-card-line">
+      <ul
+        class="-mx-5 divide-y divide-card-divider border-b border-t border-card-line"
+        :class="event.status === 'draft' ? '' : '-mt-5'"
+      >
         <AppLinkRow
           :to="{ name: 'event-settings', params: { eventSlug: props.eventSlug } }"
           label="Event settings"

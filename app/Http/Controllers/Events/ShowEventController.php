@@ -49,6 +49,7 @@ class ShowEventController extends Controller
                 'organise' => true,
                 'register' => false,
                 'manage_organisers' => false,
+                'publish' => false,
             ],
         ],
         'timezone_is_fixed' => true,
@@ -66,6 +67,7 @@ class ShowEventController extends Controller
     #[ResponseField('data.viewer.permissions.organise', 'boolean', 'Publish Rounds, correct results, open Polls, read tallies.')]
     #[ResponseField('data.viewer.permissions.register', 'boolean', 'Enter the Event.')]
     #[ResponseField('data.viewer.permissions.manage_organisers', 'boolean', 'Appoint and remove Organisers.')]
+    #[ResponseField('data.viewer.permissions.publish', 'boolean', 'Take a Draft to Published. The Lead Organiser\'s alone.')]
     public function __invoke(Request $request, Event $event): EventResource
     {
         abort_unless($event->isVisibleTo($request->user('sanctum')), 404);

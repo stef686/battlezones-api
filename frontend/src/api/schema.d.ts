@@ -1233,6 +1233,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/events/{event_slug}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publish an Event
+         * @description Lead Organiser only. Takes a Draft to Published, so Players can find and enter it. Refused with 422 for anything but a Draft, and for each thing publishing needs that is missing: a venue name, a venue city, and an Event that has not already ended.
+         */
+        post: operations["publishAnEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events/{event_slug}/banner": {
         parameters: {
             query?: never;
@@ -3346,6 +3369,8 @@ export interface operations {
                                     register: boolean;
                                     /** @description Appoint and remove Organisers. */
                                     manage_organisers: boolean;
+                                    /** @description Take a Draft to Published. The Lead Organiser's alone. */
+                                    publish: boolean;
                                 };
                             } | null;
                             /** @description Whether the Event has a Schedule block, which fixes its timezone: every block's day is read in it. */
@@ -5360,6 +5385,66 @@ export interface operations {
                             slug: string;
                             /** @description Whether no Event holds it. */
                             available: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+        };
+    };
+    publishAnEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            slug?: string;
+                            description?: string;
+                            status?: string;
+                            pairing_format?: string;
+                            timezone?: string;
+                            starts_at?: string;
+                            ends_at?: string;
+                            max_attendees?: number;
+                            attendee_size?: number;
+                            requires_allegiance?: boolean;
+                            registration_closes_at?: string | null;
+                            is_full?: boolean;
+                            venue?: {
+                                name?: string;
+                                address?: string;
+                                city?: string;
+                                country?: string;
+                            };
+                            banner?: string | null;
+                            colour?: string | null;
+                            created_at?: string;
+                            updated_at?: string;
                         };
                     };
                 };

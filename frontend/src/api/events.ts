@@ -10,6 +10,8 @@ export interface EventViewer {
         organise: boolean;
         register: boolean;
         manage_organisers: boolean;
+        /** Take a Draft to Published: the Lead Organiser's alone. Sent on a single Event read only. */
+        publish?: boolean;
     };
 }
 
@@ -242,6 +244,17 @@ export function checkEventSlug(client: ApiClient, slug: string): Promise<{ slug:
 
 export function updateEvent(client: ApiClient, slug: string, changes: EventChanges): Promise<EventSummary> {
     return client.patch<{ data: EventSummary }>(eventPath(slug), changes).then((response) => response.data);
+}
+
+/**
+ * Take a Draft to Published, so Players can find and enter it.
+ *
+ * Its own transition rather than a field on the Event PATCH (ADR 0002). The
+ * API refuses each unmet precondition under the field that fixes it, which
+ * `publishChecklist` in `lib/publishing.ts` mirrors.
+ */
+export function publishEvent(client: ApiClient, slug: string): Promise<EventSummary> {
+    return client.post<{ data: EventSummary }>(`${eventPath(slug)}/publish`).then((response) => response.data);
 }
 
 /**

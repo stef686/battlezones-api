@@ -44,6 +44,7 @@ class EventViewer
                 'organise' => Gate::forUser($user)->allows('organise', $event),
                 'register' => Gate::forUser($user)->allows('register', $event),
                 'manage_organisers' => Gate::forUser($user)->allows('manageOrganisers', $event),
+                'publish' => Gate::forUser($user)->allows('publish', $event),
             ],
         ];
     }
