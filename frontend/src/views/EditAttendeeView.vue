@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { amendAttendee, fetchAttendee, fetchEvent, type Allegiance } from '@/api/events';
+import { amendAttendee, deleteAttendee, fetchAttendee, fetchEvent, type Allegiance } from '@/api/events';
 import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
 import AttendeeDetailsFields from '@/components/AttendeeDetailsFields.vue';
 import BackLink from '@/components/BackLink.vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
 
 const props = defineProps<{ eventSlug: string; attendeeId: string }>();
 
 const client = useApiClient();
 const queryClient = useQueryClient();
+const router = useRouter();
 
 const attendeeKey = computed(() => keys.attendee(props.eventSlug, Number(props.attendeeId)));
 
@@ -100,6 +103,42 @@ async function save(): Promise<void> {
     saving.value = false;
   }
 }
+
+/**
+ * Deleting is for a team that has never been paired — a no-show, a duplicate,
+ * a refund. Once it is in any Game the API refuses, and a Drop is the tool,
+ * so the button is offered only while the API says it would be accepted.
+ */
+const mayDelete = computed(() => attendee.value?.has_been_paired === false);
+
+const confirmingDelete = ref(false);
+const deleting = ref(false);
+const deleteFailure = ref<string | null>(null);
+
+async function remove(): Promise<void> {
+  deleting.value = true;
+  deleteFailure.value = null;
+
+  try {
+    await deleteAttendee(client, props.eventSlug, Number(props.attendeeId));
+
+    // Forgotten rather than refetched: the team is gone, and asking after it
+    // again would only answer "not found". Everything that counted or named
+    // it is behind now.
+    queryClient.removeQueries({ queryKey: attendeeKey.value });
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: keys.allAttendees(props.eventSlug) }),
+      queryClient.invalidateQueries({ queryKey: keys.standings(props.eventSlug) }),
+      queryClient.invalidateQueries({ queryKey: keys.event(props.eventSlug), exact: true }),
+    ]);
+
+    await router.push({ name: 'attendees', params: { eventSlug: props.eventSlug } });
+  } catch (caught) {
+    deleteFailure.value = caught instanceof Error ? caught.message : 'That could not be deleted.';
+  } finally {
+    deleting.value = false;
+  }
+}
 </script>
 
 <template>
@@ -169,6 +208,39 @@ async function save(): Promise<void> {
           {{ saving ? 'Saving…' : 'Save' }}
         </AppButton>
       </form>
+
+      <section
+        v-if="mayDelete"
+        class="flex flex-col gap-3 border-t border-card-divider pt-5"
+      >
+        <AppButton
+          data-testid="delete-attendee"
+          variant="danger"
+          block
+          :disabled="deleting"
+          @click="confirmingDelete = true"
+        >
+          Delete
+        </AppButton>
+
+        <AppAlert
+          v-if="deleteFailure"
+          data-testid="delete-attendee-error"
+          tone="error"
+        >
+          {{ deleteFailure }}
+        </AppAlert>
+
+        <ConfirmDialog
+          v-model:open="confirmingDelete"
+          :title="`Delete ${attendee.name}?`"
+          confirm-label="Delete"
+          testid="delete-attendee-confirm"
+          @confirm="remove"
+        >
+          This removes them from the event and can't be undone.
+        </ConfirmDialog>
+      </section>
     </template>
 
     <p

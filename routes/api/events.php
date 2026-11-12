@@ -4,6 +4,7 @@ use App\Http\Controllers\Events\ClaimInviteController;
 use App\Http\Controllers\Events\CloseEventPollController;
 use App\Http\Controllers\Events\DeleteAttendeeAvatarController;
 use App\Http\Controllers\Events\DeleteAttendeeMemberController;
+use App\Http\Controllers\Events\DeleteEventAttendeeController;
 use App\Http\Controllers\Events\DeleteEventBannerController;
 use App\Http\Controllers\Events\DeleteEventOrganiserController;
 use App\Http\Controllers\Events\DeleteEventScheduleBlockController;
@@ -213,6 +214,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.attendees.store');
     Route::scopeBindings()->patch('events/{event:slug}/attendees/{attendee}', UpdateEventAttendeeController::class)
         ->name('events.attendees.update');
+    Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}', DeleteEventAttendeeController::class)
+        ->name('events.attendees.destroy');
     // Its own multipart routes rather than a field on the Attendee PATCH,
     // exactly as the Banner is: PHP does not populate uploaded files for a
     // PATCH body.

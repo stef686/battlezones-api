@@ -42,6 +42,7 @@ const ATTENDEE = {
         name: 'Sons of Terra',
         allegiance: 'loyalist',
         allegiance_locked: false,
+        has_been_paired: false,
         members: [
             { id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' } },
             { id: 13, name: 'Grace Hopper', faction: null },
@@ -218,5 +219,68 @@ describe('the attendee edit screen', () => {
         await view.get('[data-testid="team-name-field"]').setValue('The Ordo Ludi');
 
         expect(view.find('[data-testid="team-saved"]').exists()).toBe(false);
+    });
+
+    it('deletes a team that has never been paired, once the organiser confirms', async () => {
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="delete-attendee"]').trigger('click');
+
+        const dialog = view.get('[data-testid="delete-attendee-confirm"]');
+        expect(dialog.text()).toContain('Delete Sons of Terra?');
+        expect(dialog.text()).toContain('can\'t be undone');
+        expect(fetch.mock.calls.some(([, init]) => init?.method === 'DELETE')).toBe(false);
+
+        stubApi({ [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 204 } });
+        const push = vi.spyOn(router, 'push');
+
+        await view.get('[data-testid="delete-attendee-confirm-confirm"]').trigger('click');
+        await flushPromises();
+
+        expect(push).toHaveBeenCalledWith({ name: 'attendees', params: { eventSlug: EVENT_SLUG } });
+    });
+
+    it('offers no delete once the team has been paired', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: { data: { ...ATTENDEE.data, has_been_paired: true } } },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="delete-attendee"]').exists()).toBe(false);
+    });
+
+    it('says why a delete was refused', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 422,
+                body: {
+                    message: 'This team has been paired, so it cannot be deleted. Drop it instead.',
+                    errors: { attendee: ['This team has been paired, so it cannot be deleted. Drop it instead.'] },
+                },
+            },
+        });
+
+        await view.get('[data-testid="delete-attendee"]').trigger('click');
+        await view.get('[data-testid="delete-attendee-confirm-confirm"]').trigger('click');
+        await flushPromises();
+
+        expect(view.get('[data-testid="delete-attendee-error"]').text()).toContain('Drop it instead');
     });
 });

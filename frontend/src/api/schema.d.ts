@@ -613,7 +613,11 @@ export interface paths {
         get: operations["showEventAttendee"];
         put?: never;
         post?: never;
-        delete?: never;
+        /**
+         * Delete a Team
+         * @description Organisers only. Removes an Attendee that has never been in a Game, Draft Rounds included; a paired Attendee is refused with 422 and should be Dropped instead.
+         */
+        delete: operations["deleteATeam"];
         options?: never;
         head?: never;
         /**
@@ -3753,12 +3757,62 @@ export interface operations {
                             allegiance?: string | null;
                             avatar?: string | null;
                             allegiance_locked?: boolean;
+                            has_been_paired?: boolean;
                             members?: unknown[];
                             checked_in_at?: string | null;
                             painting_entered?: boolean;
                             display_number?: string | null;
                             custom_field_responses?: unknown[];
                             games?: unknown[];
+                        };
+                    };
+                };
+            };
+        };
+    };
+    deleteATeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The Attendee was deleted. */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never> | null;
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            attendee?: string[];
                         };
                     };
                 };

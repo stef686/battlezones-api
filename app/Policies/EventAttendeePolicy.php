@@ -23,6 +23,18 @@ class EventAttendeePolicy
     }
 
     /**
+     * Whether this User may delete the Attendee outright.
+     *
+     * Its Organisers only: a team cannot withdraw itself by deleting, since
+     * a delete takes Invites and ballots with it and cannot be undone.
+     * Admins too, or Filament's Delete action disappears.
+     */
+    public function delete(User $user, EventAttendee $attendee): bool
+    {
+        return $user->is_admin || $attendee->event->isOrganisedBy($user);
+    }
+
+    /**
      * Whether this Player may read the party's army lists.
      *
      * Lists are competitive information, so reading one costs attendance at
