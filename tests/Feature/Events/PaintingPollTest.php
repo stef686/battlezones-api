@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Events\PollOpened;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -372,3 +373,22 @@ test('a team says whether its army is on the display table', function () {
     expect($data['painting_entered'])->toBeTrue()
         ->and($data['display_number'])->toBe(4);
 });
+
+test('an organiser reads the polls of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $poll = EventPoll::factory()->for($event)->create();
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.polls.index', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonPath('data.0.id', $poll->id);
+})->with('hidden event statuses');
+
+test('its own players still cannot read the polls of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $poll = EventPoll::factory()->for($event)->create();
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.polls.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');

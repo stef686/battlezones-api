@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Events\StoreGameScores;
+use App\Enums\EventStatus;
 use App\Models\Club;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -370,3 +371,24 @@ test('an attendee who has played nothing yet ranks last rather than reading as a
     // held last place rather than fallen into it from nowhere.
     expect($movement['Latecomer'])->toBe(0);
 });
+
+test('an organiser reads the standings of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->standingsVisible()->create(['status' => $status]);
+    EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create(['display_order' => 0]);
+    EventAttendee::factory()->for($event)->withMember(User::factory()->create())->create();
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonCount(1, 'data');
+})->with('hidden event statuses');
+
+test('its own players still cannot read the standings of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->standingsVisible()->create(['status' => $status]);
+    EventScoreType::factory()->matchPoints()->rankedAt(1)->for($event)->create(['display_order' => 0]);
+    EventAttendee::factory()->for($event)->withMember(User::factory()->create())->create();
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');

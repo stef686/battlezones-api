@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventUpdate;
 use App\Models\EventUpdateAttachment;
@@ -132,3 +133,22 @@ test('it returns 404 for a cancelled event', function () {
 test('it returns 404 for a non-existent slug', function () {
     $this->getJson(route('events.updates.index', 'does-not-exist'))->assertNotFound();
 });
+
+test('an organiser reads the updates of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    EventUpdate::factory()->count(2)->for($event)->create();
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.updates.index', $event))
+        ->assertOk()
+        ->assertJsonCount(2, 'data');
+})->with('hidden event statuses');
+
+test('its own players still cannot read the updates of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    EventUpdate::factory()->count(2)->for($event)->create();
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.updates.index', $event))
+        ->assertNotFound();
+})->with('hidden event statuses');

@@ -9,6 +9,7 @@ use App\Models\EventPoll;
 use App\Models\GameScore;
 use App\Models\Round;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
@@ -45,9 +46,9 @@ class ShowEventPulseController extends Controller
     #[ResponseField('data.rounds', 'string', 'When a Round was last created, published or unpublished. Null when the Event has no Rounds.', nullable: true)]
     #[ResponseField('data.standings', 'string', 'When a score last changed. Null before any result is in.', nullable: true)]
     #[ResponseField('data.polls', 'string', 'When a Poll was last opened, closed or changed. Null when the Event has no Polls.', nullable: true)]
-    public function __invoke(Event $event): JsonResponse
+    public function __invoke(Request $request, Event $event): JsonResponse
     {
-        abort_unless($event->status->isPubliclyVisible(), 404);
+        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
 
         $currentRound = Round::query()
             ->where('event_id', $event->getKey())

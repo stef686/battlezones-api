@@ -533,7 +533,7 @@ export interface paths {
         };
         /**
          * List Event Updates
-         * @description List updates for a publicly visible event, pinned first then most recent.
+         * @description List updates for an event, pinned first then most recent. A Draft or Cancelled Event answers 404 to everyone but its Organisers.
          */
         get: operations["listEventUpdates"];
         put?: never;
@@ -556,7 +556,7 @@ export interface paths {
         };
         /**
          * List Event Attendees
-         * @description Paginated list of attendees for a publicly visible event.
+         * @description Paginated list of attendees for an event. A Draft or Cancelled Event answers 404 to everyone but its Organisers.
          */
         get: operations["listEventAttendees"];
         put?: never;
@@ -608,7 +608,7 @@ export interface paths {
         };
         /**
          * Show Event Attendee
-         * @description Attendee detail for a publicly visible event.
+         * @description Attendee detail. A Draft or Cancelled Event answers 404 to everyone but its Organisers.
          */
         get: operations["showEventAttendee"];
         put?: never;
@@ -712,7 +712,7 @@ export interface paths {
         };
         /**
          * List Event Standings
-         * @description Paginated standings for a publicly visible event, computed from Games. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position. Movement is places gained since the round before the one being played, computed the same way; it is null until two rounds have been scored.
+         * @description Paginated standings for an event, computed from Games. A Draft or Cancelled Event answers 404 to everyone but its Organisers. Ranked on Match Points then Victory Points, with tied Attendees sharing a position. Sorting by a Score Type changes the order of the list but never the reported position. Movement is places gained since the round before the one being played, computed the same way; it is null until two rounds have been scored.
          */
         get: operations["listEventStandings"];
         put?: never;
@@ -758,7 +758,7 @@ export interface paths {
         };
         /**
          * List Event Gallery
-         * @description Paginated photos for a publicly visible event.
+         * @description Paginated photos for an event. A Draft or Cancelled Event answers 404 to everyone but its Organisers.
          */
         get: operations["listEventGallery"];
         put?: never;

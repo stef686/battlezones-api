@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Models\Club;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -152,3 +153,22 @@ test('it searches by user name case-insensitively', function () {
         ->assertJsonCount(1, 'data')
         ->assertJsonPath('data.0.members.0.name', 'Alice Anderson');
 });
+
+test('an organiser reads the attendees of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    EventAttendee::factory()->for($event)->withMember(User::factory()->create())->create();
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.attendees.index', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonCount(1, 'data');
+})->with('hidden event statuses');
+
+test('its own players still cannot read the attendees of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    EventAttendee::factory()->for($event)->withMember(User::factory()->create())->create();
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.attendees.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');

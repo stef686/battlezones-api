@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\Photo;
 use App\Models\Reaction;
@@ -101,3 +102,22 @@ test('it does not leak photos from other events', function () {
         ->assertSuccessful()
         ->assertJsonCount(1, 'data');
 });
+
+test('an organiser reads the gallery of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $photo = Photo::factory()->for(User::factory())->create(['event_id' => $event->id]);
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.gallery.index', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonPath('data.0.id', $photo->id);
+})->with('hidden event statuses');
+
+test('its own players still cannot read the gallery of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $photo = Photo::factory()->for(User::factory())->create(['event_id' => $event->id]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.gallery.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');

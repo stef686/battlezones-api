@@ -30,6 +30,24 @@ test('the factions of an event nobody can see are not readable either', function
         ->assertNotFound();
 });
 
+test('an organiser reads the factions of their own hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $faction = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.factions.index', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonPath('data.0.id', $faction->id);
+})->with('hidden event statuses');
+
+test('its own players still cannot read the factions of a hidden event', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.factions.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');
+
 test('a player records the faction they are bringing', function () {
     $event = Event::factory()->published()->create();
     $faction = Faction::factory()->create(['game_system_id' => $event->game_system_id]);

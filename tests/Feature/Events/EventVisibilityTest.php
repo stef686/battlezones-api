@@ -1,9 +1,7 @@
 <?php
 
-use App\Enums\EventOrganiserRole;
 use App\Enums\EventStatus;
 use App\Models\Event;
-use App\Models\EventAttendee;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -17,18 +15,8 @@ function eventViewers(): array
     return [
         'a guest' => fn (Event $event): ?User => null,
         'an unrelated User' => fn (Event $event): ?User => User::factory()->create(),
-        'one of its Players' => function (Event $event): User {
-            $player = User::factory()->create();
-            EventAttendee::factory()->for($event)->withMember($player)->create();
-
-            return $player;
-        },
-        'a co-Organiser' => function (Event $event): User {
-            $colleague = User::factory()->create();
-            $event->organisers()->attach($colleague, ['role' => EventOrganiserRole::Organiser->value]);
-
-            return $colleague;
-        },
+        'one of its Players' => fn (Event $event): User => playerOf($event),
+        'a co-Organiser' => fn (Event $event): User => coOrganiserOf($event),
         'its Lead Organiser' => fn (Event $event): User => organiserOf($event),
     ];
 }
