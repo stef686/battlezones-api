@@ -55,6 +55,7 @@ const chipOfRoute: Record<string, string> = {
   standings: 'standings',
   attendees: 'attendees',
   attendee: 'attendees',
+  'attendee-edit': 'attendees',
   schedule: 'schedule',
   'my-team': 'my-team',
   'my-team-details': 'my-team',

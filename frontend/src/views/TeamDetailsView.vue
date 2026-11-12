@@ -6,11 +6,10 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { amendAttendee, removeTeamAvatar, uploadTeamAvatar, type Allegiance, type Attendee } from '@/api/events';
 import AppAlert from '@/components/AppAlert.vue';
+import AttendeeDetailsFields from '@/components/AttendeeDetailsFields.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
-import SelectField from '@/components/SelectField.vue';
 import AppAvatar from '@/components/AppAvatar.vue';
-import TextField from '@/components/TextField.vue';
 import { useMyTeam } from '@/composables/useMyTeam';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -18,21 +17,8 @@ const props = defineProps<{ eventSlug: string }>();
 const client = useApiClient();
 const { event, attendee, attendeeId, loading, refresh } = useMyTeam(() => props.eventSlug);
 
-const ALLEGIANCES: { value: Allegiance; label: string }[] = [
-  { value: 'loyalist', label: 'Loyalist' },
-  { value: 'traitor', label: 'Traitor' },
-];
-
 const partyName = ref('');
 const allegiance = ref('');
-
-/**
- * Allegiance is a pairing constraint, so it is frozen once the Event is under
- * way — Games already played were paired on it. The field closes rather than
- * accepting a change the API would refuse: being told afterwards is a worse
- * way to learn it than seeing it was never on offer.
- */
-const allegianceLocked = computed(() => attendee.value?.allegiance_locked === true);
 
 // The form mirrors what the API last returned rather than holding its own
 // idea of the team: a correction made on another device wins on the next read.
@@ -93,9 +79,10 @@ const saving = ref(false);
 const saved = ref(false);
 const failure = ref<ApiError | null>(null);
 
-function fieldErrors(field: string): string[] {
-  return failure.value?.fields[field] ?? [];
-}
+const fieldErrors = computed(() => ({
+  name: failure.value?.fields['name'],
+  allegiance: failure.value?.fields['allegiance'],
+}));
 
 async function save(): Promise<void> {
   if (attendeeId.value === null) {
@@ -195,23 +182,12 @@ async function save(): Promise<void> {
         novalidate
         @submit.prevent="save"
       >
-        <TextField
-          v-model="partyName"
-          label="Team name"
-          testid="team-name-field"
-          :errors="fieldErrors('name')"
-        />
-
-        <SelectField
-          v-if="event.requires_allegiance"
-          v-model="allegiance"
-          label="Allegiance"
-          placeholder="Choose a side"
-          testid="team-allegiance"
-          :options="ALLEGIANCES"
-          :disabled="allegianceLocked"
-          :hint="allegianceLocked ? 'Frozen now the event has begun.' : 'Frozen once the event begins.'"
-          :errors="fieldErrors('allegiance')"
+        <AttendeeDetailsFields
+          v-model:name="partyName"
+          v-model:allegiance="allegiance"
+          :requires-allegiance="event.requires_allegiance"
+          :allegiance-locked="attendee.allegiance_locked === true"
+          :errors="fieldErrors"
         />
 
         <AppAlert
