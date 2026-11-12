@@ -50,7 +50,7 @@ test('an Event is visible when it is public or the viewer organises it', functio
     $event = Event::factory()->create(['status' => $status]);
     $user = eventViewers()[$viewer]($event);
 
-    expect($event->fresh()->isVisibleTo($user))->toBe($visible);
+    expect($event->isVisibleTo($user))->toBe($visible);
 })->with('event visibility');
 
 test('a public Event is visible without asking who organises it', function () {
