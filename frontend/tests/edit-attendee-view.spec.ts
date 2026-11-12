@@ -477,3 +477,186 @@ describe('the attendee edit screen', () => {
         expect(view.find('[data-testid="undrop-draft-round"]').exists()).toBe(false);
     });
 });
+
+/**
+ * A doubles team on the day: Ada has claimed her account, Grace was named by
+ * her Captain and has not answered her invitation yet.
+ */
+const PARTY = {
+    data: {
+        ...ATTENDEE.data,
+        members: [
+            { id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' }, membership_id: 4, invite_outstanding: false },
+            { id: 13, name: 'Grace Hopper', faction: null, membership_id: 5, invite_outstanding: true, email: 'grace@example.com' },
+        ],
+    },
+};
+
+const FACTIONS = {
+    data: [
+        { id: 3, name: 'Imperial Fists', slug: 'imperial-fists' },
+        { id: 7, name: 'Sons of Horus', slug: 'sons-of-horus' },
+    ],
+};
+
+function partyRoutes(attendee: unknown = PARTY) {
+    return {
+        [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: attendee },
+        [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+        [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+    };
+}
+
+function requestTo(fetch: ReturnType<typeof stubApi>, method: string, suffix: string) {
+    return fetch.mock.calls.find(([url, init]) => String(url).split('?')[0]!.endsWith(suffix) && init?.method === method);
+}
+
+describe('the players on the attendee edit screen', () => {
+    it('swaps an invited player for somebody else by correcting their details', async () => {
+        const fetch = stubApi({
+            ...partyRoutes(),
+            [`/attendees/9/members/5`]: { status: 200, body: PARTY },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect((view.get('[data-testid="member-5-email"]').element as HTMLInputElement).value).toBe('grace@example.com');
+
+        await view.get('[data-testid="member-5-name"]').setValue('Alan Turing');
+        await view.get('[data-testid="member-5-email"]').setValue('alan@example.com');
+        await view.get('[data-testid="member-5-faction"]').setValue('7');
+        await view.get('[data-testid="member-5-form"]').trigger('submit');
+        await flushPromises();
+
+        const amend = requestTo(fetch, 'PATCH', '/attendees/9/members/5')!;
+        expect(JSON.parse(amend[1]?.body as string)).toEqual({ name: 'Alan Turing', email: 'alan@example.com', faction_id: 7 });
+        expect(view.find('[data-testid="member-5-saved"]').exists()).toBe(true);
+    });
+
+    it('sends an invited player their invitation again, and offers no resend to one who has claimed', async () => {
+        const fetch = stubApi({
+            ...partyRoutes(),
+            [`/attendees/9/members/5/invite`]: { status: 201, body: {} },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="member-4-resend"]').exists()).toBe(false);
+
+        await view.get('[data-testid="member-5-resend"]').trigger('click');
+        await flushPromises();
+
+        expect(requestTo(fetch, 'POST', '/attendees/9/members/5/invite')).toBeDefined();
+        expect(view.get('[data-testid="member-5-resent"]').text()).toContain('earlier link has stopped working');
+    });
+
+    it('removes a player from the team once the organiser confirms, and rereads the team', async () => {
+        const fetch = stubApi({
+            ...partyRoutes(),
+            [`/attendees/9/members/12`]: { status: 200 },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="member-4-remove"]').trigger('click');
+        expect(view.get('[data-testid="member-4-remove-confirm"] h2').text()).toBe('Remove Ada Lovelace?');
+        expect(requestTo(fetch, 'DELETE', '/attendees/9/members/12')).toBeUndefined();
+
+        const readsBefore = fetch.mock.calls.filter(([url]) => String(url).split('?')[0]!.endsWith('/attendees/9')).length;
+
+        await view.get('[data-testid="member-4-remove-confirm-confirm"]').trigger('click');
+        await flushPromises();
+
+        expect(requestTo(fetch, 'DELETE', '/attendees/9/members/12')).toBeDefined();
+        expect(fetch.mock.calls.filter(([url]) => String(url).split('?')[0]!.endsWith('/attendees/9')).length).toBe(readsBefore + 1);
+    });
+
+    it('offers no remove for the only player left, since that is deleting or dropping the team', async () => {
+        stubApi(partyRoutes({ data: { ...PARTY.data, members: [PARTY.data.members[0]] } }));
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="member-4"]').exists()).toBe(true);
+        expect(view.find('[data-testid="member-4-remove"]').exists()).toBe(false);
+    });
+
+    it('adds a player to a team with room for one, and offers no add once the team is full', async () => {
+        const routes: Record<string, { status: number; body?: unknown }> = {
+            ...partyRoutes({ data: { ...PARTY.data, members: [PARTY.data.members[0]] } }),
+            [`/attendees/9/members`]: { status: 201, body: PARTY },
+        };
+        const fetch = stubApi(routes);
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="add-player-name"]').setValue('Grace Hopper');
+        await view.get('[data-testid="add-player-email"]').setValue('grace@example.com');
+        await view.get('[data-testid="add-player-faction"]').setValue('7');
+
+        // The team as the API reads it once she is in.
+        routes[`/api/events/${EVENT_SLUG}/attendees/9`] = { status: 200, body: PARTY };
+
+        await view.get('[data-testid="add-player-form"]').trigger('submit');
+        await flushPromises();
+
+        const add = requestTo(fetch, 'POST', '/attendees/9/members')!;
+        expect(JSON.parse(add[1]?.body as string)).toEqual({ name: 'Grace Hopper', email: 'grace@example.com', faction_id: 7 });
+        expect(view.find('[data-testid="member-5"]').exists()).toBe(true);
+        expect(view.find('[data-testid="add-player-form"]').exists()).toBe(false);
+    });
+
+    it('shows the api\'s refusal of a new player against the field it is about', async () => {
+        stubApi({
+            ...partyRoutes({ data: { ...PARTY.data, members: [PARTY.data.members[0]] } }),
+            [`/attendees/9/members`]: {
+                status: 422,
+                body: { message: 'The given data was invalid.', errors: { email: ['This player has already entered this event.'] } },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="add-player-email"]').setValue('ada@example.com');
+        await view.get('[data-testid="add-player-form"]').trigger('submit');
+        await flushPromises();
+
+        expect(view.get('[data-testid="add-player-email-error"]').text()).toContain('already entered');
+    });
+
+    it('shows the api\'s refusal of a corrected player against the field it is about', async () => {
+        stubApi({
+            ...partyRoutes(),
+            [`/attendees/9/members/5`]: {
+                status: 422,
+                body: { message: 'The given data was invalid.', errors: { email: ['This player has already entered this event.'] } },
+            },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="member-5-email"]').setValue('ada@example.com');
+        await view.get('[data-testid="member-5-form"]').trigger('submit');
+        await flushPromises();
+
+        expect(view.get('[data-testid="member-5-email-error"]').text()).toContain('already entered');
+        expect(view.find('[data-testid="member-5-saved"]').exists()).toBe(false);
+    });
+
+    it('reports a player who has claimed their account rather than offering to edit them', async () => {
+        stubApi(partyRoutes());
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="member-4"]').text()).toContain('Ada Lovelace');
+        expect(view.get('[data-testid="member-4"]').text()).toContain('only they can change their details');
+        expect(view.find('[data-testid="member-4-form"]').exists()).toBe(false);
+    });
+});

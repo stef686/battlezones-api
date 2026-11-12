@@ -5,12 +5,14 @@ import { useRouter } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { amendAttendee, deleteAttendee, dropAttendee, fetchAttendee, fetchEvent, undropAttendee, type Allegiance, type Attendee } from '@/api/events';
+import { amendAttendee, deleteAttendee, dropAttendee, fetchAttendee, fetchEvent, fetchFactions, undropAttendee, type Allegiance, type Attendee } from '@/api/events';
 import { keys } from '@/api/keys';
 import { fetchRounds, roundTitle } from '@/api/rounds';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
+import AddAttendeePlayerForm from '@/components/AddAttendeePlayerForm.vue';
 import AttendeeDetailsFields from '@/components/AttendeeDetailsFields.vue';
+import AttendeePlayerCard from '@/components/AttendeePlayerCard.vue';
 import BackLink from '@/components/BackLink.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
@@ -104,6 +106,31 @@ async function save(): Promise<void> {
     saving.value = false;
   }
 }
+
+const { data: factions } = useQuery({
+  queryKey: computed(() => keys.factions(props.eventSlug)),
+  queryFn: () => fetchFactions(client, props.eventSlug),
+  enabled: mayOrganise,
+  retry: false,
+});
+
+const factionOptions = computed(() => (factions.value ?? []).map((faction) => ({
+  value: String(faction.id),
+  label: faction.name,
+})));
+
+/**
+ * A change to who is in the team is reread rather than patched in: the
+ * Attendee lists name every Player, and retiring them retires this team's own
+ * detail along with them.
+ */
+function playersChanged(): Promise<void> {
+  return queryClient.invalidateQueries({ queryKey: keys.allAttendees(props.eventSlug) });
+}
+
+/** A seat is free while the team is short of the Event's party size; Organisers fill it whenever. */
+const hasRoom = computed(() => attendee.value !== undefined && event.value !== undefined
+  && attendee.value.members.length < event.value.attendee_size);
 
 /**
  * Deleting is for a team that has never been paired — a no-show, a duplicate,
@@ -276,6 +303,37 @@ async function changeDrop(change: () => Promise<Attendee>, fallback: string): Pr
           {{ saving ? 'Saving…' : 'Save' }}
         </AppButton>
       </form>
+
+      <section
+        class="flex flex-col gap-4"
+        aria-labelledby="players-heading"
+      >
+        <h2
+          id="players-heading"
+          class="text-xs font-medium uppercase tracking-widest text-muted-foreground"
+        >
+          Players
+        </h2>
+
+        <AttendeePlayerCard
+          v-for="member in attendee.members"
+          :key="member.membership_id ?? member.id"
+          :event-slug="props.eventSlug"
+          :attendee-id="attendee.id"
+          :member="member"
+          :faction-options="factionOptions"
+          :removable="attendee.members.length > 1"
+          @changed="playersChanged"
+        />
+
+        <AddAttendeePlayerForm
+          v-if="hasRoom"
+          :event-slug="props.eventSlug"
+          :attendee-id="attendee.id"
+          :faction-options="factionOptions"
+          @added="playersChanged"
+        />
+      </section>
 
       <section
         v-if="mayDelete || mayDrop || mayUndrop"
