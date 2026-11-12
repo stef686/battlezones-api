@@ -2,6 +2,7 @@
 
 use App\Enums\Allegiance;
 use App\Enums\EventOrganiserRole;
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScoreType;
@@ -294,3 +295,22 @@ test('it counts a bye as a win from the moment it is paired', function () {
 
     expect($attendees[0]['is_winner'])->toBeTrue();
 });
+
+test('an organiser opens a round of their own event before it is under way', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertOk()
+        ->assertJsonPath('data.id', $round->id);
+})->with('statuses before rounds are public');
+
+test('its own players still cannot open a round before the event is under way', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.rounds.show', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertNotFound();
+})->with('statuses before rounds are public');

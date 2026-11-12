@@ -418,6 +418,31 @@ describe('the schedule', () => {
         expect(drafted.get('[data-testid="block-2"]').attributes('href')).toBeUndefined();
     });
 
+    it('opens a round block for an organiser before the event is under way', async () => {
+        // Nothing moves an Event to Active by itself, and an Organiser who has
+        // paired a Published Event has to be able to read the pairings.
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/schedule`]: { status: 200, body: SCHEDULE },
+            [`/api/events/${EVENT_SLUG}`]: {
+                status: 200,
+                body: eventBody({
+                    viewer: {
+                        is_organiser: true,
+                        is_lead_organiser: false,
+                        is_attendee: false,
+                        attendee_id: null,
+                        permissions: { organise: true, register: false, manage_organisers: false },
+                    },
+                }),
+            },
+        });
+
+        const view = mountView(ScheduleView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="block-2"]').attributes('href')).toBe(`/events/${EVENT_SLUG}/rounds/4`);
+    });
+
     it('offers an organiser an item at the foot of the day, and writes the hall\'s time', async () => {
         const ORGANISING = eventBody({
             timezone: 'Europe/London',

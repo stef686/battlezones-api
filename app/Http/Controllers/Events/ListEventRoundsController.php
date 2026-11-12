@@ -17,12 +17,12 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Group('Events', 'APIs for Events')]
 class ListEventRoundsController extends Controller
 {
-    #[Endpoint('List Event Rounds', 'List rounds for an event. Only visible for Active/Completed events. Draft rounds are shown to Organisers only.')]
+    #[Endpoint('List Event Rounds', 'List rounds for an event. Before the Event is Active or Completed, only its Organisers can read its Rounds; anyone else gets a 404. Draft rounds are shown to Organisers only.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[ResponseFromApiResource(RoundResource::class, model: Round::class, collection: true)]
     public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
-        abort_unless($event->status->hasRoundsVisible(), 404);
+        abort_unless($event->hasRoundsVisibleTo($request->user('sanctum')), 404);
 
         $rounds = $event->rounds()
             ->unless($event->isOrganisedBy($request->user('sanctum')), fn (Builder $query) => $query->live())

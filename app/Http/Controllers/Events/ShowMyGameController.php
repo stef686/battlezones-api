@@ -19,7 +19,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Authenticated]
 class ShowMyGameController extends Controller
 {
-    #[Endpoint('Show My Current Game', 'The authenticated Player\'s Game and table number in the current Round. Null until that Round is published.')]
+    #[Endpoint('Show My Current Game', 'The authenticated Player\'s Game and table number in the current Round. Null until that Round is published. Before the Event is Active or Completed, only its Organisers can read its Rounds; anyone else gets a 404.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [
         'id' => 18,
@@ -45,7 +45,7 @@ class ShowMyGameController extends Controller
     #[Response(['data' => null], description: 'The current Round is not published, or this Player is not playing in it.')]
     public function __invoke(Request $request, Event $event): GameDetailResource|JsonResponse
     {
-        abort_unless($event->status->hasRoundsVisible(), 404);
+        abort_unless($event->hasRoundsVisibleTo($request->user()), 404);
 
         $round = $event->currentRound();
 

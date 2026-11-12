@@ -244,3 +244,16 @@ test('a non-organiser cannot find the flagged results of a hidden event, rather 
         ->getJson(route('events.flags.index', ['event' => $event->slug]))
         ->assertNotFound();
 })->with('hidden event statuses');
+
+test('nobody flags a result before the event is under way, not even an organiser', function (EventStatus $status) {
+    [$event, $game] = submittedGame();
+    $event->forceFill(['status' => $status])->save();
+
+    $this->actingAs(coOrganiserOf($event))
+        ->postJson(route('events.games.flag.store', ['event' => $event->slug, 'game' => $game->id]), [
+            'reason' => 'Too early to be wrong.',
+        ])
+        ->assertNotFound();
+
+    expect(GameResultFlag::query()->where('game_id', $game->id)->exists())->toBeFalse();
+})->with('statuses before rounds are public');

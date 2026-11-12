@@ -635,7 +635,7 @@ export interface paths {
         };
         /**
          * List Event Rounds
-         * @description List rounds for an event. Only visible for Active/Completed events. Draft rounds are shown to Organisers only.
+         * @description List rounds for an event. Before the Event is Active or Completed, only its Organisers can read its Rounds; anyone else gets a 404. Draft rounds are shown to Organisers only.
          */
         get: operations["listEventRounds"];
         put?: never;
@@ -664,7 +664,7 @@ export interface paths {
         };
         /**
          * Show Event Round
-         * @description Round detail with games for an event. Draft rounds are visible to Organisers only.
+         * @description Round detail with games for an event. Before the Event is Active or Completed, only its Organisers can read its Rounds; anyone else gets a 404. Draft rounds are visible to Organisers only.
          */
         get: operations["showEventRound"];
         put?: never;
@@ -1367,7 +1367,7 @@ export interface paths {
         };
         /**
          * Show My Current Game
-         * @description The authenticated Player's Game and table number in the current Round. Null until that Round is published.
+         * @description The authenticated Player's Game and table number in the current Round. Null until that Round is published. Before the Event is Active or Completed, only its Organisers can read its Rounds; anyone else gets a 404.
          */
         get: operations["showMyCurrentGame"];
         put?: never;

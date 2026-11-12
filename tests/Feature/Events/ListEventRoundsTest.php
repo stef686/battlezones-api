@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\EventOrganiserRole;
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\Round;
 use App\Models\User;
@@ -87,3 +88,22 @@ test('it shows draft rounds to organisers', function () {
         ->assertSuccessful()
         ->assertJsonCount(2, 'data');
 });
+
+test('an organiser lists the rounds of their own event before it is under way', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+
+    $this->actingAs(coOrganiserOf($event))
+        ->getJson(route('events.rounds.index', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonPath('data.0.id', $round->id);
+})->with('statuses before rounds are public');
+
+test('its own players still cannot list the rounds before the event is under way', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    Round::factory()->for($event)->live()->create(['number' => 1]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.rounds.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('statuses before rounds are public');
