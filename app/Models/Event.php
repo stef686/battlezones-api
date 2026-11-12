@@ -366,10 +366,11 @@ class Event extends Model
     /**
      * A Draft is being set up, so nobody may enter it, be added to it, or be
      * invited into it until it is published. Every way in calls this first.
+     * Only Draft: whether a Cancelled Event takes anybody in is for #192.
      *
      * @throws EventIsDraft
      */
-    public function ensureAcceptsEntries(): void
+    public function ensureIsNotDraft(): void
     {
         if ($this->status === EventStatus::Draft) {
             throw new EventIsDraft();

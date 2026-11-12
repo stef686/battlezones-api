@@ -29,7 +29,7 @@ class SendEventInvite
         ?EventAttendee $attendee = null,
         ?User $invitedBy = null,
     ): EventInvite {
-        $event->ensureAcceptsEntries();
+        $event->ensureIsNotDraft();
 
         $user = $this->findOrCreateAccount($email, $name);
 
