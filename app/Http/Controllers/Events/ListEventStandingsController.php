@@ -26,6 +26,8 @@ class ListEventStandingsController extends Controller
         'attendee' => [
             'id' => 9,
             'name' => 'Ada and Grace',
+            'avatar' => null,
+            'dropped_at' => null,
             'members' => [[
                 'id' => 12,
                 'name' => 'Ada Lovelace',

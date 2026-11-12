@@ -4213,6 +4213,8 @@ export interface operations {
                             attendee?: {
                                 id?: number;
                                 name?: string;
+                                avatar?: string | null;
+                                dropped_at?: string | null;
                                 members?: {
                                     id?: number;
                                     name?: string;

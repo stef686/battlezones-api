@@ -10,6 +10,7 @@ import { keys } from '@/api/keys';
 import { columnLabel } from '@/api/rounds';
 import { columnsOf, factionsOf, fetchStandings, scoreOf, type Standing, type StandingColumn } from '@/api/standings';
 import StandingMovement from '@/components/StandingMovement.vue';
+import StatusBadge from '@/components/StatusBadge.vue';
 import AppAvatar from '@/components/AppAvatar.vue';
 import TextField from '@/components/TextField.vue';
 import { useEventPulse } from '@/composables/useEventPulse';
@@ -216,10 +217,21 @@ function matchesSearch(standing: Standing): boolean {
                            up: it is what a reader is scanning for, and the
                            numbers and the Factions are what it is read
                            against. -->
-                      <span
-                        :data-testid="`name-${row.standing.attendee.id}`"
-                        class="block truncate text-xs"
-                      >{{ row.standing.attendee.name }}</span>
+                      <!-- A Dropped team keeps its row and its rank: its
+                           results still count for everyone it played, so it
+                           is marked rather than hidden or moved. -->
+                      <span class="flex min-w-0 items-center gap-1.5">
+                        <span
+                          :data-testid="`name-${row.standing.attendee.id}`"
+                          class="block truncate text-xs"
+                        >{{ row.standing.attendee.name }}</span>
+                        <StatusBadge
+                          v-if="row.standing.attendee.dropped_at"
+                          :data-testid="`dropped-${row.standing.attendee.id}`"
+                        >
+                          Dropped
+                        </StatusBadge>
+                      </span>
 
                       <!-- Under the name and in grey, because it qualifies the
                            team rather than identifying it: two teams called

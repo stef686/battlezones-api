@@ -11,6 +11,7 @@ import { keys } from '@/api/keys';
 import AllegianceBadge from '@/components/AllegianceBadge.vue';
 import AppAvatar from '@/components/AppAvatar.vue';
 import MissingNotice from '@/components/MissingNotice.vue';
+import StatusBadge from '@/components/StatusBadge.vue';
 import AppButton from '@/components/AppButton.vue';
 import TextField from '@/components/TextField.vue';
 
@@ -141,7 +142,15 @@ const empty = computed(() => data.value !== undefined && attendees.value.length 
             />
 
             <span class="flex min-w-0 flex-1 flex-col">
-              <span class="truncate text-base font-semibold text-foreground">{{ attendee.name }}</span>
+              <span class="flex min-w-0 items-center gap-2">
+                <span class="truncate text-base font-semibold text-foreground">{{ attendee.name }}</span>
+                <StatusBadge
+                  v-if="attendee.dropped_at"
+                  :data-testid="`dropped-${attendee.id}`"
+                >
+                  Dropped
+                </StatusBadge>
+              </span>
               <span class="truncate text-sm text-muted-foreground">
                 {{ attendee.members.map((member) => member.name).join(' & ') }}
               </span>

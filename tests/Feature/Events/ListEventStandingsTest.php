@@ -392,3 +392,23 @@ test('its own players still cannot read the standings of a hidden event', functi
         ->getJson(route('events.standings.index', ['event' => $event->slug]))
         ->assertNotFound();
 })->with('hidden event statuses');
+
+test('a dropped attendee is marked, and ranks exactly where its results put it', function () {
+    $event = Event::factory()->published()->standingsVisible()->create();
+    EventScoreType::factory()->matchPoints(win: 3, draw: 1, loss: 0)->rankedAt(1)->for($event)->create(['display_order' => 0]);
+    $victoryPoints = EventScoreType::factory()->victoryPoints()->rankedAt(2)->for($event)->create(['display_order' => 1]);
+
+    $leader = EventAttendee::factory()->for($event)->withMember()->create(['dropped_at' => '2026-09-12 13:05:00']);
+    $trailer = EventAttendee::factory()->for($event)->withMember()->create();
+
+    playGame(Round::factory()->for($event)->live()->create(), $leader, $trailer, 85, 70, $victoryPoints);
+
+    $rows = $this->getJson(route('events.standings.index', ['event' => $event->slug]))
+        ->assertSuccessful()
+        ->json('data');
+
+    expect(collect($rows)->pluck('id')->all())->toBe([$leader->id, $trailer->id])
+        ->and($rows[0]['position'])->toBe(1)
+        ->and($rows[0]['attendee']['dropped_at'])->toBe('2026-09-12T13:05:00Z')
+        ->and($rows[1]['attendee']['dropped_at'])->toBeNull();
+});

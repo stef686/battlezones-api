@@ -31,6 +31,10 @@ class EventStandingResource extends JsonResource
                 'id' => $this->attendee->id,
                 'name' => $this->attendee->displayName(),
                 'avatar' => $this->attendee->avatarUrl(),
+                // Marked rather than hidden or re-sorted: a Dropped team's
+                // results still count for everyone it played. Read off the
+                // row already selected, so it costs nothing.
+                'dropped_at' => $this->attendee->dropped_at?->toIso8601ZuluString(),
                 'members' => $this->serialiseMembers($this->attendee, withClubs: true),
             ],
             'scores' => $this->scores->map(fn (array $score): array => [

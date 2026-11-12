@@ -16,7 +16,8 @@ export interface Standing {
      * better one.
      */
     movement: number | null;
-    attendee: { id: number; name: string; avatar?: string | null; members: AttendeeMember[] };
+    /** `dropped_at` marks a team that has left; its row ranks where its results put it all the same. */
+    attendee: { id: number; name: string; avatar?: string | null; dropped_at?: string | null; members: AttendeeMember[] };
     scores: { value: number | string; score_type: StandingColumn }[];
 }
 

@@ -98,6 +98,8 @@ export interface AttendeeSummary {
     allegiance: string | null;
     /** The team's badge, signed and expiring. Null where they have not uploaded one. */
     avatar?: string | null;
+    /** When an Organiser marked the team as having left; null while it is in. */
+    dropped_at?: string | null;
     members: AttendeeMember[];
 }
 
