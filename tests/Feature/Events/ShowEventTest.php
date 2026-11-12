@@ -43,6 +43,26 @@ test('it returns 404 for a cancelled event', function () {
     $this->getJson(route('events.show', $event))->assertNotFound();
 });
 
+test('an Organiser reads their own Event before it is public', function (string $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(organiserOf($event))
+        ->getJson(route('events.show', $event))
+        ->assertSuccessful()
+        ->assertJsonPath('data.status', $status)
+        ->assertJsonPath('data.viewer.is_organiser', true);
+})->with(['draft', 'cancelled']);
+
+test('a Player of an Event that is not public still finds nothing', function (string $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $player = User::factory()->create();
+    EventAttendee::factory()->for($event)->withMember($player)->create();
+
+    $this->actingAs($player)
+        ->getJson(route('events.show', $event))
+        ->assertNotFound();
+})->with(['draft', 'cancelled']);
+
 test('it returns 404 for a non-existent slug', function () {
     $this->getJson(route('events.show', 'does-not-exist'))->assertNotFound();
 });

@@ -12,6 +12,10 @@
  * Overlay text sits on scrims that are there whether or not a Banner is, so
  * it has one colour rule in every state — a pale Banner cannot make it
  * unreadable, and muting a dark one is the accepted cost.
+ *
+ * The `notice` slot sits above the Game System for anything the header must
+ * say about the Event itself rather than describe it — that it is a Draft,
+ * say. It carries its own surface, so it is not bound by the overlay rule.
  */
 withDefaults(defineProps<{
   name: string;
@@ -61,6 +65,8 @@ withDefaults(defineProps<{
       />
 
       <div class="relative mx-auto flex w-full max-w-md flex-col px-5 pb-4 leading-tight">
+        <slot name="notice" />
+
         <p
           v-if="gameSystem"
           data-testid="event-header-game-system"

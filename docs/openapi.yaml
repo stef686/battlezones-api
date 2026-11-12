@@ -1410,7 +1410,7 @@ paths:
     get:
       summary: 'Show Event'
       operationId: showEvent
-      description: 'Get a publicly visible event by slug.'
+      description: 'Get an event by slug. A Draft or Cancelled event is found only by its Organisers; anyone else gets a 404.'
       parameters: []
       responses:
         200:

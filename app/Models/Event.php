@@ -351,6 +351,17 @@ class Event extends Model
         return $user !== null && $this->organisers()->whereKey($user->getKey())->exists();
     }
 
+    /**
+     * A Draft or Cancelled Event exists only for its Organisers; to anyone
+     * else it should answer 404, never 403, which would confirm it exists.
+     * Deliberately not a policy ability: a public Event costs no query, a
+     * guest is accepted, and Admins get no bypass.
+     */
+    public function isVisibleTo(?User $user): bool
+    {
+        return $this->status->isPubliclyVisible() || $this->isOrganisedBy($user);
+    }
+
     public function isLedBy(User $user): bool
     {
         return $this->organisers()

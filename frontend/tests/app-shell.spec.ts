@@ -278,6 +278,33 @@ describe('the event nav', () => {
 });
 
 describe('the event header', () => {
+    it.each([
+        ['draft', 'Draft — only Organisers can see this event'],
+        ['cancelled', 'Cancelled — only Organisers can see this event'],
+    ])('says a %s event is hidden from everyone but its Organisers', async (status, notice) => {
+        stubEvent(eventBody({ status }));
+        await router.push(`/events/${EVENT_SLUG}/standings`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        const banner = view.get('[data-testid="event-header-visibility"]');
+        expect(banner.text()).toBe(notice);
+        expect(banner.classes()).toContain('text-warning');
+    });
+
+    it('says nothing about who can see an event everyone can', async () => {
+        stubEvent(eventBody({ status: 'published' }));
+        await router.push(`/events/${EVENT_SLUG}/standings`);
+        await router.isReady();
+
+        const view = mountShell();
+        await flushPromises();
+
+        expect(view.find('[data-testid="event-header-visibility"]').exists()).toBe(false);
+    });
+
     it('names the event on a screen that belongs to one', async () => {
         stubEvent();
         await router.push(`/events/${EVENT_SLUG}/standings`);
