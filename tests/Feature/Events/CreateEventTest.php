@@ -86,6 +86,20 @@ test('an organiser creates a draft event that they lead, scored on the columns t
         ->toBe(['match-points', 'victory-points']);
 });
 
+test('the organiser can open the draft they have just created, where the wizard sends them', function () {
+    $creator = User::factory()->create();
+
+    $this->actingAs($creator)
+        ->postJson(route('events.store'), newEvent())
+        ->assertCreated();
+
+    $this->actingAs($creator)
+        ->getJson(route('events.show', 'croydon-doubles'))
+        ->assertSuccessful()
+        ->assertJsonPath('data.status', 'draft')
+        ->assertJsonPath('data.viewer.permissions.organise', true);
+});
+
 test('an account nobody has claimed cannot create an event, since it would expire and leave the event leaderless', function () {
     $this->actingAs(User::factory()->unclaimed()->create())
         ->postJson(route('events.store'), newEvent())

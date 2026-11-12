@@ -14,7 +14,7 @@ use Knuckles\Scribe\Attributes\ResponseField;
 #[Group('Events', 'APIs for Events')]
 class ShowEventController extends Controller
 {
-    #[Endpoint('Show Event', 'Get a publicly visible event by slug.')]
+    #[Endpoint('Show Event', 'Get an event by slug. A Draft or Cancelled event is found only by its Organisers; anyone else gets a 404.')]
     #[Response(['data' => [
         'id' => 1,
         'name' => 'London Grand Tournament',
@@ -68,7 +68,7 @@ class ShowEventController extends Controller
     #[ResponseField('data.viewer.permissions.manage_organisers', 'boolean', 'Appoint and remove Organisers.')]
     public function __invoke(Request $request, Event $event): EventResource
     {
-        abort_unless($event->status->isPubliclyVisible(), 404);
+        abort_unless($event->isVisibleTo($request->user('sanctum')), 404);
 
         $event->load(['gameSystem', 'documents']);
         $event->loadCount('attendees');

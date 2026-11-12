@@ -49,10 +49,7 @@ class UpdateEventRequest extends FormRequest
     {
         $event = $this->event();
 
-        abort_unless(
-            $event->status->isPubliclyVisible() || $event->isOrganisedBy($this->user()),
-            404,
-        );
+        abort_unless($event->isVisibleTo($this->user()), 404);
     }
 
     public function authorize(): bool

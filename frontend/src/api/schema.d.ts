@@ -506,7 +506,7 @@ export interface paths {
         };
         /**
          * Show Event
-         * @description Get a publicly visible event by slug.
+         * @description Get an event by slug. A Draft or Cancelled event is found only by its Organisers; anyone else gets a 404.
          */
         get: operations["showEvent"];
         put?: never;

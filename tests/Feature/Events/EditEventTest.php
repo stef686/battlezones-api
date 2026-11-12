@@ -123,6 +123,15 @@ test('an event the caller may not see answers not found', function () {
         ->assertNotFound();
 });
 
+test('an organiser saves the settings of an event nobody else can see yet', function (string $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.update', ['event' => $event->slug]), ['name' => 'Still being set up'])
+        ->assertSuccessful()
+        ->assertJsonPath('data.name', 'Still being set up');
+})->with(['draft', 'cancelled']);
+
 test('an organiser reshapes an event nobody has entered yet', function () {
     $event = Event::factory()->published()->create(['attendee_size' => 1]);
     $system = GameSystem::factory()->create(['name' => 'Horus Heresy', 'slug' => 'horus-heresy']);
