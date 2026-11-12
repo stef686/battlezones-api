@@ -16,16 +16,16 @@ export interface PublishCheck {
  *
  * Mirrors `App\Actions\Events\PublishEvent`, which is the rule: this exists so
  * the button can say what is missing before it is pressed. Change both
- * together. `now` is the caller's so a test can hold the clock still.
+ * together. An Event always has an end, so one without is treated as unmet
+ * rather than as never ending. `now` is the caller's so a test can hold the clock still.
  */
 export function publishChecklist(event: EventSummary, now: Date = new Date()): PublishCheck[] {
     const settings: RouteLocationRaw = { name: 'event-settings', params: { eventSlug: event.slug } };
-    const endsAt = event.ends_at === null ? null : new Date(event.ends_at);
 
     return [
         { field: 'venue_name', label: 'Venue name', met: filled(event.venue.name), fix: settings },
         { field: 'venue_city', label: 'Venue town or city', met: filled(event.venue.city), fix: settings },
-        { field: 'ends_at', label: 'Not over yet', met: endsAt === null || endsAt > now, fix: settings },
+        { field: 'ends_at', label: 'Not over yet', met: event.ends_at !== null && new Date(event.ends_at) > now, fix: settings },
     ];
 }
 

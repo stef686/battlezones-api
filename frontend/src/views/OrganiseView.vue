@@ -200,7 +200,7 @@ const byes = computed(() => (liveDetail.value?.games ?? []).filter((game) => gam
            Round below them. -->
       <ul
         class="-mx-5 divide-y divide-card-divider border-b border-t border-card-line"
-        :class="event.status === 'draft' ? '' : '-mt-5'"
+        :class="{ '-mt-5': event.status !== 'draft' }"
       >
         <AppLinkRow
           :to="{ name: 'event-settings', params: { eventSlug: props.eventSlug } }"

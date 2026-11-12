@@ -12,7 +12,12 @@ use Illuminate\Validation\ValidationException;
  * Its own transition rather than a field on the Event PATCH (ADR 0002).
  * Every unmet precondition is refused at once, each under the field that
  * fixes it, so an Organiser learns everything that stands in the way from
- * one attempt. The organise hub's checklist (`publishChecklist` in
+ * one attempt.
+ *
+ * The write is conditional on the row still being a Draft, which is the
+ * whole race guard: two publishes racing, or a publish racing a cancel, both
+ * pass the check on the model they read, and only one of them may land. The
+ * loser is told what the winner left it. The organise hub's checklist (`publishChecklist` in
  * `frontend/src/lib/publishing.ts`) mirrors these; change both together.
  */
 class PublishEvent
@@ -23,7 +28,7 @@ class PublishEvent
     public function execute(Event $event): void
     {
         if ($event->status !== EventStatus::Draft) {
-            throw ValidationException::withMessages(['status' => 'Only a draft event can be published.']);
+            throw self::notADraft();
         }
 
         $unmet = array_filter([
@@ -36,6 +41,20 @@ class PublishEvent
             throw ValidationException::withMessages($unmet);
         }
 
-        $event->update(['status' => EventStatus::Published]);
+        $published = Event::query()
+            ->whereKey($event->getKey())
+            ->where('status', EventStatus::Draft)
+            ->update(['status' => EventStatus::Published]);
+
+        if ($published === 0) {
+            throw self::notADraft();
+        }
+
+        $event->refresh();
+    }
+
+    private static function notADraft(): ValidationException
+    {
+        return ValidationException::withMessages(['status' => 'Only a draft event can be published.']);
     }
 }
