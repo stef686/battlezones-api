@@ -41,7 +41,7 @@ const { data: attendee, error: attendeeError } = useQuery({
 const missing = computed(() => (event.value !== undefined && !mayOrganise.value)
   || [eventError.value, attendeeError.value].some((caught) => caught instanceof ApiError && caught.kind === 'not_found'));
 
-const unreadable = computed(() => (attendeeError.value ?? eventError.value) as ApiError | null);
+const unreadable = computed(() => attendeeError.value ?? eventError.value);
 
 const partyName = ref('');
 const allegiance = ref('');
@@ -57,8 +57,15 @@ watch(attendee, (loaded) => {
   allegiance.value = loaded.allegiance ?? '';
 }, { immediate: true });
 
+/**
+ * What was last saved, so "Saved." describes the form only while the form
+ * still holds it: a keystroke afterwards is a change nobody has saved yet.
+ */
+const savedAs = ref<{ name: string; allegiance: string } | null>(null);
+const saved = computed(() => savedAs.value?.name === partyName.value
+  && savedAs.value.allegiance === allegiance.value);
+
 const saving = ref(false);
-const saved = ref(false);
 const failure = ref<ApiError | null>(null);
 
 const fieldErrors = computed(() => ({
@@ -67,8 +74,10 @@ const fieldErrors = computed(() => ({
 }));
 
 async function save(): Promise<void> {
+  const submitted = { name: partyName.value, allegiance: allegiance.value };
+
   saving.value = true;
-  saved.value = false;
+  savedAs.value = null;
   failure.value = null;
 
   try {
@@ -78,9 +87,13 @@ async function save(): Promise<void> {
     });
 
     // Refetched rather than patched in: the detail carries more than the
-    // amend answers with, and the Attendee page behind this one reads it.
-    await queryClient.invalidateQueries({ queryKey: attendeeKey.value });
-    saved.value = true;
+    // amend answers with. The list pages and the Standings name the team
+    // too, and would otherwise show the old name until their next read.
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: keys.allAttendees(props.eventSlug) }),
+      queryClient.invalidateQueries({ queryKey: keys.standings(props.eventSlug) }),
+    ]);
+    savedAs.value = submitted;
   } catch (caught) {
     failure.value = caught instanceof ApiError ? caught : null;
   } finally {

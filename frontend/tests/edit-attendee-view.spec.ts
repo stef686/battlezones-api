@@ -1,10 +1,11 @@
-import { VueQueryPlugin } from '@tanstack/vue-query';
+import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Router } from 'vue-router';
 
 import { createApiClient } from '@/api';
+import { keys } from '@/api/keys';
 import { InMemoryTokenStorage } from '@/api/token-storage';
 import { createAppRouter } from '@/router';
 import EditAttendeeView from '@/views/EditAttendeeView.vue';
@@ -73,16 +74,13 @@ function stubApi(routes: Record<string, { status: number; body?: unknown }>) {
 
 let router: Router;
 let pinia: ReturnType<typeof createPinia>;
+let queryClient: QueryClient;
 
 function mountView() {
     return mount(EditAttendeeView as never, ({
         props: { eventSlug: EVENT_SLUG, attendeeId: '9' },
         global: {
-            plugins: [
-                pinia,
-                router,
-                [VueQueryPlugin, { queryClientConfig: { defaultOptions: { queries: { retry: false } } } }],
-            ],
+            plugins: [pinia, router, [VueQueryPlugin, { queryClient }]],
         },
     }) as never);
 }
@@ -91,6 +89,7 @@ beforeEach(async () => {
     window.localStorage.clear();
     pinia = createPinia();
     setActivePinia(pinia);
+    queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
     router = createAppRouter();
     createApiClient(router, { baseUrl: 'https://api.test', storage: new InMemoryTokenStorage() });
@@ -180,5 +179,44 @@ describe('the attendee edit screen', () => {
         expect(view.get('[data-testid="missing"]').text().toLowerCase()).toContain('not found');
         expect(view.find('form').exists()).toBe(false);
         expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/attendees/9'))).toBe(false);
+    });
+
+    it('retires every screen that shows the team\'s name, not only its own page', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        queryClient.setQueryData(keys.attendees(EVENT_SLUG, '', 1), []);
+        queryClient.setQueryData(keys.standings(EVENT_SLUG), []);
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="team-name-field"]').setValue('The Ordo Ludi');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        expect(queryClient.getQueryState(keys.attendees(EVENT_SLUG, '', 1))?.isInvalidated).toBe(true);
+        expect(queryClient.getQueryState(keys.standings(EVENT_SLUG))?.isInvalidated).toBe(true);
+    });
+
+    it('stops saying saved once the form is changed again', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        expect(view.find('[data-testid="team-saved"]').exists()).toBe(true);
+
+        await view.get('[data-testid="team-name-field"]').setValue('The Ordo Ludi');
+
+        expect(view.find('[data-testid="team-saved"]').exists()).toBe(false);
     });
 });
