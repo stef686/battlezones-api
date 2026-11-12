@@ -46,7 +46,7 @@ class DeleteAttendeeAvatarController extends Controller
 
         $this->avatars->delete($attendee);
 
-        $attendee->load(['memberships.user.clubs', 'memberships.faction', 'customFieldResponses.field', 'games.round', 'games.attendees.memberships.user']);
+        $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee);
     }

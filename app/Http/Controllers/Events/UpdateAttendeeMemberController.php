@@ -65,7 +65,7 @@ class UpdateAttendeeMemberController extends Controller
 
         $amendAttendeeMember->handle($membership, $changes, $request->user());
 
-        $attendee->load(['memberships.user.clubs', 'memberships.faction', 'customFieldResponses.field', 'games.round', 'games.attendees.memberships.user']);
+        $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee);
     }

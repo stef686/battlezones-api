@@ -314,6 +314,7 @@ describe('the attendee edit screen', () => {
         const dialog = view.get('[data-testid="drop-attendee-confirm"]');
         expect(dialog.get('h2').text()).toBe('Drop Sons of Terra?');
         expect(dialog.text()).toContain('They won\'t be paired in later rounds. Results so far stand.');
+        expect(dialog.find('[data-testid="drop-attendee-draft-round"]').exists()).toBe(false);
         expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/drop'))).toBe(false);
 
         fetch = stubApi({
@@ -328,6 +329,24 @@ describe('the attendee edit screen', () => {
         const drop = fetch.mock.calls.find(([url]) => String(url).endsWith('/attendees/9/drop'));
         expect(drop?.[1]?.method).toBe('POST');
         expect(view.find('[data-testid="drop-attendee"]').exists()).toBe(false);
+    });
+
+    it('warns that a drop leaves a draft round pairing the team as it is', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, has_been_paired: true, dropped_at: null, paired_in_draft_round: true } },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="drop-attendee"]').trigger('click');
+
+        expect(view.get('[data-testid="drop-attendee-draft-round"]').text())
+            .toContain('still paired in the round being drafted');
     });
 
     it('offers no drop before the team has been paired, nor once it has been dropped', async () => {

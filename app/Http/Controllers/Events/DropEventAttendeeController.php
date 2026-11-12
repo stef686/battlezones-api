@@ -32,6 +32,7 @@ class DropEventAttendeeController extends Controller
         'allegiance_locked' => true,
         'has_been_paired' => true,
         'dropped_at' => '2026-09-12T13:05:00Z',
+        'paired_in_draft_round' => false,
         'members' => [[
             'id' => 12,
             'name' => 'Ada Lovelace',
@@ -52,7 +53,7 @@ class DropEventAttendeeController extends Controller
 
         $this->dropAttendee->execute($attendee);
 
-        $attendee->load(['memberships.user.clubs', 'memberships.faction', 'customFieldResponses.field', 'games.round', 'games.attendees.memberships.user', 'games.scores.scoreType']);
+        $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee);
     }

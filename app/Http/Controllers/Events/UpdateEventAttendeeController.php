@@ -53,7 +53,7 @@ class UpdateEventAttendeeController extends Controller
 
         $attendee->fill($request->validated())->save();
 
-        $attendee->load(['memberships.user.clubs', 'memberships.faction', 'customFieldResponses.field', 'games.round', 'games.attendees.memberships.user']);
+        $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee);
     }

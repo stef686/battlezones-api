@@ -71,7 +71,7 @@ class StoreEventAttendeeController extends Controller
             return response()->json(['message' => $full->getMessage()], 409);
         }
 
-        $attendee->load(['memberships.user.clubs', 'memberships.faction', 'customFieldResponses.field', 'games.round', 'games.attendees.memberships.user']);
+        $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee)
             ->response()

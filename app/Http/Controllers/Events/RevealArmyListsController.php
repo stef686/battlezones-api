@@ -50,7 +50,7 @@ class RevealArmyListsController extends Controller
 
         $attendee->forceFill(['army_lists_revealed_at' => now()])->save();
 
-        $attendee->load(['memberships.user.clubs', 'memberships.faction', 'customFieldResponses.field', 'games.round', 'games.attendees.memberships.user']);
+        $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee);
     }

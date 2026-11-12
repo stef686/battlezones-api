@@ -3785,6 +3785,7 @@ export interface operations {
                             allegiance_locked?: boolean;
                             has_been_paired?: boolean;
                             dropped_at?: string | null;
+                            paired_in_draft_round?: boolean;
                             members?: unknown[];
                             checked_in_at?: string | null;
                             painting_entered?: boolean;
@@ -7123,6 +7124,7 @@ export interface operations {
                             allegiance_locked?: boolean;
                             has_been_paired?: boolean;
                             dropped_at?: string;
+                            paired_in_draft_round?: boolean;
                             members?: {
                                 id?: number;
                                 name?: string;

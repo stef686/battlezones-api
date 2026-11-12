@@ -2033,6 +2033,8 @@ paths:
                       dropped_at:
                         type: string
                         nullable: true
+                      paired_in_draft_round:
+                        type: boolean
                       members:
                         type: array
                       checked_in_at:
@@ -6459,6 +6461,8 @@ paths:
                         type: boolean
                       dropped_at:
                         type: string
+                      paired_in_draft_round:
+                        type: boolean
                       members:
                         type: array
                         items:

@@ -63,7 +63,7 @@ class StoreAttendeeMemberController extends Controller
 
         $enrolPlayer->handle($attendee, $player, $request->user());
 
-        $attendee->load(['memberships.user.clubs', 'memberships.faction', 'customFieldResponses.field', 'games.round', 'games.attendees.memberships.user']);
+        $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee)
             ->response()

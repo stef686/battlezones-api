@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Events;
 
 use App\Enums\CustomFieldType;
+use App\Enums\RoundStatus;
 use App\Http\Resources\Events\Concerns\SerialisesAttendeeMembers;
 use App\Models\EventAttendee;
 use App\Models\EventCustomFieldResponse;
@@ -38,6 +39,11 @@ class EventAttendeeDetailResource extends JsonResource
             // already loaded below, so it costs nothing.
             'has_been_paired' => $this->games->isNotEmpty(),
             'dropped_at' => $this->dropped_at?->toIso8601ZuluString(),
+            // A Drop leaves a Draft Round that already pairs the team as it
+            // is, so the Organiser dropping them is told before they do it.
+            'paired_in_draft_round' => $this->games->contains(
+                fn (Game $game): bool => $game->round->status === RoundStatus::Draft,
+            ),
             'members' => $this->serialiseMembers($this->resource, withArmyList: true, withClubs: true, withInviteState: true),
             'checked_in_at' => $this->checked_in_at?->toIso8601ZuluString(),
             // Whether this army is on the display table, and the number it
