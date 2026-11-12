@@ -6,10 +6,10 @@ import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
 import { amendAttendee, removeTeamAvatar, uploadTeamAvatar, type Allegiance, type Attendee } from '@/api/events';
 import AppAlert from '@/components/AppAlert.vue';
-import AttendeeDetailsFields from '@/components/AttendeeDetailsFields.vue';
 import AppButton from '@/components/AppButton.vue';
 import BackLink from '@/components/BackLink.vue';
 import AppAvatar from '@/components/AppAvatar.vue';
+import AttendeeDetailsFields from '@/components/AttendeeDetailsFields.vue';
 import { useMyTeam } from '@/composables/useMyTeam';
 
 const props = defineProps<{ eventSlug: string }>();
@@ -75,8 +75,15 @@ async function withAvatar(change: () => Promise<Attendee>): Promise<void> {
   }
 }
 
+/**
+ * What was last saved, so "Saved." describes the form only while the form
+ * still holds it: a keystroke afterwards is a change nobody has saved yet.
+ */
+const savedAs = ref<{ name: string; allegiance: string } | null>(null);
+const saved = computed(() => savedAs.value?.name === partyName.value
+  && savedAs.value.allegiance === allegiance.value);
+
 const saving = ref(false);
-const saved = ref(false);
 const failure = ref<ApiError | null>(null);
 
 const fieldErrors = computed(() => ({
@@ -89,8 +96,10 @@ async function save(): Promise<void> {
     return;
   }
 
+  const submitted = { name: partyName.value, allegiance: allegiance.value };
+
   saving.value = true;
-  saved.value = false;
+  savedAs.value = null;
   failure.value = null;
 
   try {
@@ -100,7 +109,7 @@ async function save(): Promise<void> {
     });
 
     await refresh();
-    saved.value = true;
+    savedAs.value = submitted;
   } catch (caught) {
     failure.value = caught instanceof ApiError ? caught : null;
   } finally {

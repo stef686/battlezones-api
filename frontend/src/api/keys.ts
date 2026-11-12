@@ -16,6 +16,8 @@ export const keys = {
     pulse: (slug: string) => ['events', slug, 'pulse'] as const,
     schedule: (slug: string) => ['events', slug, 'schedule'] as const,
     factions: (slug: string) => ['events', slug, 'factions'] as const,
+    /** Every list page and every detail of one Event's Attendees, for retiring them together. */
+    allAttendees: (slug: string) => ['events', slug, 'attendees'] as const,
     attendees: (slug: string, search: string, page: number) =>
         ['events', slug, 'attendees', { search, page }] as const,
     attendee: (slug: string, attendeeId: number) => ['events', slug, 'attendees', attendeeId] as const,

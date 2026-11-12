@@ -466,6 +466,25 @@ describe('the my team screens', () => {
         expect(view.find('[data-testid="team-saved"]').exists()).toBe(true);
     });
 
+    it('stops saying saved once the team details are changed again', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(TeamDetailsView);
+        await flushPromises();
+
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        expect(view.find('[data-testid="team-saved"]').exists()).toBe(true);
+
+        await view.get('[data-testid="team-allegiance"]').setValue('traitor');
+
+        expect(view.find('[data-testid="team-saved"]').exists()).toBe(false);
+    });
+
     it('closes the allegiance field once the event has begun, rather than refusing the change later', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: {

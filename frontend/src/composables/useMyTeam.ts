@@ -72,7 +72,7 @@ export function useMyTeam(eventSlug: MaybeRefOrGetter<string>) {
 
     /** The party changed, and every screen reading it is now behind. */
     function refresh(): Promise<void> {
-        return queryClient.invalidateQueries({ queryKey: ['events', slug.value, 'attendees'] });
+        return queryClient.invalidateQueries({ queryKey: keys.allAttendees(slug.value) });
     }
 
     return { event, attendee, attendeeId, me, partner, isDoubles, paintingPoll, loading, refresh };
