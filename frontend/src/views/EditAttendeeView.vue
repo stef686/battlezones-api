@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { ApiError } from '@/api/errors';
-import { amendAttendee, deleteAttendee, fetchAttendee, fetchEvent, type Allegiance } from '@/api/events';
+import { amendAttendee, deleteAttendee, dropAttendee, fetchAttendee, fetchEvent, type Allegiance } from '@/api/events';
 import { keys } from '@/api/keys';
 import AppAlert from '@/components/AppAlert.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -140,6 +140,38 @@ async function remove(): Promise<void> {
 
   await router.push({ name: 'attendees', params: { eventSlug: props.eventSlug } });
 }
+
+/**
+ * Dropping is for a team that has been paired and has left. Before its first
+ * Game the API points at Delete instead, and a team already Dropped has
+ * nothing more to drop from.
+ */
+const mayDrop = computed(() => attendee.value?.has_been_paired === true && !attendee.value.dropped_at);
+
+const confirmingDrop = ref(false);
+const dropping = ref(false);
+const dropFailure = ref<string | null>(null);
+
+async function drop(): Promise<void> {
+  dropping.value = true;
+  dropFailure.value = null;
+
+  try {
+    const dropped = await dropAttendee(client, props.eventSlug, Number(props.attendeeId));
+
+    queryClient.setQueryData(attendeeKey.value, dropped);
+  } catch (caught) {
+    dropFailure.value = caught instanceof Error ? caught.message : 'That could not be dropped.';
+
+    return;
+  } finally {
+    dropping.value = false;
+  }
+
+  // The list and the Standings mark a Dropped team, so both are behind.
+  void queryClient.invalidateQueries({ queryKey: keys.allAttendees(props.eventSlug) });
+  void queryClient.invalidateQueries({ queryKey: keys.standings(props.eventSlug) });
+}
 </script>
 
 <template>
@@ -211,10 +243,43 @@ async function remove(): Promise<void> {
       </form>
 
       <section
-        v-if="mayDelete"
+        v-if="mayDelete || mayDrop"
         class="flex flex-col gap-3 border-t border-card-divider pt-5"
       >
+        <!-- One way out of the Event at a time: Delete until the team has
+             been paired, Drop afterwards. -->
         <AppButton
+          v-if="mayDrop"
+          data-testid="drop-attendee"
+          variant="danger"
+          block
+          :disabled="dropping"
+          @click="confirmingDrop = true"
+        >
+          Drop
+        </AppButton>
+
+        <AppAlert
+          v-if="dropFailure"
+          data-testid="drop-attendee-error"
+          tone="error"
+        >
+          {{ dropFailure }}
+        </AppAlert>
+
+        <ConfirmDialog
+          v-if="mayDrop"
+          v-model:open="confirmingDrop"
+          :title="`Drop ${attendee.name || 'this team'}?`"
+          confirm-label="Drop"
+          testid="drop-attendee-confirm"
+          @confirm="drop"
+        >
+          They won't be paired in later rounds. Results so far stand.
+        </ConfirmDialog>
+
+        <AppButton
+          v-if="mayDelete"
           data-testid="delete-attendee"
           variant="danger"
           block
@@ -233,6 +298,7 @@ async function remove(): Promise<void> {
         </AppAlert>
 
         <ConfirmDialog
+          v-if="mayDelete"
           v-model:open="confirmingDelete"
           :title="`Delete ${attendee.name || 'this team'}?`"
           confirm-label="Delete"

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 /**
  * A pill naming a status the reader has to be told about: a Draft or a
- * Cancelled Event, which only its Organisers can see. Drawn in the warning
- * tone because both are something to act on, not information.
+ * Cancelled Event, which only its Organisers can see, or a Dropped Attendee.
+ * Drawn in the warning tone because each changes what the reader can expect
+ * of the thing it is on.
  *
  * Classes passed in merge onto the pill, so a placement (the Event header's
  * margin and its backing over a Banner) stays with the caller.

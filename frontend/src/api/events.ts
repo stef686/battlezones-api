@@ -151,6 +151,8 @@ export interface Attendee {
      * Organiser deletes it, afterwards they drop it. Sent on the detail only.
      */
     has_been_paired?: boolean;
+    /** When an Organiser marked the team as having left; null while it is in. */
+    dropped_at?: string | null;
     members: AttendeeMember[];
     checked_in_at: string | null;
     /** Whether this army is on the display table for the painting vote. */
@@ -405,6 +407,15 @@ export function uploadTeamAvatar(client: ApiClient, slug: string, attendeeId: nu
  */
 export function deleteAttendee(client: ApiClient, slug: string, attendeeId: number): Promise<void> {
     return client.delete<null>(`${eventPath(slug)}/attendees/${attendeeId}`).then(() => undefined);
+}
+
+/**
+ * Mark a paired Attendee as having left: not paired from the next Round
+ * generated, with everything already played left standing.
+ */
+export function dropAttendee(client: ApiClient, slug: string, attendeeId: number): Promise<Attendee> {
+    return client.post<{ data: Attendee }>(`${eventPath(slug)}/attendees/${attendeeId}/drop`)
+        .then((response) => response.data);
 }
 
 /** Take the Avatar off, returning the team to its placeholder. */

@@ -173,7 +173,10 @@ class GenerateRoundPairings
      */
     private function rankAttendees(Event $event, Collection $rankingScoreTypes, array $totals): Collection
     {
-        $attendees = $event->attendees()->orderBy('id')->sharedLock()->get();
+        // A Dropped Attendee is not in the field: it left, and pairing it
+        // would sit an opponent across from an empty chair. Its results still
+        // count for everyone it already played, which the totals carry.
+        $attendees = $event->attendees()->whereNull('dropped_at')->orderBy('id')->sharedLock()->get();
 
         $keys = [];
 

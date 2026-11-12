@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $avatar_path
  * @property Carbon|null $army_lists_revealed_at
  * @property Carbon|null $checked_in_at
+ * @property Carbon|null $dropped_at
  * @property bool $painting_entered
  * @property int|null $display_number
  * @property Carbon|null $created_at
@@ -48,6 +49,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|EventAttendee whereCheckedInAt($value)
  * @method static Builder<static>|EventAttendee whereCreatedAt($value)
  * @method static Builder<static>|EventAttendee whereDisplayNumber($value)
+ * @method static Builder<static>|EventAttendee whereDroppedAt($value)
  * @method static Builder<static>|EventAttendee whereEventId($value)
  * @method static Builder<static>|EventAttendee whereId($value)
  * @method static Builder<static>|EventAttendee whereName($value)
@@ -84,6 +86,7 @@ class EventAttendee extends Model
             'allegiance' => Allegiance::class,
             'army_lists_revealed_at' => 'datetime',
             'checked_in_at' => 'datetime',
+            'dropped_at' => 'datetime',
             'painting_entered' => 'boolean',
             'display_number' => 'integer',
         ];
@@ -138,6 +141,17 @@ class EventAttendee extends Model
 
         return $memberships->isNotEmpty()
             && $memberships->every(fn (EventAttendeeMembership $membership): bool => $membership->isArmyListLocked());
+    }
+
+    /**
+     * Whether an Organiser has marked this team as having left the Event.
+     *
+     * A Dropped team is not paired in any Round generated afterwards, and
+     * nothing else changes: what it played stands, and it keeps its place.
+     */
+    public function isDropped(): bool
+    {
+        return $this->dropped_at !== null;
     }
 
     public function hasMember(User $user): bool

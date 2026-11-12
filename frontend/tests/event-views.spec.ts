@@ -876,6 +876,27 @@ describe('the attendee detail', () => {
         expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/members/12/army-list/unlock'))).toBe(true);
     });
 
+    it('marks a team that has been dropped, and nothing on one still in', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, dropped_at: '2026-09-12T13:05:00Z' } },
+            },
+        });
+
+        const dropped = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '9' });
+        await flushPromises();
+
+        expect(dropped.get('[data-testid="attendee-dropped"]').text()).toBe('Dropped');
+
+        stubApi({ [`/api/events/${EVENT_SLUG}/attendees/10`]: { status: 200, body: { data: { ...ATTENDEE.data, id: 10, dropped_at: null } } } });
+
+        const staying = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '10' });
+        await flushPromises();
+
+        expect(staying.find('[data-testid="attendee-dropped"]').exists()).toBe(false);
+    });
+
     it('gives an organiser a pencil to the attendee\'s edit screen', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },

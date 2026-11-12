@@ -1663,6 +1663,31 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/events/{event_slug}/attendees/{attendee_id}/drop": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Drop a Team
+         * @description Organisers only. Marks a paired Attendee as having left: it is left out of every Round generated afterwards, and everything already played stands. A never-paired Attendee is refused with 422 and should be deleted instead.
+         */
+        post: operations["dropATeam"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events/{event_slug}/attendees/{attendee_id}/avatar": {
         parameters: {
             query?: never;
@@ -3577,6 +3602,7 @@ export interface operations {
                             name?: string;
                             allegiance?: string | null;
                             avatar?: string | null;
+                            dropped_at?: string | null;
                             members?: unknown[];
                         };
                     };
@@ -3758,6 +3784,7 @@ export interface operations {
                             avatar?: string | null;
                             allegiance_locked?: boolean;
                             has_been_paired?: boolean;
+                            dropped_at?: string | null;
                             members?: unknown[];
                             checked_in_at?: string | null;
                             painting_entered?: boolean;
@@ -7063,6 +7090,77 @@ export interface operations {
                 content: {
                     "application/json": {
                         message?: string;
+                    };
+                };
+            };
+        };
+    };
+    dropATeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            allegiance?: string;
+                            avatar?: string | null;
+                            allegiance_locked?: boolean;
+                            has_been_paired?: boolean;
+                            dropped_at?: string;
+                            members?: {
+                                id?: number;
+                                name?: string;
+                                faction?: {
+                                    id?: number;
+                                    name?: string;
+                                };
+                                army_list_locked?: boolean;
+                                clubs?: unknown[];
+                            }[];
+                            checked_in_at?: string | null;
+                            custom_field_responses?: unknown[];
+                            games?: unknown[];
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            attendee?: string[];
+                        };
                     };
                 };
             };
