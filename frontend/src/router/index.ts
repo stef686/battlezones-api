@@ -123,6 +123,15 @@ const routes: RouteRecordRaw[] = [
         meta: { public: true },
     },
     {
+        // Hung off the Attendee it edits rather than off the organiser hub:
+        // an Organiser reaches it from that Attendee's page, and the later
+        // Players, Delete and Drop controls belong to the same screen.
+        path: '/events/:eventSlug/attendees/:attendeeId/edit',
+        name: 'attendee-edit',
+        component: () => import('@/views/EditAttendeeView.vue'),
+        props: true,
+    },
+    {
         path: '/events/:eventSlug/rounds',
         name: 'rounds',
         component: () => import('@/views/RoundsView.vue'),

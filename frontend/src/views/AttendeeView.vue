@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronLeft } from 'lucide-vue-next';
+import { ChevronLeft, Pencil } from 'lucide-vue-next';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { computed, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -146,6 +146,20 @@ async function run(action: () => Promise<unknown>): Promise<void> {
           </h1>
           <AllegianceBadge :allegiance="attendee.allegiance" />
         </div>
+
+        <!-- Offered on the permission the API sent: a reader who does not
+             run the Event is not sent the way in. -->
+        <AppButton
+          v-if="mayOrganise"
+          :to="{ name: 'attendee-edit', params: { eventSlug: props.eventSlug, attendeeId: props.attendeeId } }"
+          data-testid="edit-attendee"
+          variant="ghost"
+          size="sm"
+          class="ms-auto shrink-0 self-start"
+        >
+          <Pencil class="size-4 shrink-0" />
+          <span class="sr-only">Edit attendee</span>
+        </AppButton>
       </header>
 
       <section class="flex flex-col gap-3">

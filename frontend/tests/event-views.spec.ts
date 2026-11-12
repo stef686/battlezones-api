@@ -876,6 +876,33 @@ describe('the attendee detail', () => {
         expect(fetch.mock.calls.some(([url]) => String(url).endsWith('/members/12/army-list/unlock'))).toBe(true);
     });
 
+    it('gives an organiser a pencil to the attendee\'s edit screen', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
+            [`/api/events/${EVENT_SLUG}`]: {
+                status: 200,
+                body: eventBody({
+                    viewer: {
+                        is_organiser: true,
+                        is_lead_organiser: false,
+                        is_attendee: false,
+                        attendee_id: null,
+                        permissions: { organise: true, register: false, manage_organisers: false },
+                    },
+                }),
+            },
+        });
+
+        const view = mountView(AttendeeView, { eventSlug: EVENT_SLUG, attendeeId: '9' });
+        await flushPromises();
+
+        const pencil = view.get('[data-testid="edit-attendee"]');
+
+        expect(pencil.attributes('href')).toBe(`/events/${EVENT_SLUG}/attendees/9/edit`);
+        expect(pencil.text()).toBe('Edit attendee');
+        expect(pencil.find('svg').exists()).toBe(true);
+    });
+
     it('offers no organiser controls to a reader who does not run the event', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },
@@ -887,6 +914,7 @@ describe('the attendee detail', () => {
 
         expect(view.find('[data-testid="reveal-army-lists"]').exists()).toBe(false);
         expect(view.find('[data-testid="unlock-12"]').exists()).toBe(false);
+        expect(view.find('[data-testid="edit-attendee"]').exists()).toBe(false);
     });
 
     it('answers a team that is not there the same way as a missing event', async () => {
