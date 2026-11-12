@@ -429,4 +429,47 @@ describe('the attendee edit screen', () => {
 
         expect(view.get('[data-testid="drop-attendee-error"]').text()).toContain('has not been dropped');
     });
+
+    it('warns before undropping that the round being drafted was paired without them', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, has_been_paired: true, dropped_at: '2026-09-12T13:05:00Z', paired_in_draft_round: false } },
+            },
+            [`/api/events/${EVENT_SLUG}/rounds`]: {
+                status: 200,
+                body: { data: [
+                    { id: 1, number: 1, name: null, status: 'completed' },
+                    { id: 2, number: 2, name: null, status: 'draft' },
+                ] },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.get('[data-testid="undrop-draft-round"]').text())
+            .toContain('Round 2 is being drafted without them');
+    });
+
+    it('says nothing about drafts when no round is being drafted', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: { data: { ...ATTENDEE.data, has_been_paired: true, dropped_at: '2026-09-12T13:05:00Z', paired_in_draft_round: false } },
+            },
+            [`/api/events/${EVENT_SLUG}/rounds`]: {
+                status: 200,
+                body: { data: [{ id: 1, number: 1, name: null, status: 'live' }] },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ORGANISER },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        expect(view.find('[data-testid="undrop-attendee"]').exists()).toBe(true);
+        expect(view.find('[data-testid="undrop-draft-round"]').exists()).toBe(false);
+    });
 });
