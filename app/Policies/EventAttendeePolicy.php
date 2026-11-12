@@ -35,7 +35,8 @@ class EventAttendeePolicy
     }
 
     /**
-     * Whether this User may mark the Attendee as having left the Event.
+     * Whether this User may mark the Attendee as having left the Event, or
+     * take that back.
      *
      * Its Organisers only: a Player cannot drop themselves (see Drop in
      * CONTEXT.md). Admins too, or Filament loses the action.

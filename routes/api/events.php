@@ -63,6 +63,7 @@ use App\Http\Controllers\Events\StoreGameResultController;
 use App\Http\Controllers\Events\StoreInviteSessionController;
 use App\Http\Controllers\Events\SubmitFeedbackController;
 use App\Http\Controllers\Events\SwapRoundPairingsController;
+use App\Http\Controllers\Events\UndropEventAttendeeController;
 use App\Http\Controllers\Events\UnlockArmyListController;
 use App\Http\Controllers\Events\UnpublishRoundController;
 use App\Http\Controllers\Events\UpdateArmyListController;
@@ -221,6 +222,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
     // PATCH, which the team's own Players can reach.
     Route::scopeBindings()->post('events/{event:slug}/attendees/{attendee}/drop', DropEventAttendeeController::class)
         ->name('events.attendees.drop');
+    Route::scopeBindings()->delete('events/{event:slug}/attendees/{attendee}/drop', UndropEventAttendeeController::class)
+        ->name('events.attendees.undrop');
     // Its own multipart routes rather than a field on the Attendee PATCH,
     // exactly as the Banner is: PHP does not populate uploaded files for a
     // PATCH body.

@@ -1682,7 +1682,11 @@ export interface paths {
          * @description Organisers only. Marks a paired Attendee as having left: it is left out of every Round generated afterwards, and everything already played stands. A never-paired Attendee is refused with 422 and should be deleted instead.
          */
         post: operations["dropATeam"];
-        delete?: never;
+        /**
+         * Undrop a Team
+         * @description Organisers only. Clears a Drop, so the Attendee is paired again from the next Round generated. An Attendee that is not Dropped is refused with 422.
+         */
+        delete: operations["undropATeam"];
         options?: never;
         head?: never;
         patch?: never;
@@ -7124,6 +7128,78 @@ export interface operations {
                             allegiance_locked?: boolean;
                             has_been_paired?: boolean;
                             dropped_at?: string;
+                            paired_in_draft_round?: boolean;
+                            members?: {
+                                id?: number;
+                                name?: string;
+                                faction?: {
+                                    id?: number;
+                                    name?: string;
+                                };
+                                army_list_locked?: boolean;
+                                clubs?: unknown[];
+                            }[];
+                            checked_in_at?: string | null;
+                            custom_field_responses?: unknown[];
+                            games?: unknown[];
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                        errors?: {
+                            attendee?: string[];
+                        };
+                    };
+                };
+            };
+        };
+    };
+    undropATeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the attendee. */
+                attendee_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            name?: string;
+                            allegiance?: string;
+                            avatar?: string | null;
+                            allegiance_locked?: boolean;
+                            has_been_paired?: boolean;
+                            dropped_at?: string | null;
                             paired_in_draft_round?: boolean;
                             members?: {
                                 id?: number;
