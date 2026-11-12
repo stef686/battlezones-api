@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\FeedbackQuestion;
 use App\Models\FeedbackResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
@@ -21,8 +22,10 @@ class ExportEventFeedbackController extends Controller
     #[Endpoint('Export Feedback', 'Organisers only. A CSV of every answer, grouped by question and shuffled within it, so no row can be tied to a Player or to another row. Synchronous: one Event is a few hundred rows.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(content: "question_key,prompt,type,rating,answer\noverall,How was the Event overall?,rating,5,\n", description: 'A CSV download.')]
-    public function __invoke(Event $event): StreamedResponse
+    public function __invoke(Request $request, Event $event): StreamedResponse
     {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('organise', $event);
 
         $questions = FeedbackQuestion::query()->orderBy('display_order')->orderBy('id')->get();

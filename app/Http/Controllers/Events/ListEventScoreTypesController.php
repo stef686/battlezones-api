@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Events;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Events\EventScoreTypeResource;
 use App\Models\Event;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
@@ -35,8 +36,10 @@ class ListEventScoreTypesController extends Controller
         'display_order' => 0,
         'is_scored' => true,
     ]]])]
-    public function __invoke(Event $event): AnonymousResourceCollection
+    public function __invoke(Request $request, Event $event): AnonymousResourceCollection
     {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('organise', $event);
 
         $scoreTypes = $event->scoreTypes()

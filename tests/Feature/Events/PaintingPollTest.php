@@ -392,3 +392,12 @@ test('its own players still cannot read the polls of a hidden event', function (
         ->getJson(route('events.polls.index', ['event' => $event->slug]))
         ->assertNotFound();
 })->with('hidden event statuses');
+
+test('a non-organiser cannot find the results of a poll in a hidden event, rather than being refused it', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $poll = EventPoll::factory()->for($event)->create();
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.polls.results', ['event' => $event->slug, 'poll' => $poll->id]))
+        ->assertNotFound();
+})->with('hidden event statuses');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\FeedbackInvitation;
@@ -237,3 +238,19 @@ test('one player exhausting their link does not shut out everyone on the same wi
     $this->postJson(route('feedback.store', ['token' => $theirs]), $payload)
         ->assertNotFound();
 });
+
+test('a non-organiser cannot find the feedback of a hidden event, rather than being refused it', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.feedback.index', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');
+
+test('a non-organiser cannot find the feedback export of a hidden event, rather than being refused it', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+
+    $this->actingAs(playerOf($event))
+        ->getJson(route('events.feedback.export', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('hidden event statuses');

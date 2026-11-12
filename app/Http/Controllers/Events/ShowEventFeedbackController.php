@@ -9,6 +9,7 @@ use App\Models\FeedbackInvitation;
 use App\Models\FeedbackQuestion;
 use App\Models\FeedbackResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
@@ -34,8 +35,10 @@ class ShowEventFeedbackController extends Controller
             'distribution' => ['1' => 0, '2' => 1, '3' => 2, '4' => 5, '5' => 11],
         ]],
     ]])]
-    public function __invoke(Event $event): JsonResponse
+    public function __invoke(Request $request, Event $event): JsonResponse
     {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('organise', $event);
 
         $responses = FeedbackResponse::query()

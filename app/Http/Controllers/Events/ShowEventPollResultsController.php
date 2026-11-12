@@ -8,6 +8,7 @@ use App\Models\EventAttendee;
 use App\Models\EventPoll;
 use App\Models\EventVote;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Knuckles\Scribe\Attributes\Authenticated;
 use Knuckles\Scribe\Attributes\Endpoint;
@@ -29,8 +30,10 @@ class ShowEventPollResultsController extends Controller
             'votes' => 11,
         ]],
     ]])]
-    public function __invoke(Event $event, EventPoll $poll): JsonResponse
+    public function __invoke(Request $request, Event $event, EventPoll $poll): JsonResponse
     {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         Gate::authorize('organise', $event);
 
         abort_unless($poll->event_id === $event->getKey(), 404);

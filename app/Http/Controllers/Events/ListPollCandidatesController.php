@@ -35,6 +35,8 @@ class ListPollCandidatesController extends Controller
     ]]])]
     public function __invoke(Request $request, Event $event, EventPoll $poll): AnonymousResourceCollection
     {
+        abort_unless($event->isVisibleTo($request->user()), 404);
+
         abort_unless($poll->event_id === $event->getKey(), 404);
 
         $candidates = $poll->eligibleSubjects($request->user())
