@@ -108,9 +108,13 @@ function roundLink(block: ScheduleBlock): RouteLocationRaw | null {
   return { name: 'round', params: { eventSlug: props.eventSlug, roundId: round.id } };
 }
 
-/** Rounds are not published to anybody until the Event itself is under way. */
+/**
+ * Rounds are shown to everyone once the Event is under way, and to its
+ * Organisers always: nothing moves an Event to Active by itself, so an
+ * Organiser who has paired a Published Event must still reach the pairings.
+ */
 const roundsReachable = computed(
-  () => event.value?.status === 'active' || event.value?.status === 'completed',
+  () => mayOrganise.value || event.value?.status === 'active' || event.value?.status === 'completed',
 );
 
 /**

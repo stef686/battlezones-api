@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\Game;
@@ -63,3 +64,28 @@ test('it requires authentication', function () {
     $this->getJson(route('events.my-game.show', ['event' => $event->slug]))
         ->assertUnauthorized();
 });
+
+test('an organiser playing in their own event sees their game before it is under way', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $organiser = coOrganiserOf($event);
+    $attendee = EventAttendee::factory()->for($event)->withMember($organiser)->create();
+    $game = Game::factory()->for(Round::factory()->for($event)->live())->create();
+    $game->attendees()->attach($attendee);
+
+    $this->actingAs($organiser)
+        ->getJson(route('events.my-game.show', ['event' => $event->slug]))
+        ->assertOk()
+        ->assertJsonPath('data.id', $game->id);
+})->with('statuses before rounds are public');
+
+test('a player cannot see their game before the event is under way', function (EventStatus $status) {
+    $event = Event::factory()->create(['status' => $status]);
+    $player = User::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember($player)->create();
+    $game = Game::factory()->for(Round::factory()->for($event)->live())->create();
+    $game->attendees()->attach($attendee);
+
+    $this->actingAs($player)
+        ->getJson(route('events.my-game.show', ['event' => $event->slug]))
+        ->assertNotFound();
+})->with('statuses before rounds are public');

@@ -364,6 +364,19 @@ class Event extends Model
     }
 
     /**
+     * Rounds are everyone's once the Event is under way, and its Organisers'
+     * always: nothing moves an Event to Active by itself, and an Organiser who
+     * has generated pairings on a Published Event has to be able to read them.
+     * Like isVisibleTo(), a guest is accepted, an Event under way costs no
+     * query, and Admins get no bypass. Whether a Draft Round is shown is a
+     * separate question, asked of the Round.
+     */
+    public function hasRoundsVisibleTo(?User $user): bool
+    {
+        return $this->status->hasRoundsVisible() || $this->isOrganisedBy($user);
+    }
+
+    /**
      * A Draft is being set up, so nobody may enter it, be added to it, or be
      * invited into it until it is published. Every way in calls this first.
      * Only Draft: whether a Cancelled Event takes anybody in is for #192.

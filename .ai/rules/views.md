@@ -27,7 +27,7 @@ Which tab opens is decided from the payload, not the phone: the day holding a li
 
 A block says where its target has got to through `target_state` — `live`, `finished` or null — and never through the clock: the Round being played is the Event's current one, not the one whose start time has passed. Exactly one block can read "Now".
 
-A Round block links to its Round, but only where the Round can actually be opened: Rounds are hidden from everybody until the Event is `active` or `completed`, and a Draft is its Organisers' business alone. The block payload carries `round.status` for exactly this, and a row that cannot be opened is drawn as a row rather than as a link to a 404.
+A Round block links to its Round, but only where the Round can actually be opened: Rounds are hidden until the Event is `active` or `completed` from everybody but its Organisers (nothing moves an Event to Active by itself, so an Organiser who has paired a Published Event must reach the pairings), and a Draft Round is its Organisers' business alone. The block payload carries `round.status` for exactly this, and a row that cannot be opened is drawn as a row rather than as a link to a 404.
 
 An Organiser adds a block from the foot of the open day (`add-block`), or from beside "Nothing scheduled yet" on an Event that has none. The form sits outside the `TabStrip`, because the block being added may belong to a day the schedule does not have yet and a form inside the panel would take what was typed with it when the reader changed tab.
 

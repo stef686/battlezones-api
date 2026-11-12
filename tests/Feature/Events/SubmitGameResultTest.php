@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EventStatus;
 use App\Events\ResultSubmitted;
 use App\Models\Event as EventModel;
 use App\Models\EventAttendee;
@@ -374,3 +375,28 @@ test('a rejected submission still writes nothing', function () {
         ->and(GameScore::query()->where('game_id', $game->id)->where('event_attendee_id', $mine->id)->value('value'))->toBe('85.00')
         ->and(GameScore::query()->where('game_id', $game->id)->where('event_attendee_id', $theirs->id)->value('value'))->toBe('70.00');
 });
+
+test('nobody submits a result before the event is under way, not even an organiser playing in it', function (EventStatus $status) {
+    $event = EventModel::factory()->create(['status' => $status]);
+    EventScoreType::factory()->victoryPoints()->for($event)->create();
+
+    // Seeing the Round is not playing it: an Organiser reads pairings early,
+    // but results wait for the Event to be under way like everyone else's.
+    $organiser = coOrganiserOf($event);
+    $mine = EventAttendee::factory()->for($event)->withMember($organiser)->create();
+    $theirs = EventAttendee::factory()->for($event)->withMember()->create();
+
+    $game = Game::factory()->for(Round::factory()->for($event)->live())->create();
+    $game->attendees()->attach([$mine->id, $theirs->id]);
+
+    $this->actingAs($organiser)
+        ->postJson(route('events.games.result.store', ['event' => $event->slug, 'game' => $game->id]), [
+            'scores' => [
+                $mine->id => ['victory-points' => 85],
+                $theirs->id => ['victory-points' => 70],
+            ],
+        ])
+        ->assertNotFound();
+
+    expect(GameScore::query()->where('game_id', $game->id)->exists())->toBeFalse();
+})->with('statuses before rounds are public');

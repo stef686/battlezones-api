@@ -2197,7 +2197,7 @@ paths:
     get:
       summary: 'List Event Rounds'
       operationId: listEventRounds
-      description: 'List rounds for an event. Only visible for Active/Completed events. Draft rounds are shown to Organisers only.'
+      description: 'List rounds for an event. Before the Event is Active or Completed, only its Organisers can read its Rounds; anyone else gets a 404. Draft rounds are shown to Organisers only.'
       parameters: []
       responses:
         200:
@@ -2313,7 +2313,7 @@ paths:
     get:
       summary: 'Show Event Round'
       operationId: showEventRound
-      description: 'Round detail with games for an event. Draft rounds are visible to Organisers only.'
+      description: 'Round detail with games for an event. Before the Event is Active or Completed, only its Organisers can read its Rounds; anyone else gets a 404. Draft rounds are visible to Organisers only.'
       parameters: []
       responses:
         200:
@@ -4781,7 +4781,7 @@ paths:
     get:
       summary: 'Show My Current Game'
       operationId: showMyCurrentGame
-      description: "The authenticated Player's Game and table number in the current Round. Null until that Round is published."
+      description: "The authenticated Player's Game and table number in the current Round. Null until that Round is published. Before the Event is Active or Completed, only its Organisers can read its Rounds; anyone else gets a 404."
       parameters: []
       responses:
         200:

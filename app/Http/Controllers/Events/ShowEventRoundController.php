@@ -15,7 +15,7 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Group('Events', 'APIs for Events')]
 class ShowEventRoundController extends Controller
 {
-    #[Endpoint('Show Event Round', 'Round detail with games for an event. Draft rounds are visible to Organisers only.')]
+    #[Endpoint('Show Event Round', 'Round detail with games for an event. Before the Event is Active or Completed, only its Organisers can read its Rounds; anyone else gets a 404. Draft rounds are visible to Organisers only.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('id', 'integer', 'The id of the round.', example: 1)]
     #[Response(['data' => [
@@ -42,7 +42,7 @@ class ShowEventRoundController extends Controller
     ]])]
     public function __invoke(Request $request, Event $event, Round $round): RoundDetailResource
     {
-        abort_unless($event->status->hasRoundsVisible(), 404);
+        abort_unless($event->hasRoundsVisibleTo($request->user('sanctum')), 404);
         abort_if($round->isDraft() && ! $event->isOrganisedBy($request->user('sanctum')), 404);
 
         $round->load(['event.scoreTypes', 'games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType', 'games.openResultFlag']);

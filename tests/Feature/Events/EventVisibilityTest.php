@@ -50,3 +50,33 @@ test('a public Event is visible without asking who organises it', function () {
     expect($event->isVisibleTo($stranger))->toBeTrue()
         ->and(DB::getQueryLog())->toBeEmpty();
 });
+
+dataset('round visibility', function (): Generator {
+    $underWay = [EventStatus::Active, EventStatus::Completed];
+    $organises = ['a co-Organiser', 'its Lead Organiser'];
+
+    foreach (EventStatus::cases() as $status) {
+        foreach (array_keys(eventViewers()) as $viewer) {
+            $visible = in_array($status, $underWay, true) || in_array($viewer, $organises, true);
+
+            yield "{$status->value} to {$viewer}" => [$status, $viewer, $visible];
+        }
+    }
+});
+
+test('an Event\'s Rounds are visible once it is under way, and to its Organisers always', function (EventStatus $status, string $viewer, bool $visible) {
+    $event = Event::factory()->create(['status' => $status]);
+    $user = eventViewers()[$viewer]($event);
+
+    expect($event->hasRoundsVisibleTo($user))->toBe($visible);
+})->with('round visibility');
+
+test('the Rounds of an Event under way are visible without asking who organises it', function () {
+    $event = Event::factory()->active()->create();
+    $stranger = User::factory()->create();
+
+    DB::enableQueryLog();
+
+    expect($event->hasRoundsVisibleTo($stranger))->toBeTrue()
+        ->and(DB::getQueryLog())->toBeEmpty();
+});
