@@ -15,6 +15,9 @@
  * it was opened from, and an empty or unknown `?tab=` falls back to the
  * default rather than opening on nothing.
  *
+ * Each row leads with an `EventThumbnail` — the Banner, or a square of the
+ * Event Colour — so an Event is recognisable before its name is read.
+ *
  * Only Draft and Cancelled wear a badge. They are the two an Organiser has to
  * be told about — nobody else can see them — and badging every status would
  * bury those two among words that need no action.
@@ -28,6 +31,7 @@ import { useApiClient } from '@/api';
 import { type EventStatus, fetchOrganisedEvents, type OrganisedEvent } from '@/api/events';
 import { keys } from '@/api/keys';
 import AppButton from '@/components/AppButton.vue';
+import EventThumbnail from '@/components/EventThumbnail.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
 import TabStrip from '@/components/TabStrip.vue';
 import { useNow } from '@/composables/useNow';
@@ -122,6 +126,11 @@ function dates(event: OrganisedEvent): string {
                 data-testid="organised-event"
                 class="flex items-center gap-3 px-5 py-4 hover:bg-muted-hover focus:bg-muted-hover focus:outline-hidden"
               >
+                <EventThumbnail
+                  :banner="event.banner"
+                  :colour="event.colour"
+                  data-testid="organised-event-thumbnail"
+                />
                 <span class="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span class="flex items-center gap-2">
                     <span
