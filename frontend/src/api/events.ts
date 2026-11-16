@@ -24,6 +24,12 @@ export interface EventViewer {
 /** Where an Event is in its life. Draft and Cancelled are seen only by its Organisers. */
 export type EventStatus = 'draft' | 'published' | 'active' | 'completed' | 'cancelled';
 
+/** An Event's Banner in both normalised sizes: `small` for lists and phones, `large` for wide headers. */
+export interface EventBanner {
+    large: string;
+    small: string;
+}
+
 export interface EventSummary {
     id: number;
     name: string;
@@ -48,7 +54,7 @@ export interface EventSummary {
     is_full: boolean;
     game_system: { id: number; name: string; slug: string } | null;
     /** Both normalised variants, or null while the header is flat. */
-    banner: { large: string; small: string } | null;
+    banner: EventBanner | null;
     /** The Event Colour as a lowercase `#rrggbb`, or null for the platform colour. */
     colour: string | null;
     venue: {

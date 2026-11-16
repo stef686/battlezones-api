@@ -21,6 +21,7 @@
 import { Trash2 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 
+import type { EventBanner } from '@/api/events';
 import AppButton from '@/components/AppButton.vue';
 import type { FieldErrors } from '@/lib/event-fields';
 
@@ -31,7 +32,7 @@ const MIN_WIDTH = 1200;
 const MIN_HEIGHT = 400;
 
 const props = withDefaults(defineProps<{
-  banner: { large: string; small: string } | null;
+  banner: EventBanner | null;
   busy?: boolean;
   errors?: FieldErrors;
 }>(), {
