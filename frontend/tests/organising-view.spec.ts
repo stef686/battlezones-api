@@ -261,4 +261,24 @@ describe('the tabs over the events a viewer organises', () => {
         expect(tabs.every((tab) => tab.attributes('aria-disabled') === 'true')).toBe(true);
         expect(view.get('[data-testid="organising-empty"]').text()).toContain('You\'re not organising any events yet');
     });
+
+    it('moves an event to happening now when it starts while the list is open', async () => {
+        // The list's clock ticks on an interval, so that is held still too.
+        vi.useRealTimers();
+        vi.useFakeTimers({ toFake: ['Date', 'setInterval', 'clearInterval'] });
+        vi.setSystemTime(new Date('2026-10-03T07:59:30Z'));
+        stubApi(200, { data: UPCOMING_AND_PAST });
+
+        const view = await mountView();
+
+        expect(namesIn(view, 'upcoming')).toEqual(['Croydon Doubles']);
+
+        // Croydon Doubles starts at 08:00; nothing is refetched in between.
+        vi.advanceTimersByTime(60_000);
+        await flushPromises();
+
+        expect(view.get('[data-testid="organising-tab-happening-now"]').attributes('aria-disabled')).toBeUndefined();
+        expect(view.get('[data-testid="organising-tab-upcoming"]').attributes('aria-disabled')).toBe('true');
+        expect(namesIn(view, 'happening-now')).toEqual(['Croydon Doubles']);
+    });
 });

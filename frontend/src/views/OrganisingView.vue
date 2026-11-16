@@ -30,6 +30,7 @@ import { keys } from '@/api/keys';
 import AppButton from '@/components/AppButton.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
 import TabStrip from '@/components/TabStrip.vue';
+import { useNow } from '@/composables/useNow';
 import { formatDateRange } from '@/lib/dates';
 import { whenTabs } from '@/lib/organised-events';
 
@@ -47,7 +48,11 @@ const { data, isPending, isError } = useQuery({
 
 const events = computed(() => data.value ?? []);
 
-const tabs = computed(() => whenTabs(events.value).map((tab) => ({ ...tab, disabled: tab.events.length === 0 })));
+// Ticked once a minute, so an Event moves tab as it starts or ends while the
+// list is open — on the day, which is when the list is used most.
+const now = useNow();
+
+const tabs = computed(() => whenTabs(events.value, now.value).map((tab) => ({ ...tab, disabled: tab.events.length === 0 })));
 
 /** The first tab with anything in it, left to right; -1, so nothing opens, when every tab is empty. */
 const defaultTab = computed(() => tabs.value.findIndex((tab) => !tab.disabled));

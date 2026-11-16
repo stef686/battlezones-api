@@ -29,8 +29,8 @@ export function whenTabs(events: OrganisedEvent[], now: Date = new Date()): When
     const past: OrganisedEvent[] = [];
 
     for (const event of events) {
-        const starts = moment(event.starts_at);
-        const ends = moment(event.ends_at);
+        const starts = timestamp(event.starts_at);
+        const ends = timestamp(event.ends_at);
 
         if (starts === null || starts > at) {
             upcoming.push(event);
@@ -49,11 +49,12 @@ export function whenTabs(events: OrganisedEvent[], now: Date = new Date()): When
     ];
 }
 
-function moment(iso: string | null): number | null {
+/** Milliseconds since the epoch, for comparing; null where the date is not set. */
+function timestamp(iso: string | null): number | null {
     return iso === null ? null : new Date(iso).getTime();
 }
 
 /** Earlier first, with a date not yet set after every date that is. */
 function soonest(left: string | null, right: string | null): number {
-    return (moment(left) ?? Number.POSITIVE_INFINITY) - (moment(right) ?? Number.POSITIVE_INFINITY) || 0;
+    return (timestamp(left) ?? Number.POSITIVE_INFINITY) - (timestamp(right) ?? Number.POSITIVE_INFINITY) || 0;
 }
