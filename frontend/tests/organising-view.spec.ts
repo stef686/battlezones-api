@@ -6,6 +6,7 @@ import type { Router } from 'vue-router';
 
 import { createApiClient } from '@/api';
 import { InMemoryTokenStorage } from '@/api/token-storage';
+import { eventColourStyle } from '@/lib/event-colour';
 import { createAppRouter } from '@/router';
 import { useSessionStore } from '@/stores/session';
 import OrganisingView from '@/views/OrganisingView.vue';
@@ -177,6 +178,46 @@ describe('the events a viewer organises', () => {
 
         expect(view.find('[data-testid="organising-problem"]').exists()).toBe(true);
         expect(view.find('[data-testid="organising-empty"]').exists()).toBe(false);
+    });
+});
+
+describe('the thumbnail beside each event', () => {
+    it('shows the small banner, without naming the event a second time', async () => {
+        stubApi(200, {
+            data: [organised({ banner: { large: 'https://cdn.test/banner-large.webp', small: 'https://cdn.test/banner-small.webp' } })],
+        });
+
+        const row = (await mountView()).get('[data-testid="organised-event"]');
+        const thumbnail = row.get('[data-testid="organised-event-thumbnail"]');
+
+        expect(thumbnail.find('img').attributes('src')).toBe('https://cdn.test/banner-small.webp');
+        expect(thumbnail.attributes('aria-hidden')).toBe('true');
+        expect(thumbnail.find('img').attributes('alt')).toBe('');
+    });
+
+    it('is a square of the event colour, as the event\'s own screens wear it, when there is no banner', async () => {
+        stubApi(200, { data: [organised({ colour: '#2f6fd1' })] });
+
+        const thumbnail = (await mountView()).get('[data-testid="organised-event-thumbnail"]');
+        const element = thumbnail.element as HTMLElement;
+
+        expect(thumbnail.find('img').exists()).toBe(false);
+        expect(thumbnail.classes()).toContain('bg-primary');
+        expect(element.style.getPropertyValue('--primary-500')).toBe(eventColourStyle('#2f6fd1')['--primary-500']);
+        expect(thumbnail.attributes('aria-hidden')).toBe('true');
+    });
+
+    it('is a square of the platform colour when the event has neither banner nor colour', async () => {
+        stubApi(200, { data: [organised()] });
+
+        const thumbnail = (await mountView()).get('[data-testid="organised-event-thumbnail"]');
+        const element = thumbnail.element as HTMLElement;
+
+        expect(thumbnail.find('img').exists()).toBe(false);
+        expect(thumbnail.classes()).toContain('bg-primary');
+        // Nothing redeclared, so the theme's own primary shows through.
+        expect(element.style.getPropertyValue('--primary-500')).toBe('');
+        expect(element.style.getPropertyValue('--primary')).toBe('');
     });
 });
 
