@@ -11,6 +11,7 @@
  */
 import { computed } from 'vue';
 
+import type { EventBanner } from '@/api/events';
 import EventHeaderSurface from '@/components/EventHeaderSurface.vue';
 import { eventColourStyle } from '@/lib/event-colour';
 import { EVENT_SECTIONS, eventNavChipClass } from '@/lib/event-nav';
@@ -19,7 +20,7 @@ const props = withDefaults(defineProps<{
   name: string;
   gameSystem?: string | null;
   dates?: string;
-  banner?: { large: string; small: string } | null;
+  banner?: EventBanner | null;
   colour: string | null;
 }>(), {
   gameSystem: null,

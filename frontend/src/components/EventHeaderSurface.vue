@@ -17,11 +17,13 @@
  * say about the Event itself rather than describe it — that it is a Draft,
  * say. It carries its own surface, so it is not bound by the overlay rule.
  */
+import type { EventBanner } from '@/api/events';
+
 withDefaults(defineProps<{
   name: string;
   gameSystem?: string | null;
   dates?: string;
-  banner?: { large: string; small: string } | null;
+  banner?: EventBanner | null;
   tag?: 'header' | 'div';
   insetTop?: boolean;
 }>(), {

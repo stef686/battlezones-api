@@ -14,10 +14,11 @@
  */
 import { computed } from 'vue';
 
+import type { EventBanner } from '@/api/events';
 import { eventColourStyle } from '@/lib/event-colour';
 
 const props = withDefaults(defineProps<{
-  banner?: { large: string; small: string } | null;
+  banner?: EventBanner | null;
   colour?: string | null;
 }>(), {
   banner: null,
@@ -37,6 +38,8 @@ const style = computed(() => eventColourStyle(props.colour));
       v-if="banner"
       :src="banner.small"
       alt=""
+      loading="lazy"
+      decoding="async"
       class="size-full object-cover"
     >
   </span>

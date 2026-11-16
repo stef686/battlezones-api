@@ -204,6 +204,8 @@ describe('the thumbnail beside each event', () => {
         expect(thumbnail.find('img').exists()).toBe(false);
         expect(thumbnail.classes()).toContain('bg-primary');
         expect(element.style.getPropertyValue('--primary-500')).toBe(eventColourStyle('#2f6fd1')['--primary-500']);
+        // `bg-primary` paints from `--primary`, so the state token must follow the scale.
+        expect(element.style.getPropertyValue('--primary')).toBe('var(--primary-500)');
         expect(thumbnail.attributes('aria-hidden')).toBe('true');
     });
 
