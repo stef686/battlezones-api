@@ -83,13 +83,23 @@ class Round extends Model
     /**
      * Whether any result has been recorded against this Round's Games.
      *
+     * A result is any score on a contested Game, or a score somebody entered
+     * on a Bye (its Victory Points). The Match Points a Bye is awarded the
+     * moment it is paired are not one: nothing has been played, and counting
+     * them would leave every Round with a Bye stuck from generation onwards.
+     *
      * Publishing can only be reversed while this is false: the alternative
      * once results exist is silently hiding scores Players have already seen.
      */
     public function hasResults(): bool
     {
         return GameScore::query()
-            ->whereIn('game_id', $this->games()->select('id'))
+            ->join('games', 'games.id', '=', 'game_scores.game_id')
+            ->join('event_score_types', 'event_score_types.id', '=', 'game_scores.event_score_type_id')
+            ->where('games.round_id', $this->getKey())
+            ->where(fn (Builder $score) => $score
+                ->where('games.is_bye', false)
+                ->orWhere('event_score_types.is_derived', false))
             ->exists();
     }
 

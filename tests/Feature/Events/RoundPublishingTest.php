@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Events\StoreGameScores;
 use App\Enums\RoundStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -86,6 +87,22 @@ test('an organiser unpublishes a round while it has no results', function () {
         ->assertNotFound();
 });
 
+test('an organiser unpublishes a round whose only score is a bye\'s match points', function () {
+    $event = Event::factory()->active()->create();
+    EventScoreType::factory()->matchPoints()->for($event)->create();
+    EventScoreType::factory()->victoryPoints()->for($event)->create();
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+    $bye = Game::factory()->for($round)->bye()->create(['table_number' => 1]);
+    $bye->attendees()->attach(EventAttendee::factory()->for($event)->withMember()->create());
+    app(StoreGameScores::class)->awardByeWin($bye);
+
+    $this->actingAs(organiserOf($event))
+        ->deleteJson(route('events.rounds.unpublish', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertSuccessful();
+
+    expect($round->refresh()->status)->toBe(RoundStatus::Draft);
+});
+
 test('unpublishing is rejected once any result exists', function () {
     $event = Event::factory()->active()->create();
     $round = Round::factory()->for($event)->live()->create(['number' => 1]);
@@ -98,6 +115,30 @@ test('unpublishing is rejected once any result exists', function () {
         'event_attendee_id' => $attendee->id,
         'event_score_type_id' => EventScoreType::factory()->victoryPoints()->for($event)->create()->id,
         'value' => 85,
+    ]);
+
+    $this->actingAs(organiserOf($event))
+        ->deleteJson(route('events.rounds.unpublish', ['event' => $event->slug, 'round' => $round->id]))
+        ->assertStatus(422);
+
+    expect($round->refresh()->status)->toBe(RoundStatus::Live);
+});
+
+test('unpublishing is rejected once victory points are entered on a bye', function () {
+    $event = Event::factory()->active()->create();
+    EventScoreType::factory()->matchPoints()->for($event)->create();
+    $victoryPoints = EventScoreType::factory()->victoryPoints()->for($event)->create();
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+    $bye = Game::factory()->for($round)->bye()->create(['table_number' => 1]);
+    $attendee = EventAttendee::factory()->for($event)->withMember()->create();
+    $bye->attendees()->attach($attendee);
+    app(StoreGameScores::class)->awardByeWin($bye);
+
+    GameScore::factory()->create([
+        'game_id' => $bye->id,
+        'event_attendee_id' => $attendee->id,
+        'event_score_type_id' => $victoryPoints->id,
+        'value' => 60,
     ]);
 
     $this->actingAs(organiserOf($event))
