@@ -87,7 +87,7 @@ test('an organiser unpublishes a round while it has no results', function () {
         ->assertNotFound();
 });
 
-test('an organiser unpublishes a round whose only score is a bye\'s match points', function () {
+test("an organiser unpublishes a round whose only score is a bye's match points", function () {
     $event = Event::factory()->active()->create();
     EventScoreType::factory()->matchPoints()->for($event)->create();
     EventScoreType::factory()->victoryPoints()->for($event)->create();
@@ -103,7 +103,7 @@ test('an organiser unpublishes a round whose only score is a bye\'s match points
     expect($round->refresh()->status)->toBe(RoundStatus::Draft);
 });
 
-test('unpublishing is rejected once any result exists', function () {
+test('unpublishing is rejected once a contested game has a score', function () {
     $event = Event::factory()->active()->create();
     $round = Round::factory()->for($event)->live()->create(['number' => 1]);
     $game = Game::factory()->for($round)->create(['table_number' => 4]);
