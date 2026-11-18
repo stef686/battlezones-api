@@ -84,9 +84,10 @@ class Round extends Model
      * Whether any result has been recorded against this Round's Games.
      *
      * A result is any score on a contested Game, or a score somebody entered
-     * on a Bye (its Victory Points). The Match Points a Bye is awarded the
-     * moment it is paired are not one: nothing has been played, and counting
-     * them would leave every Round with a Bye stuck from generation onwards.
+     * on a Bye (any submitted Score Type, e.g. Victory Points). The Match
+     * Points a Bye is awarded the moment it is paired are not one: nothing
+     * has been played, and counting them would leave every Round with a Bye
+     * stuck from generation onwards.
      *
      * Publishing can only be reversed while this is false: the alternative
      * once results exist is silently hiding scores Players have already seen.
