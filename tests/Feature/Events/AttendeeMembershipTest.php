@@ -1,5 +1,7 @@
 <?php
 
+use App\Actions\Events\SendEventInvite;
+use App\Enums\EventInviteRole;
 use App\Enums\EventOrganiserRole;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -159,10 +161,12 @@ function invitePartnerAndCaptureToken(Event $event, EventAttendee $attendee, Use
         },
     );
 
+    expect($token)->not->toBeNull();
+
     return $token;
 }
 
-test('a removed partner\'s invitation stops opening the event', function () {
+test("a removed partner's invitation stops opening the event", function () {
     Notification::fake();
 
     [$event, $attendee, $captain] = teamOfOneSoFar();
@@ -203,6 +207,38 @@ test('removing a partner leaves every other invitation working', function () {
 
     $this->getJson(route('invites.show', ['token' => $teamMatesToken]))->assertSuccessful();
     $this->getJson(route('invites.show', ['token' => $otherEventsToken]))->assertSuccessful();
+});
+
+test('a removed partner keeps an invitation to enter the event on their own', function () {
+    Notification::fake();
+
+    [$event, $attendee, $captain] = teamOfOneSoFar();
+    invitePartnerAndCaptureToken($event, $attendee, $captain, 'tarik@example.com');
+    $partner = User::where('email', 'tarik@example.com')->firstOrFail();
+
+    app(SendEventInvite::class)->handle($event, 'tarik@example.com', EventInviteRole::Captain);
+    $captainToken = null;
+    Notification::assertSentTo($partner, function (EventInviteNotification $notification) use (&$captainToken): bool {
+        if ($notification->role !== EventInviteRole::Captain) {
+            return false;
+        }
+
+        $captainToken = $notification->plainToken;
+
+        return true;
+    });
+
+    $this->actingAs($captain)
+        ->deleteJson(route('events.attendees.members.destroy', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'member' => $partner->id,
+        ]))
+        ->assertSuccessful();
+
+    $this->getJson(route('invites.show', ['token' => $captainToken]))
+        ->assertSuccessful()
+        ->assertJsonPath('data.role', 'captain');
 });
 
 test('a captain corrects the name and faction of a partner who has not answered', function () {

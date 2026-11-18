@@ -8,25 +8,30 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Take a Player out of an Attendee, and out of the Event with it.
+ * Take a Player out of an Attendee.
  *
- * Their outstanding Invites for the Event are revoked in the same
+ * The Invites that brought them into this Attendee are revoked in the same
  * transaction: an unclaimed Player has no other way in, and a link left
- * working would open an Event, and an Attendee, they are no longer part of.
- * Invites the same Player holds for other Events are untouched.
+ * working would open an Attendee they are no longer part of. Only Invites
+ * into this Attendee go: a Captain invitation to enter the Event on their
+ * own is not tied to any Attendee and survives, as do the Player's Invites
+ * for other Events.
  */
 class RemoveAttendeeMember
 {
-    public function handle(EventAttendee $attendee, User $member): void
+    /**
+     * Detach the Player and revoke their outstanding Invites into the Attendee.
+     */
+    public function execute(EventAttendee $attendee, User $member): void
     {
         DB::transaction(function () use ($attendee, $member): void {
             $attendee->members()->detach($member->getKey());
 
             EventInvite::query()
-                ->where('event_id', $attendee->event_id)
+                ->where('event_attendee_id', $attendee->getKey())
                 ->where('user_id', $member->getKey())
                 ->outstanding()
-                ->update(['revoked_at' => now()]);
+                ->each(fn (EventInvite $invite) => $invite->revoke());
         });
     }
 }
