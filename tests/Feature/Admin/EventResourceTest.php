@@ -321,6 +321,31 @@ test('a bulk delete removes unpaired attendees and reports the paired ones as re
     assertDatabaseHas(EventAttendee::class, ['id' => $paired->id]);
 });
 
+test('a bulk delete of only paired attendees deletes none and reports every one as refused', function () {
+    $event = Event::factory()->active()->create();
+    $first = EventAttendee::factory()->for($event)->withMember()->create(['name' => 'The Iron Warband']);
+    $second = EventAttendee::factory()->for($event)->withMember()->create(['name' => 'The Ashen Host']);
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+    Game::factory()->for($round)->create()->attendees()->attach([$first->id, $second->id]);
+
+    Livewire::test(AttendeesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->selectTableRecords([$first, $second])
+        ->callAction(TestAction::make(DeleteBulkAction::class)->table()->bulk())
+        ->assertNotified(
+            Notification::make()
+                ->danger()
+                ->title('Failed to delete')
+                ->body('<p>Already paired, so not deleted: The Iron Warband, The Ashen Host. Drop them instead.</p>')
+                ->persistent(),
+        );
+
+    assertDatabaseHas(EventAttendee::class, ['id' => $first->id]);
+    assertDatabaseHas(EventAttendee::class, ['id' => $second->id]);
+});
+
 test('can search attendees by the name they compete under', function () {
     $event = Event::factory()->create();
     $matching = EventAttendee::factory()
