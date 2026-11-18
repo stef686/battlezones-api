@@ -21,15 +21,20 @@ use App\Models\EventCustomField;
 use App\Models\EventDocument;
 use App\Models\EventScoreType;
 use App\Models\EventUpdate;
+use App\Models\Game;
 use App\Models\GameSystem;
 use App\Models\Round;
 use App\Models\User;
+use App\Services\UploadStorage;
 use Filament\Actions\AttachAction;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\DetachAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\Testing\TestAction;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 use function Pest\Laravel\assertDatabaseHas;
@@ -255,6 +260,65 @@ test('can delete an attendee via relation manager', function () {
         ->assertNotified();
 
     assertDatabaseMissing(EventAttendee::class, ['id' => $attendee->id]);
+});
+
+test('deleting an attendee via relation manager removes its avatar file', function () {
+    Storage::fake(UploadStorage::name());
+
+    $event = Event::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember()->create();
+    $path = "avatars/{$attendee->id}/badge.webp";
+    UploadStorage::disk()->put($path, 'badge');
+    $attendee->forceFill(['avatar_path' => $path])->save();
+
+    Livewire::test(AttendeesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(DeleteAction::class)->table($attendee));
+
+    expect(UploadStorage::disk()->exists($path))->toBeFalse();
+});
+
+test('a paired attendee is refused deletion via relation manager', function () {
+    $event = Event::factory()->active()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember()->create();
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+    Game::factory()->for($round)->create()->attendees()->attach($attendee);
+
+    Livewire::test(AttendeesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->callAction(TestAction::make(DeleteAction::class)->table($attendee))
+        ->assertNotified('This team has been paired, so it cannot be deleted. Drop it instead.');
+
+    assertDatabaseHas(EventAttendee::class, ['id' => $attendee->id]);
+});
+
+test('a bulk delete removes unpaired attendees and reports the paired ones as refused', function () {
+    $event = Event::factory()->active()->create();
+    $unpaired = EventAttendee::factory()->for($event)->withMember()->create();
+    $paired = EventAttendee::factory()->for($event)->withMember()->create(['name' => 'The Iron Warband']);
+    $round = Round::factory()->for($event)->live()->create(['number' => 1]);
+    Game::factory()->for($round)->create()->attendees()->attach($paired);
+
+    Livewire::test(AttendeesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->selectTableRecords([$unpaired, $paired])
+        ->callAction(TestAction::make(DeleteBulkAction::class)->table()->bulk())
+        ->assertNotified(
+            Notification::make()
+                ->warning()
+                ->title('Deleted 1 of 2')
+                ->body('<p>Already paired, so not deleted: The Iron Warband. Drop them instead.</p>')
+                ->persistent(),
+        );
+
+    assertDatabaseMissing(EventAttendee::class, ['id' => $unpaired->id]);
+    assertDatabaseHas(EventAttendee::class, ['id' => $paired->id]);
 });
 
 test('can search attendees by the name they compete under', function () {
