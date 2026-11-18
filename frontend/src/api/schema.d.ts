@@ -1769,7 +1769,7 @@ export interface paths {
         post?: never;
         /**
          * Remove a Player from a Team
-         * @description Closed to members once registration closes; Organisers are never blocked.
+         * @description Closed to members once registration closes; Organisers are never blocked. Their outstanding Invites for the Event are revoked with it.
          */
         delete: operations["removeAPlayerFromATeam"];
         options?: never;
