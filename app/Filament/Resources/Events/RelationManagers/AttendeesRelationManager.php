@@ -16,12 +16,17 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
 class AttendeesRelationManager extends RelationManager
 {
     protected static string $relationship = 'attendees';
 
+    /**
+     * Deletes, single and bulk, go through DeleteAttendee as the API's do, so
+     * a paired Attendee is refused and its Avatar file cleaned up.
+     */
     public function table(Table $table): Table
     {
         return $table
@@ -63,14 +68,12 @@ class AttendeesRelationManager extends RelationManager
                         Select::make('allegiance')
                             ->options(Allegiance::class),
                     ]),
-                // Deletes go through DeleteAttendee, as the API's do, so a
-                // paired Attendee is refused and its Avatar file cleaned up.
                 DeleteAction::make()
                     ->using(function (DeleteAction $action, EventAttendee $record, DeleteAttendee $deleteAttendee): bool {
                         try {
                             $deleteAttendee->execute($record);
                         } catch (ValidationException $refusal) {
-                            $action->failureNotificationTitle($refusal->getMessage());
+                            $action->failureNotificationTitle($refusal->errors()['attendee'][0]);
 
                             return false;
                         }
@@ -81,22 +84,24 @@ class AttendeesRelationManager extends RelationManager
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
-                        ->using(function (DeleteBulkAction $action, EloquentCollection $records, DeleteAttendee $deleteAttendee): void {
-                            $attendees = $records->ensure(EventAttendee::class);
-                            $attendees->loadMissing('memberships.user');
-                            $refusedNames = [];
+                        ->using(function (DeleteBulkAction $action, Collection $records, DeleteAttendee $deleteAttendee): void {
+                            $refused = new EloquentCollection();
 
-                            foreach ($attendees as $attendee) {
+                            foreach ($records->ensure(EventAttendee::class) as $attendee) {
                                 try {
                                     $deleteAttendee->execute($attendee);
                                 } catch (ValidationException) {
-                                    $refusedNames[] = $attendee->displayName();
+                                    $refused->push($attendee);
                                     $action->reportBulkProcessingFailure(
                                         'paired',
-                                        fn (): string => 'Already paired, so not deleted: '.implode(', ', $refusedNames).'. Drop them instead.',
+                                        function () use (&$refused): string {
+                                            return 'Already paired, so not deleted: '.$refused->map(fn (EventAttendee $refusedAttendee): string => $refusedAttendee->displayName())->implode(', ').'. Drop them instead.';
+                                        },
                                     );
                                 }
                             }
+
+                            $refused->loadMissing('memberships.user');
                         }),
                 ]),
             ]);
