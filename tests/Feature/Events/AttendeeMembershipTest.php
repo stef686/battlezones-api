@@ -135,6 +135,76 @@ test('a captain drops a partner who never answered their invitation', function (
     expect($attendee->fresh()->members)->toHaveCount(1);
 });
 
+/**
+ * Sends the partner invitation through the API and returns the plain token
+ * that only the email ever sees. Requires Notification::fake().
+ */
+function invitePartnerAndCaptureToken(Event $event, EventAttendee $attendee, User $captain, string $email): string
+{
+    test()->actingAs($captain)
+        ->postJson(route('events.attendees.members.store', ['event' => $event->slug, 'attendee' => $attendee->id]), [
+            'name' => 'Tarik Torgaddon',
+            'email' => $email,
+        ])
+        ->assertCreated();
+
+    $token = null;
+
+    Notification::assertSentTo(
+        User::where('email', $email)->firstOrFail(),
+        function (EventInviteNotification $notification) use (&$token): bool {
+            $token = $notification->plainToken;
+
+            return true;
+        },
+    );
+
+    return $token;
+}
+
+test('a removed partner\'s invitation stops opening the event', function () {
+    Notification::fake();
+
+    [$event, $attendee, $captain] = teamOfOneSoFar();
+    $token = invitePartnerAndCaptureToken($event, $attendee, $captain, 'tarik@example.com');
+    $partner = User::where('email', 'tarik@example.com')->firstOrFail();
+
+    $this->actingAs($captain)
+        ->deleteJson(route('events.attendees.members.destroy', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'member' => $partner->id,
+        ]))
+        ->assertSuccessful();
+
+    $this->getJson(route('invites.show', ['token' => $token]))
+        ->assertStatus(410)
+        ->assertJsonPath('code', 'invite_revoked');
+});
+
+test('removing a partner leaves every other invitation working', function () {
+    Notification::fake();
+
+    [$event, $attendee, $captain] = teamOfOneSoFar(['attendee_size' => 3]);
+    invitePartnerAndCaptureToken($event, $attendee, $captain, 'tarik@example.com');
+    $teamMatesToken = invitePartnerAndCaptureToken($event, $attendee, $captain, 'saul@example.com');
+    $partner = User::where('email', 'tarik@example.com')->firstOrFail();
+
+    [$otherEvent, $otherAttendee, $otherCaptain] = teamOfOneSoFar();
+    $otherEventsToken = invitePartnerAndCaptureToken($otherEvent, $otherAttendee, $otherCaptain, 'tarik@example.com');
+
+    $this->actingAs($captain)
+        ->deleteJson(route('events.attendees.members.destroy', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'member' => $partner->id,
+        ]))
+        ->assertSuccessful();
+
+    $this->getJson(route('invites.show', ['token' => $teamMatesToken]))->assertSuccessful();
+    $this->getJson(route('invites.show', ['token' => $otherEventsToken]))->assertSuccessful();
+});
+
 test('a captain corrects the name and faction of a partner who has not answered', function () {
     Notification::fake();
 
