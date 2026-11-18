@@ -22,7 +22,7 @@ class DeleteAttendeeMemberController extends Controller
 {
     public function __construct(private RemoveAttendeeMember $removeAttendeeMember) {}
 
-    #[Endpoint('Remove a Player from a Team', 'Closed to members once registration closes; Organisers are never blocked. Their outstanding Invites for the Event are revoked with it.')]
+    #[Endpoint('Remove a Player from a Team', 'Closed to members once registration closes; Organisers are never blocked. Their outstanding Invites into this Team are revoked with it.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
     #[UrlParam('id', 'integer', 'The id of the Player to remove.', example: 1)]
@@ -31,7 +31,7 @@ class DeleteAttendeeMemberController extends Controller
     {
         Gate::authorize('changeMembers', $attendee);
 
-        $this->removeAttendeeMember->handle($attendee, $member);
+        $this->removeAttendeeMember->execute($attendee, $member);
 
         return response()->json(status: 200);
     }
