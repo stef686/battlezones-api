@@ -12,3 +12,6 @@ Setting a password is what claiming means, whichever route it arrives by: run `A
 
 ## Countries are the Country enum, never a table
 `App\Enums\Country` (ISO 3166-1 alpha-2, with `label()`) is the one list of countries: it casts `venue_country`, `users.country` and `clubs.country`, and validates them via `Rule::enum`. A picker reads it from `GET /api/countries` (ListCountriesController), which serves the cases in declared order — already name order. Do not add a countries table or seeder; it would be a second list that validation never consults.
+
+## Attendees are deleted through DeleteAttendee, Filament included
+`App\Actions\Events\DeleteAttendee` holds the never-paired check, the Avatar clean-up after commit, and whatever else a delete must do. Every path that removes an Attendee calls it — the API controller and both Filament deletes in `AttendeesRelationManager` (`->using()`, catching its `ValidationException` as a failure notification). Never call `$attendee->delete()` directly, or a paired Attendee vanishes from its opponents' Games.

@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Events\RelationManagers;
 
+use App\Actions\Events\DeleteAttendee;
 use App\Enums\Allegiance;
+use App\Models\EventAttendee;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -13,6 +15,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Validation\ValidationException;
 
 class AttendeesRelationManager extends RelationManager
 {
@@ -59,11 +63,41 @@ class AttendeesRelationManager extends RelationManager
                         Select::make('allegiance')
                             ->options(Allegiance::class),
                     ]),
-                DeleteAction::make(),
+                // Deletes go through DeleteAttendee, as the API's do, so a
+                // paired Attendee is refused and its Avatar file cleaned up.
+                DeleteAction::make()
+                    ->using(function (DeleteAction $action, EventAttendee $record, DeleteAttendee $deleteAttendee): bool {
+                        try {
+                            $deleteAttendee->execute($record);
+                        } catch (ValidationException $refusal) {
+                            $action->failureNotificationTitle($refusal->getMessage());
+
+                            return false;
+                        }
+
+                        return true;
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->using(function (DeleteBulkAction $action, EloquentCollection $records, DeleteAttendee $deleteAttendee): void {
+                            $attendees = $records->ensure(EventAttendee::class);
+                            $attendees->loadMissing('memberships.user');
+                            $refusedNames = [];
+
+                            foreach ($attendees as $attendee) {
+                                try {
+                                    $deleteAttendee->execute($attendee);
+                                } catch (ValidationException) {
+                                    $refusedNames[] = $attendee->displayName();
+                                    $action->reportBulkProcessingFailure(
+                                        'paired',
+                                        fn (): string => 'Already paired, so not deleted: '.implode(', ', $refusedNames).'. Drop them instead.',
+                                    );
+                                }
+                            }
+                        }),
                 ]),
             ]);
     }
