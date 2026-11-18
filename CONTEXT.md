@@ -9,13 +9,17 @@ The platform account a person signs in with. One User may be a Player in many Ev
 _Avoid_: Account (in code), member, profile
 
 **Event**:
-A single competition run by an organiser, identified publicly by its slug. Every piece of competition data belongs to exactly one Event.
+A single competition run by an organiser, identified publicly by its slug. Every piece of competition data belongs to exactly one Event. An Event is Draft from creation until it is published, and may later be Cancelled; in either state only its Organisers can see it, and to everyone else it does not exist. A Draft is being set up: nobody can enter it, be added to it, or be invited into it until it is published. Its Rounds are seen by everyone only once the Event is under way, but by its Organisers always.
 _Avoid_: Tournament, comp
 
 **Attendee**:
 The competing unit within an Event. An Attendee is a party of one or more Players — one for a singles event, two for a doubles event — and is what gets paired, scored, and ranked.
 _Avoid_: Team, entrant, participant, competitor
 _Except_: Player-facing copy calls a Player's own Attendee "my team" (the nav chip, `MyTeamView`, the `my-team` route), because that is the word Players use at a venue. Attendee remains the term everywhere else — API, models, resources, docs — and no code should be renamed to match the copy.
+
+**Drop**:
+An Organiser marking an Attendee as having left the Event part-way through. A Dropped Attendee is not paired in any Round decided after the Drop, but everything already played stands: their Games, scores, and Standing remain, and they still appear in Standings marked as Dropped. An Organiser can reverse a Drop, and the Attendee is paired again from the next Round. Players cannot drop themselves.
+_Avoid_: Withdraw, retire, remove (removing an Attendee is deleting it, which a Drop is not)
 
 **Player**:
 A person taking part in an Event, as a member of exactly one Attendee. Factions and army lists belong to the Player, not the Attendee.
@@ -40,8 +44,8 @@ A Game with a single Attendee, created when an Event's Attendee count leaves som
 _Avoid_: Ghost game, walkover
 
 **Pairing**:
-The act of deciding which Attendees meet in a Round, and the resulting assignment. Not a stored noun distinct from Game.
-_Avoid_: Draw, matchmaking
+The act of deciding which Attendees meet in a Round, and the resulting assignment. Not a stored noun distinct from Game. A Draft Round can be paired again, replacing its Games with a fresh Pairing of the field as it stands; the Round itself, its number and its place in the schedule remain. A Round with results cannot be paired again.
+_Avoid_: Draw, matchmaking; discard, reset or repair (for pairing a Draft Round again)
 
 **Allegiance**:
 The side an Attendee fights for in Events whose setting divides the field in two (for Horus Heresy, Loyalist or Traitor). Where an Event opposes allegiances, every Game must be between opposed Attendees, and this outranks keeping Attendees on equal scores together.
@@ -68,7 +72,7 @@ The Player who registers an Attendee and invites its other members.
 _Avoid_: Owner, team leader, primary player
 
 **Claim**:
-The act of an invited Player turning their unclaimed account into a real one by setting a password. Until a Player claims, they exist only as an invited account and stay out of public surfaces.
+The act of an invited Player turning their unclaimed account into a real one by setting a password. Until a Player claims, they exist only as an invited account and stay out of public surfaces. Once claimed, their name and address are theirs alone; their Faction belongs to their place in the Event, so an Organiser can still correct it.
 _Avoid_: Activate, verify, sign up
 
 **Poll**:
@@ -88,5 +92,5 @@ The single accent colour an Organiser gives an Event, carried by that Event's sc
 _Avoid_: Theme, theme colours, brand colour, palette
 
 **Faction**:
-The army or force a Player brings, drawn from the Event's Game System.
+The army or force a Player brings, drawn from the Event's Game System. A Player chooses their Faction before submitting their army list, and once the list is submitted their Faction is fixed with it: opponents prepare against both, so from then on only an Organiser can change it.
 _Avoid_: Army, race, allegiance
