@@ -18,6 +18,9 @@ Generation is blocked when any Attendee in the previous Round has no `game_score
 ## A Bye's auto-awarded Match Points are not results
 A Round has results (`Round::hasResults()`) when any score exists on a non-Bye Game, or when somebody has entered a score on a Bye: any submitted (non-`is_derived`) Score Type, e.g. Victory Points. The Match Points `awardByeWin()` writes at generation do not count. Counting them would mean every Round containing a Bye "has results" from the moment it exists, so it could never be unpublished with nothing played. Do not go back to "any `game_scores` row on the Round".
 
+## Pairing a Draft Round again deletes its Games before reading the field
+`GenerateRoundPairings::regenerate()` pairs the latest Draft Round again in place: same Round row, id, number and schedule block, fresh Games. It locks the Round, re-checks Draft / latest / no results under the lock, deletes the Games, then runs the same `pair()` as generation into the existing Round. The delete must come before the field is read: otherwise `scoreTotals()` counts the old Bye's Match Points, `previousOpponents()` treats the old pairings as rematches, and `attendeesGivenByes()` counts the old Bye as given. Any refusal rolls the transaction back, so the old pairing survives. `guardTheRoundBefore()` takes the Round number being paired and checks the Round below it, so it serves both paths; do not go back to "the latest Round", which would be the Draft being paired again.
+
 ## The rematch penalty is computed, not a magic number
 The cost matrix is squared score-group distance plus a rematch penalty of `fieldSize ** 3 + 1`. That is large enough to dominate every possible arrangement of the rest of the matrix, so a rematch is never chosen while any alternative exists, and finite so that a genuinely stuck field still returns a pairing to be flagged. Replacing it with a fixed constant breaks the first property on large fields.
 

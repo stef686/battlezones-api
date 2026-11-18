@@ -45,6 +45,16 @@ class CannotGeneratePairings extends RuntimeException
         return new self('Every Attendee shares one Allegiance, so no Game can be opposed.');
     }
 
+    public static function roundIsLive(int $number): self
+    {
+        return new self("Round {$number} is live, so it cannot be paired again. Unpublish it first.");
+    }
+
+    public static function notTheLatestRound(int $number): self
+    {
+        return new self("Round {$number} is not the latest Round, so it cannot be paired again.");
+    }
+
     public function render(Request $request): JsonResponse
     {
         return response()->json(['message' => $this->getMessage()], 422);

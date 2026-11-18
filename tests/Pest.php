@@ -88,6 +88,18 @@ function generatePairings(Event $event): Round
 }
 
 /**
+ * @return array<int, array<int, int>> the attendee id pairs of each Game, each pair sorted
+ */
+function pairingsOf(Round $round): array
+{
+    return $round->games()->with('attendees')->get()
+        ->map(fn (Game $game): array => $game->attendees->pluck('id')->sort()->values()->all())
+        ->sortBy(fn (array $pair): int => $pair[0])
+        ->values()
+        ->all();
+}
+
+/**
  * An Event that ranks on Match Points, with Victory Points as the tiebreaker.
  *
  * @param  array<string, mixed>  $settings
