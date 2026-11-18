@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Events;
 
+use App\Actions\Events\RemoveAttendeeMember;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventAttendee;
@@ -19,7 +20,9 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Authenticated]
 class DeleteAttendeeMemberController extends Controller
 {
-    #[Endpoint('Remove a Player from a Team', 'Closed to members once registration closes; Organisers are never blocked.')]
+    public function __construct(private RemoveAttendeeMember $removeAttendeeMember) {}
+
+    #[Endpoint('Remove a Player from a Team', 'Closed to members once registration closes; Organisers are never blocked. Their outstanding Invites for the Event are revoked with it.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
     #[UrlParam('id', 'integer', 'The id of the Player to remove.', example: 1)]
@@ -28,7 +31,7 @@ class DeleteAttendeeMemberController extends Controller
     {
         Gate::authorize('changeMembers', $attendee);
 
-        $attendee->members()->detach($member->getKey());
+        $this->removeAttendeeMember->handle($attendee, $member);
 
         return response()->json(status: 200);
     }
