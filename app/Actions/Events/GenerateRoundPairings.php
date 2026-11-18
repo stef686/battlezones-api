@@ -6,6 +6,7 @@ use App\Enums\Allegiance;
 use App\Enums\RoundStatus;
 use App\Enums\SortDirection;
 use App\Exceptions\CannotGeneratePairings;
+use App\Exceptions\RoundHasResults;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventScoreType;
@@ -39,15 +40,68 @@ class GenerateRoundPairings
      */
     public function execute(Event $event): Round
     {
-        return DB::transaction(fn (): Round => $this->pair($event));
+        return DB::transaction(function () use ($event): Round {
+            $roundNumber = $this->nextRoundNumber($event);
+
+            $this->guardRoundCount($event, $roundNumber);
+
+            return $this->pair($event, $roundNumber);
+        });
     }
 
-    private function pair(Event $event): Round
+    /**
+     * Pair the latest Round again in place, while it is still a Draft with no
+     * results: the Round keeps its id, number and schedule block, and its
+     * Games are replaced with a fresh Pairing of the field as it stands.
+     *
+     * The old Games are deleted before the field is read. Left in place, the
+     * old Bye's Match Points would count towards Standings, the old pairings
+     * would read as previous opponents, and the old Bye as already given. Any
+     * refusal rolls the whole transaction back, so the old pairing survives.
+     *
+     * @throws CannotGeneratePairings
+     * @throws RoundHasResults
+     */
+    public function regenerate(Round $round): Round
     {
-        $roundNumber = $this->nextRoundNumber($event);
+        return DB::transaction(function () use ($round): Round {
+            $round = Round::query()->whereKey($round->getKey())->lockForUpdate()->firstOrFail();
+            $event = $round->event;
 
-        $this->guardRoundCount($event, $roundNumber);
-        $this->guardTheRoundBefore($event);
+            $this->guardCanBePairedAgain($event, $round);
+
+            $round->games()->delete();
+
+            return $this->pair($event, $round->number, $round);
+        });
+    }
+
+    /**
+     * Checked under the Round's lock, so a publish or a first result landing
+     * at the same moment is either seen here or waits for this to commit.
+     */
+    private function guardCanBePairedAgain(Event $event, Round $round): void
+    {
+        if ($round->isLive()) {
+            throw CannotGeneratePairings::roundIsLive($round->number);
+        }
+
+        if ($event->rounds()->where('number', '>', $round->number)->exists()) {
+            throw CannotGeneratePairings::notTheLatestRound($round->number);
+        }
+
+        if ($round->hasResults()) {
+            throw RoundHasResults::cannotBePairedAgain($round->number);
+        }
+    }
+
+    /**
+     * Pair the field into Round $roundNumber: into $existing when pairing a
+     * Draft again, otherwise into a new Round.
+     */
+    private function pair(Event $event, int $roundNumber, ?Round $existing = null): Round
+    {
+        $this->guardTheRoundBefore($event, $roundNumber);
 
         $rankingScoreTypes = $this->rankingScoreTypes($event);
         $totals = $this->scoreTotals($event);
@@ -71,7 +125,7 @@ class GenerateRoundPairings
             $pairs[] = [$attendee, $sideB[$assignment[$index]]];
         }
 
-        return $this->persist($event, $roundNumber, $ranked, $pairs, $byes);
+        return $this->persist($event, $roundNumber, $existing, $ranked, $pairs, $byes);
     }
 
     /**
@@ -98,9 +152,9 @@ class GenerateRoundPairings
      * A Draft Round trips the same guard: none of its Games have been played,
      * so pairing past it would strand a Round nobody has seen.
      */
-    private function guardTheRoundBefore(Event $event): void
+    private function guardTheRoundBefore(Event $event, int $roundNumber): void
     {
-        $latest = $event->rounds()->orderByDesc('number')->first();
+        $latest = $event->rounds()->where('number', '<', $roundNumber)->orderByDesc('number')->first();
 
         if (! $latest instanceof Round) {
             return;
@@ -444,7 +498,7 @@ class GenerateRoundPairings
      * @param  list<array{EventAttendee, EventAttendee}>  $pairs
      * @param  list<EventAttendee>  $byes
      */
-    private function persist(Event $event, int $roundNumber, Collection $ranked, array $pairs, array $byes): Round
+    private function persist(Event $event, int $roundNumber, ?Round $existing, Collection $ranked, array $pairs, array $byes): Round
     {
         $positionOf = [];
 
@@ -455,7 +509,7 @@ class GenerateRoundPairings
         usort($pairs, fn (array $a, array $b): int => min($positionOf[$a[0]->id], $positionOf[$a[1]->id])
             <=> min($positionOf[$b[0]->id], $positionOf[$b[1]->id]));
 
-        $round = $event->rounds()->create([
+        $round = $existing ?? $event->rounds()->create([
             'number' => $roundNumber,
             'status' => RoundStatus::Draft,
         ]);

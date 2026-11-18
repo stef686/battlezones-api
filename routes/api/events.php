@@ -32,6 +32,7 @@ use App\Http\Controllers\Events\ListTimezonesController;
 use App\Http\Controllers\Events\OpenEventPollController;
 use App\Http\Controllers\Events\PublishEventController;
 use App\Http\Controllers\Events\PublishRoundController;
+use App\Http\Controllers\Events\RegenerateRoundController;
 use App\Http\Controllers\Events\ReorderEventScheduleController;
 use App\Http\Controllers\Events\ReplaceBallotController;
 use App\Http\Controllers\Events\ReplaceEventScoreTypesController;
@@ -203,6 +204,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ->name('events.rounds.publish');
     Route::scopeBindings()->post('events/{event:slug}/rounds/{round}/swap', SwapRoundPairingsController::class)
         ->name('events.rounds.swap');
+    Route::scopeBindings()->post('events/{event:slug}/rounds/{round}/regenerate', RegenerateRoundController::class)
+        ->name('events.rounds.regenerate');
     Route::scopeBindings()->delete('events/{event:slug}/rounds/{round}/publish', UnpublishRoundController::class)
         ->name('events.rounds.unpublish');
 

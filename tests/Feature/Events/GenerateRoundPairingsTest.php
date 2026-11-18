@@ -54,18 +54,6 @@ function attendeesFor(Event $event, int $count, ?Allegiance $allegiance = null):
         ->create(['allegiance' => $allegiance]);
 }
 
-/**
- * @return array<int, array<int, int>> the attendee id pairs of each Game, each pair sorted
- */
-function pairingsOf(Round $round): array
-{
-    return $round->games()->with('attendees')->get()
-        ->map(fn (Game $game): array => $game->attendees->pluck('id')->sort()->values()->all())
-        ->sortBy(fn (array $pair): int => $pair[0])
-        ->values()
-        ->all();
-}
-
 test('pairings are generated into a new draft round', function () {
     $event = Event::factory()->active()->create();
     EventAttendee::factory()->count(4)->for($event)->withMember()->create();

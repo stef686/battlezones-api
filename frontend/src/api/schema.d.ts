@@ -1592,6 +1592,31 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/events/{event_slug}/rounds/{round_id}/regenerate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the round. */
+                round_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Pair a Draft Round again
+         * @description Organisers only, on the latest Round while it is a Draft with no results. Replaces its Games with a fresh Pairing of the field as it stands, leaving out Attendees Dropped since and including any added since. The Round keeps its id, number and schedule block. Refused with the same reasons as generation when the field cannot be paired, in which case the old Pairing is left exactly as it was.
+         */
+        post: operations["pairADraftRoundAgain"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/events/{event_slug}/army-list": {
         parameters: {
             query?: never;
@@ -6982,6 +7007,83 @@ export interface operations {
                         errors?: {
                             field_name?: string[];
                         };
+                    };
+                };
+            };
+        };
+    };
+    pairADraftRoundAgain: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The slug of the event. */
+                event_slug: string;
+                /** @description The id of the round. */
+                round_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            id?: number;
+                            number?: number;
+                            name?: string;
+                            status?: string;
+                            games?: {
+                                id?: number;
+                                table_number?: number;
+                                is_bye?: boolean;
+                                is_rematch?: boolean;
+                                result?: {
+                                    submitted_at?: string | null;
+                                    is_flagged?: boolean;
+                                };
+                                attendees?: {
+                                    id?: number;
+                                    name?: string;
+                                    allegiance?: string;
+                                    members?: {
+                                        id?: number;
+                                        name?: string;
+                                        faction?: {
+                                            id?: number;
+                                            name?: string;
+                                        };
+                                        army_list_locked?: boolean;
+                                    }[];
+                                    scores?: unknown[];
+                                }[];
+                            }[];
+                        };
+                    };
+                };
+            };
+            /** @description The request carries no valid token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
                     };
                 };
             };

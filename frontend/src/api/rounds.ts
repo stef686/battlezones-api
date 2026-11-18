@@ -195,6 +195,18 @@ export function swapPairings(client: ApiClient, slug: string, roundId: number, g
         .then((response) => response.data);
 }
 
+/**
+ * Pair the latest Draft Round again, as the field stands now.
+ *
+ * The Round keeps its id and number; only its Games are replaced. Refused
+ * once it is Live, has results, or is not the latest Round, and for the same
+ * reasons as generation, in which case the old pairing is left untouched.
+ */
+export function regenerateRound(client: ApiClient, slug: string, roundId: number): Promise<RoundDetail> {
+    return client.post<{ data: RoundDetail }>(`${eventPath(slug)}/rounds/${roundId}/regenerate`)
+        .then((response) => response.data);
+}
+
 /** Refused once any result is in: by then the Round has been played on. */
 export function unpublishRound(client: ApiClient, slug: string, roundId: number): Promise<RoundDetail> {
     return client.delete<{ data: RoundDetail }>(`${eventPath(slug)}/rounds/${roundId}/publish`)
