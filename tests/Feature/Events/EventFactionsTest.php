@@ -132,3 +132,46 @@ test('an unclaimed player who entered on an invite can still say what they are b
         ->assertOk()
         ->assertJsonPath('data.members.0.faction.id', $faction->id);
 });
+
+test('a player cannot change or clear their faction once their list is locked', function (bool $clearing) {
+    $event = Event::factory()->published()->create();
+    $chosen = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
+    $other = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
+    $player = User::factory()->create();
+
+    $attendee = EventAttendee::factory()->for($event)->create();
+    $attendee->members()->attach($player, ['event_id' => $event->id, 'faction_id' => $chosen->id, 'army_list_submitted_at' => now()]);
+
+    $this->actingAs($player)
+        ->patchJson(route('events.my-faction.update', ['event' => $event->slug]), ['faction_id' => $clearing ? null : $other->id])
+        ->assertForbidden()
+        ->assertJsonPath('message', 'Your list is locked. Ask an organiser to reopen it if you need to change your Faction.');
+
+    expect($attendee->memberships()->where('user_id', $player->id)->value('faction_id'))->toBe($chosen->id);
+})->with([
+    'changing it' => [false],
+    'clearing it' => [true],
+]);
+
+test('once an organiser reopens their list, a player can change their faction again', function () {
+    $event = Event::factory()->published()->create();
+    $chosen = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
+    $corrected = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
+    $player = User::factory()->create();
+
+    $attendee = EventAttendee::factory()->for($event)->create();
+    $attendee->members()->attach($player, ['event_id' => $event->id, 'faction_id' => $chosen->id, 'army_list_submitted_at' => now()]);
+
+    $this->actingAs(organiserOf($event))
+        ->postJson(route('events.army-list.unlock', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'member' => $player->id,
+        ]))
+        ->assertSuccessful();
+
+    $this->actingAs($player)
+        ->patchJson(route('events.my-faction.update', ['event' => $event->slug]), ['faction_id' => $corrected->id])
+        ->assertOk()
+        ->assertJsonPath('data.members.0.faction.id', $corrected->id);
+});

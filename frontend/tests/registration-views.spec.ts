@@ -626,6 +626,32 @@ describe('the my team screens', () => {
         expect(view.find('[data-testid="faction-saved"]').exists()).toBe(true);
     });
 
+    it('fixes the faction once the list is locked, saying who can reopen it', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: {
+                    data: {
+                        ...ATTENDEE.data,
+                        members: [
+                            { id: 12, name: 'Ada Lovelace', faction: { id: 3, name: 'Imperial Fists' }, army_list_locked: true, army_list: 'Legion Tactical Squad' },
+                            { id: 13, name: 'Tarik Torgaddon', faction: null, army_list_locked: false, army_list: null },
+                        ],
+                    },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(MyFactionView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="my-faction"]').attributes('disabled')).toBeDefined();
+        expect(view.get('[data-testid="save-faction"]').attributes('disabled')).toBeDefined();
+        expect(view.text()).toContain('Your list is locked. Ask an organiser to reopen it if you need to change your Faction.');
+    });
+
     it('submits this Player\'s own army list, saying that submitting locks it', async () => {
         const fetch = stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: ATTENDEE },

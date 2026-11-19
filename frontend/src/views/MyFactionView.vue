@@ -34,6 +34,12 @@ watch(me, (member) => {
   myFactionId.value = member?.faction === null || member?.faction === undefined ? '' : String(member.faction.id);
 }, { immediate: true });
 
+/**
+ * The Faction locks with the list: opponents prepare against both, and the
+ * API refuses a change until an Organiser reopens the list.
+ */
+const factionLocked = computed(() => me.value?.army_list_locked === true);
+
 const saving = ref(false);
 const saved = ref(false);
 const failure = ref<ApiError | null>(null);
@@ -90,6 +96,8 @@ async function save(): Promise<void> {
           testid="my-faction"
           :options="factionOptions"
           :errors="failure?.fields['faction_id'] ?? []"
+          :disabled="factionLocked"
+          :hint="factionLocked ? 'Your list is locked. Ask an organiser to reopen it if you need to change your Faction.' : null"
         />
 
         <AppAlert
@@ -111,7 +119,7 @@ async function save(): Promise<void> {
         <AppButton
           type="submit"
           data-testid="save-faction"
-          :disabled="saving"
+          :disabled="saving || factionLocked"
           block
           class="mt-2"
         >
