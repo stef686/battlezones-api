@@ -47,6 +47,20 @@ class EventAttendeePolicy
     }
 
     /**
+     * Whether this User may correct the Faction of a Player in the party who
+     * has claimed their account.
+     *
+     * Its Organisers only, whatever the army list or Round state: the Faction
+     * belongs to the seat rather than the account, and fixing it on the day is
+     * their job. Team mates are refused, since a claimed account's details are
+     * its owner's. Admins too, as everywhere Filament repairs a team.
+     */
+    public function correctClaimedFaction(User $user, EventAttendee $attendee): bool
+    {
+        return $user->is_admin || $attendee->event->isOrganisedBy($user);
+    }
+
+    /**
      * Whether this Player may read the party's army lists.
      *
      * Lists are competitive information, so reading one costs attendance at

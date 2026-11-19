@@ -676,7 +676,7 @@ describe('the players on the attendee edit screen', () => {
     it('shows the api\'s refusal of a claimed player\'s faction', async () => {
         stubApi({
             ...partyRoutes(),
-            [`/attendees/9/members/4`]: { status: 403, body: { message: 'That player has claimed their account, so only they can change their details.' } },
+            [`/attendees/9/members/4`]: { status: 403, body: { message: 'That player has claimed their account, so only they can change their name and email.' } },
         });
 
         const view = mountView();
@@ -685,7 +685,7 @@ describe('the players on the attendee edit screen', () => {
         await view.get('[data-testid="member-4-form"]').trigger('submit');
         await flushPromises();
 
-        expect(view.get('[data-testid="member-4-error"]').text()).toContain('only they can change their details');
+        expect(view.get('[data-testid="member-4-error"]').text()).toContain('only they can change their name and email');
         expect(view.find('[data-testid="member-4-saved"]').exists()).toBe(false);
     });
 
