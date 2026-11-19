@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
+import { RouterLink } from 'vue-router';
 
 import { useApiClient } from '@/api';
 import { submitArmyList } from '@/api/army-lists';
@@ -26,6 +27,12 @@ watch(me, (member) => {
  * rather than leaving them to guess from an empty box.
  */
 const listLocked = computed(() => me.value?.army_list_locked === true);
+
+/**
+ * The Faction locks with the list, so a list is never submitted without one:
+ * the API refuses it, and the screen holds Submit back and says where to go.
+ */
+const needsFaction = computed(() => !me.value?.faction);
 
 const submitting = ref(false);
 const problem = ref<string | null>(null);
@@ -92,9 +99,23 @@ async function submit(): Promise<void> {
         <p class="text-sm text-muted-foreground-1">
           Submitting locks the list. Only an organiser can reopen it.
         </p>
+        <p
+          v-if="needsFaction"
+          data-testid="army-list-needs-faction"
+          class="text-sm text-muted-foreground-1"
+        >
+          Choose your faction before submitting your list.
+          <RouterLink
+            :to="{ name: 'my-team-faction', params: { eventSlug: props.eventSlug } }"
+            data-testid="army-list-choose-faction"
+            class="font-medium text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
+          >
+            Choose faction
+          </RouterLink>
+        </p>
         <AppButton
           data-testid="submit-army-list"
-          :disabled="submitting"
+          :disabled="submitting || needsFaction"
           block
           @click="submit"
         >

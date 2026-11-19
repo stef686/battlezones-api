@@ -647,6 +647,31 @@ describe('the my team screens', () => {
         expect(JSON.parse(submitted[1]?.body as string)).toEqual({ army_list: 'Legion Tactical Squad, 10 models' });
     });
 
+    it('holds Submit back until a faction is chosen, pointing at where to choose one', async () => {
+        stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: {
+                status: 200,
+                body: {
+                    data: {
+                        ...ATTENDEE.data,
+                        members: [
+                            { id: 12, name: 'Ada Lovelace', faction: null, army_list_locked: false, army_list: null },
+                            { id: 13, name: 'Tarik Torgaddon', faction: null, army_list_locked: false, army_list: null },
+                        ],
+                    },
+                },
+            },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(MyArmyListView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="submit-army-list"]').attributes('disabled')).toBeDefined();
+        expect(view.get('[data-testid="army-list-needs-faction"]').text()).toContain('Choose your faction');
+        expect(view.get('[data-testid="army-list-choose-faction"]').attributes('href')).toBe(`/events/${EVENT_SLUG}/my-team/faction`);
+    });
+
     it('says a locked list is in, and offers nothing to type into', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: {
