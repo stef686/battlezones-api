@@ -81,6 +81,25 @@ class Round extends Model
     }
 
     /**
+     * Load everything RoundDetailResource reads, Games in table order.
+     *
+     * One list for every controller that answers with a Round's detail, so a
+     * relation the resource starts reading is added once rather than missed
+     * in one of them.
+     */
+    public function loadDetail(): static
+    {
+        return $this->load([
+            'event.scoreTypes',
+            'games' => fn (HasMany $query) => $query->orderBy('table_number'),
+            'games.attendees.memberships.user',
+            'games.attendees.memberships.faction',
+            'games.scores.scoreType',
+            'games.openResultFlag',
+        ]);
+    }
+
+    /**
      * Whether any result has been recorded against this Round's Games.
      *
      * A result is any score on a contested Game, or a score somebody entered

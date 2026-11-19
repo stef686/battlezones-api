@@ -82,8 +82,8 @@ class GenerateRoundPairings
      */
     private function guardCanBePairedAgain(Event $event, Round $round): void
     {
-        if ($round->isLive()) {
-            throw CannotGeneratePairings::roundIsLive($round->number);
+        if (! $round->isDraft()) {
+            throw CannotGeneratePairings::notADraft($round->number);
         }
 
         if ($event->rounds()->where('number', '>', $round->number)->exists()) {

@@ -17,6 +17,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Authenticated]
 class GenerateRoundController extends Controller
 {
+    public function __construct(private GenerateRoundPairings $generatePairings) {}
+
     #[Endpoint('Generate the next Round', "Organisers only. Pairs the field into a new Draft Round. Rejected while the current Round is unpublished or has results outstanding, and once the Event's round count is reached.")]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [
@@ -39,19 +41,13 @@ class GenerateRoundController extends Controller
             ]],
         ]],
     ]])]
-    public function __invoke(Event $event, GenerateRoundPairings $generatePairings): RoundDetailResource
+    public function __invoke(Event $event): RoundDetailResource
     {
         Gate::authorize('organise', $event);
 
-        $round = $generatePairings->execute($event);
+        $round = $this->generatePairings->execute($event);
 
-        $round->load([
-            'event.scoreTypes',
-            'games' => fn ($query) => $query->orderBy('table_number'),
-            'games.attendees.memberships.user',
-            'games.attendees.memberships.faction',
-            'games.scores.scoreType', 'games.openResultFlag',
-        ]);
+        $round->loadDetail();
 
         return RoundDetailResource::make($round);
     }
