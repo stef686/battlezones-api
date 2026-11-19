@@ -26,6 +26,43 @@ test('a player submits their own list, which locks on submission', function () {
         ->toBe('2000pts Ultramarines');
 });
 
+test('a list cannot be submitted before a faction is chosen', function () {
+    $event = Event::factory()->active()->create(['attendee_size' => 2]);
+    $player = User::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember($player)->create();
+    $attendee->memberships()->update(['faction_id' => null, 'army_list' => null]);
+
+    $this->actingAs($player)
+        ->putJson(route('events.army-list.update', ['event' => $event->slug]), [
+            'army_list' => '2000pts Ultramarines',
+        ])
+        ->assertUnprocessable()
+        ->assertJsonPath('message', 'Choose your Faction before submitting your list.');
+
+    $membership = $attendee->memberships()->firstOrFail();
+
+    expect($membership->isArmyListLocked())->toBeFalse()
+        ->and($membership->army_list)->toBeNull();
+});
+
+test('a list already submitted without a faction is left locked as it was', function () {
+    $event = Event::factory()->active()->create(['attendee_size' => 2]);
+    $player = User::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember($player)->create();
+    $attendee->memberships()->update(['faction_id' => null, 'army_list' => 'Submitted long ago', 'army_list_submitted_at' => now()]);
+
+    $this->actingAs($player)
+        ->putJson(route('events.army-list.update', ['event' => $event->slug]), [
+            'army_list' => 'Second thoughts',
+        ])
+        ->assertForbidden();
+
+    $membership = $attendee->memberships()->firstOrFail();
+
+    expect($membership->isArmyListLocked())->toBeTrue()
+        ->and($membership->army_list)->toBe('Submitted long ago');
+});
+
 /**
  * A doubles team plus a rival Player who also attends the Event.
  *

@@ -1630,7 +1630,7 @@ export interface paths {
         get?: never;
         /**
          * Submit Your Army List
-         * @description Submitting locks the list. Only an Organiser can reopen it.
+         * @description Submitting locks the list. Only an Organiser can reopen it. Refused until the Player has chosen their Faction.
          */
         put: operations["submitYourArmyList"];
         post?: never;
@@ -7133,7 +7133,6 @@ export interface operations {
                     };
                 };
             };
-            /** @description The submitted data failed validation. */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -7142,7 +7141,7 @@ export interface operations {
                     "application/json": {
                         message?: string;
                         errors?: {
-                            field_name?: string[];
+                            faction?: string[];
                         };
                     };
                 };
