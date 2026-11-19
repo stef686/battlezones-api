@@ -1823,10 +1823,10 @@ export interface paths {
         options?: never;
         head?: never;
         /**
-         * Amend an Invited Player
-         * @description The name, address and Faction of a team mate who has not claimed their account. Refused once they have: their details are then theirs alone. Addressed by membership because the membership is the seat being amended.
+         * Amend a team mate
+         * @description The name, address and Faction of a team mate. Once they have claimed their account, their name and address are theirs alone, and only an Organiser can still correct their Faction. Addressed by membership because the membership is the seat being amended.
          */
-        patch: operations["amendAnInvitedPlayer"];
+        patch: operations["amendATeamMate"];
         trace?: never;
     };
     "/api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}/invite": {
@@ -7698,7 +7698,7 @@ export interface operations {
             };
         };
     };
-    amendAnInvitedPlayer: {
+    amendATeamMate: {
         parameters: {
             query?: never;
             header?: never;
@@ -7765,13 +7765,14 @@ export interface operations {
                     };
                 };
             };
-            /** @description The Player has an account of their own. */
             403: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": {
+                        message?: string;
+                    } | {
                         message?: string;
                     };
                 };

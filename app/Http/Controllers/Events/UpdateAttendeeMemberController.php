@@ -21,8 +21,8 @@ use Knuckles\Scribe\Attributes\UrlParam;
 class UpdateAttendeeMemberController extends Controller
 {
     #[Endpoint(
-        'Amend an Invited Player',
-        'The name, address and Faction of a team mate who has not claimed their account. Refused once they have: their details are then theirs alone. Addressed by membership because the membership is the seat being amended.'
+        'Amend a team mate',
+        'The name, address and Faction of a team mate. Once they have claimed their account, their name and address are theirs alone, and only an Organiser can still correct their Faction. Addressed by membership because the membership is the seat being amended.'
     )]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
@@ -44,7 +44,8 @@ class UpdateAttendeeMemberController extends Controller
         'custom_field_responses' => [],
         'games' => [],
     ]])]
-    #[Response(['message' => 'That player has claimed their account, so only they can change their details.'], 403, 'The Player has an account of their own.')]
+    #[Response(['message' => 'That player has claimed their account, so only they can change their details.'], 403, 'The Player has an account of their own, and the caller is not an Organiser.')]
+    #[Response(['message' => 'That player has claimed their account, so only they can change their name and email.'], 403, 'An Organiser sent a name or email for a Player with an account of their own.')]
     public function __invoke(
         UpdateAttendeeMemberRequest $request,
         Event $event,
@@ -54,11 +55,9 @@ class UpdateAttendeeMemberController extends Controller
     ): EventAttendeeDetailResource {
         Gate::authorize('changeMembers', $attendee);
 
-        abort_if(
-            $membership->user->isClaimed(),
-            403,
-            'That player has claimed their account, so only they can change their details.',
-        );
+        if ($membership->user->isClaimed()) {
+            $this->ensureClaimedPlayerMayBeAmended($request, $event);
+        }
 
         /** @var array{name?: string|null, email?: string, faction_id?: int|null} $changes */
         $changes = $request->validated();
@@ -68,5 +67,27 @@ class UpdateAttendeeMemberController extends Controller
         $attendee->loadForDetail();
 
         return EventAttendeeDetailResource::make($attendee);
+    }
+
+    /**
+     * A claimed Player's name and address are theirs alone, but their Faction
+     * belongs to their seat in the Event, so an Organiser can still correct it
+     * on the day. A team mate cannot touch any of it.
+     */
+    private function ensureClaimedPlayerMayBeAmended(UpdateAttendeeMemberRequest $request, Event $event): void
+    {
+        $actor = $request->user();
+
+        if (! $actor->is_admin && ! $event->isOrganisedBy($actor)) {
+            abort(403, 'That player has claimed their account, so only they can change their details.');
+        }
+
+        // Refused on presence rather than change, so a caller resending the
+        // value already held is told plainly rather than quietly ignored.
+        abort_if(
+            $request->hasAny(['name', 'email']),
+            403,
+            'That player has claimed their account, so only they can change their name and email.',
+        );
     }
 }

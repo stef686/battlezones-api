@@ -7,8 +7,9 @@
  * any of it here. Correcting the address is how one Player is swapped for
  * another: the seat moves to the new address, Faction and list intact, and the
  * old invitation stops working. A Player who has claimed their account owns
- * their name and address, and the API refuses to change them, so they are
- * reported rather than offered.
+ * their name and address, and the API refuses to change them, so only their
+ * Faction is offered: it belongs to their seat in the Event, and an Organiser
+ * fixing it on the day is the point of this screen.
  *
  * Every change is its own request, made the moment it is asked for, and the
  * card emits `changed` once the API has accepted it so the screen can reread
@@ -130,11 +131,13 @@ async function save(): Promise<void> {
   failure.value = null;
 
   try {
-    await amendMember(client, props.eventSlug, props.attendeeId, props.member.membership_id, {
-      name: submitted.name,
-      email: submitted.email,
-      faction_id: submitted.factionId === '' ? null : Number(submitted.factionId),
-    });
+    const factionChange = { faction_id: submitted.factionId === '' ? null : Number(submitted.factionId) };
+
+    // A claimed Player's name and address are refused even unchanged, so
+    // only the Faction is sent for them.
+    await amendMember(client, props.eventSlug, props.attendeeId, props.member.membership_id, invited.value
+      ? { name: submitted.name, email: submitted.email, ...factionChange }
+      : factionChange);
 
     // The form now holds what the API holds, so the reread that follows may
     // replace it with the API's own spelling of it.
@@ -197,32 +200,42 @@ async function remove(): Promise<void> {
     :data-testid="testid"
   >
     <form
-      v-if="invited"
       class="flex flex-col gap-4"
       novalidate
       :data-testid="`${testid}-form`"
       @submit.prevent="save"
     >
-      <p class="text-sm text-muted-foreground-1">
-        Has not accepted their invitation yet.
-      </p>
+      <template v-if="invited">
+        <p class="text-sm text-muted-foreground-1">
+          Has not accepted their invitation yet.
+        </p>
 
-      <TextField
-        v-model="name"
-        label="Name"
-        :testid="`${testid}-name`"
-        :errors="fieldErrors('name')"
-      />
+        <TextField
+          v-model="name"
+          label="Name"
+          :testid="`${testid}-name`"
+          :errors="fieldErrors('name')"
+        />
 
-      <TextField
-        v-model="email"
-        label="Email"
-        type="email"
-        inputmode="email"
-        :testid="`${testid}-email`"
-        :hint="addressChanged ? 'A new invitation will be sent to this address, and the old one will stop working.' : undefined"
-        :errors="fieldErrors('email')"
-      />
+        <TextField
+          v-model="email"
+          label="Email"
+          type="email"
+          inputmode="email"
+          :testid="`${testid}-email`"
+          :hint="addressChanged ? 'A new invitation will be sent to this address, and the old one will stop working.' : undefined"
+          :errors="fieldErrors('email')"
+        />
+      </template>
+
+      <template v-else>
+        <p class="text-sm font-medium text-foreground">
+          {{ member.name }}
+        </p>
+        <p class="text-sm text-muted-foreground">
+          They have their own account, so only they can change their name and email.
+        </p>
+      </template>
 
       <SelectField
         v-model="factionId"
@@ -255,39 +268,29 @@ async function remove(): Promise<void> {
         :disabled="saving"
         block
       >
-        {{ saving ? 'Saving…' : 'Save player' }}
+        {{ saving ? 'Saving…' : invited ? 'Save player' : 'Save faction' }}
       </AppButton>
 
-      <AppButton
-        :data-testid="`${testid}-resend`"
-        variant="secondary"
-        :disabled="resending"
-        block
-        @click="resend"
-      >
-        {{ resending ? 'Sending…' : 'Send the invitation again' }}
-      </AppButton>
+      <template v-if="invited">
+        <AppButton
+          :data-testid="`${testid}-resend`"
+          variant="secondary"
+          :disabled="resending"
+          block
+          @click="resend"
+        >
+          {{ resending ? 'Sending…' : 'Send the invitation again' }}
+        </AppButton>
 
-      <AppAlert
-        v-if="resent"
-        :data-testid="`${testid}-resent`"
-        tone="success"
-      >
-        Sent. Their earlier link has stopped working.
-      </AppAlert>
+        <AppAlert
+          v-if="resent"
+          :data-testid="`${testid}-resent`"
+          tone="success"
+        >
+          Sent. Their earlier link has stopped working.
+        </AppAlert>
+      </template>
     </form>
-
-    <template v-else>
-      <p class="text-sm font-medium text-foreground">
-        {{ member.name }}
-      </p>
-      <p class="text-sm text-muted-foreground-1">
-        {{ member.faction?.name ?? 'Faction not chosen' }}
-      </p>
-      <p class="text-sm text-muted-foreground">
-        They have their own account, so only they can change their details.
-      </p>
-    </template>
 
     <template v-if="removable">
       <AppButton

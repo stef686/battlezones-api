@@ -485,8 +485,9 @@ export function addMember(
 /**
  * Correct a team mate's details on their behalf.
  *
- * Only while their invitation is outstanding: once they claim the account the
- * API refuses this, because their name and address are then theirs. Addressed
+ * Once they claim the account their name and address are theirs, and the API
+ * refuses either key even unchanged; an Organiser may still send `faction_id`
+ * alone, because the Faction belongs to the seat. Addressed
  * by membership because the seat is what is being amended — correcting the
  * address moves that seat to another account, faction and list intact.
  */

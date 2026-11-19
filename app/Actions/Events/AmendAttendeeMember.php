@@ -8,12 +8,14 @@ use App\Models\EventInvite;
 use App\Models\User;
 
 /**
- * Corrects the details of a Player who has not answered their invitation.
+ * Corrects the details of a Player in an Attendee.
  *
  * A Captain names their partner from memory — a nickname, an address typed on
  * a phone — and has no way to fix either once it is sent unless somebody can
- * amend it on their behalf. Once the Player claims the account it is theirs,
- * and this path is closed to everybody but the Player themselves.
+ * amend it on their behalf. Once the Player claims the account, their name and
+ * address are theirs alone; their Faction belongs to their seat in the Event,
+ * so an Organiser can still correct it. Who may send what is decided by the
+ * caller before this runs.
  */
 class AmendAttendeeMember
 {

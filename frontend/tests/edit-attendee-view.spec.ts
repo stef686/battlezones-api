@@ -649,15 +649,44 @@ describe('the players on the attendee edit screen', () => {
         expect(view.find('[data-testid="member-5-saved"]').exists()).toBe(false);
     });
 
-    it('reports a player who has claimed their account rather than offering to edit them', async () => {
-        stubApi(partyRoutes());
+    it('corrects only the faction of a player who has claimed their account', async () => {
+        const fetch = stubApi({
+            ...partyRoutes(),
+            [`/attendees/9/members/4`]: { status: 200, body: PARTY },
+        });
 
         const view = mountView();
         await flushPromises();
 
         expect(view.get('[data-testid="member-4"]').text()).toContain('Ada Lovelace');
-        expect(view.get('[data-testid="member-4"]').text()).toContain('only they can change their details');
-        expect(view.find('[data-testid="member-4-form"]').exists()).toBe(false);
+        expect(view.get('[data-testid="member-4"]').text()).toContain('only they can change their name and email');
+        expect(view.find('[data-testid="member-4-name"]').exists()).toBe(false);
+        expect(view.find('[data-testid="member-4-email"]').exists()).toBe(false);
+
+        await view.get('[data-testid="member-4-faction"]').setValue('7');
+        await view.get('[data-testid="member-4-form"]').trigger('submit');
+        await flushPromises();
+
+        const amend = requestTo(fetch, 'PATCH', '/attendees/9/members/4')!;
+        expect(JSON.parse(amend[1]?.body as string)).toEqual({ faction_id: 7 });
+        expect(view.get('[data-testid="member-4-save"]').text()).toBe('Save faction');
+        expect(view.find('[data-testid="member-4-saved"]').exists()).toBe(true);
+    });
+
+    it('shows the api\'s refusal of a claimed player\'s faction', async () => {
+        stubApi({
+            ...partyRoutes(),
+            [`/attendees/9/members/4`]: { status: 403, body: { message: 'That player has claimed their account, so only they can change their details.' } },
+        });
+
+        const view = mountView();
+        await flushPromises();
+
+        await view.get('[data-testid="member-4-form"]').trigger('submit');
+        await flushPromises();
+
+        expect(view.get('[data-testid="member-4-error"]').text()).toContain('only they can change their details');
+        expect(view.find('[data-testid="member-4-saved"]').exists()).toBe(false);
     });
 
     it('keeps what is typed into one player when the team is reread', async () => {

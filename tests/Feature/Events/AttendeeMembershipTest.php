@@ -316,6 +316,69 @@ test('a partner who has claimed their account keeps their own details', function
     expect($partner->fresh()->name)->toBe('Tarik Torgaddon');
 });
 
+test('an organiser corrects the faction of a player who has claimed their account', function (string $corrector) {
+    Notification::fake();
+
+    [$event, $attendee, , $faction] = teamOfOneSoFar();
+    $partner = User::factory()->create();
+    $attendee->members()->attach($partner, ['event_id' => $event->id]);
+    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+
+    $this->actingAs($corrector === 'admin' ? User::factory()->admin()->create() : coOrganiserOf($event))
+        ->patchJson(route('events.attendees.members.update', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'membership' => $membership->id,
+        ]), ['faction_id' => $faction->id])
+        ->assertSuccessful();
+
+    expect($membership->fresh()->faction_id)->toBe($faction->id);
+
+    Notification::assertNothingSent();
+})->with(['co-organiser', 'admin']);
+
+test('a team mate cannot change the faction of a partner who has claimed their account', function () {
+    Notification::fake();
+
+    [$event, $attendee, $captain, $faction] = teamOfOneSoFar();
+    $partner = User::factory()->create();
+    $attendee->members()->attach($partner, ['event_id' => $event->id]);
+    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+
+    $this->actingAs($captain)
+        ->patchJson(route('events.attendees.members.update', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'membership' => $membership->id,
+        ]), ['faction_id' => $faction->id])
+        ->assertForbidden()
+        ->assertJsonPath('message', 'That player has claimed their account, so only they can change their details.');
+
+    expect($membership->fresh()->faction_id)->toBeNull();
+});
+
+test('an organiser cannot send the name or address of a player who has claimed their account', function (string $field) {
+    Notification::fake();
+
+    [$event, $attendee, , $faction] = teamOfOneSoFar();
+    $partner = User::factory()->create(['name' => 'Tarik Torgaddon', 'email' => 'tarik@example.com']);
+    $attendee->members()->attach($partner, ['event_id' => $event->id]);
+    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+
+    // Refused on presence: even the value they already hold is not the
+    // Organiser's to send.
+    $this->actingAs(organiserOf($event))
+        ->patchJson(route('events.attendees.members.update', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'membership' => $membership->id,
+        ]), [$field => $partner->{$field}, 'faction_id' => $faction->id])
+        ->assertForbidden()
+        ->assertJsonPath('message', 'That player has claimed their account, so only they can change their name and email.');
+
+    expect($membership->fresh()->faction_id)->toBeNull();
+})->with(['name', 'email']);
+
 test('an address already entered in this event is refused', function () {
     Notification::fake();
 
