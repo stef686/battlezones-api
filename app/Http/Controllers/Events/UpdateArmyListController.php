@@ -18,14 +18,20 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Authenticated]
 class UpdateArmyListController extends Controller
 {
+    /**
+     * The submit is one write, conditional on the row still being unlocked
+     * and having a Faction, so clearing the Faction at the same moment cannot
+     * slip a list through with none attached. Nothing written means one of
+     * the two failed, and the row is read again to say which.
+     */
     #[Endpoint('Submit Your Army List', 'Submitting locks the list. Only an Organiser can reopen it. Refused until the Player has chosen their Faction.')]
-    #[Response(['message' => 'Choose your Faction before submitting your list.', 'errors' => ['faction' => ['Choose your Faction before submitting your list.']]], status: 422)]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(['data' => [
         'army_list' => 'Legion Tactical Squad, 10 models...',
         'submitted_at' => '2026-09-10T18:30:00+00:00',
         'is_locked' => false,
     ]])]
+    #[Response(['message' => 'Choose your Faction before submitting your list.', 'errors' => ['faction' => ['Choose your Faction before submitting your list.']]], status: 422, description: 'No Faction chosen, or the list failed validation.')]
     public function __invoke(SubmitArmyListRequest $request, Event $event): ArmyListResource
     {
         $membership = EventAttendeeMembership::query()
@@ -35,9 +41,6 @@ class UpdateArmyListController extends Controller
 
         abort_if($membership === null, 404);
 
-        // Conditional on the row still being unlocked and having a Faction,
-        // so clearing the Faction at the same moment cannot slip a list
-        // through that is locked with none attached.
         $submitted = EventAttendeeMembership::query()
             ->whereKey($membership->getKey())
             ->whereNull('army_list_submitted_at')
