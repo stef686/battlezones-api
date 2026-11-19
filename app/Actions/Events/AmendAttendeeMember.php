@@ -26,7 +26,7 @@ class AmendAttendeeMember
 
     /**
      * @param  array{name?: string|null, email?: string, faction_id?: int|null}  $changes
-     * @param  bool  $factionLocksWithList  Whether a locked army list refuses the Faction change, as it does for a team mate but not an Organiser.
+     * @param  bool  $mayOverrideFactionLock  Whether the amender may change the Faction past a locked army list, as an Organiser or admin may and a team mate may not.
      *
      * @throws PartnerListIsLocked
      */
@@ -34,12 +34,12 @@ class AmendAttendeeMember
         EventAttendeeMembership $membership,
         array $changes,
         User $amendedBy,
-        bool $factionLocksWithList,
+        bool $mayOverrideFactionLock,
     ): EventAttendeeMembership {
         $player = $membership->user;
 
         if (array_key_exists('faction_id', $changes)) {
-            $this->changeFaction($membership, $changes['faction_id'], $factionLocksWithList);
+            $this->changeFaction($membership, $changes['faction_id'], $mayOverrideFactionLock);
         }
 
         if (array_key_exists('name', $changes) && $changes['name'] !== null) {
@@ -66,9 +66,9 @@ class AmendAttendeeMember
      *
      * @throws PartnerListIsLocked
      */
-    private function changeFaction(EventAttendeeMembership $membership, ?int $factionId, bool $factionLocksWithList): void
+    private function changeFaction(EventAttendeeMembership $membership, ?int $factionId, bool $mayOverrideFactionLock): void
     {
-        if (! $factionLocksWithList) {
+        if ($mayOverrideFactionLock) {
             $membership->update(['faction_id' => $factionId]);
 
             return;

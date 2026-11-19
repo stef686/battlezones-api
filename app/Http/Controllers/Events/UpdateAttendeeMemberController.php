@@ -56,10 +56,10 @@ class UpdateAttendeeMemberController extends Controller
     ): EventAttendeeDetailResource {
         Gate::authorize('changeMembers', $attendee);
 
-        $correctsAsOrganiser = Gate::allows('correctMemberFaction', $attendee);
+        $mayCorrectFaction = Gate::allows('correctMemberFaction', $attendee);
 
         if ($membership->user->isClaimed()) {
-            $this->ensureClaimedPlayerMayBeAmended($request, $correctsAsOrganiser);
+            $this->ensureClaimedPlayerMayBeAmended($request, $mayCorrectFaction);
         }
 
         /** @var array{name?: string|null, email?: string, faction_id?: int|null} $changes */
@@ -69,7 +69,7 @@ class UpdateAttendeeMemberController extends Controller
             $membership,
             $changes,
             $request->user(),
-            factionLocksWithList: ! $correctsAsOrganiser,
+            mayOverrideFactionLock: $mayCorrectFaction,
         );
 
         $attendee->loadForDetail();
@@ -86,10 +86,10 @@ class UpdateAttendeeMemberController extends Controller
      * resending the value already held is told plainly rather than quietly
      * ignored.
      */
-    private function ensureClaimedPlayerMayBeAmended(UpdateAttendeeMemberRequest $request, bool $correctsAsOrganiser): void
+    private function ensureClaimedPlayerMayBeAmended(UpdateAttendeeMemberRequest $request, bool $mayCorrectFaction): void
     {
         abort_unless(
-            $correctsAsOrganiser,
+            $mayCorrectFaction,
             403,
             'That player has claimed their account, so only they can change their details.',
         );
