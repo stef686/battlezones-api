@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use RuntimeException;
 
 /**
@@ -19,7 +20,7 @@ class PartnerListIsLocked extends RuntimeException
         parent::__construct('Their list is locked. Ask an organiser to reopen it if their Faction needs changing.');
     }
 
-    public function render(): JsonResponse
+    public function render(Request $request): JsonResponse
     {
         return response()->json(['message' => $this->getMessage()], 403);
     }

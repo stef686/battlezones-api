@@ -5,6 +5,7 @@ use App\Enums\EventInviteRole;
 use App\Enums\EventOrganiserRole;
 use App\Models\Event;
 use App\Models\EventAttendee;
+use App\Models\EventAttendeeMembership;
 use App\Models\EventInvite;
 use App\Models\Faction;
 use App\Models\User;
@@ -24,6 +25,17 @@ function teamOfOneSoFar(array $eventAttributes = []): array
     $attendee = EventAttendee::factory()->for($event)->withMember($captain)->create(['name' => 'Sons of Terra']);
 
     return [$event, $attendee, $captain, Faction::factory()->create(['game_system_id' => $event->game_system_id])];
+}
+
+/**
+ * Seat this Player in the team, as a Captain adding them would, and return
+ * the seat every member endpoint addresses.
+ */
+function partnerIn(EventAttendee $attendee, User $partner): EventAttendeeMembership
+{
+    $attendee->members()->attach($partner, ['event_id' => $attendee->event_id]);
+
+    return $attendee->memberships()->where('user_id', $partner->id)->firstOrFail();
 }
 
 test('a captain adds their partner, who is invited', function () {
@@ -246,8 +258,7 @@ test('a captain corrects the name and faction of a partner who has not answered'
 
     [$event, $attendee, $captain, $faction] = teamOfOneSoFar();
     $partner = User::factory()->unclaimed()->create(['name' => 'Tarik Torgadon', 'email' => 'tarik@example.com']);
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
 
     $this->actingAs($captain)
         ->patchJson(route('events.attendees.members.update', [
@@ -302,8 +313,7 @@ test('a partner who has claimed their account keeps their own details', function
 
     [$event, $attendee, $captain, $faction] = teamOfOneSoFar();
     $partner = User::factory()->create(['name' => 'Tarik Torgaddon']);
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
 
     $this->actingAs($captain)
         ->patchJson(route('events.attendees.members.update', [
@@ -321,8 +331,7 @@ test('an organiser corrects the faction of a player who has claimed their accoun
 
     [$event, $attendee, , $faction] = teamOfOneSoFar();
     $partner = User::factory()->create();
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
 
     // A locked list does not stop an Organiser: they are the ones who unlock
     // lists, and this is how a wrong Faction is fixed on the day.
@@ -346,8 +355,7 @@ test('a team mate cannot change the faction of a partner who has claimed their a
 
     [$event, $attendee, $captain, $faction] = teamOfOneSoFar();
     $partner = User::factory()->create();
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
 
     $this->actingAs($captain)
         ->patchJson(route('events.attendees.members.update', [
@@ -366,8 +374,7 @@ test('an organiser cannot send the name or address of a player who has claimed t
 
     [$event, $attendee, , $faction] = teamOfOneSoFar();
     $partner = User::factory()->create(['name' => 'Tarik Torgaddon', 'email' => 'tarik@example.com']);
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
 
     // Refused on presence: even the value they already hold is not the
     // Organiser's to send.
@@ -388,8 +395,7 @@ test('a team mate cannot change the faction of a partner whose list is locked', 
 
     [$event, $attendee, $captain, $faction] = teamOfOneSoFar();
     $partner = User::factory()->unclaimed()->create();
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
     $chosen = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
     $membership->update(['faction_id' => $chosen->id, 'army_list_submitted_at' => now()]);
 
@@ -410,8 +416,7 @@ test('a team mate still corrects the name and address of a partner whose list is
 
     [$event, $attendee, $captain] = teamOfOneSoFar();
     $partner = User::factory()->unclaimed()->create(['name' => 'Tarik Torgadon', 'email' => 'tarik@exmaple.com']);
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
     $membership->update(['army_list_submitted_at' => now()]);
 
     $this->actingAs($captain)
@@ -433,8 +438,7 @@ test('an organiser changes the faction of an invited player whose list is locked
 
     [$event, $attendee, , $faction] = teamOfOneSoFar();
     $partner = User::factory()->unclaimed()->create();
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
     $membership->update(['army_list_submitted_at' => now()]);
 
     $this->actingAs(coOrganiserOf($event))
@@ -453,8 +457,7 @@ test('an address already entered in this event is refused', function () {
 
     [$event, $attendee, $captain] = teamOfOneSoFar();
     $partner = User::factory()->unclaimed()->create(['email' => 'tarik@example.com']);
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
 
     $rival = User::factory()->create(['email' => 'loken@example.com']);
     EventAttendee::factory()->for($event)->withMember($rival)->create();
@@ -476,8 +479,7 @@ test('a captain sends a waiting partner their invitation again', function () {
 
     [$event, $attendee, $captain] = teamOfOneSoFar();
     $partner = User::factory()->unclaimed()->create(['email' => 'tarik@example.com']);
-    $attendee->members()->attach($partner, ['event_id' => $event->id]);
-    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership = partnerIn($attendee, $partner);
 
     $this->actingAs($captain)
         ->postJson(route('events.attendees.members.invite', [
