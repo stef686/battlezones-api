@@ -383,6 +383,71 @@ test('an organiser cannot send the name or address of a player who has claimed t
     expect($membership->fresh()->faction_id)->toBeNull();
 })->with(['name', 'email']);
 
+test('a team mate cannot change the faction of a partner whose list is locked', function (bool $clearing) {
+    Notification::fake();
+
+    [$event, $attendee, $captain, $faction] = teamOfOneSoFar();
+    $partner = User::factory()->unclaimed()->create();
+    $attendee->members()->attach($partner, ['event_id' => $event->id]);
+    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $chosen = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
+    $membership->update(['faction_id' => $chosen->id, 'army_list_submitted_at' => now()]);
+
+    $this->actingAs($captain)
+        ->patchJson(route('events.attendees.members.update', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'membership' => $membership->id,
+        ]), ['faction_id' => $clearing ? null : $faction->id])
+        ->assertForbidden()
+        ->assertJsonPath('message', 'Their list is locked. Ask an organiser to reopen it if their Faction needs changing.');
+
+    expect($membership->fresh()->faction_id)->toBe($chosen->id);
+})->with(['changing' => false, 'clearing' => true]);
+
+test('a team mate still corrects the name and address of a partner whose list is locked', function () {
+    Notification::fake();
+
+    [$event, $attendee, $captain] = teamOfOneSoFar();
+    $partner = User::factory()->unclaimed()->create(['name' => 'Tarik Torgadon', 'email' => 'tarik@exmaple.com']);
+    $attendee->members()->attach($partner, ['event_id' => $event->id]);
+    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership->update(['army_list_submitted_at' => now()]);
+
+    $this->actingAs($captain)
+        ->patchJson(route('events.attendees.members.update', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'membership' => $membership->id,
+        ]), ['name' => 'Tarik Torgaddon', 'email' => 'tarik@example.com'])
+        ->assertSuccessful();
+
+    $corrected = User::where('email', 'tarik@example.com')->firstOrFail();
+
+    expect($membership->fresh()->user_id)->toBe($corrected->id)
+        ->and($corrected->name)->toBe('Tarik Torgaddon');
+});
+
+test('an organiser changes the faction of an invited player whose list is locked', function () {
+    Notification::fake();
+
+    [$event, $attendee, , $faction] = teamOfOneSoFar();
+    $partner = User::factory()->unclaimed()->create();
+    $attendee->members()->attach($partner, ['event_id' => $event->id]);
+    $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+    $membership->update(['army_list_submitted_at' => now()]);
+
+    $this->actingAs(coOrganiserOf($event))
+        ->patchJson(route('events.attendees.members.update', [
+            'event' => $event->slug,
+            'attendee' => $attendee->id,
+            'membership' => $membership->id,
+        ]), ['faction_id' => $faction->id])
+        ->assertSuccessful();
+
+    expect($membership->fresh()->faction_id)->toBe($faction->id);
+});
+
 test('an address already entered in this event is refused', function () {
     Notification::fake();
 

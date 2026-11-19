@@ -754,6 +754,39 @@ describe('the my team screens', () => {
         expect(view.find('[data-testid="partner-saved"]').exists()).toBe(true);
     });
 
+    it('fixes a partner\'s faction once their list is locked, and still saves their name and address', async () => {
+        const LOCKED = {
+            data: {
+                ...MY_TEAM.data,
+                members: [
+                    MY_TEAM.data.members[0],
+                    { ...MY_TEAM.data.members[1], faction: { id: 4, name: 'Sons of Horus' }, army_list_locked: true },
+                ],
+            },
+        };
+        const fetch = stubApi({
+            [`/api/events/${EVENT_SLUG}/attendees/9/members/42`]: { status: 200, body: LOCKED },
+            [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: LOCKED },
+            [`/api/events/${EVENT_SLUG}/factions`]: { status: 200, body: FACTIONS },
+            [`/api/events/${EVENT_SLUG}`]: { status: 200, body: ENTERED },
+        });
+
+        const view = mountView(PartnerView);
+        await flushPromises();
+
+        expect(view.get('[data-testid="partner-faction"]').attributes('disabled')).toBeDefined();
+        expect(view.text()).toContain('Their list is locked. Ask an organiser to reopen it if their Faction needs changing.');
+
+        await view.get('[data-testid="partner-name"]').setValue('Tarik Torgaddon');
+        await view.get('form').trigger('submit');
+        await flushPromises();
+
+        // The locked Faction is left out, or the API would refuse the whole save.
+        const amend = fetch.mock.calls.find(([url, init]) => String(url).endsWith('/members/42') && init?.method === 'PATCH')!;
+        expect(JSON.parse(amend[1]?.body as string)).toEqual({ name: 'Tarik Torgaddon', email: 'tarik@exmaple.com' });
+        expect(view.find('[data-testid="partner-saved"]').exists()).toBe(true);
+    });
+
     it('says a new invitation follows only once the address has changed', async () => {
         stubApi({
             [`/api/events/${EVENT_SLUG}/attendees/9`]: { status: 200, body: MY_TEAM },

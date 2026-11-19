@@ -47,15 +47,18 @@ class EventAttendeePolicy
     }
 
     /**
-     * Whether this User may correct the Faction of a Player in the party who
-     * has claimed their account.
+     * Whether this User may correct a Player's Faction past what team mates
+     * are held to: once the Player has claimed their account, or once their
+     * army list is locked.
      *
      * Its Organisers only, whatever the army list or Round state: the Faction
-     * belongs to the seat rather than the account, and fixing it on the day is
-     * their job. Team mates are refused, since a claimed account's details are
-     * its owner's. Admins too, as everywhere Filament repairs a team.
+     * belongs to the seat rather than the account, they are the ones who
+     * reopen lists, and fixing it on the day is their job. Team mates are
+     * refused, since a claimed account's details are its owner's and a locked
+     * list's Faction is fixed with it. Admins too, as everywhere Filament
+     * repairs a team.
      */
-    public function correctClaimedFaction(User $user, EventAttendee $attendee): bool
+    public function correctMemberFaction(User $user, EventAttendee $attendee): bool
     {
         return $user->is_admin || $attendee->event->isOrganisedBy($user);
     }
