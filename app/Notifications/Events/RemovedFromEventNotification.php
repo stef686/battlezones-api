@@ -58,8 +58,20 @@ class RemovedFromEventNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage())
             ->subject("You're no longer entered in {$this->event->name}")
-            ->line("{$this->removedBy->public_name} has removed {$this->attendeeName} from {$this->event->name}. If you weren't expecting this, contact the organisers.")
+            ->line("{$this->remover()} has removed {$this->attendeeName} from {$this->event->name}. If you weren't expecting this, contact the organisers.")
             ->action('View the event', Frontend::eventUrl($this->event))
             ->salutation('The Battlezones Team');
+    }
+
+    /**
+     * The Organiser by name, or "An organiser" for a platform admin working
+     * Filament: the Players do not know them, and the email points them at the
+     * organisers anyway.
+     */
+    private function remover(): string
+    {
+        return $this->event->isOrganisedBy($this->removedBy)
+            ? $this->removedBy->public_name
+            : 'An organiser';
     }
 }

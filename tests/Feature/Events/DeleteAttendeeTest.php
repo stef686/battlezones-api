@@ -205,7 +205,7 @@ test('players are told only while the event is open or under way', function (Eve
     'cancelled' => [EventStatus::Cancelled, false],
 ]);
 
-test('nobody is told when the delete is refused or rolls back', function () {
+test('nobody is told when the delete rolls back', function () {
     Notification::fake();
 
     [$event, $attendee] = neverPairedTeam();
@@ -220,10 +220,19 @@ test('nobody is told when the delete is refused or rolls back', function () {
     } catch (RuntimeException) {
     }
 
+    expect(EventAttendee::find($attendee->id))->not->toBeNull();
+
+    Notification::assertNothingSent();
+});
+
+test('nobody is told when the delete is refused', function () {
+    Notification::fake();
+
+    [$event, $attendee] = neverPairedTeam();
     $round = Round::factory()->for($event)->create(['number' => 1]);
     Game::factory()->for($round)->create()->attendees()->attach($attendee);
 
-    $this->actingAs($organiser)
+    $this->actingAs(coOrganiserOf($event))
         ->deleteJson(deleteAttendeeRoute($event, $attendee))
         ->assertUnprocessable();
 
@@ -260,4 +269,20 @@ test('the email names who removed the team and links to the event, and the in-ap
     });
 
     expect(NotificationType::tryFrom('removed_from_event'))->toBeNull();
+});
+
+test('a platform admin is not named to the players, since they do not know them', function () {
+    Notification::fake();
+
+    $event = Event::factory()->published()->create(['name' => 'London Grand Tournament', 'attendee_size' => 2]);
+    $admin = User::factory()->admin()->create(['name' => 'Malcador']);
+    $player = User::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember($player)->create(['name' => 'Ada and Grace']);
+
+    $this->actingAs($admin)
+        ->deleteJson(deleteAttendeeRoute($event, $attendee))
+        ->assertNoContent();
+
+    Notification::assertSentTo($player, fn (RemovedFromEventNotification $notification): bool => $notification->toMail($player)->introLines
+        === ["An organiser has removed Ada and Grace from London Grand Tournament. If you weren't expecting this, contact the organisers."]);
 });
