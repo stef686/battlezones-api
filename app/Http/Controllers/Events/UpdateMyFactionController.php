@@ -21,6 +21,9 @@ class UpdateMyFactionController extends Controller
      * The Faction locks with the army list: opponents prepare against both.
      * The write is conditional on the list still being unlocked, so a list
      * submitted at the same moment cannot have its Faction changed under it.
+     * MySQL counts rows changed rather than matched, so re-saving the current
+     * Faction within a second writes nothing; zero rows is only a refusal once
+     * the re-read row says the list is locked.
      */
     #[Endpoint('Record My Faction', 'The Faction this Player is bringing. Personal to the Player, not the party: a doubles team fields two Factions under one Allegiance. Refused once their army list is submitted, until an Organiser reopens it.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
@@ -59,7 +62,7 @@ class UpdateMyFactionController extends Controller
             ->update(['faction_id' => $request->validated('faction_id')]);
 
         abort_if(
-            $changed === 0,
+            $changed === 0 && $membership->refresh()->isArmyListLocked(),
             403,
             'Your list is locked. Ask an organiser to reopen it if you need to change your Faction.',
         );

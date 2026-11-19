@@ -133,14 +133,26 @@ test('an unclaimed player who entered on an invite can still say what they are b
         ->assertJsonPath('data.members.0.faction.id', $faction->id);
 });
 
-test('a player cannot change or clear their faction once their list is locked', function (bool $clearing) {
+/**
+ * A Player who has chosen a Faction and submitted their list, so both are locked.
+ *
+ * @return array{0: Event, 1: EventAttendee, 2: User, 3: Faction}
+ */
+function lockedPlayer(): array
+{
     $event = Event::factory()->published()->create();
     $chosen = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
-    $other = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
     $player = User::factory()->create();
 
     $attendee = EventAttendee::factory()->for($event)->create();
     $attendee->members()->attach($player, ['event_id' => $event->id, 'faction_id' => $chosen->id, 'army_list_submitted_at' => now()]);
+
+    return [$event, $attendee, $player, $chosen];
+}
+
+test('a player cannot change or clear their faction once their list is locked', function (bool $clearing) {
+    [$event, $attendee, $player, $chosen] = lockedPlayer();
+    $other = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
 
     $this->actingAs($player)
         ->patchJson(route('events.my-faction.update', ['event' => $event->slug]), ['faction_id' => $clearing ? null : $other->id])
@@ -154,13 +166,8 @@ test('a player cannot change or clear their faction once their list is locked', 
 ]);
 
 test('once an organiser reopens their list, a player can change their faction again', function () {
-    $event = Event::factory()->published()->create();
-    $chosen = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
+    [$event, $attendee, $player] = lockedPlayer();
     $corrected = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
-    $player = User::factory()->create();
-
-    $attendee = EventAttendee::factory()->for($event)->create();
-    $attendee->members()->attach($player, ['event_id' => $event->id, 'faction_id' => $chosen->id, 'army_list_submitted_at' => now()]);
 
     $this->actingAs(organiserOf($event))
         ->postJson(route('events.army-list.unlock', [
@@ -174,4 +181,22 @@ test('once an organiser reopens their list, a player can change their faction ag
         ->patchJson(route('events.my-faction.update', ['event' => $event->slug]), ['faction_id' => $corrected->id])
         ->assertOk()
         ->assertJsonPath('data.members.0.faction.id', $corrected->id);
+});
+
+test('saving the same faction twice on an unlocked list is not mistaken for a lock', function () {
+    $this->freezeSecond();
+
+    $event = Event::factory()->published()->create();
+    $faction = Faction::factory()->create(['game_system_id' => $event->game_system_id]);
+    $player = User::factory()->create();
+
+    $attendee = EventAttendee::factory()->for($event)->create();
+    $attendee->members()->attach($player, ['event_id' => $event->id]);
+
+    foreach ([1, 2] as $attempt) {
+        $this->actingAs($player)
+            ->patchJson(route('events.my-faction.update', ['event' => $event->slug]), ['faction_id' => $faction->id])
+            ->assertOk()
+            ->assertJsonPath('data.members.0.faction.id', $faction->id);
+    }
 });
