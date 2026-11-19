@@ -19,7 +19,9 @@ use Illuminate\Notifications\Notification;
  * There is no NotificationType for it, so it never shows as a preference.
  *
  * It carries the Attendee's name as it stood rather than the Attendee, which
- * is gone by the time a queued job would try to load it.
+ * is gone by the time a queued job would try to load it. Two things take a
+ * place away, and each has its own line: the whole Attendee being Deleted,
+ * or this one Player being taken out of it.
  */
 class RemovedFromEventNotification extends Notification implements ShouldQueue
 {
@@ -31,7 +33,24 @@ class RemovedFromEventNotification extends Notification implements ShouldQueue
         public Event $event,
         public User $removedBy,
         public string $attendeeName,
+        public bool $wholeAttendee,
     ) {}
+
+    /**
+     * The Attendee this Player was in has been Deleted.
+     */
+    public static function attendeeDeleted(Event $event, User $removedBy, string $attendeeName): self
+    {
+        return new self($event, $removedBy, $attendeeName, wholeAttendee: true);
+    }
+
+    /**
+     * This Player alone has been taken out of their Attendee.
+     */
+    public static function memberRemoved(Event $event, User $removedBy, string $attendeeName): self
+    {
+        return new self($event, $removedBy, $attendeeName, wholeAttendee: false);
+    }
 
     /**
      * @return array<int, string>
@@ -58,20 +77,23 @@ class RemovedFromEventNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage())
             ->subject("You're no longer entered in {$this->event->name}")
-            ->line("{$this->remover()} has removed {$this->attendeeName} from {$this->event->name}. If you weren't expecting this, contact the organisers.")
+            ->line($this->wholeAttendee
+                ? "{$this->remover()} has removed {$this->attendeeName} from {$this->event->name}. If you weren't expecting this, contact the organisers."
+                : "{$this->remover()} has removed you from {$this->attendeeName} in {$this->event->name}.")
             ->action('View the event', Frontend::eventUrl($this->event))
             ->salutation('The Battlezones Team');
     }
 
     /**
-     * The Organiser by name, or "An organiser" for a platform admin working
-     * Filament: the Players do not know them, and the email points them at the
-     * organisers anyway.
+     * Named when the Player knows them: an Organiser of the Event, or for a
+     * member removal the team mate who did it. Anyone else is a platform admin
+     * working Filament, whom the Players do not know, so "An organiser".
      */
     private function remover(): string
     {
-        return $this->event->isOrganisedBy($this->removedBy)
-            ? $this->removedBy->public_name
-            : 'An organiser';
+        $known = $this->event->isOrganisedBy($this->removedBy)
+            || (! $this->wholeAttendee && $this->event->isAttendedBy($this->removedBy));
+
+        return $known ? $this->removedBy->public_name : 'An organiser';
     }
 }

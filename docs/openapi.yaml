@@ -7144,7 +7144,7 @@ paths:
     delete:
       summary: 'Remove a Player from a Team'
       operationId: removeAPlayerFromATeam
-      description: 'Closed to members once registration closes; Organisers are never blocked. Their outstanding Invites into this Team are revoked with it.'
+      description: 'Closed to members once registration closes; Organisers are never blocked. Their outstanding Invites into this Team are revoked with it. While the Event is Published or Active the removed Player is emailed (and told in-app once claimed), unless they removed themselves.'
       parameters: []
       responses:
         200:

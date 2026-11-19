@@ -1794,7 +1794,7 @@ export interface paths {
         post?: never;
         /**
          * Remove a Player from a Team
-         * @description Closed to members once registration closes; Organisers are never blocked. Their outstanding Invites into this Team are revoked with it.
+         * @description Closed to members once registration closes; Organisers are never blocked. Their outstanding Invites into this Team are revoked with it. While the Event is Published or Active the removed Player is emailed (and told in-app once claimed), unless they removed themselves.
          */
         delete: operations["removeAPlayerFromATeam"];
         options?: never;
