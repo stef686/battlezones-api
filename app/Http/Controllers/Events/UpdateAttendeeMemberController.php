@@ -22,7 +22,7 @@ class UpdateAttendeeMemberController extends Controller
 {
     #[Endpoint(
         'Amend a team mate',
-        'The name, address and Faction of a team mate. Once they have claimed their account, their name and address are theirs alone, and only an Organiser can still correct their Faction. Addressed by membership because the membership is the seat being amended.'
+        'The name, address and Faction of a team mate. Once they have claimed their account, their name and address are theirs alone, and only an Organiser can still correct their Faction. The Faction also locks with the Player\'s army list: once it is submitted, only an Organiser can change or clear it. Addressed by membership because the membership is the seat being amended.'
     )]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
@@ -46,6 +46,7 @@ class UpdateAttendeeMemberController extends Controller
     ]])]
     #[Response(['message' => 'That player has claimed their account, so only they can change their details.'], 403, 'The Player has an account of their own, and the caller is not an Organiser.')]
     #[Response(['message' => 'That player has claimed their account, so only they can change their name and email.'], 403, 'An Organiser sent a name or email for a Player with an account of their own.')]
+    #[Response(['message' => 'Their list is locked. Ask an organiser to reopen it if their Faction needs changing.'], 403, 'A team mate sent a Faction for a Player whose army list is locked.')]
     public function __invoke(
         UpdateAttendeeMemberRequest $request,
         Event $event,
@@ -55,14 +56,21 @@ class UpdateAttendeeMemberController extends Controller
     ): EventAttendeeDetailResource {
         Gate::authorize('changeMembers', $attendee);
 
+        $correctsAsOrganiser = Gate::allows('correctMemberFaction', $attendee);
+
         if ($membership->user->isClaimed()) {
-            $this->ensureClaimedPlayerMayBeAmended($request, $attendee);
+            $this->ensureClaimedPlayerMayBeAmended($request, $correctsAsOrganiser);
         }
 
         /** @var array{name?: string|null, email?: string, faction_id?: int|null} $changes */
         $changes = $request->validated();
 
-        $amendAttendeeMember->handle($membership, $changes, $request->user());
+        $amendAttendeeMember->handle(
+            $membership,
+            $changes,
+            $request->user(),
+            factionLocksWithList: ! $correctsAsOrganiser,
+        );
 
         $attendee->loadForDetail();
 
@@ -78,10 +86,10 @@ class UpdateAttendeeMemberController extends Controller
      * resending the value already held is told plainly rather than quietly
      * ignored.
      */
-    private function ensureClaimedPlayerMayBeAmended(UpdateAttendeeMemberRequest $request, EventAttendee $attendee): void
+    private function ensureClaimedPlayerMayBeAmended(UpdateAttendeeMemberRequest $request, bool $correctsAsOrganiser): void
     {
         abort_unless(
-            Gate::allows('correctClaimedFaction', $attendee),
+            $correctsAsOrganiser,
             403,
             'That player has claimed their account, so only they can change their details.',
         );

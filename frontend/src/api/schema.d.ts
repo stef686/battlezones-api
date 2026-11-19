@@ -1824,7 +1824,7 @@ export interface paths {
         head?: never;
         /**
          * Amend a team mate
-         * @description The name, address and Faction of a team mate. Once they have claimed their account, their name and address are theirs alone, and only an Organiser can still correct their Faction. Addressed by membership because the membership is the seat being amended.
+         * @description The name, address and Faction of a team mate. Once they have claimed their account, their name and address are theirs alone, and only an Organiser can still correct their Faction. The Faction also locks with the Player's army list: once it is submitted, only an Organiser can change or clear it. Addressed by membership because the membership is the seat being amended.
          */
         patch: operations["amendATeamMate"];
         trace?: never;
@@ -7771,6 +7771,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        message?: string;
+                    } | {
                         message?: string;
                     } | {
                         message?: string;

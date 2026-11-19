@@ -38,6 +38,15 @@ const factionOptions = computed(() => (factions.value ?? []).map((faction) => ({
  */
 const editable = computed(() => partner.value === null || partner.value.invite_outstanding === true);
 
+/**
+ * The Faction locks with the partner's army list, as a Player's own does: an
+ * unclaimed partner can still submit theirs through their Invite. Only an
+ * Organiser, who can reopen the list, may change it after that.
+ */
+const factionLocked = computed(() => partner.value?.army_list_locked === true);
+
+const LOCKED_HINT = 'Their list is locked. Ask an organiser to reopen it if their Faction needs changing.';
+
 const name = ref('');
 const email = ref('');
 const factionId = ref('');
@@ -94,11 +103,12 @@ async function save(): Promise<void> {
       });
     } else if (mate.membership_id !== undefined) {
       // The address goes back whether or not it changed; the API reissues the
-      // invitation only when it actually differs from the one on file.
+      // invitation only when it actually differs from the one on file. A
+      // locked Faction is left out, since the API refuses any Faction then.
       await amendMember(client, props.eventSlug, attendeeId.value, mate.membership_id, {
         name: name.value,
         email: email.value,
-        faction_id: faction,
+        ...(factionLocked.value ? {} : { faction_id: faction }),
       });
     }
 
@@ -220,6 +230,8 @@ async function resend(): Promise<void> {
             placeholder="Not decided yet"
             testid="partner-faction"
             :options="factionOptions"
+            :disabled="factionLocked"
+            :hint="factionLocked ? LOCKED_HINT : null"
             :errors="fieldErrors('faction_id')"
           />
 

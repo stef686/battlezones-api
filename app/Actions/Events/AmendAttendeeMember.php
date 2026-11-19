@@ -3,6 +3,7 @@
 namespace App\Actions\Events;
 
 use App\Enums\EventInviteRole;
+use App\Exceptions\PartnerListIsLocked;
 use App\Models\EventAttendeeMembership;
 use App\Models\EventInvite;
 use App\Models\User;
@@ -25,13 +26,20 @@ class AmendAttendeeMember
 
     /**
      * @param  array{name?: string|null, email?: string, faction_id?: int|null}  $changes
+     * @param  bool  $factionLocksWithList  Whether a locked army list refuses the Faction change, as it does for a team mate but not an Organiser.
+     *
+     * @throws PartnerListIsLocked
      */
-    public function handle(EventAttendeeMembership $membership, array $changes, User $amendedBy): EventAttendeeMembership
-    {
+    public function handle(
+        EventAttendeeMembership $membership,
+        array $changes,
+        User $amendedBy,
+        bool $factionLocksWithList,
+    ): EventAttendeeMembership {
         $player = $membership->user;
 
         if (array_key_exists('faction_id', $changes)) {
-            $membership->update(['faction_id' => $changes['faction_id']]);
+            $this->changeFaction($membership, $changes['faction_id'], $factionLocksWithList);
         }
 
         if (array_key_exists('name', $changes) && $changes['name'] !== null) {
@@ -45,6 +53,35 @@ class AmendAttendeeMember
         }
 
         return $membership->fresh() ?? $membership;
+    }
+
+    /**
+     * Write the Faction, conditional on the list still being unlocked where
+     * the lock applies, so a list submitted at the same moment cannot have its
+     * Faction changed under it.
+     *
+     * The Faction is written first, so a refusal leaves the name and address
+     * untouched too. MySQL counts rows changed rather than matched, so zero
+     * rows is only a refusal once the re-read row says the list is locked.
+     *
+     * @throws PartnerListIsLocked
+     */
+    private function changeFaction(EventAttendeeMembership $membership, ?int $factionId, bool $factionLocksWithList): void
+    {
+        if (! $factionLocksWithList) {
+            $membership->update(['faction_id' => $factionId]);
+
+            return;
+        }
+
+        $changed = EventAttendeeMembership::query()
+            ->whereKey($membership->getKey())
+            ->whereNull('army_list_submitted_at')
+            ->update(['faction_id' => $factionId]);
+
+        if ($changed === 0 && $membership->refresh()->isArmyListLocked()) {
+            throw new PartnerListIsLocked();
+        }
     }
 
     /**
