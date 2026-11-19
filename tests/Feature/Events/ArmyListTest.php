@@ -37,6 +37,7 @@ test('a list cannot be submitted before a faction is chosen', function () {
             'army_list' => '2000pts Ultramarines',
         ])
         ->assertUnprocessable()
+        ->assertJsonValidationErrors(['faction'])
         ->assertJsonPath('message', 'Choose your Faction before submitting your list.');
 
     $membership = $attendee->memberships()->firstOrFail();

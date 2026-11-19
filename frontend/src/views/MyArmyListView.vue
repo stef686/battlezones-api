@@ -104,14 +104,14 @@ async function submit(): Promise<void> {
           data-testid="army-list-needs-faction"
           class="text-sm text-muted-foreground-1"
         >
-          Choose your faction before submitting your list.
           <RouterLink
             :to="{ name: 'my-team-faction', params: { eventSlug: props.eventSlug } }"
             data-testid="army-list-choose-faction"
             class="font-medium text-primary decoration-2 hover:underline focus:underline focus:outline-hidden"
           >
-            Choose faction
+            Choose your faction
           </RouterLink>
+          before submitting your list.
         </p>
         <AppButton
           data-testid="submit-army-list"

@@ -7133,6 +7133,7 @@ export interface operations {
                     };
                 };
             };
+            /** @description No Faction chosen, or the list failed validation. */
             422: {
                 headers: {
                     [name: string]: unknown;

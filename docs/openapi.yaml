@@ -6395,7 +6395,7 @@ paths:
                   message:
                     type: string
         422:
-          description: ''
+          description: 'No Faction chosen, or the list failed validation.'
           content:
             application/json:
               schema:
