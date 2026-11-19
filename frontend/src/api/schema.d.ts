@@ -1404,7 +1404,7 @@ export interface paths {
         head?: never;
         /**
          * Record My Faction
-         * @description The Faction this Player is bringing. Personal to the Player, not the party: a doubles team fields two Factions under one Allegiance.
+         * @description The Faction this Player is bringing. Personal to the Player, not the party: a doubles team fields two Factions under one Allegiance. Refused once their army list is submitted, until an Organiser reopens it.
          */
         patch: operations["recordMyFaction"];
         trace?: never;
@@ -6163,6 +6163,17 @@ export interface operations {
             };
             /** @description The request carries no valid token. */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message?: string;
+                    };
+                };
+            };
+            /** @description The Player's army list is locked. */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

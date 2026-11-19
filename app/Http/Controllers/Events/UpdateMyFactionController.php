@@ -17,7 +17,12 @@ use Knuckles\Scribe\Attributes\UrlParam;
 #[Authenticated]
 class UpdateMyFactionController extends Controller
 {
-    #[Endpoint('Record My Faction', 'The Faction this Player is bringing. Personal to the Player, not the party: a doubles team fields two Factions under one Allegiance.')]
+    /**
+     * The Faction locks with the army list: opponents prepare against both.
+     * The write is conditional on the list still being unlocked, so a list
+     * submitted at the same moment cannot have its Faction changed under it.
+     */
+    #[Endpoint('Record My Faction', 'The Faction this Player is bringing. Personal to the Player, not the party: a doubles team fields two Factions under one Allegiance. Refused once their army list is submitted, until an Organiser reopens it.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[Response(status: 200, content: ['data' => [
         'id' => 9,
@@ -34,6 +39,7 @@ class UpdateMyFactionController extends Controller
         'custom_field_responses' => [],
         'games' => [],
     ]])]
+    #[Response(['message' => 'Your list is locked. Ask an organiser to reopen it if you need to change your Faction.'], 403, 'The Player\'s army list is locked.')]
     #[Response(['message' => 'Not Found.'], 404, 'This Player has not entered this Event.')]
     public function __invoke(UpdateMyFactionRequest $request, Event $event): EventAttendeeDetailResource
     {
@@ -47,7 +53,16 @@ class UpdateMyFactionController extends Controller
             ->where('user_id', $request->user()->getKey())
             ->firstOrFail();
 
-        $membership->update(['faction_id' => $request->validated('faction_id')]);
+        $changed = EventAttendeeMembership::query()
+            ->whereKey($membership->getKey())
+            ->whereNull('army_list_submitted_at')
+            ->update(['faction_id' => $request->validated('faction_id')]);
+
+        abort_if(
+            $changed === 0,
+            403,
+            'Your list is locked. Ask an organiser to reopen it if you need to change your Faction.',
+        );
 
         $attendee = $membership->attendee()->firstOrFail();
 
