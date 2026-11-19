@@ -40,6 +40,9 @@ watch(me, (member) => {
  */
 const factionLocked = computed(() => me.value?.army_list_locked === true);
 
+/** The API's own refusal, said up front rather than after a refused save. */
+const LOCKED_HINT = 'Your list is locked. Ask an organiser to reopen it if you need to change your Faction.';
+
 const saving = ref(false);
 const saved = ref(false);
 const failure = ref<ApiError | null>(null);
@@ -97,7 +100,7 @@ async function save(): Promise<void> {
           :options="factionOptions"
           :errors="failure?.fields['faction_id'] ?? []"
           :disabled="factionLocked"
-          :hint="factionLocked ? 'Your list is locked. Ask an organiser to reopen it if you need to change your Faction.' : null"
+          :hint="factionLocked ? LOCKED_HINT : null"
         />
 
         <AppAlert
