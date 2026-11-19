@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Event;
+
 /**
  * Links into the SPA.
  *
@@ -38,6 +40,14 @@ class Frontend
         $url = rtrim((string) config('app.frontend_url'), '/').'/'.ltrim($path, '/');
 
         return $query === [] ? $url : $url.'?'.http_build_query($query);
+    }
+
+    /**
+     * The Event's own screen, which anyone may open once it is public.
+     */
+    public static function eventUrl(Event $event): string
+    {
+        return self::url('/events/'.$event->slug);
     }
 
     public static function inviteUrl(string $token): string

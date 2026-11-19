@@ -615,7 +615,7 @@ export interface paths {
         post?: never;
         /**
          * Delete a Team
-         * @description Organisers only. Removes an Attendee that has never been in a Game, Draft Rounds included; a paired Attendee is refused with 422 and should be Dropped instead.
+         * @description Organisers only. Removes an Attendee that has never been in a Game, Draft Rounds included; a paired Attendee is refused with 422 and should be Dropped instead. While the Event is Published or Active, its Players are emailed (and told in-app once claimed), except the Organiser deleting it.
          */
         delete: operations["deleteATeam"];
         options?: never;
