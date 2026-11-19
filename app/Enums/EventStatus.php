@@ -10,6 +10,17 @@ enum EventStatus: string
     case Completed = 'completed';
     case Cancelled = 'cancelled';
 
+    /**
+     * Whether a Player who loses their place in the Event is told.
+     *
+     * Only while it is open or under way: once Completed or Cancelled,
+     * everyone has already heard, or the Player never turned up.
+     */
+    public function announcesRemovals(): bool
+    {
+        return in_array($this, [self::Published, self::Active], true);
+    }
+
     public function isPubliclyVisible(): bool
     {
         return match ($this) {

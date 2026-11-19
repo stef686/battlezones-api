@@ -21,7 +21,7 @@ class DeleteEventAttendeeController extends Controller
 {
     public function __construct(private DeleteAttendee $deleteAttendee) {}
 
-    #[Endpoint('Delete a Team', 'Organisers only. Removes an Attendee that has never been in a Game, Draft Rounds included; a paired Attendee is refused with 422 and should be Dropped instead.')]
+    #[Endpoint('Delete a Team', 'Organisers only. Removes an Attendee that has never been in a Game, Draft Rounds included; a paired Attendee is refused with 422 and should be Dropped instead. While the Event is Published or Active, its Players are emailed (and told in-app once claimed), except the Organiser deleting it.')]
     #[UrlParam('event_slug', 'string', 'The slug of the event.', example: 'london-grand-tournament')]
     #[UrlParam('attendee_id', 'integer', 'The id of the attendee.', example: 1)]
     #[ResponseAttribute(status: 204, description: 'The Attendee was deleted.')]
@@ -32,7 +32,7 @@ class DeleteEventAttendeeController extends Controller
 
         Gate::authorize('delete', $attendee);
 
-        $this->deleteAttendee->execute($attendee);
+        $this->deleteAttendee->execute($attendee, $request->user());
 
         return response()->noContent();
     }

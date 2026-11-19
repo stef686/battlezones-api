@@ -5,11 +5,13 @@ namespace App\Filament\Resources\Events\RelationManagers;
 use App\Actions\Events\DeleteAttendee;
 use App\Enums\Allegiance;
 use App\Models\EventAttendee;
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -71,7 +73,7 @@ class AttendeesRelationManager extends RelationManager
                 DeleteAction::make()
                     ->using(function (DeleteAction $action, EventAttendee $record, DeleteAttendee $deleteAttendee): bool {
                         try {
-                            $deleteAttendee->execute($record);
+                            $deleteAttendee->execute($record, self::admin());
                         } catch (ValidationException $refusal) {
                             $action->failureNotificationTitle($refusal->errors()['attendee'][0]);
 
@@ -89,7 +91,7 @@ class AttendeesRelationManager extends RelationManager
 
                             foreach ($records->ensure(EventAttendee::class) as $attendee) {
                                 try {
-                                    $deleteAttendee->execute($attendee);
+                                    $deleteAttendee->execute($attendee, self::admin());
                                 } catch (ValidationException) {
                                     $refused->push($attendee);
                                     $action->reportBulkProcessingFailure(
@@ -105,5 +107,17 @@ class AttendeesRelationManager extends RelationManager
                         }),
                 ]),
             ]);
+    }
+
+    /**
+     * The admin working the panel, named as the one who removed the Players.
+     */
+    private static function admin(): User
+    {
+        $admin = Filament::auth()->user();
+
+        assert($admin instanceof User);
+
+        return $admin;
     }
 }

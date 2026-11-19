@@ -25,6 +25,7 @@ use App\Models\Game;
 use App\Models\GameSystem;
 use App\Models\Round;
 use App\Models\User;
+use App\Notifications\Events\RemovedFromEventNotification;
 use App\Services\UploadStorage;
 use Filament\Actions\AttachAction;
 use Filament\Actions\CreateAction;
@@ -34,6 +35,7 @@ use Filament\Actions\DetachAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\Testing\TestAction;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Notification as Notifications;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
@@ -261,6 +263,25 @@ test('can delete an attendee via relation manager', function () {
 
     assertDatabaseMissing(EventAttendee::class, ['id' => $attendee->id]);
 });
+
+test('deleting an attendee via relation manager tells its players, single and bulk', function (bool $bulk) {
+    Notifications::fake();
+
+    $event = Event::factory()->published()->create();
+    $player = User::factory()->create();
+    $attendee = EventAttendee::factory()->for($event)->withMember($player)->create();
+
+    Livewire::test(AttendeesRelationManager::class, [
+        'ownerRecord' => $event,
+        'pageClass' => EditEvent::class,
+    ])
+        ->selectTableRecords([$attendee])
+        ->callAction($bulk
+            ? TestAction::make(DeleteBulkAction::class)->table()->bulk()
+            : TestAction::make(DeleteAction::class)->table($attendee));
+
+    Notifications::assertSentTo($player, RemovedFromEventNotification::class, fn (RemovedFromEventNotification $notification): bool => $notification->removedBy->is(auth()->user()));
+})->with(['single' => false, 'bulk' => true]);
 
 test('deleting an attendee via relation manager removes its avatar file', function () {
     Storage::fake(UploadStorage::name());
