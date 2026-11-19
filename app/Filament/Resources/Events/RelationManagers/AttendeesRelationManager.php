@@ -17,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
@@ -90,6 +91,10 @@ class AttendeesRelationManager extends RelationManager
                             $refused = new EloquentCollection();
 
                             foreach ($records->ensure(EventAttendee::class) as $attendee) {
+                                // Every record hangs off the Event on screen, so
+                                // the action need not load it once per row.
+                                $attendee->setRelation('event', $this->getOwnerRecord());
+
                                 try {
                                     $deleteAttendee->execute($attendee, self::admin());
                                 } catch (ValidationException) {
@@ -110,13 +115,15 @@ class AttendeesRelationManager extends RelationManager
     }
 
     /**
-     * The admin working the panel, named as the one who removed the Players.
+     * The admin working the panel, recorded as the one who removed the Players.
+     *
+     * @throws AuthenticationException
      */
     private static function admin(): User
     {
         $admin = Filament::auth()->user();
 
-        assert($admin instanceof User);
+        throw_unless($admin instanceof User, AuthenticationException::class);
 
         return $admin;
     }
