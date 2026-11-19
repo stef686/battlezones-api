@@ -1,8 +1,10 @@
 <?php
 
+use App\Actions\Events\RemoveAttendeeMember;
 use App\Actions\Events\SendEventInvite;
 use App\Enums\EventInviteRole;
 use App\Enums\EventOrganiserRole;
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventAttendee;
 use App\Models\EventAttendeeMembership;
@@ -10,6 +12,9 @@ use App\Models\EventInvite;
 use App\Models\Faction;
 use App\Models\User;
 use App\Notifications\Events\EventInviteNotification;
+use App\Notifications\Events\RemovedFromEventNotification;
+use App\Services\Frontend;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 /**
@@ -251,6 +256,139 @@ test('a removed partner keeps an invitation to enter the event on their own', fu
     $this->getJson(route('invites.show', ['token' => $captainToken]))
         ->assertSuccessful()
         ->assertJsonPath('data.role', 'captain');
+});
+
+function removeMemberRoute(EventAttendee $attendee, User $member): string
+{
+    return route('events.attendees.members.destroy', [
+        'event' => $attendee->event->slug,
+        'attendee' => $attendee->id,
+        'member' => $member->id,
+    ]);
+}
+
+test('a removed partner is told, by email whether or not they have claimed their account', function (bool $claimed) {
+    Notification::fake();
+
+    [, $attendee, $captain] = teamOfOneSoFar();
+    $partner = $claimed ? User::factory()->create() : User::factory()->unclaimed()->create();
+    partnerIn($attendee, $partner);
+
+    $this->actingAs($captain)->deleteJson(removeMemberRoute($attendee, $partner))->assertSuccessful();
+
+    Notification::assertSentTo(
+        $partner,
+        RemovedFromEventNotification::class,
+        fn (RemovedFromEventNotification $notification, array $channels): bool => $channels === ($claimed ? ['mail', 'database'] : ['mail']),
+    );
+    Notification::assertNotSentTo($captain, RemovedFromEventNotification::class);
+})->with(['claimed' => true, 'invited' => false]);
+
+test('the email names whoever removed them, team mate or organiser', function (string $remover) {
+    Notification::fake();
+
+    [$event, $attendee, $captain] = teamOfOneSoFar(['name' => 'London Grand Tournament']);
+    $captain->update(['name' => 'Garviel Loken', 'show_public_name' => true]);
+    $partner = User::factory()->create();
+    partnerIn($attendee, $partner);
+    $actor = $remover === 'organiser' ? organiserOf($event) : $captain;
+    $actor->update(['name' => 'Garviel Loken', 'show_public_name' => true]);
+
+    $this->actingAs($actor)->deleteJson(removeMemberRoute($attendee, $partner))->assertSuccessful();
+
+    Notification::assertSentTo($partner, function (RemovedFromEventNotification $notification) use ($partner, $event, $actor): bool {
+        $mail = $notification->toMail($partner);
+
+        return $mail->subject === "You're no longer entered in London Grand Tournament"
+            && $mail->introLines === ['Garviel Loken has removed you from Sons of Terra in London Grand Tournament.']
+            && $mail->actionText === 'View the event'
+            && $mail->actionUrl === Frontend::eventUrl($event)
+            && $notification->toArray($partner) === [
+                'type' => 'removed_from_event',
+                'event_id' => $event->id,
+                'actor_id' => $actor->id,
+            ];
+    });
+})->with(['team mate', 'organiser']);
+
+test('a player who leaves their team is not told about their own removal', function () {
+    Notification::fake();
+
+    [, $attendee, $captain] = teamOfOneSoFar();
+    $partner = User::factory()->create();
+    partnerIn($attendee, $partner);
+
+    $this->actingAs($partner)->deleteJson(removeMemberRoute($attendee, $partner))->assertSuccessful();
+
+    Notification::assertNothingSent();
+});
+
+test('only the removed player is told, not the rest of the team', function () {
+    Notification::fake();
+
+    [, $attendee, $captain] = teamOfOneSoFar(['attendee_size' => 3]);
+    $leaving = User::factory()->create();
+    $staying = User::factory()->create();
+    partnerIn($attendee, $leaving);
+    partnerIn($attendee, $staying);
+
+    $this->actingAs($captain)->deleteJson(removeMemberRoute($attendee, $leaving))->assertSuccessful();
+
+    Notification::assertSentTo($leaving, RemovedFromEventNotification::class);
+    Notification::assertNotSentTo([$captain, $staying], RemovedFromEventNotification::class);
+});
+
+test('a removal is announced only while the event is open or under way', function (EventStatus $status, bool $told) {
+    Notification::fake();
+
+    [$event, $attendee] = teamOfOneSoFar();
+    $event->update(['status' => $status]);
+    $partner = User::factory()->create();
+    partnerIn($attendee, $partner);
+
+    $this->actingAs(organiserOf($event))->deleteJson(removeMemberRoute($attendee, $partner))->assertSuccessful();
+
+    $told
+        ? Notification::assertSentTo($partner, RemovedFromEventNotification::class)
+        : Notification::assertNothingSent();
+})->with([
+    'published' => [EventStatus::Published, true],
+    'active' => [EventStatus::Active, true],
+    'completed' => [EventStatus::Completed, false],
+    'cancelled' => [EventStatus::Cancelled, false],
+]);
+
+test('nobody is told when the removal rolls back', function () {
+    Notification::fake();
+
+    [, $attendee, $captain] = teamOfOneSoFar();
+    $partner = User::factory()->create();
+    partnerIn($attendee, $partner);
+
+    try {
+        DB::transaction(function () use ($attendee, $partner, $captain): void {
+            app(RemoveAttendeeMember::class)->execute($attendee, $partner, $captain);
+
+            throw new RuntimeException('Something after the removal failed.');
+        });
+    } catch (RuntimeException) {
+    }
+
+    expect($attendee->members()->whereKey($partner->id)->exists())->toBeTrue();
+
+    Notification::assertNothingSent();
+});
+
+test('nobody is told when the removal is refused', function () {
+    Notification::fake();
+
+    [, $attendee, $captain] = teamOfOneSoFar(['registration_closes_at' => now()->subHour()]);
+    $partner = User::factory()->create();
+    partnerIn($attendee, $partner);
+
+    $this->actingAs($captain)->deleteJson(removeMemberRoute($attendee, $partner))->assertForbidden();
+
+    Notification::assertNothingSent();
 });
 
 test('a captain corrects the name and faction of a partner who has not answered', function () {

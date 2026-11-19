@@ -61,7 +61,7 @@ class DeleteAttendee
             if ($toTell->isNotEmpty()) {
                 DB::afterCommit(fn () => Notification::send(
                     $toTell,
-                    new RemovedFromEventNotification($attendee->event, $deletedBy, $attendeeName),
+                    RemovedFromEventNotification::attendeeDeleted($attendee->event, $deletedBy, $attendeeName),
                 ));
             }
 
