@@ -45,9 +45,9 @@ class CannotGeneratePairings extends RuntimeException
         return new self('Every Attendee shares one Allegiance, so no Game can be opposed.');
     }
 
-    public static function roundIsLive(int $number): self
+    public static function notADraft(int $number): self
     {
-        return new self("Round {$number} is live, so it cannot be paired again. Unpublish it first.");
+        return new self("Round {$number} has been published, so it cannot be paired again. Unpublish it first.");
     }
 
     public static function notTheLatestRound(int $number): self

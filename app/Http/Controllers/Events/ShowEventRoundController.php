@@ -45,7 +45,7 @@ class ShowEventRoundController extends Controller
         abort_unless($event->hasRoundsVisibleTo($request->user('sanctum')), 404);
         abort_if($round->isDraft() && ! $event->isOrganisedBy($request->user('sanctum')), 404);
 
-        $round->load(['event.scoreTypes', 'games' => fn ($q) => $q->orderBy('table_number'), 'games.attendees.memberships.user', 'games.attendees.memberships.faction', 'games.scores.scoreType', 'games.openResultFlag']);
+        $round->loadDetail();
 
         return RoundDetailResource::make($round);
     }

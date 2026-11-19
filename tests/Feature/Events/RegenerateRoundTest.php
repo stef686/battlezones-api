@@ -70,6 +70,9 @@ test('the old pairing is not counted as previous opponents', function () {
         ->assertJsonPath('data.games.0.is_rematch', false)
         ->assertJsonPath('data.games.1.is_rematch', false);
 
+    // The field is level and the matcher deterministic, so the same pairing
+    // coming back is the proof: had the old Games counted as previous
+    // opponents, the rematch penalty would have forced a different one.
     expect(pairingsOf($round))->toBe($before);
 });
 
@@ -148,7 +151,7 @@ test('a live round cannot be paired again', function () {
     $this->actingAs(organiserOf($event))
         ->postJson(regenerateRoute($event, $round))
         ->assertStatus(422)
-        ->assertJsonPath('message', 'Round 1 is live, so it cannot be paired again. Unpublish it first.');
+        ->assertJsonPath('message', 'Round 1 has been published, so it cannot be paired again. Unpublish it first.');
 });
 
 test('only the latest round can be paired again', function () {
@@ -175,6 +178,18 @@ test('a field that can no longer be paired leaves the old pairing exactly as it 
 
     expect($round->games()->pluck('id')->all())->toEqualCanonicalizing($oldGameIds)
         ->and(pairingsOf($round))->toBe($before);
+});
+
+test('a round of another event cannot be paired again through this one', function () {
+    [$event] = draftRoundOf();
+    [, $otherRound] = draftRoundOf();
+    $oldGameIds = $otherRound->games()->pluck('id')->all();
+
+    $this->actingAs(organiserOf($event))
+        ->postJson(regenerateRoute($event, $otherRound))
+        ->assertNotFound();
+
+    expect($otherRound->games()->pluck('id')->all())->toEqualCanonicalizing($oldGameIds);
 });
 
 test('a player may not pair a round again', function () {

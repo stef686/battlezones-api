@@ -58,13 +58,7 @@ class SwapRoundPairingsController extends Controller
 
         $this->swapPairings->execute($round, $first, $second);
 
-        $round->load([
-            'event.scoreTypes',
-            'games' => fn ($query) => $query->orderBy('table_number'),
-            'games.attendees.memberships.user',
-            'games.attendees.memberships.faction',
-            'games.scores.scoreType', 'games.openResultFlag',
-        ]);
+        $round->loadDetail();
 
         return RoundDetailResource::make($round);
     }

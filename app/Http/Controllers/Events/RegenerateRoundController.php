@@ -50,13 +50,7 @@ class RegenerateRoundController extends Controller
 
         $round = $this->generatePairings->regenerate($round);
 
-        $round->load([
-            'event.scoreTypes',
-            'games' => fn ($query) => $query->orderBy('table_number'),
-            'games.attendees.memberships.user',
-            'games.attendees.memberships.faction',
-            'games.scores.scoreType', 'games.openResultFlag',
-        ]);
+        $round->loadDetail();
 
         return RoundDetailResource::make($round);
     }
