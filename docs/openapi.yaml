@@ -7189,9 +7189,9 @@ paths:
           type: integer
   '/api/events/{event_slug}/attendees/{attendee_id}/members/{membership_id}':
     patch:
-      summary: 'Amend an Invited Player'
-      operationId: amendAnInvitedPlayer
-      description: 'The name, address and Faction of a team mate who has not claimed their account. Refused once they have: their details are then theirs alone. Addressed by membership because the membership is the seat being amended.'
+      summary: 'Amend a team mate'
+      operationId: amendATeamMate
+      description: 'The name, address and Faction of a team mate. Once they have claimed their account, their name and address are theirs alone, and only an Organiser can still correct their Faction. Addressed by membership because the membership is the seat being amended.'
       parameters: []
       responses:
         200:
@@ -7251,14 +7251,23 @@ paths:
                   message:
                     type: string
         403:
-          description: 'The Player has an account of their own.'
+          description: ''
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                oneOf:
+                  -
+                    description: 'The Player has an account of their own, and the caller is not an Organiser.'
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                  -
+                    description: 'An Organiser sent a name or email for a Player with an account of their own.'
+                    type: object
+                    properties:
+                      message:
+                        type: string
         422:
           description: 'The submitted data failed validation.'
           content:
