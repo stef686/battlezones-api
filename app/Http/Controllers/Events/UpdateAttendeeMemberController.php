@@ -56,7 +56,7 @@ class UpdateAttendeeMemberController extends Controller
         Gate::authorize('changeMembers', $attendee);
 
         if ($membership->user->isClaimed()) {
-            $this->ensureClaimedPlayerMayBeAmended($request, $event);
+            $this->ensureClaimedPlayerMayBeAmended($request, $attendee);
         }
 
         /** @var array{name?: string|null, email?: string, faction_id?: int|null} $changes */
@@ -73,17 +73,19 @@ class UpdateAttendeeMemberController extends Controller
      * A claimed Player's name and address are theirs alone, but their Faction
      * belongs to their seat in the Event, so an Organiser can still correct it
      * on the day. A team mate cannot touch any of it.
+     *
+     * Name and email are refused on presence rather than change, so a caller
+     * resending the value already held is told plainly rather than quietly
+     * ignored.
      */
-    private function ensureClaimedPlayerMayBeAmended(UpdateAttendeeMemberRequest $request, Event $event): void
+    private function ensureClaimedPlayerMayBeAmended(UpdateAttendeeMemberRequest $request, EventAttendee $attendee): void
     {
-        $actor = $request->user();
+        abort_unless(
+            Gate::allows('correctClaimedFaction', $attendee),
+            403,
+            'That player has claimed their account, so only they can change their details.',
+        );
 
-        if (! $actor->is_admin && ! $event->isOrganisedBy($actor)) {
-            abort(403, 'That player has claimed their account, so only they can change their details.');
-        }
-
-        // Refused on presence rather than change, so a caller resending the
-        // value already held is told plainly rather than quietly ignored.
         abort_if(
             $request->hasAny(['name', 'email']),
             403,

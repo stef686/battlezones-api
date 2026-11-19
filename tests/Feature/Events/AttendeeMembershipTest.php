@@ -316,13 +316,17 @@ test('a partner who has claimed their account keeps their own details', function
     expect($partner->fresh()->name)->toBe('Tarik Torgaddon');
 });
 
-test('an organiser corrects the faction of a player who has claimed their account', function (string $corrector) {
+test('an organiser corrects the faction of a player who has claimed their account', function (string $corrector, bool $listLocked) {
     Notification::fake();
 
     [$event, $attendee, , $faction] = teamOfOneSoFar();
     $partner = User::factory()->create();
     $attendee->members()->attach($partner, ['event_id' => $event->id]);
     $membership = $attendee->fresh()->memberships->firstWhere('user_id', $partner->id);
+
+    // A locked list does not stop an Organiser: they are the ones who unlock
+    // lists, and this is how a wrong Faction is fixed on the day.
+    $membership->update(['army_list_submitted_at' => $listLocked ? now() : null]);
 
     $this->actingAs($corrector === 'admin' ? User::factory()->admin()->create() : coOrganiserOf($event))
         ->patchJson(route('events.attendees.members.update', [
@@ -335,7 +339,7 @@ test('an organiser corrects the faction of a player who has claimed their accoun
     expect($membership->fresh()->faction_id)->toBe($faction->id);
 
     Notification::assertNothingSent();
-})->with(['co-organiser', 'admin']);
+})->with(['co-organiser', 'admin'])->with(['open list' => false, 'locked list' => true]);
 
 test('a team mate cannot change the faction of a partner who has claimed their account', function () {
     Notification::fake();
