@@ -54,15 +54,14 @@ class DeleteAttendee
 
             $avatar = $attendee->avatar_path;
             $toTell = $this->playersToTell($attendee, $deletedBy);
-            $attendeeName = $attendee->displayName();
+            $notification = $toTell->isEmpty()
+                ? null
+                : RemovedFromEventNotification::attendeeDeleted($attendee->event, $deletedBy, $attendee->displayName());
 
             $attendee->delete();
 
-            if ($toTell->isNotEmpty()) {
-                DB::afterCommit(fn () => Notification::send(
-                    $toTell,
-                    RemovedFromEventNotification::attendeeDeleted($attendee->event, $deletedBy, $attendeeName),
-                ));
+            if ($notification !== null) {
+                DB::afterCommit(fn () => Notification::send($toTell, $notification));
             }
 
             if ($avatar !== null) {

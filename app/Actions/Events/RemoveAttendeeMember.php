@@ -26,6 +26,9 @@ class RemoveAttendeeMember
 {
     /**
      * Detach the Player and revoke their outstanding Invites into the Attendee.
+     *
+     * The Attendee is reread once the Player is gone, so the notification
+     * calls an unnamed team after who is left in it rather than after them.
      */
     public function execute(EventAttendee $attendee, User $member, User $removedBy): void
     {
@@ -39,10 +42,7 @@ class RemoveAttendeeMember
                 ->each(fn (EventInvite $invite) => $invite->revoke());
 
             if ($member->isNot($removedBy) && $attendee->event->status->announcesRemovals()) {
-                // Read once the Player is gone, so an unnamed team is called
-                // after who is left in it rather than after them.
-                $attendeeName = $attendee->load('memberships.user')->displayName();
-                $notification = RemovedFromEventNotification::memberRemoved($attendee->event, $removedBy, $attendeeName);
+                $notification = RemovedFromEventNotification::memberRemoved($attendee->load('memberships.user'), $removedBy);
 
                 DB::afterCommit(fn () => $member->notify($notification));
             }
