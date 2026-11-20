@@ -3,6 +3,7 @@
 namespace App\Notifications\Events;
 
 use App\Models\Event;
+use App\Models\EventAttendee;
 use App\Models\User;
 use App\Services\Frontend;
 use Illuminate\Bus\Queueable;
@@ -29,27 +30,55 @@ class RemovedFromEventNotification extends Notification implements ShouldQueue
 
     public const TYPE = 'removed_from_event';
 
-    public function __construct(
+    private const UNNAMED_REMOVER = 'An organiser';
+
+    /**
+     * Built through attendeeDeleted() or memberRemoved(), which resolve the
+     * names at the moment of removal: by the time a queued job renders the
+     * mail the remover may have left the team or the Event.
+     */
+    private function __construct(
         public Event $event,
         public User $removedBy,
+        public string $removerName,
         public string $attendeeName,
         public bool $wholeAttendee,
     ) {}
 
     /**
      * The Attendee this Player was in has been Deleted.
+     *
+     * Only its Organisers and platform admins can delete one, so the remover
+     * is named when they organise the Event; a platform admin, whom the
+     * Players do not know, reads as "An organiser".
      */
     public static function attendeeDeleted(Event $event, User $removedBy, string $attendeeName): self
     {
-        return new self($event, $removedBy, $attendeeName, wholeAttendee: true);
+        $removerName = $event->isOrganisedBy($removedBy) ? $removedBy->public_name : self::UNNAMED_REMOVER;
+
+        return new self($event, $removedBy, $removerName, $attendeeName, wholeAttendee: true);
     }
 
     /**
-     * This Player alone has been taken out of their Attendee.
+     * This Player alone has been taken out of their Attendee, which is read
+     * as it stands after the removal.
+     *
+     * The remover is named when the Player knows them: an Organiser of the
+     * Event, or a team mate still in this Attendee. Anyone else is a platform
+     * admin, who reads as "An organiser".
      */
-    public static function memberRemoved(Event $event, User $removedBy, string $attendeeName): self
+    public static function memberRemoved(EventAttendee $attendee, User $removedBy): self
     {
-        return new self($event, $removedBy, $attendeeName, wholeAttendee: false);
+        $event = $attendee->event;
+        $known = $event->isOrganisedBy($removedBy) || $attendee->hasMember($removedBy);
+
+        return new self(
+            $event,
+            $removedBy,
+            $known ? $removedBy->public_name : self::UNNAMED_REMOVER,
+            $attendee->displayName(),
+            wholeAttendee: false,
+        );
     }
 
     /**
@@ -78,22 +107,9 @@ class RemovedFromEventNotification extends Notification implements ShouldQueue
         return (new MailMessage())
             ->subject("You're no longer entered in {$this->event->name}")
             ->line($this->wholeAttendee
-                ? "{$this->remover()} has removed {$this->attendeeName} from {$this->event->name}. If you weren't expecting this, contact the organisers."
-                : "{$this->remover()} has removed you from {$this->attendeeName} in {$this->event->name}.")
+                ? "{$this->removerName} has removed {$this->attendeeName} from {$this->event->name}. If you weren't expecting this, contact the organisers."
+                : "{$this->removerName} has removed you from {$this->attendeeName} in {$this->event->name}.")
             ->action('View the event', Frontend::eventUrl($this->event))
             ->salutation('The Battlezones Team');
-    }
-
-    /**
-     * Named when the Player knows them: an Organiser of the Event, or for a
-     * member removal the team mate who did it. Anyone else is a platform admin
-     * working Filament, whom the Players do not know, so "An organiser".
-     */
-    private function remover(): string
-    {
-        $known = $this->event->isOrganisedBy($this->removedBy)
-            || (! $this->wholeAttendee && $this->event->isAttendedBy($this->removedBy));
-
-        return $known ? $this->removedBy->public_name : 'An organiser';
     }
 }

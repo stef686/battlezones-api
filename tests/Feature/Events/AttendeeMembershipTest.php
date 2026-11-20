@@ -288,7 +288,7 @@ test('the email names whoever removed them, team mate or organiser', function (s
     Notification::fake();
 
     [$event, $attendee, $captain] = teamOfOneSoFar(['name' => 'London Grand Tournament']);
-    $captain->update(['name' => 'Garviel Loken', 'show_public_name' => true]);
+    $captain->update(['name' => 'Tarik Torgaddon', 'show_public_name' => true]);
     $partner = User::factory()->create();
     partnerIn($attendee, $partner);
     $actor = $remover === 'organiser' ? organiserOf($event) : $captain;
@@ -310,6 +310,27 @@ test('the email names whoever removed them, team mate or organiser', function (s
             ];
     });
 })->with(['team mate', 'organiser']);
+
+test('the remover is named as they stood at the removal, even if they leave before the email is sent', function () {
+    Notification::fake();
+
+    [$event, $attendee] = teamOfOneSoFar();
+    $organiser = organiserOf($event);
+    $organiser->update(['name' => 'Garviel Loken', 'show_public_name' => true]);
+    $partner = User::factory()->create();
+    partnerIn($attendee, $partner);
+
+    $this->actingAs($organiser)->deleteJson(removeMemberRoute($attendee, $partner))->assertSuccessful();
+
+    $event->organisers()->detach($organiser);
+
+    // Round-tripped as the queue would, so the mail is rendered from a fresh
+    // read of the Event rather than the instance the removal used.
+    Notification::assertSentTo($partner, fn (RemovedFromEventNotification $notification): bool => str_starts_with(
+        unserialize(serialize($notification))->toMail($partner)->introLines[0],
+        'Garviel Loken has removed you',
+    ));
+});
 
 test('a player who leaves their team is not told about their own removal', function () {
     Notification::fake();
